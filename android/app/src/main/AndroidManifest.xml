@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
-            android:label="aed_map"
+            android:label="Mapa AED"
             android:name="${applicationName}"
             android:icon="@mipmap/ic_launcher">
         <activity

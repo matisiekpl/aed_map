@@ -287,9 +287,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           children: [
             FlutterMap(
               mapController: mapController,
-              options: MapOptions(center: rzeszow, zoom: 14, maxZoom: 18, plugins: [VectorMapTilesPlugin(), LocationMarkerPlugin(), DragMarkerPlugin()]),
+              options: MapOptions(
+                  center: rzeszow,
+                  interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+                  zoom: 14,
+                  maxZoom: 18,
+                  minZoom: 8,
+                  plugins: [VectorMapTilesPlugin(), LocationMarkerPlugin(), DragMarkerPlugin()]),
               layers: <LayerOptions>[
-                VectorTileLayerOptions(theme: _getMapTheme(context), tileProviders: TileProviders({'openmaptiles': Store.instance.buildCachingTileProvider()})),
+                TileLayerOptions(
+                  urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  userAgentPackageName: 'pl.enteam.aed_map',
+                ),
+                // VectorTileLayerOptions(theme: _getMapTheme(context), tileProviders: TileProviders({'openmaptiles': Store.instance.buildCachingTileProvider()})),
                 LocationMarkerLayerOptions(),
                 DragMarkerPluginOptions(markers: _getMarkers()),
               ],
@@ -363,8 +373,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   _showAboutDialog() {
     showAboutDialog(
       context: context,
-      applicationIcon: const FlutterLogo(),
-      applicationName: 'Polska Mapa AED',
+      applicationIcon: const Image(image: AssetImage('assets/icon.png'), width: 64),
+      applicationName: 'Mapa AED',
       applicationVersion: 'v1.0.0',
       applicationLegalese: 'By Mateusz Woźniak',
       children: <Widget>[
