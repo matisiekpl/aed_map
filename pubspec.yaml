@@ -48,6 +48,7 @@ dependencies:
   url_launcher: ^6.1.5
   flutter_map_dragmarker: ^3.1.0
   cross_fade: ^0.3.1
+  connectivity_plus: ^2.3.6
 
 dev_dependencies:
   flutter_test:

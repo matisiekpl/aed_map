@@ -148,8 +148,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 duration: const Duration(milliseconds: 200),
                 value: aed.openingHours ?? 'brak danych',
                 builder: (context, v) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Godziny otwarcia: ', style: TextStyle(fontSize: 16)),
                       Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
@@ -296,10 +296,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
             SafeArea(
                 child: Padding(
-              padding: const EdgeInsets.only(left: 16, top: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), Text('${aeds.length} AED dostępnych', style: TextStyle(fontSize: 14))],
+              padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), Text('${aeds.length} AED dostępnych', style: TextStyle(fontSize: 14))],
+                  ),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          _showAboutDialog();
+                        },
+                        child: const Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(CupertinoIcons.gear),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             )),
           ],
@@ -337,6 +358,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       }
     });
     controller.forward();
+  }
+
+  _showAboutDialog() {
+    showAboutDialog(
+      context: context,
+      applicationIcon: const FlutterLogo(),
+      applicationName: 'Polska Mapa AED',
+      applicationVersion: 'v1.0.0',
+      applicationLegalese: 'By Mateusz Woźniak',
+      children: <Widget>[
+        Padding(padding: EdgeInsets.only(top: 15), child: Text('Dane o lokalizacjach AED pochodzą z projektu aed.openstreetmap.org.pl')),
+      ],
+    );
   }
 
   _getMapTheme(BuildContext context) {
