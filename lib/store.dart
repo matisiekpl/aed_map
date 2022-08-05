@@ -31,7 +31,7 @@ class Store {
     return MemoryCacheVectorTileProvider(delegate: NetworkVectorTileProvider(urlTemplate: urlTemplate, maximumZoom: 14), maxSizeBytes: 1024 * 1024 * 32);
   }
 
-  Future<List<AED>> loadAEDs() async {
+  Future<List<AED>> loadAEDs(LatLng currentLocation) async {
     var response = await http.get(Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
     if (response.statusCode != 200) {
       throw Exception('Failed to load AEDs');
@@ -40,9 +40,15 @@ class Store {
     var jsonList = jsonDecode(response.body)['features'];
     jsonList.forEach((row) {
       aeds.add(AED(LatLng(row['geometry']['coordinates'][1], row['geometry']['coordinates'][0]), row['properties']['osm_id'], row['properties']['defibrillator:location'],
-          row['properties']['indoor'] == 'yes', row['properties']['operator'], row['properties']['phone']));
+          row['properties']['indoor'] == 'yes', row['properties']['operator'], row['properties']['phone'], row['properties']['opening_hours']));
     });
     print('Loaded ${aeds.length} AEDs!');
+    aeds = aeds.map((aed) {
+      const Distance distance = Distance();
+      aed.distance = distance(currentLocation, aed.location).ceil();
+      return aed;
+    }).toList();
+    aeds.sort((a, b) => a.distance!.compareTo(b.distance!));
     return aeds;
   }
 }

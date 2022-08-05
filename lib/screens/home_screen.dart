@@ -1,7 +1,9 @@
+import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_dragmarker/dragmarker.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,9 +25,11 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   List<AED> aeds = [];
   AED? selectedAED;
+  final PanelController panel = PanelController();
+  final MapController mapController = MapController();
 
   @override
   void initState() {
@@ -34,15 +38,29 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _initAsync() async {
-    var _aeds = await Store.instance.loadAEDs();
+    var position = await Store.instance.determinePosition();
+    var _aeds = await Store.instance.loadAEDs(LatLng(position.latitude, position.longitude));
     setState(() {
       aeds = _aeds;
-      selectedAED = aeds[0];
+      selectedAED = aeds.first;
     });
   }
 
-  List<Marker> _getMarkers() {
-    return aeds.map((aed) => Marker(point: aed.location, builder: (context) => SvgPicture.asset('assets/map-pin.svg', color: Colors.red, semanticsLabel: 'A red up arrow'))).cast<Marker>().toList();
+  List<DragMarker> _getMarkers() {
+    return aeds
+        .map((aed) => DragMarker(
+              point: aed.location,
+              onTap: (pos) {
+                _selectAED(aed);
+              },
+              builder: (ctx) {
+                return aed.id == selectedAED!.id ? Icon(Icons.pin_drop, color: Colors.orange, size: 38) : Icon(Icons.pin_drop, color: Colors.red, size: 38);
+                // ? Container(child: SvgPicture.asset(key: const ValueKey('assets/map-pin-orange.svg'), 'assets/map-pin-orange.svg', color: Colors.red, semanticsLabel: 'A red up arrow'))
+                // : SvgPicture.asset('assets/map-pin.svg', color: Colors.red, semanticsLabel: 'A red up arrow');
+              },
+            ))
+        .cast<DragMarker>()
+        .toList();
   }
 
   @override
@@ -55,7 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: aeds.isEmpty
             ? Center(child: CircularProgressIndicator())
             : SlidingUpPanel(
-                maxHeight: 400, borderRadius: radius, panel: Container(decoration: BoxDecoration(borderRadius: radius), child: _buildBottomPanel()), body: SafeArea(child: _buildMap(), top: false)));
+                controller: panel,
+                maxHeight: 500,
+                borderRadius: radius,
+                panel: Container(decoration: BoxDecoration(borderRadius: radius), child: _buildBottomPanel()),
+                body: SafeArea(child: _buildMap(), top: false)));
   }
 
   Widget _buildBottomPanel() {
@@ -80,7 +102,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('⚠️ Najbliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18)),
+                if (aeds.first == selectedAED) Text('⚠️ Najbliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18)),
+                if (aeds.first != selectedAED)
+                  GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        _selectAED(aeds.first);
+                      },
+                      child: Text('⚠️ Dostępny jest bliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18))),
               ],
             ),
             SizedBox(height: 8),
@@ -89,52 +118,90 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [Text('🫀 Defibrylator AED', style: TextStyle(fontSize: 24))],
             ),
             SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('Dokładna lokalizacja: ', style: TextStyle(fontSize: 16)),
-                Text(aed.description ?? 'brak danych', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              ],
-            ),
+            CrossFade<String>(
+                duration: const Duration(milliseconds: 200),
+                value: aed.description ?? 'brak danych',
+                builder: (context, v) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Dokładna lokalizacja: ', style: TextStyle(fontSize: 16)),
+                      Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    ],
+                  );
+                }),
             SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('Wewnątrz budynku: ', style: TextStyle(fontSize: 16)),
-                Text(aed.indoor ? 'tak' : 'nie', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              ],
-            ),
+            CrossFade<String>(
+                duration: const Duration(milliseconds: 200),
+                value: aed.operator ?? 'brak danych',
+                builder: (context, v) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Operator: ', style: TextStyle(fontSize: 16)),
+                      Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    ],
+                  );
+                }),
             SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('Operator: ', style: TextStyle(fontSize: 16)),
-                Text(aed.operator ?? 'brak danych', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              ],
-            ),
+            CrossFade<String>(
+                duration: const Duration(milliseconds: 200),
+                value: aed.openingHours ?? 'brak danych',
+                builder: (context, v) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Godziny otwarcia: ', style: TextStyle(fontSize: 16)),
+                      Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    ],
+                  );
+                }),
             SizedBox(height: 4),
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () {
-                print('Calling to: tel:${aed.phone.toString().replaceAll(' ', '')}');
-                launchUrl(Uri.parse('tel:${aed.phone.toString().replaceAll(' ', '')}'));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text('Kontakt: ', style: TextStyle(fontSize: 16)),
-                  Text(aed.phone ?? 'brak danych', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
+            CrossFade<bool>(
+                duration: const Duration(milliseconds: 200),
+                value: aed.indoor,
+                builder: (context, v) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Wewnątrz budynku: ', style: TextStyle(fontSize: 16)),
+                      Text(v ? 'tak' : 'nie', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    ],
+                  );
+                }),
             SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('Identyfikator: ', style: TextStyle(fontSize: 16)),
-                Text(aed.id.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              ],
-            ),
+            CrossFade<String>(
+                duration: const Duration(milliseconds: 200),
+                value: aed.phone ?? 'brak danych',
+                builder: (context, v) {
+                  return GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      print('Calling to: tel:${aed.phone.toString().replaceAll(' ', '')}');
+                      launchUrl(Uri.parse('tel:${aed.phone.toString().replaceAll(' ', '')}'));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('Kontakt: ', style: TextStyle(fontSize: 16)),
+                        Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  );
+                }),
+            SizedBox(height: 4),
+            CrossFade<int>(
+                duration: const Duration(milliseconds: 200),
+                value: aed.id,
+                builder: (context, v) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Identyfikator: ', style: TextStyle(fontSize: 16)),
+                      Text(v.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    ],
+                  );
+                }),
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Row(
@@ -191,12 +258,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       })),
             ),
             SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('~9 minut biegiem (450m)', style: TextStyle(color: Colors.orange)),
-              ],
-            )
+            CrossFade<String>(
+                duration: const Duration(milliseconds: 200),
+                value: _translateMeters(selectedAED!.distance!),
+                builder: (context, v) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(v, style: TextStyle(color: Colors.orange)),
+                    ],
+                  );
+                })
           ],
         ),
       )
@@ -204,46 +276,67 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMap() {
-    return FutureBuilder<Position>(
-        future: Store.instance.determinePosition(),
-        builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-          if (snapshot.hasData || snapshot.hasError) {
-            return Column(
-              children: [
-                Flexible(
-                    child: Stack(
-                  children: [
-                    FlutterMap(
-                      options: MapOptions(
-                          center: snapshot.hasData ? LatLng(snapshot.data!.latitude, snapshot.data!.longitude) : warsaw,
-                          zoom: 14,
-                          maxZoom: 18,
-                          plugins: [VectorMapTilesPlugin(), LocationMarkerPlugin()]),
-                      // options: MapOptions(center: warsaw, zoom: 14, maxZoom: 18, plugins: [VectorMapTilesPlugin()]),
-                      layers: <LayerOptions>[
-                        VectorTileLayerOptions(theme: _getMapTheme(context), tileProviders: TileProviders({'openmaptiles': Store.instance.buildCachingTileProvider()})),
-                        MarkerLayerOptions(markers: _getMarkers()),
-                        LocationMarkerLayerOptions(),
-                      ],
-                    ),
-                    SafeArea(
-                        child: Padding(
-                      padding: const EdgeInsets.only(left: 16, top: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)),
-                          Text('${aeds.length} AED dostępnych', style: TextStyle(fontSize: 14))
-                        ],
-                      ),
-                    )),
-                  ],
-                )),
+    // return FutureBuilder<Position>(
+    //     future: Store.instance.determinePosition(),
+    //     builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+    //       if (snapshot.hasData || snapshot.hasError) {
+    return Column(
+      children: [
+        Flexible(
+            child: Stack(
+          children: [
+            FlutterMap(
+              mapController: mapController,
+              options: MapOptions(center: rzeszow, zoom: 14, maxZoom: 18, plugins: [VectorMapTilesPlugin(), LocationMarkerPlugin(), DragMarkerPlugin()]),
+              layers: <LayerOptions>[
+                VectorTileLayerOptions(theme: _getMapTheme(context), tileProviders: TileProviders({'openmaptiles': Store.instance.buildCachingTileProvider()})),
+                LocationMarkerLayerOptions(),
+                DragMarkerPluginOptions(markers: _getMarkers()),
               ],
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
-        });
+            ),
+            SafeArea(
+                child: Padding(
+              padding: const EdgeInsets.only(left: 16, top: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), Text('${aeds.length} AED dostępnych', style: TextStyle(fontSize: 14))],
+              ),
+            )),
+          ],
+        )),
+      ],
+    );
+    // }
+    // return const Center(child: CircularProgressIndicator());
+    // });
+  }
+
+  _selectAED(AED aed) {
+    setState(() {
+      selectedAED = aed;
+    });
+    panel.open();
+    _animatedMapMove(selectedAED!.location, 14);
+  }
+
+  void _animatedMapMove(LatLng destLocation, double destZoom) {
+    final latTween = Tween<double>(begin: mapController.center.latitude, end: destLocation.latitude - 0.009);
+    final lngTween = Tween<double>(begin: mapController.center.longitude, end: destLocation.longitude);
+    final zoomTween = Tween<double>(begin: mapController.zoom, end: destZoom);
+
+    final controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    final Animation<double> animation = CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+    controller.addListener(() {
+      mapController.move(LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)), zoomTween.evaluate(animation));
+    });
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.dispose();
+      } else if (status == AnimationStatus.dismissed) {
+        controller.dispose();
+      }
+    });
+    controller.forward();
   }
 
   _getMapTheme(BuildContext context) {
@@ -251,5 +344,10 @@ class _HomeScreenState extends State<HomeScreen> {
     // to provide a dark theme do something like this:
     // if (MediaQuery.of(context).platformBrightness == Brightness.dark) return myDarkTheme();
     return ProvidedThemes.lightTheme();
+  }
+
+  String _translateMeters(int distance) {
+    if (distance > 10000) return 'około ${(distance / 1000).floor()}km stąd';
+    return '~${(distance / 200).ceil().toString()} minut biegiem (${distance.toString()}m)';
   }
 }

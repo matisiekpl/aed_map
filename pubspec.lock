@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  cross_fade:
+    dependency: "direct main"
+    description:
+      name: cross_fade
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -97,6 +104,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
+  flutter_map_dragmarker:
+    dependency: "direct main"
+    description:
+      name: flutter_map_dragmarker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
   flutter_map_location_marker:
     dependency: "direct main"
     description:

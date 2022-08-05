@@ -54,5 +54,8 @@
       <string>sms</string>
       <string>tel</string>
     </array>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
 </dict>
 </plist>

@@ -7,6 +7,8 @@ class AED {
   bool indoor;
   String? operator;
   String? phone;
+  int? distance;
+  String? openingHours;
 
-  AED(this.location, this.id, this.description, this.indoor, this.operator, this.phone);
+  AED(this.location, this.id, this.description, this.indoor, this.operator, this.phone, this.openingHours);
 }
