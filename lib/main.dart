@@ -45,6 +45,7 @@ class _AppState extends State<App> {
       DeviceOrientation.portraitDown,
     ]);
     return CupertinoApp(
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         DefaultMaterialLocalizations.delegate,
         DefaultCupertinoLocalizations.delegate,

@@ -254,7 +254,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   child: CupertinoButton.filled(
                       child: Text('Nawiguj'),
                       onPressed: () {
-                        MapsLauncher.launchCoordinates(aed.location.latitude, aed.location.longitude);
+                        _openMap(aed.location.latitude, aed.location.longitude);
+                        // MapsLauncher.launchCoordinates(aed.location.latitude, aed.location.longitude);
                       })),
             ),
             SizedBox(height: 12),
@@ -276,70 +277,70 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildMap() {
-    // return FutureBuilder<Position>(
-    //     future: Store.instance.determinePosition(),
-    //     builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
-    //       if (snapshot.hasData || snapshot.hasError) {
-    return Column(
-      children: [
-        Flexible(
-            child: Stack(
-          children: [
-            FlutterMap(
-              mapController: mapController,
-              options: MapOptions(
-                  center: rzeszow,
-                  interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-                  zoom: 14,
-                  maxZoom: 18,
-                  minZoom: 8,
-                  plugins: [VectorMapTilesPlugin(), LocationMarkerPlugin(), DragMarkerPlugin()]),
-              layers: <LayerOptions>[
-                TileLayerOptions(
-                  urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                  userAgentPackageName: 'pl.enteam.aed_map',
-                ),
-                // VectorTileLayerOptions(theme: _getMapTheme(context), tileProviders: TileProviders({'openmaptiles': Store.instance.buildCachingTileProvider()})),
-                LocationMarkerLayerOptions(),
-                DragMarkerPluginOptions(markers: _getMarkers()),
-              ],
-            ),
-            SafeArea(
-                child: Padding(
-              padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), Text('${aeds.length} AED dostępnych', style: TextStyle(fontSize: 14))],
-                  ),
-                  Column(
-                    children: [
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          _showAboutDialog();
-                        },
-                        child: const Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Icon(CupertinoIcons.gear),
-                          ),
+    return FutureBuilder<LatLng>(
+        future: Store.instance.determinePosition(),
+        builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+          if (snapshot.hasData || snapshot.hasError) {
+            return Column(
+              children: [
+                Flexible(
+                    child: Stack(
+                  children: [
+                    FlutterMap(
+                      mapController: mapController,
+                      options: MapOptions(
+                          center: aeds.first.location,
+                          interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+                          zoom: 14,
+                          maxZoom: 18,
+                          minZoom: 8,
+                          plugins: [VectorMapTilesPlugin(), LocationMarkerPlugin(), DragMarkerPlugin()]),
+                      layers: <LayerOptions>[
+                        TileLayerOptions(
+                          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                          userAgentPackageName: 'pl.enteam.aed_map',
                         ),
+                        // VectorTileLayerOptions(theme: _getMapTheme(context), tileProviders: TileProviders({'openmaptiles': Store.instance.buildCachingTileProvider()})),
+                        LocationMarkerLayerOptions(),
+                        DragMarkerPluginOptions(markers: _getMarkers()),
+                      ],
+                    ),
+                    SafeArea(
+                        child: Padding(
+                      padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), Text('${aeds.length} AED dostępnych', style: TextStyle(fontSize: 14))],
+                          ),
+                          Column(
+                            children: [
+                              GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () {
+                                  _showAboutDialog();
+                                },
+                                child: const Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(CupertinoIcons.gear),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                    ],
-                  )
-                ],
-              ),
-            )),
-          ],
-        )),
-      ],
-    );
-    // }
-    // return const Center(child: CircularProgressIndicator());
-    // });
+                    )),
+                  ],
+                )),
+              ],
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        });
   }
 
   _selectAED(AED aed) {
@@ -393,5 +394,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   String _translateMeters(int distance) {
     if (distance > 10000) return 'około ${(distance / 1000).floor()}km stąd';
     return '~${(distance / 200).ceil().toString()} minut biegiem (${distance.toString()}m)';
+  }
+
+  _openMap(double latitude, double longitude) async {
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
   }
 }
