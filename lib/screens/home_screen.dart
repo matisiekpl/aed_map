@@ -376,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       context: context,
       applicationIcon: const Image(image: AssetImage('assets/icon.png'), width: 64),
       applicationName: 'Mapa AED',
-      applicationVersion: 'v1.0.0',
+      applicationVersion: 'v1.0.1',
       applicationLegalese: 'By Mateusz Woźniak',
       children: <Widget>[
         Padding(padding: EdgeInsets.only(top: 15), child: Text('Dane o lokalizacjach AED pochodzą z projektu aed.openstreetmap.org.pl')),
@@ -397,11 +397,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   _openMap(double latitude, double longitude) async {
-    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-    if (await canLaunch(googleUrl)) {
-      await launch(googleUrl);
-    } else {
-      throw 'Could not open the map.';
-    }
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: const Text('Choose maps app'),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            onPressed: () {
+              MapsLauncher.launchCoordinates(latitude, longitude);
+            },
+            child: const Text('Apple Maps'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+              if (await canLaunch(googleUrl)) {
+                await launch(googleUrl);
+              } else {
+                throw 'Could not open the map.';
+              }
+            },
+            child: const Text('Google Maps'),
+          ),
+        ],
+      ),
+    );
   }
 }
