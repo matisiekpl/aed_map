@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aed_map/screens/home_screen.dart';
 import 'package:aed_map/screens/offline_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -24,12 +26,14 @@ class _AppState extends State<App> {
   }
 
   _checkNetwork() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      setState(() {
-        current = HomeScreen();
-      });
-    } else {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          current = HomeScreen();
+        });
+      }
+    } on SocketException catch (_) {
       setState(() {
         current = OfflineScreen();
       });

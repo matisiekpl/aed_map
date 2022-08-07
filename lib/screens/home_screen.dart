@@ -376,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       context: context,
       applicationIcon: const Image(image: AssetImage('assets/icon.png'), width: 64),
       applicationName: 'Mapa AED',
-      applicationVersion: 'v1.0.1',
+      applicationVersion: 'v1.0.2',
       applicationLegalese: 'By Mateusz Woźniak',
       children: <Widget>[
         Padding(padding: EdgeInsets.only(top: 15), child: Text('Dane o lokalizacjach AED pochodzą z projektu aed.openstreetmap.org.pl')),
