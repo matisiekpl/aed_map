@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -397,30 +399,34 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   _openMap(double latitude, double longitude) async {
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => CupertinoActionSheet(
-        title: const Text('Choose maps app'),
-        actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            onPressed: () {
-              MapsLauncher.launchCoordinates(latitude, longitude);
-            },
-            child: const Text('Apple Maps'),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () async {
-              String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-              if (await canLaunch(googleUrl)) {
-                await launch(googleUrl);
-              } else {
-                throw 'Could not open the map.';
-              }
-            },
-            child: const Text('Google Maps'),
-          ),
-        ],
-      ),
-    );
+    if (Platform.isIOS) {
+      showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+          title: const Text('Wybierz aplikację do map'),
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                MapsLauncher.launchCoordinates(latitude, longitude);
+              },
+              child: const Text('Apple Maps'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () async {
+                String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+                if (await canLaunch(googleUrl)) {
+                  await launch(googleUrl);
+                } else {
+                  throw 'Could not open the map.';
+                }
+              },
+              child: const Text('Google Maps'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      MapsLauncher.launchCoordinates(latitude, longitude);
+    }
   }
 }
