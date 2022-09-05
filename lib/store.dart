@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
@@ -43,7 +44,9 @@ class Store {
       aeds.add(AED(LatLng(row['geometry']['coordinates'][1], row['geometry']['coordinates'][0]), row['properties']['osm_id'], row['properties']['defibrillator:location'],
           row['properties']['indoor'] == 'yes', row['properties']['operator'], row['properties']['phone'], row['properties']['opening_hours']));
     });
-    print('Loaded ${aeds.length} AEDs!');
+    if (kDebugMode) {
+      print('Loaded ${aeds.length} AEDs!');
+    }
     aeds = aeds.map((aed) {
       const Distance distance = Distance();
       aed.distance = distance(currentLocation, aed.location).ceil();

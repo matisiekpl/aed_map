@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:aed_map/screens/home_screen.dart';
 import 'package:aed_map/screens/offline_screen.dart';
@@ -26,16 +25,26 @@ class _AppState extends State<App> {
   }
 
   _checkNetwork() async {
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        setState(() {
-          current = HomeScreen();
-        });
-      }
-    } on SocketException catch (_) {
+    // try {
+    //   final result = await InternetAddress.lookup('example.com');
+    //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    //     setState(() {
+    //       current = HomeScreen();
+    //     });
+    //   }
+    // } on SocketException catch (_) {
+    //   setState(() {
+    //     current = OfflineScreen();
+    //   });
+    // }
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       setState(() {
-        current = OfflineScreen();
+        current = const HomeScreen();
+      });
+    } else {
+      setState(() {
+        current = const OfflineScreen();
       });
     }
   }
@@ -50,7 +59,7 @@ class _AppState extends State<App> {
     ]);
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         DefaultMaterialLocalizations.delegate,
         DefaultCupertinoLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,

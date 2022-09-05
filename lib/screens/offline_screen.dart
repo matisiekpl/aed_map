@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class OfflineScreen extends StatefulWidget {
   const OfflineScreen({Key? key}) : super(key: key);
@@ -13,7 +12,7 @@ class _OfflineScreenState extends State<OfflineScreen> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
         child: Center(
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: const [
       Icon(CupertinoIcons.wifi_exclamationmark, size: 128),
       SizedBox(height: 24),
       Text('Brak połączenia z siecią', style: TextStyle(fontSize: 20)),

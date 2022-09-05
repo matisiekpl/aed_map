@@ -7,16 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_dragmarker/dragmarker.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
-import 'package:vector_tile_renderer/vector_tile_renderer.dart';
 
-import '../constants.dart';
 import '../models/aed.dart';
 import '../store.dart';
 
@@ -41,9 +37,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   _initAsync() async {
     var position = await Store.instance.determinePosition();
-    var _aeds = await Store.instance.loadAEDs(LatLng(position.latitude, position.longitude));
+    var items = await Store.instance.loadAEDs(LatLng(position.latitude, position.longitude));
     setState(() {
-      aeds = _aeds;
+      aeds = items;
       selectedAED = aeds.first;
     });
   }
@@ -56,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 _selectAED(aed);
               },
               builder: (ctx) {
-                return aed.id == selectedAED!.id ? Icon(Icons.pin_drop, color: Colors.orange, size: 38) : Icon(Icons.pin_drop, color: Colors.red, size: 38);
+                return aed.id == selectedAED!.id ? const Icon(Icons.pin_drop, color: Colors.orange, size: 38) : const Icon(Icons.pin_drop, color: Colors.red, size: 38);
                 // ? Container(child: SvgPicture.asset(key: const ValueKey('assets/map-pin-orange.svg'), 'assets/map-pin-orange.svg', color: Colors.red, semanticsLabel: 'A red up arrow'))
                 // : SvgPicture.asset('assets/map-pin.svg', color: Colors.red, semanticsLabel: 'A red up arrow');
               },
@@ -73,13 +69,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
     return CupertinoPageScaffold(
         child: aeds.isEmpty
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : SlidingUpPanel(
                 controller: panel,
                 maxHeight: 500,
                 borderRadius: radius,
                 panel: Container(decoration: BoxDecoration(borderRadius: radius), child: _buildBottomPanel()),
-                body: SafeArea(child: _buildMap(), top: false)));
+                body: SafeArea(top: false, child: _buildMap())));
   }
 
   Widget _buildBottomPanel() {
@@ -104,22 +100,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (aeds.first == selectedAED) Text('⚠️ Najbliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18)),
+                if (aeds.first == selectedAED) const Text('⚠️ Najbliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18)),
                 if (aeds.first != selectedAED)
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         _selectAED(aeds.first);
                       },
-                      child: Text('⚠️ Dostępny jest bliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18))),
+                      child: const Text('⚠️ Dostępny jest bliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18))),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [Text('🫀 Defibrylator AED', style: TextStyle(fontSize: 24))],
+              children: const [Text('🫀 Defibrylator AED', style: TextStyle(fontSize: 24))],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
                 value: aed.description ?? 'brak danych',
@@ -127,12 +123,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Dokładna lokalizacja: ', style: TextStyle(fontSize: 16)),
-                      Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Dokładna lokalizacja: ', style: TextStyle(fontSize: 16)),
+                      Text(v, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
                 value: aed.operator ?? 'brak danych',
@@ -140,12 +136,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Operator: ', style: TextStyle(fontSize: 16)),
-                      Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Operator: ', style: TextStyle(fontSize: 16)),
+                      Text(v, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
                 value: aed.openingHours ?? 'brak danych',
@@ -153,12 +149,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Godziny otwarcia: ', style: TextStyle(fontSize: 16)),
-                      Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Godziny otwarcia: ', style: TextStyle(fontSize: 16)),
+                      Text(v, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             CrossFade<bool>(
                 duration: const Duration(milliseconds: 200),
                 value: aed.indoor,
@@ -166,12 +162,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('Wewnątrz budynku: ', style: TextStyle(fontSize: 16)),
-                      Text(v ? 'tak' : 'nie', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Wewnątrz budynku: ', style: TextStyle(fontSize: 16)),
+                      Text(v ? 'tak' : 'nie', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
                 value: aed.phone ?? 'brak danych',
@@ -179,19 +175,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      print('Calling to: tel:${aed.phone.toString().replaceAll(' ', '')}');
                       launchUrl(Uri.parse('tel:${aed.phone.toString().replaceAll(' ', '')}'));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('Kontakt: ', style: TextStyle(fontSize: 16)),
-                        Text(v, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        const Text('Kontakt: ', style: TextStyle(fontSize: 16)),
+                        Text(v, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   );
                 }),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             CrossFade<int>(
                 duration: const Duration(milliseconds: 200),
                 value: aed.id,
@@ -199,8 +194,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('Identyfikator: ', style: TextStyle(fontSize: 16)),
-                      Text(v.toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Identyfikator: ', style: TextStyle(fontSize: 16)),
+                      Text(v.toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
@@ -213,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     var message = 'Szer: ${aed.location.latitude}';
                     return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
                       return TextButton(
-                          child: Text(message, style: TextStyle(fontSize: 16, color: Colors.black)),
+                          child: Text(message, style: const TextStyle(fontSize: 16, color: Colors.black)),
                           onPressed: () {
                             Clipboard.setData(ClipboardData(text: aed.location.latitude.toString()));
                             setState(() {
@@ -231,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     var message = 'Dł: ${aed.location.longitude}';
                     return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
                       return TextButton(
-                          child: Text(message, style: TextStyle(fontSize: 16, color: Colors.black)),
+                          child: Text(message, style: const TextStyle(fontSize: 16, color: Colors.black)),
                           onPressed: () {
                             Clipboard.setData(ClipboardData(text: aed.location.longitude.toString()));
                             setState(() {
@@ -248,19 +243,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: SizedBox(
                   width: double.infinity,
                   child: CupertinoButton.filled(
-                      child: Text('Nawiguj'),
+                      child: const Text('Nawiguj'),
                       onPressed: () {
                         _openMap(aed.location.latitude, aed.location.longitude);
                         // MapsLauncher.launchCoordinates(aed.location.latitude, aed.location.longitude);
                       })),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
                 value: _translateMeters(selectedAED!.distance!),
@@ -268,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(v, style: TextStyle(color: Colors.orange)),
+                      Text(v, style: const TextStyle(color: Colors.orange)),
                     ],
                   );
                 })
@@ -296,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           zoom: 14,
                           maxZoom: 18,
                           minZoom: 8,
-                          plugins: [VectorMapTilesPlugin(), LocationMarkerPlugin(), DragMarkerPlugin()]),
+                          plugins: [VectorMapTilesPlugin(), const LocationMarkerPlugin(), DragMarkerPlugin()]),
                       layers: <LayerOptions>[
                         TileLayerOptions(
                           urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -315,7 +310,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)), Text('${aeds.length} AED dostępnych', style: TextStyle(fontSize: 14))],
+                            children: [
+                              const Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)),
+                              Text('${aeds.length} AED dostępnych', style: const TextStyle(fontSize: 14))
+                            ],
                           ),
                           Column(
                             children: [
@@ -381,16 +379,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       applicationVersion: 'v1.0.2',
       applicationLegalese: 'By Mateusz Woźniak',
       children: <Widget>[
-        Padding(padding: EdgeInsets.only(top: 15), child: Text('Dane o lokalizacjach AED pochodzą z projektu aed.openstreetmap.org.pl')),
+        const Padding(padding: EdgeInsets.only(top: 15), child: Text('Dane o lokalizacjach AED pochodzą z projektu aed.openstreetmap.org.pl')),
       ],
     );
-  }
-
-  _getMapTheme(BuildContext context) {
-    // maps are rendered using themes
-    // to provide a dark theme do something like this:
-    // if (MediaQuery.of(context).platformBrightness == Brightness.dark) return myDarkTheme();
-    return ProvidedThemes.lightTheme();
   }
 
   String _translateMeters(int distance) {
@@ -414,7 +405,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             CupertinoActionSheetAction(
               onPressed: () async {
                 String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+                // ignore: deprecated_member_use
                 if (await canLaunch(googleUrl)) {
+                  // ignore: deprecated_member_use
                   await launch(googleUrl);
                 } else {
                   throw 'Could not open the map.';
