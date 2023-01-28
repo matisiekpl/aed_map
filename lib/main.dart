@@ -1,12 +1,10 @@
-
 import 'package:aed_map/screens/home_screen.dart';
-import 'package:aed_map/screens/offline_screen.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
@@ -21,35 +19,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    _checkNetwork();
   }
-
-  _checkNetwork() async {
-    // try {
-    //   final result = await InternetAddress.lookup('example.com');
-    //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-    //     setState(() {
-    //       current = HomeScreen();
-    //     });
-    //   }
-    // } on SocketException catch (_) {
-    //   setState(() {
-    //     current = OfflineScreen();
-    //   });
-    // }
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-      setState(() {
-        current = const HomeScreen();
-      });
-    } else {
-      setState(() {
-        current = const OfflineScreen();
-      });
-    }
-  }
-
-  Widget current = const CupertinoApp(home: Center(child: CircularProgressIndicator()));
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +27,14 @@ class _AppState extends State<App> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return CupertinoApp(
+    return const CupertinoApp(
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
+      localizationsDelegates: [
         DefaultMaterialLocalizations.delegate,
         DefaultCupertinoLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
       ],
-      home: current,
+      home: HomeScreen(),
     );
   }
 }

@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:vector_map_tiles/vector_map_tiles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'constants.dart';
@@ -16,7 +18,7 @@ class Store {
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return Future.error('Location services are disabled.');
+    if (!serviceEnabled) return warsaw;
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -28,21 +30,45 @@ class Store {
     return LatLng(position.latitude, position.longitude);
   }
 
-  VectorTileProvider buildCachingTileProvider() {
-    const urlTemplate = 'https://tiles.stadiamaps.com/data/openmaptiles/{z}/{x}/{y}.pbf?api_key=$tilesApiKey';
-    return MemoryCacheVectorTileProvider(delegate: NetworkVectorTileProvider(urlTemplate: urlTemplate, maximumZoom: 14), maxSizeBytes: 1024 * 1024 * 32);
+  static const String aedListKey = 'aed_list_json';
+
+  updateAEDs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      var response = await http.get(
+          Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
+      await prefs.setString(aedListKey, response.body);
+    } catch (err) {
+      if (kDebugMode) {
+        print('Failed to load AEDs from internet!');
+      }
+    }
+  }
+
+  loadLocalAEDs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String data = await rootBundle.loadString("assets/aed_poland.geojson");
+    await prefs.setString(aedListKey, data);
   }
 
   Future<List<AED>> loadAEDs(LatLng currentLocation) async {
-    var response = await http.get(Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
-    if (response.statusCode != 200) {
-      throw Exception('Failed to load AEDs');
-    }
     List<AED> aeds = [];
-    var jsonList = jsonDecode(response.body)['features'];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
+    updateAEDs();
+    var contents = prefs.getString(aedListKey)!;
+    var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
-      aeds.add(AED(LatLng(row['geometry']['coordinates'][1], row['geometry']['coordinates'][0]), row['properties']['osm_id'], row['properties']['defibrillator:location'],
-          row['properties']['indoor'] == 'yes', row['properties']['operator'], row['properties']['phone'], row['properties']['opening_hours']));
+      aeds.add(AED(
+          LatLng(row['geometry']['coordinates'][1],
+              row['geometry']['coordinates'][0]),
+          row['properties']['osm_id'],
+          row['properties']['defibrillator:location'],
+          row['properties']['indoor'] == 'yes',
+          row['properties']['operator'],
+          row['properties']['phone'],
+          row['properties']['opening_hours'],
+          row['properties']['access']));
     });
     if (kDebugMode) {
       print('Loaded ${aeds.length} AEDs!');

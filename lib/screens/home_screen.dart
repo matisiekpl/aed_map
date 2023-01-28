@@ -1,17 +1,20 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
+import 'package:aed_map/cached_network_tile_provider.dart';
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_dragmarker/dragmarker.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vector_map_tiles/vector_map_tiles.dart';
 
 import '../models/aed.dart';
 import '../store.dart';
@@ -23,11 +26,16 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   List<AED> aeds = [];
   AED? selectedAED;
   final PanelController panel = PanelController();
   final MapController mapController = MapController();
+  final SuperclusterImmutableController markersController =
+      SuperclusterImmutableController();
+
+  Brightness? _brightness;
 
   @override
   void initState() {
@@ -37,27 +45,74 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   _initAsync() async {
     var position = await Store.instance.determinePosition();
-    var items = await Store.instance.loadAEDs(LatLng(position.latitude, position.longitude));
+    var items = await Store.instance
+        .loadAEDs(LatLng(position.latitude, position.longitude));
     setState(() {
       aeds = items;
       selectedAED = aeds.first;
     });
+    WidgetsBinding.instance.addObserver(this);
+    _brightness = WidgetsBinding.instance.window.platformBrightness;
+    Timer.periodic(const Duration(seconds: 4), (timer) {
+      _checkNetwork();
+    });
   }
 
-  List<DragMarker> _getMarkers() {
+  @override
+  void didChangePlatformBrightness() {
+    if (mounted) {
+      setState(() {
+        _brightness = WidgetsBinding.instance.window.platformBrightness;
+      });
+    }
+    super.didChangePlatformBrightness();
+  }
+
+  List<Marker> _getMarkers() {
     return aeds
-        .map((aed) => DragMarker(
+        .map((aed) {
+          if (aed.access == 'yes') {
+            return Marker(
               point: aed.location,
-              onTap: (pos) {
-                _selectAED(aed);
-              },
-              builder: (ctx) {
-                return aed.id == selectedAED!.id ? const Icon(Icons.pin_drop, color: Colors.orange, size: 38) : const Icon(Icons.pin_drop, color: Colors.red, size: 38);
-                // ? Container(child: SvgPicture.asset(key: const ValueKey('assets/map-pin-orange.svg'), 'assets/map-pin-orange.svg', color: Colors.red, semanticsLabel: 'A red up arrow'))
-                // : SvgPicture.asset('assets/map-pin.svg', color: Colors.red, semanticsLabel: 'A red up arrow');
-              },
-            ))
-        .cast<DragMarker>()
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/green_aed.svg'),
+            );
+          }
+          if (aed.access == 'customers') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/yellow_aed.svg'),
+            );
+          }
+          if (aed.access == 'private' || aed.access == 'permissive') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/blue_aed.svg'),
+            );
+          }
+          if (aed.access == 'no') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/red_aed.svg'),
+            );
+          }
+          if (aed.access == 'unknown') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/grey_aed.svg'),
+            );
+          }
+          return Marker(
+            point: aed.location,
+            key: Key(aeds.indexOf(aed).toString()),
+            builder: (ctx) => SvgPicture.asset('assets/green_aed.svg'),
+          );
+        })
+        .cast<Marker>()
         .toList();
   }
 
@@ -70,12 +125,27 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return CupertinoPageScaffold(
         child: aeds.isEmpty
             ? const Center(child: CircularProgressIndicator())
-            : SlidingUpPanel(
-                controller: panel,
-                maxHeight: 500,
-                borderRadius: radius,
-                panel: Container(decoration: BoxDecoration(borderRadius: radius), child: _buildBottomPanel()),
-                body: SafeArea(top: false, child: _buildMap())));
+            : Stack(
+                children: [
+                  SlidingUpPanel(
+                      controller: panel,
+                      maxHeight: 500,
+                      borderRadius: radius,
+                      parallaxEnabled: true,
+                      parallaxOffset: 0.5,
+                      panel: AnimatedContainer(
+                          decoration: BoxDecoration(
+                            borderRadius: radius,
+                            color: _brightness == Brightness.dark
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                          duration: const Duration(milliseconds: 300),
+                          child: _buildBottomPanel()),
+                      body: SafeArea(top: false, child: _buildMap())),
+                  SafeArea(child: _buildHeader())
+                ],
+              ));
   }
 
   Widget _buildBottomPanel() {
@@ -88,7 +158,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Container(
             width: 30,
             height: 5,
-            decoration: BoxDecoration(color: Colors.grey[300], borderRadius: const BorderRadius.all(Radius.circular(12.0))),
+            decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: const BorderRadius.all(Radius.circular(12.0))),
           ),
         ],
       ),
@@ -100,21 +172,47 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                if (aeds.first == selectedAED) const Text('⚠️ Najbliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18)),
+                if (aeds.first == selectedAED)
+                  const Text('⚠️ Najbliższy AED',
+                      style: TextStyle(
+                          color: Colors.orange,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 18)),
                 if (aeds.first != selectedAED)
                   GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         _selectAED(aeds.first);
                       },
-                      child: const Text('⚠️ Dostępny jest bliższy AED', style: TextStyle(color: Colors.orange, fontStyle: FontStyle.italic, fontSize: 18))),
+                      child: const Text('⚠️ Dostępny jest bliższy AED',
+                          style: TextStyle(
+                              color: Colors.orange,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 18))),
               ],
             ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [Text('🫀 Defibrylator AED', style: TextStyle(fontSize: 24))],
+              children: const [
+                Text('🫀 Defibrylator AED', style: TextStyle(fontSize: 24))
+              ],
             ),
+            const SizedBox(height: 8),
+            CrossFade<String>(
+                duration: const Duration(milliseconds: 200),
+                value: aed.getAccessComment() ?? 'brak danych',
+                builder: (context, v) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text('Dostęp: ', style: TextStyle(fontSize: 16)),
+                      Text(v,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                    ],
+                  );
+                }),
             const SizedBox(height: 8),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
@@ -123,8 +221,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Dokładna lokalizacja: ', style: TextStyle(fontSize: 16)),
-                      Text(v, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Dokładna lokalizacja: ',
+                          style: TextStyle(fontSize: 16)),
+                      Text(v,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
@@ -137,7 +238,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('Operator: ', style: TextStyle(fontSize: 16)),
-                      Text(v, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      Text(v,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
@@ -149,8 +252,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Godziny otwarcia: ', style: TextStyle(fontSize: 16)),
-                      Text(v, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Godziny otwarcia: ',
+                          style: TextStyle(fontSize: 16)),
+                      Text(v,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
@@ -162,8 +268,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text('Wewnątrz budynku: ', style: TextStyle(fontSize: 16)),
-                      Text(v ? 'tak' : 'nie', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Wewnątrz budynku: ',
+                          style: TextStyle(fontSize: 16)),
+                      Text(v ? 'tak' : 'nie',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
@@ -175,13 +284,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      launchUrl(Uri.parse('tel:${aed.phone.toString().replaceAll(' ', '')}'));
+                      launchUrl(Uri.parse(
+                          'tel:${aed.phone.toString().replaceAll(' ', '')}'));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Text('Kontakt: ', style: TextStyle(fontSize: 16)),
-                        Text(v, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        Text(v,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   );
@@ -194,8 +306,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text('Identyfikator: ', style: TextStyle(fontSize: 16)),
-                      Text(v.toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('Identyfikator: ',
+                          style: TextStyle(fontSize: 16)),
+                      Text(v.toString(),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
                   );
                 }),
@@ -206,15 +321,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 children: [
                   Builder(builder: (BuildContext context) {
                     var message = 'Szer: ${aed.location.latitude}';
-                    return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+                    return StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
                       return TextButton(
-                          child: Text(message, style: const TextStyle(fontSize: 16, color: Colors.black)),
+                          child: Text(message,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: _brightness == Brightness.dark
+                                      ? Colors.white
+                                      : Colors.black)),
                           onPressed: () {
-                            Clipboard.setData(ClipboardData(text: aed.location.latitude.toString()));
+                            Clipboard.setData(ClipboardData(
+                                text: aed.location.latitude.toString()));
                             setState(() {
                               message = 'Skopiowano';
                             });
-                            Future.delayed(const Duration(milliseconds: 2000), () {
+                            Future.delayed(const Duration(milliseconds: 2000),
+                                () {
                               setState(() {
                                 message = 'Dł: ${aed.location.latitude}';
                               });
@@ -224,15 +347,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   }),
                   Builder(builder: (BuildContext context) {
                     var message = 'Dł: ${aed.location.longitude}';
-                    return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+                    return StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
                       return TextButton(
-                          child: Text(message, style: const TextStyle(fontSize: 16, color: Colors.black)),
+                          child: Text(message,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: _brightness == Brightness.dark
+                                      ? Colors.white
+                                      : Colors.black)),
                           onPressed: () {
-                            Clipboard.setData(ClipboardData(text: aed.location.longitude.toString()));
+                            Clipboard.setData(ClipboardData(
+                                text: aed.location.longitude.toString()));
                             setState(() {
                               message = 'Skopiowano';
                             });
-                            Future.delayed(const Duration(milliseconds: 2000), () {
+                            Future.delayed(const Duration(milliseconds: 2000),
+                                () {
                               setState(() {
                                 message = 'Dł: ${aed.location.longitude}';
                               });
@@ -273,7 +404,49 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     ]);
   }
 
+  ColorFilter colorFilter = const ColorFilter.matrix(<double>[
+    -1,
+    0,
+    0,
+    0,
+    255,
+    0,
+    -1,
+    0,
+    0,
+    255,
+    0,
+    0,
+    -1,
+    0,
+    255,
+    0,
+    0,
+    0,
+    1,
+    0,
+  ]);
+
+  bool _isConnected = true;
+
+  void _checkNetwork() async {
+    try {
+      await http.get(Uri.parse(
+          'https://aed.openstreetmap.org.pl/aed_poland.geojson_test'));
+      setState(() {
+        _isConnected = true;
+      });
+      return;
+    } catch (_) {
+      setState(() {
+        _isConnected = false;
+      });
+      return;
+    }
+  }
+
   Widget _buildMap() {
+    bool isDarkMode = _brightness == Brightness.dark;
     return FutureBuilder<LatLng>(
         future: Store.instance.determinePosition(),
         builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
@@ -286,54 +459,62 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     FlutterMap(
                       mapController: mapController,
                       options: MapOptions(
-                          center: aeds.first.location,
-                          interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-                          zoom: 14,
-                          maxZoom: 18,
-                          minZoom: 8,
-                          plugins: [VectorMapTilesPlugin(), const LocationMarkerPlugin(), DragMarkerPlugin()]),
-                      layers: <LayerOptions>[
-                        TileLayerOptions(
-                          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                          userAgentPackageName: 'pl.enteam.aed_map',
-                        ),
-                        // VectorTileLayerOptions(theme: _getMapTheme(context), tileProviders: TileProviders({'openmaptiles': Store.instance.buildCachingTileProvider()})),
-                        LocationMarkerLayerOptions(),
-                        DragMarkerPluginOptions(markers: _getMarkers()),
-                      ],
-                    ),
-                    SafeArea(
-                        child: Padding(
-                      padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Mapa AED', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)),
-                              Text('${aeds.length} AED dostępnych', style: const TextStyle(fontSize: 14))
-                            ],
+                        center: aeds.first.location,
+                        interactiveFlags:
+                            InteractiveFlag.all & ~InteractiveFlag.rotate,
+                        zoom: 14,
+                        maxZoom: 18,
+                        minZoom: 8,
+                      ),
+                      children: [
+                        TileLayer(
+                            urlTemplate:
+                                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            userAgentPackageName: 'pl.enteam.aed_map',
+                            tileProvider: CachedNetworkTileProvider(),
+                            tileBuilder: (BuildContext context,
+                                Widget tileWidget, Tile tile) {
+                              return isDarkMode
+                                  ? ColorFiltered(
+                                      colorFilter: colorFilter,
+                                      child: tileWidget)
+                                  : tileWidget;
+                            }),
+                        CurrentLocationLayer(),
+                        SuperclusterLayer.immutable(
+                          initialMarkers: _getMarkers(),
+                          loadingOverlayBuilder: (context) => Container(),
+                          controller: markersController,
+                          onMarkerTap: (Marker marker) {
+                            _selectAED(aeds[int.parse(marker.key
+                                .toString()
+                                .replaceAll('[<\'', '')
+                                .replaceAll('\'>]', ''))]);
+                          },
+                          clusterWidgetSize: const Size(40, 40),
+                          anchor: AnchorPos.align(AnchorAlign.center),
+                          clusterZoomAnimation: const AnimationOptions.animate(
+                            curve: Curves.linear,
+                            velocity: 1,
                           ),
-                          Column(
-                            children: [
-                              GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () {
-                                  _showAboutDialog();
-                                },
-                                child: const Card(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Icon(CupertinoIcons.gear),
-                                  ),
+                          calculateAggregatedClusterData: true,
+                          builder: (context, position, markerCount,
+                              extraClusterData) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  color: const Color(0xFF289140)),
+                              child: Center(
+                                child: Text(
+                                  markerCount.toString(),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                               ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 )),
               ],
@@ -343,23 +524,79 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         });
   }
 
-  _selectAED(AED aed) {
+  Widget _buildHeader() {
+    return SafeArea(
+        child: Padding(
+      padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Mapa AED',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)),
+              Text('${aeds.length} AED dostępnych',
+                  style: const TextStyle(fontSize: 14)),
+              const SizedBox(height: 2),
+              if (!_isConnected)
+                const Text('Brak połączenia sieciowego!',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold))
+            ],
+          ),
+          Column(
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  _showAboutDialog();
+                },
+                child: Card(
+                  color: _brightness == Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(CupertinoIcons.gear,
+                        color: _brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    ));
+  }
+
+  _selectAED(AED aed) async {
     setState(() {
       selectedAED = aed;
     });
     panel.open();
-    _animatedMapMove(selectedAED!.location, 14);
+    _animatedMapMove(selectedAED!.location, 16);
   }
 
   void _animatedMapMove(LatLng destLocation, double destZoom) {
-    final latTween = Tween<double>(begin: mapController.center.latitude, end: destLocation.latitude - 0.009);
-    final lngTween = Tween<double>(begin: mapController.center.longitude, end: destLocation.longitude);
+    final latTween = Tween<double>(
+        begin: mapController.center.latitude, end: destLocation.latitude);
+    final lngTween = Tween<double>(
+        begin: mapController.center.longitude, end: destLocation.longitude);
     final zoomTween = Tween<double>(begin: mapController.zoom, end: destZoom);
 
-    final controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
-    final Animation<double> animation = CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+    final controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    final Animation<double> animation =
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
     controller.addListener(() {
-      mapController.move(LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)), zoomTween.evaluate(animation));
+      mapController.move(
+          LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+          zoomTween.evaluate(animation));
     });
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -374,12 +611,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   _showAboutDialog() {
     showAboutDialog(
       context: context,
-      applicationIcon: const Image(image: AssetImage('assets/icon.png'), width: 64),
+      applicationIcon:
+          const Image(image: AssetImage('assets/icon.png'), width: 64),
       applicationName: 'Mapa AED',
       applicationVersion: 'v1.0.2',
       applicationLegalese: 'By Mateusz Woźniak',
       children: <Widget>[
-        const Padding(padding: EdgeInsets.only(top: 15), child: Text('Dane o lokalizacjach AED pochodzą z projektu aed.openstreetmap.org.pl')),
+        const Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: Text(
+                'Dane o lokalizacjach AED pochodzą z projektu aed.openstreetmap.org.pl')),
       ],
     );
   }
@@ -404,7 +645,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
             CupertinoActionSheetAction(
               onPressed: () async {
-                String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+                String googleUrl =
+                    'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
                 // ignore: deprecated_member_use
                 if (await canLaunch(googleUrl)) {
                   // ignore: deprecated_member_use
