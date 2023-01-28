@@ -28,11 +28,6 @@ class Store {
     return LatLng(position.latitude, position.longitude);
   }
 
-  VectorTileProvider buildCachingTileProvider() {
-    const urlTemplate = 'https://tiles.stadiamaps.com/data/openmaptiles/{z}/{x}/{y}.pbf?api_key=$tilesApiKey';
-    return MemoryCacheVectorTileProvider(delegate: NetworkVectorTileProvider(urlTemplate: urlTemplate, maximumZoom: 14), maxSizeBytes: 1024 * 1024 * 32);
-  }
-
   Future<List<AED>> loadAEDs(LatLng currentLocation) async {
     var response = await http.get(Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
     if (response.statusCode != 200) {

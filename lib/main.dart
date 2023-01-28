@@ -25,18 +25,6 @@ class _AppState extends State<App> {
   }
 
   _checkNetwork() async {
-    // try {
-    //   final result = await InternetAddress.lookup('example.com');
-    //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-    //     setState(() {
-    //       current = HomeScreen();
-    //     });
-    //   }
-    // } on SocketException catch (_) {
-    //   setState(() {
-    //     current = OfflineScreen();
-    //   });
-    // }
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
       setState(() {
