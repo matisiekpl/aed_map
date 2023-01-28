@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:aed_map/cached_network_tile_provider.dart';
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,8 +32,8 @@ class _HomeScreenState extends State<HomeScreen>
   AED? selectedAED;
   final PanelController panel = PanelController();
   final MapController mapController = MapController();
-  final SuperclusterMutableController markersController =
-      SuperclusterMutableController();
+  final SuperclusterImmutableController markersController =
+      SuperclusterImmutableController();
 
   Brightness? _brightness;
 
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen>
     });
     WidgetsBinding.instance.addObserver(this);
     _brightness = WidgetsBinding.instance.window.platformBrightness;
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 4), (timer) {
       _checkNetwork();
     });
   }
@@ -430,14 +431,13 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _checkNetwork() async {
     try {
-      final result = await InternetAddress.lookup('tile.openstreetmap.org');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        setState(() {
-          _isConnected = true;
-        });
-        return;
-      }
-    } on SocketException catch (_) {
+      await http.get(Uri.parse(
+          'https://aed.openstreetmap.org.pl/aed_poland.geojson_test'));
+      setState(() {
+        _isConnected = true;
+      });
+      return;
+    } catch (_) {
       setState(() {
         _isConnected = false;
       });
@@ -474,20 +474,16 @@ class _HomeScreenState extends State<HomeScreen>
                             tileProvider: CachedNetworkTileProvider(),
                             tileBuilder: (BuildContext context,
                                 Widget tileWidget, Tile tile) {
-                              return AnimatedCrossFade(
-                                  duration: const Duration(milliseconds: 300),
-                                  firstChild: tileWidget,
-                                  secondChild: ColorFiltered(
+                              return isDarkMode
+                                  ? ColorFiltered(
                                       colorFilter: colorFilter,
-                                      child: tileWidget),
-                                  crossFadeState: isDarkMode
-                                      ? CrossFadeState.showSecond
-                                      : CrossFadeState.showFirst);
+                                      child: tileWidget)
+                                  : tileWidget;
                             }),
-                        CurrentLocationLayer(
-                            turnOnHeadingUpdate: TurnOnHeadingUpdate.always),
-                        SuperclusterLayer.mutable(
+                        CurrentLocationLayer(),
+                        SuperclusterLayer.immutable(
                           initialMarkers: _getMarkers(),
+                          loadingOverlayBuilder: (context) => Container(),
                           controller: markersController,
                           onMarkerTap: (Marker marker) {
                             _selectAED(aeds[int.parse(marker.key

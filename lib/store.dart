@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'package:http/http.dart' as http;
 
 import 'constants.dart';
@@ -17,7 +18,7 @@ class Store {
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return Future.error('Location services are disabled.');
+    if (!serviceEnabled) return warsaw;
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -31,21 +32,31 @@ class Store {
 
   static const String aedListKey = 'aed_list_json';
 
-  Future<List<AED>> loadAEDs(LatLng currentLocation) async {
-    List<AED> aeds = [];
+  updateAEDs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var contents = '';
     try {
       var response = await http.get(
           Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
-      contents = response.body;
-      await prefs.setString(aedListKey, contents);
+      await prefs.setString(aedListKey, response.body);
     } catch (err) {
       if (kDebugMode) {
         print('Failed to load AEDs from internet!');
       }
-      contents = prefs.getString(aedListKey)!;
     }
+  }
+
+  loadLocalAEDs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String data = await rootBundle.loadString("assets/aed_poland.geojson");
+    await prefs.setString(aedListKey, data);
+  }
+
+  Future<List<AED>> loadAEDs(LatLng currentLocation) async {
+    List<AED> aeds = [];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
+    updateAEDs();
+    var contents = prefs.getString(aedListKey)!;
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
       aeds.add(AED(
@@ -57,8 +68,7 @@ class Store {
           row['properties']['operator'],
           row['properties']['phone'],
           row['properties']['opening_hours'],
-          row['properties']['access']
-      ));
+          row['properties']['access']));
     });
     if (kDebugMode) {
       print('Loaded ${aeds.length} AEDs!');
