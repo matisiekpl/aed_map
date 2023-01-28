@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,16 +29,34 @@ class Store {
     return LatLng(position.latitude, position.longitude);
   }
 
+  static const String aedListKey = 'aed_list_json';
+
   Future<List<AED>> loadAEDs(LatLng currentLocation) async {
-    var response = await http.get(Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
-    if (response.statusCode != 200) {
-      throw Exception('Failed to load AEDs');
-    }
     List<AED> aeds = [];
-    var jsonList = jsonDecode(response.body)['features'];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var contents = '';
+    try {
+      var response = await http.get(
+          Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
+      contents = response.body;
+      await prefs.setString(aedListKey, contents);
+    } catch (err) {
+      if (kDebugMode) {
+        print('Failed to load AEDs from internet!');
+      }
+      contents = prefs.getString(aedListKey)!;
+    }
+    var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
-      aeds.add(AED(LatLng(row['geometry']['coordinates'][1], row['geometry']['coordinates'][0]), row['properties']['osm_id'], row['properties']['defibrillator:location'],
-          row['properties']['indoor'] == 'yes', row['properties']['operator'], row['properties']['phone'], row['properties']['opening_hours']));
+      aeds.add(AED(
+          LatLng(row['geometry']['coordinates'][1],
+              row['geometry']['coordinates'][0]),
+          row['properties']['osm_id'],
+          row['properties']['defibrillator:location'],
+          row['properties']['indoor'] == 'yes',
+          row['properties']['operator'],
+          row['properties']['phone'],
+          row['properties']['opening_hours']));
     });
     if (kDebugMode) {
       print('Loaded ${aeds.length} AEDs!');

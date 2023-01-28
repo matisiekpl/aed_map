@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:aed_map/cached_network_tile_provider.dart';
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,9 @@ class _HomeScreenState extends State<HomeScreen>
     });
     WidgetsBinding.instance.addObserver(this);
     _brightness = WidgetsBinding.instance.window.platformBrightness;
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      _checkNetwork();
+    });
   }
 
   @override
@@ -364,6 +368,25 @@ class _HomeScreenState extends State<HomeScreen>
     0,
   ]);
 
+  bool _isConnected = true;
+
+  void _checkNetwork() async {
+    try {
+      final result = await InternetAddress.lookup('tile.openstreetmap.org');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          _isConnected = true;
+        });
+        return;
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        _isConnected = false;
+      });
+      return;
+    }
+  }
+
   Widget _buildMap() {
     bool isDarkMode = _brightness == Brightness.dark;
     return FutureBuilder<LatLng>(
@@ -390,6 +413,7 @@ class _HomeScreenState extends State<HomeScreen>
                             urlTemplate:
                                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                             userAgentPackageName: 'pl.enteam.aed_map',
+                            tileProvider: CachedNetworkTileProvider(),
                             tileBuilder: (BuildContext context,
                                 Widget tileWidget, Tile tile) {
                               return AnimatedCrossFade(
@@ -459,7 +483,14 @@ class _HomeScreenState extends State<HomeScreen>
               const Text('Mapa AED',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)),
               Text('${aeds.length} AED dostępnych',
-                  style: const TextStyle(fontSize: 14))
+                  style: const TextStyle(fontSize: 14)),
+              const SizedBox(height: 2),
+              if (!_isConnected)
+                const Text('Brak połączenia sieciowego!',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold))
             ],
           ),
           Column(
@@ -469,10 +500,16 @@ class _HomeScreenState extends State<HomeScreen>
                 onTap: () {
                   _showAboutDialog();
                 },
-                child: const Card(
+                child: Card(
+                  color: _brightness == Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(CupertinoIcons.gear),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(CupertinoIcons.gear,
+                        color: _brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black),
                   ),
                 ),
               ),
