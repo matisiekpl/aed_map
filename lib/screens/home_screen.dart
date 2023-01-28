@@ -69,11 +69,48 @@ class _HomeScreenState extends State<HomeScreen>
 
   List<Marker> _getMarkers() {
     return aeds
-        .map((aed) => Marker(
+        .map((aed) {
+          if (aed.access == 'yes') {
+            return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
               builder: (ctx) => SvgPicture.asset('assets/green_aed.svg'),
-            ))
+            );
+          }
+          if (aed.access == 'customers') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/yellow_aed.svg'),
+            );
+          }
+          if (aed.access == 'private' || aed.access == 'permissive') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/blue_aed.svg'),
+            );
+          }
+          if (aed.access == 'no') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/red_aed.svg'),
+            );
+          }
+          if (aed.access == 'unknown') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => SvgPicture.asset('assets/grey_aed.svg'),
+            );
+          }
+          return Marker(
+            point: aed.location,
+            key: Key(aeds.indexOf(aed).toString()),
+            builder: (ctx) => SvgPicture.asset('assets/green_aed.svg'),
+          );
+        })
         .cast<Marker>()
         .toList();
   }
@@ -160,6 +197,21 @@ class _HomeScreenState extends State<HomeScreen>
                 Text('🫀 Defibrylator AED', style: TextStyle(fontSize: 24))
               ],
             ),
+            const SizedBox(height: 8),
+            CrossFade<String>(
+                duration: const Duration(milliseconds: 200),
+                value: aed.getAccessComment() ?? 'brak danych',
+                builder: (context, v) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text('Dostęp: ', style: TextStyle(fontSize: 16)),
+                      Text(v,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                    ],
+                  );
+                }),
             const SizedBox(height: 8),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
@@ -272,8 +324,11 @@ class _HomeScreenState extends State<HomeScreen>
                         builder: (BuildContext context, StateSetter setState) {
                       return TextButton(
                           child: Text(message,
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.black)),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: _brightness == Brightness.dark
+                                      ? Colors.white
+                                      : Colors.black)),
                           onPressed: () {
                             Clipboard.setData(ClipboardData(
                                 text: aed.location.latitude.toString()));
@@ -295,8 +350,11 @@ class _HomeScreenState extends State<HomeScreen>
                         builder: (BuildContext context, StateSetter setState) {
                       return TextButton(
                           child: Text(message,
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.black)),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: _brightness == Brightness.dark
+                                      ? Colors.white
+                                      : Colors.black)),
                           onPressed: () {
                             Clipboard.setData(ClipboardData(
                                 text: aed.location.longitude.toString()));

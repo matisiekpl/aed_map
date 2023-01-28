@@ -56,7 +56,9 @@ class Store {
           row['properties']['indoor'] == 'yes',
           row['properties']['operator'],
           row['properties']['phone'],
-          row['properties']['opening_hours']));
+          row['properties']['opening_hours'],
+          row['properties']['access']
+      ));
     });
     if (kDebugMode) {
       print('Loaded ${aeds.length} AEDs!');
