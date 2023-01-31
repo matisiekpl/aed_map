@@ -26,7 +26,8 @@ class Store {
       if (permission == LocationPermission.denied) return warsaw;
     }
     if (permission == LocationPermission.deniedForever) return warsaw;
-    var position = await Geolocator.getCurrentPosition();
+    var position = await Geolocator.getCurrentPosition(
+        timeLimit: const Duration(seconds: 2));
     return LatLng(position.latitude, position.longitude);
   }
 

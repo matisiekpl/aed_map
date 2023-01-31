@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:aed_map/constants.dart';
+import 'package:aed_map/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:aed_map/cached_network_tile_provider.dart';
 import 'package:cross_fade/cross_fade.dart';
@@ -11,6 +14,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hue_rotation/hue_rotation.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -44,9 +48,15 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   _initAsync() async {
-    var position = await Store.instance.determinePosition();
-    var items = await Store.instance
-        .loadAEDs(LatLng(position.latitude, position.longitude));
+    List<AED> items = [];
+    if (kDebugMode) {
+      items = await Store.instance
+          .loadAEDs(LatLng(warsaw.latitude, warsaw.longitude));
+    } else {
+      var position = await Store.instance.determinePosition();
+      items = await Store.instance
+          .loadAEDs(LatLng(position.latitude, position.longitude));
+    }
     setState(() {
       aeds = items;
       selectedAED = aeds.first;
@@ -194,8 +204,13 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text('🫀 Defibrylator AED', style: TextStyle(fontSize: 24))
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: SvgPicture.asset('assets/' + aed.getIconFilename(),
+                        width: 32)),
+                SizedBox(width: 6),
+                Text('Defibrylator AED', style: TextStyle(fontSize: 24))
               ],
             ),
             const SizedBox(height: 8),
@@ -206,10 +221,14 @@ class _HomeScreenState extends State<HomeScreen>
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text('Dostęp: ', style: TextStyle(fontSize: 16)),
+                      Text('Dostęp: ',
+                          style:
+                              TextStyle(fontSize: 16, color: aed.getColor())),
                       Text(v,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: aed.getColor())),
                     ],
                   );
                 }),
@@ -247,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(height: 4),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
-                value: aed.openingHours ?? 'brak danych',
+                value: formatOpeningHours(aed.openingHours) ?? 'brak danych',
                 builder: (context, v) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,82 +318,83 @@ class _HomeScreenState extends State<HomeScreen>
                   );
                 }),
             const SizedBox(height: 4),
-            CrossFade<int>(
-                duration: const Duration(milliseconds: 200),
-                value: aed.id,
-                builder: (context, v) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text('Identyfikator: ',
-                          style: TextStyle(fontSize: 16)),
-                      Text(v.toString(),
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                    ],
-                  );
-                }),
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Builder(builder: (BuildContext context) {
-                    var message = 'Szer: ${aed.location.latitude}';
-                    return StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                      return TextButton(
-                          child: Text(message,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: _brightness == Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black)),
-                          onPressed: () {
-                            Clipboard.setData(ClipboardData(
-                                text: aed.location.latitude.toString()));
-                            setState(() {
-                              message = 'Skopiowano';
-                            });
-                            Future.delayed(const Duration(milliseconds: 2000),
-                                () {
-                              setState(() {
-                                message = 'Dł: ${aed.location.latitude}';
-                              });
-                            });
-                          });
-                    });
-                  }),
-                  Builder(builder: (BuildContext context) {
-                    var message = 'Dł: ${aed.location.longitude}';
-                    return StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                      return TextButton(
-                          child: Text(message,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: _brightness == Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black)),
-                          onPressed: () {
-                            Clipboard.setData(ClipboardData(
-                                text: aed.location.longitude.toString()));
-                            setState(() {
-                              message = 'Skopiowano';
-                            });
-                            Future.delayed(const Duration(milliseconds: 2000),
-                                () {
-                              setState(() {
-                                message = 'Dł: ${aed.location.longitude}';
-                              });
-                            });
-                          });
-                    });
-                  }),
-                ],
-              ),
-            ),
+            // CrossFade<int>(
+            //     duration: const Duration(milliseconds: 200),
+            //     value: aed.id,
+            //     builder: (context, v) {
+            //       return Row(
+            //         mainAxisAlignment: MainAxisAlignment.start,
+            //         children: [
+            //           const Text('Identyfikator: ',
+            //               style: TextStyle(fontSize: 16)),
+            //           Text(v.toString(),
+            //               style: const TextStyle(
+            //                   fontSize: 16, fontWeight: FontWeight.bold)),
+            //         ],
+            //       );
+            //     }),
+            // Padding(
+            //   padding: const EdgeInsets.only(right: 16),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Builder(builder: (BuildContext context) {
+            //         var message = 'Szer: ${aed.location.latitude}';
+            //         return StatefulBuilder(
+            //             builder: (BuildContext context, StateSetter setState) {
+            //           return TextButton(
+            //               child: Text(message,
+            //                   style: TextStyle(
+            //                       fontSize: 16,
+            //                       color: _brightness == Brightness.dark
+            //                           ? Colors.white
+            //                           : Colors.black)),
+            //               onPressed: () {
+            //                 Clipboard.setData(ClipboardData(
+            //                     text: aed.location.latitude.toString()));
+            //                 setState(() {
+            //                   message = 'Skopiowano';
+            //                 });
+            //                 Future.delayed(const Duration(milliseconds: 2000),
+            //                     () {
+            //                   setState(() {
+            //                     message = 'Dł: ${aed.location.latitude}';
+            //                   });
+            //                 });
+            //               });
+            //         });
+            //       }),
+            //       Builder(builder: (BuildContext context) {
+            //         var message = 'Dł: ${aed.location.longitude}';
+            //         return StatefulBuilder(
+            //             builder: (BuildContext context, StateSetter setState) {
+            //           return TextButton(
+            //               child: Text(message,
+            //                   style: TextStyle(
+            //                       fontSize: 16,
+            //                       color: _brightness == Brightness.dark
+            //                           ? Colors.white
+            //                           : Colors.black)),
+            //               onPressed: () {
+            //                 Clipboard.setData(ClipboardData(
+            //                     text: aed.location.longitude.toString()));
+            //                 setState(() {
+            //                   message = 'Skopiowano';
+            //                 });
+            //                 Future.delayed(const Duration(milliseconds: 2000),
+            //                     () {
+            //                   setState(() {
+            //                     message = 'Dł: ${aed.location.longitude}';
+            //                   });
+            //                 });
+            //               });
+            //         });
+            //       }),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(height: 2),
+            const SizedBox(height: 4),
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: SizedBox(
@@ -405,6 +425,29 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   ColorFilter colorFilter = const ColorFilter.matrix(<double>[
+    -1,
+    0,
+    0,
+    0,
+    255,
+    0,
+    -1,
+    0,
+    0,
+    255,
+    0,
+    0,
+    -1,
+    0,
+    255,
+    0,
+    0,
+    0,
+    1,
+    0,
+  ]);
+
+  ColorFilter invert = ColorFilter.matrix(<double>[
     -1,
     0,
     0,
@@ -475,9 +518,12 @@ class _HomeScreenState extends State<HomeScreen>
                             tileBuilder: (BuildContext context,
                                 Widget tileWidget, Tile tile) {
                               return isDarkMode
-                                  ? ColorFiltered(
-                                      colorFilter: colorFilter,
-                                      child: tileWidget)
+                                  ? HueRotation(
+                                      degrees: 180,
+                                      child: ColorFiltered(
+                                          colorFilter: invert,
+                                          child: tileWidget),
+                                    )
                                   : tileWidget;
                             }),
                         CurrentLocationLayer(),
@@ -620,7 +666,7 @@ class _HomeScreenState extends State<HomeScreen>
         const Padding(
             padding: EdgeInsets.only(top: 15),
             child: Text(
-                'Dane o lokalizacjach AED pochodzą z projektu aed.openstreetmap.org.pl')),
+                'Dane o lokalizacjach AED pochodzą z projektu openaedmap.org')),
       ],
     );
   }

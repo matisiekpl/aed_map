@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
 class AED {
@@ -25,5 +28,31 @@ class AED {
       'unknown': 'nieznany',
     };
     return comments[access];
+  }
+
+  Color getColor() {
+    if (access == null) return Colors.grey;
+    Map colors = {
+      'yes': Colors.green,
+      'customers': Colors.yellow,
+      'private': Colors.blue,
+      'permissive': Colors.blue,
+      'no': Colors.red,
+      'unknown': Colors.grey,
+    };
+    return colors[access];
+  }
+
+  String getIconFilename() {
+    if (access == null) return 'green_aed.svg';
+    Map filenames = {
+      'yes': 'green_aed.svg',
+      'customers': 'yellow_aed.svg',
+      'private': 'blue_aed.svg',
+      'permissive': 'blue_aed.svg',
+      'no': 'red_aed.svg',
+      'unknown': 'grey_aed.svg',
+    };
+    return filenames[access];
   }
 }
