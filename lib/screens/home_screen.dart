@@ -33,6 +33,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   List<AED> aeds = [];
+  List<Marker> markers = [];
   AED? selectedAED;
   final PanelController panel = PanelController();
   final MapController mapController = MapController();
@@ -40,6 +41,8 @@ class _HomeScreenState extends State<HomeScreen>
       SuperclusterImmutableController();
 
   Brightness? _brightness;
+
+  bool loaded = false;
 
   @override
   void initState() {
@@ -61,6 +64,10 @@ class _HomeScreenState extends State<HomeScreen>
       aeds = items;
       selectedAED = aeds.first;
     });
+    _getMarkers();
+    setState(() {
+      loaded = true;
+    });
     WidgetsBinding.instance.addObserver(this);
     _brightness = WidgetsBinding.instance.window.platformBrightness;
     Timer.periodic(const Duration(seconds: 4), (timer) {
@@ -79,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   List<Marker> _getMarkers() {
-    return aeds
+    markers = aeds
         .map((aed) {
           if (aed.access == 'yes') {
             return Marker(
@@ -124,6 +131,7 @@ class _HomeScreenState extends State<HomeScreen>
         })
         .cast<Marker>()
         .toList();
+    return markers;
   }
 
   @override
@@ -133,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen>
       topRight: Radius.circular(24.0),
     );
     return CupertinoPageScaffold(
-        child: aeds.isEmpty
+        child: !loaded
             ? const Center(child: CircularProgressIndicator())
             : Stack(
                 children: [
@@ -553,7 +561,7 @@ class _HomeScreenState extends State<HomeScreen>
                             }),
                         CurrentLocationLayer(),
                         SuperclusterLayer.immutable(
-                          initialMarkers: _getMarkers(),
+                          initialMarkers: markers,
                           loadingOverlayBuilder: (context) => Container(),
                           controller: markersController,
                           minimumClusterSize: 3,
