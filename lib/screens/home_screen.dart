@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen>
         ],
       ),
       Padding(
-        padding: const EdgeInsets.only(left: 16),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -194,7 +194,8 @@ class _HomeScreenState extends State<HomeScreen>
                       onTap: () {
                         _selectAED(aeds.first);
                       },
-                      child: const Text('⚠️ Dostępny jest bliższy AED',
+                      child: const Text(
+                          '⚠️ Dostępny jest bliższy AED (kliknij)',
                           style: TextStyle(
                               color: Colors.orange,
                               fontStyle: FontStyle.italic,
@@ -202,36 +203,60 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ),
             const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: SvgPicture.asset('assets/' + aed.getIconFilename(),
-                        width: 32)),
-                SizedBox(width: 6),
-                Text('Defibrylator AED', style: TextStyle(fontSize: 24))
-              ],
-            ),
-            const SizedBox(height: 8),
-            CrossFade<String>(
-                duration: const Duration(milliseconds: 200),
-                value: aed.getAccessComment() ?? 'brak danych',
-                builder: (context, v) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                color: aed.getColor(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
                     children: [
-                      Text('Dostęp: ',
-                          style:
-                              TextStyle(fontSize: 16, color: aed.getColor())),
-                      Text(v,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: aed.getColor())),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: SvgPicture.asset(
+                                  'assets/' + aed.getIconFilename(),
+                                  width: 32)),
+                          const SizedBox(width: 6),
+                          Text('Defibrylator AED',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: aed.getColor() == Colors.yellow
+                                      ? Colors.black
+                                      : Colors.white))
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      CrossFade<String>(
+                          duration: const Duration(milliseconds: 200),
+                          value: aed.getAccessComment() ?? 'brak danych',
+                          builder: (context, v) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('Dostęp: ',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: aed.getColor() == Colors.yellow
+                                            ? Colors.black
+                                            : Colors.white)),
+                                Text(v,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: aed.getColor() == Colors.yellow
+                                            ? Colors.black
+                                            : Colors.white)),
+                              ],
+                            );
+                          }),
                     ],
-                  );
-                }),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 8),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
@@ -447,7 +472,7 @@ class _HomeScreenState extends State<HomeScreen>
     0,
   ]);
 
-  ColorFilter invert = ColorFilter.matrix(<double>[
+  ColorFilter invert = const ColorFilter.matrix(<double>[
     -1,
     0,
     0,
@@ -531,6 +556,7 @@ class _HomeScreenState extends State<HomeScreen>
                           initialMarkers: _getMarkers(),
                           loadingOverlayBuilder: (context) => Container(),
                           controller: markersController,
+                          minimumClusterSize: 3,
                           onMarkerTap: (Marker marker) {
                             _selectAED(aeds[int.parse(marker.key
                                 .toString()
@@ -549,7 +575,7 @@ class _HomeScreenState extends State<HomeScreen>
                             return Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.0),
-                                  color: const Color(0xFF289140)),
+                                  color: Colors.brown),
                               child: Center(
                                 child: Text(
                                   markerCount.toString(),
