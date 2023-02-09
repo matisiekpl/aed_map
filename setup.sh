@@ -1,5 +1,7 @@
 #!/bin/bash
 
+flutter gen-l10n
+
 flutter pub get
 flutter pub run flutter_launcher_icons
 

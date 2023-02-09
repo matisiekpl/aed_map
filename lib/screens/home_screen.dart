@@ -19,6 +19,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/aed.dart';
 import '../store.dart';
@@ -191,8 +192,8 @@ class _HomeScreenState extends State<HomeScreen>
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (aeds.first == selectedAED)
-                  const Text('⚠️ Najbliższy AED',
-                      style: TextStyle(
+                  Text('⚠️ ' + AppLocalizations.of(context)!.closestAED,
+                      style: const TextStyle(
                           color: Colors.orange,
                           fontStyle: FontStyle.italic,
                           fontSize: 18)),
@@ -202,9 +203,10 @@ class _HomeScreenState extends State<HomeScreen>
                       onTap: () {
                         _selectAED(aeds.first);
                       },
-                      child: const Text(
-                          '⚠️ Dostępny jest bliższy AED (kliknij)',
-                          style: TextStyle(
+                      child: Text(
+                          '⚠️ ' +
+                              AppLocalizations.of(context)!.closerAEDAvailable,
+                          style: const TextStyle(
                               color: Colors.orange,
                               fontStyle: FontStyle.italic,
                               fontSize: 18))),
@@ -228,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   'assets/' + aed.getIconFilename(),
                                   width: 32)),
                           const SizedBox(width: 6),
-                          Text('Defibrylator AED',
+                          Text(AppLocalizations.of(context)!.defibrillator,
                               style: TextStyle(
                                   fontSize: 24,
                                   color: aed.getColor() == Colors.yellow
@@ -239,12 +241,14 @@ class _HomeScreenState extends State<HomeScreen>
                       const SizedBox(height: 8),
                       CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
-                          value: aed.getAccessComment() ?? 'brak danych',
+                          value: aed.getAccessComment(context) ??
+                              AppLocalizations.of(context)!.noData,
                           builder: (context, v) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text('Dostęp: ',
+                                Text(
+                                    AppLocalizations.of(context)!.access + ": ",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: aed.getColor() == Colors.yellow
@@ -268,13 +272,13 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(height: 8),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
-                value: aed.description ?? 'brak danych',
+                value: aed.description ?? AppLocalizations.of(context)!.noData,
                 builder: (context, v) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Dokładna lokalizacja: ',
-                          style: TextStyle(fontSize: 16)),
+                      Text(AppLocalizations.of(context)!.location,
+                          style: const TextStyle(fontSize: 16)),
                       Text(v,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
@@ -284,12 +288,13 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(height: 4),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
-                value: aed.operator ?? 'brak danych',
+                value: aed.operator ?? AppLocalizations.of(context)!.noData,
                 builder: (context, v) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Operator: ', style: TextStyle(fontSize: 16)),
+                      Text(AppLocalizations.of(context)!.operator,
+                          style: const TextStyle(fontSize: 16)),
                       Text(v,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
@@ -299,13 +304,14 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(height: 4),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
-                value: formatOpeningHours(aed.openingHours) ?? 'brak danych',
+                value: formatOpeningHours(aed.openingHours) ??
+                    AppLocalizations.of(context)!.noData,
                 builder: (context, v) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Godziny otwarcia: ',
-                          style: TextStyle(fontSize: 16)),
+                      Text(AppLocalizations.of(context)!.openingHours,
+                          style: const TextStyle(fontSize: 16)),
                       Text(v,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
@@ -320,9 +326,12 @@ class _HomeScreenState extends State<HomeScreen>
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text('Wewnątrz budynku: ',
-                          style: TextStyle(fontSize: 16)),
-                      Text(v ? 'tak' : 'nie',
+                      Text(AppLocalizations.of(context)!.insideBuilding + ': ',
+                          style: const TextStyle(fontSize: 16)),
+                      Text(
+                          v
+                              ? AppLocalizations.of(context)!.yes
+                              : AppLocalizations.of(context)!.no,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                     ],
@@ -331,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen>
             const SizedBox(height: 4),
             CrossFade<String>(
                 duration: const Duration(milliseconds: 200),
-                value: aed.phone ?? 'brak danych',
+                value: aed.phone ?? AppLocalizations.of(context)!.noData,
                 builder: (context, v) {
                   return GestureDetector(
                     behavior: HitTestBehavior.translucent,
@@ -342,7 +351,8 @@ class _HomeScreenState extends State<HomeScreen>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text('Kontakt: ', style: TextStyle(fontSize: 16)),
+                        Text(AppLocalizations.of(context)!.contact + ': ',
+                            style: const TextStyle(fontSize: 16)),
                         Text(v,
                             style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
@@ -350,93 +360,15 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   );
                 }),
-            const SizedBox(height: 4),
-            // CrossFade<int>(
-            //     duration: const Duration(milliseconds: 200),
-            //     value: aed.id,
-            //     builder: (context, v) {
-            //       return Row(
-            //         mainAxisAlignment: MainAxisAlignment.start,
-            //         children: [
-            //           const Text('Identyfikator: ',
-            //               style: TextStyle(fontSize: 16)),
-            //           Text(v.toString(),
-            //               style: const TextStyle(
-            //                   fontSize: 16, fontWeight: FontWeight.bold)),
-            //         ],
-            //       );
-            //     }),
-            // Padding(
-            //   padding: const EdgeInsets.only(right: 16),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Builder(builder: (BuildContext context) {
-            //         var message = 'Szer: ${aed.location.latitude}';
-            //         return StatefulBuilder(
-            //             builder: (BuildContext context, StateSetter setState) {
-            //           return TextButton(
-            //               child: Text(message,
-            //                   style: TextStyle(
-            //                       fontSize: 16,
-            //                       color: _brightness == Brightness.dark
-            //                           ? Colors.white
-            //                           : Colors.black)),
-            //               onPressed: () {
-            //                 Clipboard.setData(ClipboardData(
-            //                     text: aed.location.latitude.toString()));
-            //                 setState(() {
-            //                   message = 'Skopiowano';
-            //                 });
-            //                 Future.delayed(const Duration(milliseconds: 2000),
-            //                     () {
-            //                   setState(() {
-            //                     message = 'Dł: ${aed.location.latitude}';
-            //                   });
-            //                 });
-            //               });
-            //         });
-            //       }),
-            //       Builder(builder: (BuildContext context) {
-            //         var message = 'Dł: ${aed.location.longitude}';
-            //         return StatefulBuilder(
-            //             builder: (BuildContext context, StateSetter setState) {
-            //           return TextButton(
-            //               child: Text(message,
-            //                   style: TextStyle(
-            //                       fontSize: 16,
-            //                       color: _brightness == Brightness.dark
-            //                           ? Colors.white
-            //                           : Colors.black)),
-            //               onPressed: () {
-            //                 Clipboard.setData(ClipboardData(
-            //                     text: aed.location.longitude.toString()));
-            //                 setState(() {
-            //                   message = 'Skopiowano';
-            //                 });
-            //                 Future.delayed(const Duration(milliseconds: 2000),
-            //                     () {
-            //                   setState(() {
-            //                     message = 'Dł: ${aed.location.longitude}';
-            //                   });
-            //                 });
-            //               });
-            //         });
-            //       }),
-            //     ],
-            //   ),
-            // ),
-            const SizedBox(height: 2),
-            const SizedBox(height: 4),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: SizedBox(
                   width: double.infinity,
                   child: CupertinoButton.filled(
-                      child: const Text('Nawiguj'),
+                      child: Text(AppLocalizations.of(context)!.navigate),
                       onPressed: () {
                         _openMap(aed.location.latitude, aed.location.longitude);
-                        // MapsLauncher.launchCoordinates(aed.location.latitude, aed.location.longitude);
                       })),
             ),
             const SizedBox(height: 12),
@@ -614,14 +546,15 @@ class _HomeScreenState extends State<HomeScreen>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Mapa AED',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32)),
-              Text('${aeds.length} AED dostępnych',
+              Text(AppLocalizations.of(context)!.heading,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 32)),
+              Text(AppLocalizations.of(context)!.subheading(aeds.length),
                   style: const TextStyle(fontSize: 14)),
               const SizedBox(height: 2),
               if (!_isConnected)
-                const Text('Brak połączenia sieciowego!',
-                    style: TextStyle(
+                Text(AppLocalizations.of(context)!.noNetwork,
+                    style: const TextStyle(
                         fontSize: 14,
                         color: Colors.red,
                         fontWeight: FontWeight.bold))
@@ -693,21 +626,23 @@ class _HomeScreenState extends State<HomeScreen>
       context: context,
       applicationIcon:
           const Image(image: AssetImage('assets/icon.png'), width: 64),
-      applicationName: 'Mapa AED',
+      applicationName: AppLocalizations.of(context)!.heading,
       applicationVersion: 'v1.0.2',
       applicationLegalese: 'By Mateusz Woźniak',
       children: <Widget>[
-        const Padding(
-            padding: EdgeInsets.only(top: 15),
-            child: Text(
-                'Dane o lokalizacjach AED pochodzą z projektu openaedmap.org')),
+        Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Text(AppLocalizations.of(context)!.about)),
       ],
     );
   }
 
   String _translateMeters(int distance) {
-    if (distance > 10000) return 'około ${(distance / 1000).floor()}km stąd';
-    return '~${(distance / 200).ceil().toString()} minut biegiem (${distance.toString()}m)';
+    if (distance > 10000) {
+      return AppLocalizations.of(context)!.distance((distance / 1000).floor());
+    }
+    return AppLocalizations.of(context)!
+        .runDistance((distance / 200).ceil(), distance);
   }
 
   _openMap(double latitude, double longitude) async {
@@ -715,7 +650,7 @@ class _HomeScreenState extends State<HomeScreen>
       showCupertinoModalPopup<void>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-          title: const Text('Wybierz aplikację do map'),
+          title: Text(AppLocalizations.of(context)!.chooseMapApp),
           actions: <CupertinoActionSheetAction>[
             CupertinoActionSheetAction(
               onPressed: () {

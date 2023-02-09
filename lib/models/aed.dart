@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AED {
   LatLng location;
@@ -17,15 +18,15 @@ class AED {
   AED(this.location, this.id, this.description, this.indoor, this.operator,
       this.phone, this.openingHours, this.access);
 
-  String? getAccessComment() {
+  String? getAccessComment(BuildContext context) {
     if (access == null) return null;
     Map comments = {
-      'yes': 'publicznie dostępny',
-      'customers': 'tylko w godzinach pracy',
-      'private': 'za zgodą właściciela',
-      'permissive': 'publicznie do odwołania',
-      'no': 'niedostępny',
-      'unknown': 'nieznany',
+      'yes': AppLocalizations.of(context)!.accessYes,
+      'customers': AppLocalizations.of(context)!.accessCustomers,
+      'private': AppLocalizations.of(context)!.accessPrivate,
+      'permissive': AppLocalizations.of(context)!.accessPermissive,
+      'no': AppLocalizations.of(context)!.accessNo,
+      'unknown': AppLocalizations.of(context)!.accessUnknown,
     };
     return comments[access];
   }

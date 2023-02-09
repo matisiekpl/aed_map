@@ -1,0 +1,56 @@
+{
+  "heading": "AED Map",
+  "subheading": "{count} AEDs available",
+  "@subheading": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "4878"
+      }
+    }
+  },
+  "access": "Access",
+  "closestAED": "Closest AED",
+  "closerAEDAvailable": "Closer AED is available (tap)",
+  "location": "Location",
+  "operator": "Operator",
+  "openingHours": "Opening hours",
+  "insideBuilding": "Inside building",
+  "contact": "Contact",
+  "noData": "No data",
+  "navigate": "Navigate",
+  "chooseMapApp": "Choose maps application",
+  "about": "Data source: openaedmap.org",
+  "defibrillator": "Defibrillator",
+  "runDistance": "~{minutes} minute(s) of running ({meters}m)",
+  "@runDistance": {
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "3"
+      },
+      "meters": {
+        "type": "int",
+        "example": "772"
+      }
+    }
+  },
+  "distance": "about {kilometers}km from here",
+  "@distance": {
+    "placeholders": {
+      "kilometers": {
+        "type": "int",
+        "example": "772"
+      }
+    }
+  },
+  "noNetwork": "No network connection!",
+  "yes": "yes",
+  "no": "no",
+  "accessYes": "publicly accessible",
+  "accessCustomers": "accessible during work hours",
+  "accessPrivate": "accessible with owner's permit",
+  "accessPermissive": "publicly available until further notice",
+  "accessNo": "unavailable",
+  "accessUnknown": "unknown access"
+}
