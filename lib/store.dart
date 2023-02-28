@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -81,5 +82,27 @@ class Store {
     }).toList();
     aeds.sort((a, b) => a.distance!.compareTo(b.distance!));
     return aeds;
+  }
+
+  void authenticate() async {
+    var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
+    var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
+    final result = await FlutterWebAuth.authenticate(
+        url:
+            "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
+        callbackUrlScheme: "aedmap");
+    final code = Uri.parse(result).queryParameters['code'];
+    if (kDebugMode) {
+      print('Got OAuth2 code: $code');
+    }
+    var response = await http.post(
+        Uri.parse(
+            'https://www.openstreetmap.org/oauth2/token?grant_type=authorization_code&redirect_uri=aedmap://success&client_id=$clientId&client_secret=$clientSecret&code=$code'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'});
+    var token = json.decode(response.body)['access_token'];
+    if (kDebugMode) {
+      print('Got OAuth2 token: $token');
+    }
+
   }
 }

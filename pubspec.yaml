@@ -58,6 +58,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  flutter_web_auth: ^0.5.0
 
 dev_dependencies:
   flutter_test:

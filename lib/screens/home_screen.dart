@@ -580,6 +580,25 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
               ),
+              const SizedBox(height: 8),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  Store.instance.authenticate();
+                },
+                child: Card(
+                  color: _brightness == Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(CupertinoIcons.wand_rays,
+                        color: _brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                ),
+              ),
             ],
           )
         ],
