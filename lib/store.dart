@@ -81,6 +81,9 @@ class Store {
       return aed;
     }).toList();
     aeds.sort((a, b) => a.distance!.compareTo(b.distance!));
+
+    print(aeds[0].toXml(777));
+
     return aeds;
   }
 
@@ -103,6 +106,5 @@ class Store {
     if (kDebugMode) {
       print('Got OAuth2 token: $token');
     }
-
   }
 }

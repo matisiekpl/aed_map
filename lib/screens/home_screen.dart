@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:aed_map/cached_network_tile_provider.dart';
@@ -152,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen>
                       borderRadius: radius,
                       parallaxEnabled: true,
                       parallaxOffset: 0.5,
-                      panel: AnimatedContainer(
+                      panelBuilder: (ScrollController sc) => AnimatedContainer(
                           decoration: BoxDecoration(
                             borderRadius: radius,
                             color: _brightness == Brightness.dark
@@ -160,233 +161,258 @@ class _HomeScreenState extends State<HomeScreen>
                                 : Colors.white,
                           ),
                           duration: const Duration(milliseconds: 300),
-                          child: _buildBottomPanel()),
+                          child: _buildBottomPanel(sc)),
                       body: SafeArea(top: false, child: _buildMap())),
                   SafeArea(child: _buildHeader())
                 ],
               ));
   }
 
-  Widget _buildBottomPanel() {
+  Widget _buildBottomPanel(ScrollController sc) {
     var aed = selectedAED!;
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const SizedBox(height: 24.0),
-          Container(
-            width: 30,
-            height: 5,
-            decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: const BorderRadius.all(Radius.circular(12.0))),
-          ),
-        ],
-      ),
-      Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                if (aeds.first == selectedAED)
-                  Text('⚠️ ' + AppLocalizations.of(context)!.closestAED,
-                      style: const TextStyle(
-                          color: Colors.orange,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 18)),
-                if (aeds.first != selectedAED)
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        _selectAED(aeds.first);
-                      },
-                      child: Text(
-                          '⚠️ ' +
-                              AppLocalizations.of(context)!.closerAEDAvailable,
-                          style: const TextStyle(
-                              color: Colors.orange,
-                              fontStyle: FontStyle.italic,
-                              fontSize: 18))),
-              ],
+    return ListView(
+      padding: const EdgeInsets.all(0),
+      controller: sc,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 24.0),
+            Container(
+              width: 30,
+              height: 5,
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: const BorderRadius.all(Radius.circular(12.0))),
             ),
-            const SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                color: aed.getColor(),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: SvgPicture.asset(
-                                  'assets/' + aed.getIconFilename(),
-                                  width: 32)),
-                          const SizedBox(width: 6),
-                          Text(AppLocalizations.of(context)!.defibrillator,
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  color: aed.getColor() == Colors.yellow
-                                      ? Colors.black
-                                      : Colors.white))
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      CrossFade<String>(
-                          duration: const Duration(milliseconds: 200),
-                          value: aed.getAccessComment(context) ??
-                              AppLocalizations.of(context)!.noData,
-                          builder: (context, v) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                    AppLocalizations.of(context)!.access + ": ",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: aed.getColor() == Colors.yellow
-                                            ? Colors.black
-                                            : Colors.white)),
-                                Text(v,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: aed.getColor() == Colors.yellow
-                                            ? Colors.black
-                                            : Colors.white)),
-                              ],
-                            );
-                          }),
-                    ],
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  if (aeds.first == selectedAED)
+                    Text('⚠️ ' + AppLocalizations.of(context)!.closestAED,
+                        style: const TextStyle(
+                            color: Colors.orange,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 18)),
+                  if (aeds.first != selectedAED)
+                    GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          _selectAED(aeds.first);
+                        },
+                        child: Text(
+                            '⚠️ ' +
+                                AppLocalizations.of(context)!
+                                    .closerAEDAvailable,
+                            style: const TextStyle(
+                                color: Colors.orange,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 18))),
+                ],
+              ),
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  color: aed.getColor(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: SvgPicture.asset(
+                                    'assets/' + aed.getIconFilename(),
+                                    width: 32)),
+                            const SizedBox(width: 6),
+                            Text(AppLocalizations.of(context)!.defibrillator,
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    color: aed.getColor() == Colors.yellow
+                                        ? Colors.black
+                                        : Colors.white))
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        CrossFade<String>(
+                            duration: const Duration(milliseconds: 200),
+                            value: aed.getAccessComment(context) ??
+                                AppLocalizations.of(context)!.noData,
+                            builder: (context, v) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      AppLocalizations.of(context)!.access +
+                                          ": ",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: aed.getColor() == Colors.yellow
+                                              ? Colors.black
+                                              : Colors.white)),
+                                  Text(v,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: aed.getColor() == Colors.yellow
+                                              ? Colors.black
+                                              : Colors.white)),
+                                ],
+                              );
+                            }),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            CrossFade<String>(
-                duration: const Duration(milliseconds: 200),
-                value: aed.description ?? AppLocalizations.of(context)!.noData,
-                builder: (context, v) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(AppLocalizations.of(context)!.location,
-                          style: const TextStyle(fontSize: 16)),
-                      Text(v,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                    ],
-                  );
-                }),
-            const SizedBox(height: 4),
-            CrossFade<String>(
-                duration: const Duration(milliseconds: 200),
-                value: aed.operator ?? AppLocalizations.of(context)!.noData,
-                builder: (context, v) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(AppLocalizations.of(context)!.operator,
-                          style: const TextStyle(fontSize: 16)),
-                      Text(v,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                    ],
-                  );
-                }),
-            const SizedBox(height: 4),
-            CrossFade<String>(
-                duration: const Duration(milliseconds: 200),
-                value: formatOpeningHours(aed.openingHours) ??
-                    AppLocalizations.of(context)!.noData,
-                builder: (context, v) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(AppLocalizations.of(context)!.openingHours,
-                          style: const TextStyle(fontSize: 16)),
-                      Text(v,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                    ],
-                  );
-                }),
-            const SizedBox(height: 4),
-            CrossFade<bool>(
-                duration: const Duration(milliseconds: 200),
-                value: aed.indoor,
-                builder: (context, v) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(AppLocalizations.of(context)!.insideBuilding + ': ',
-                          style: const TextStyle(fontSize: 16)),
-                      Text(
-                          v
-                              ? AppLocalizations.of(context)!.yes
-                              : AppLocalizations.of(context)!.no,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
-                    ],
-                  );
-                }),
-            const SizedBox(height: 4),
-            CrossFade<String>(
-                duration: const Duration(milliseconds: 200),
-                value: aed.phone ?? AppLocalizations.of(context)!.noData,
-                builder: (context, v) {
-                  return GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      launchUrl(Uri.parse(
-                          'tel:${aed.phone.toString().replaceAll(' ', '')}'));
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+              const SizedBox(height: 8),
+              CrossFade<String>(
+                  duration: const Duration(milliseconds: 200),
+                  value:
+                      aed.description ?? AppLocalizations.of(context)!.noData,
+                  builder: (context, v) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(AppLocalizations.of(context)!.contact + ': ',
+                        Text(AppLocalizations.of(context)!.location,
                             style: const TextStyle(fontSize: 16)),
                         Text(v,
                             style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                       ],
-                    ),
-                  );
-                }),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: SizedBox(
+                    );
+                  }),
+              const SizedBox(height: 4),
+              CrossFade<String>(
+                  duration: const Duration(milliseconds: 200),
+                  value: aed.operator ?? AppLocalizations.of(context)!.noData,
+                  builder: (context, v) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(AppLocalizations.of(context)!.operator,
+                            style: const TextStyle(fontSize: 16)),
+                        Text(v,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    );
+                  }),
+              const SizedBox(height: 4),
+              CrossFade<String>(
+                  duration: const Duration(milliseconds: 200),
+                  value: formatOpeningHours(aed.openingHours) ??
+                      AppLocalizations.of(context)!.noData,
+                  builder: (context, v) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(AppLocalizations.of(context)!.openingHours,
+                            style: const TextStyle(fontSize: 16)),
+                        Text(v,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    );
+                  }),
+              const SizedBox(height: 4),
+              CrossFade<bool>(
+                  duration: const Duration(milliseconds: 200),
+                  value: aed.indoor,
+                  builder: (context, v) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                            AppLocalizations.of(context)!.insideBuilding + ': ',
+                            style: const TextStyle(fontSize: 16)),
+                        Text(
+                            v
+                                ? AppLocalizations.of(context)!.yes
+                                : AppLocalizations.of(context)!.no,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    );
+                  }),
+              const SizedBox(height: 4),
+              CrossFade<String>(
+                  duration: const Duration(milliseconds: 200),
+                  value: aed.phone ?? AppLocalizations.of(context)!.noData,
+                  builder: (context, v) {
+                    return GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        launchUrl(Uri.parse(
+                            'tel:${aed.phone.toString().replaceAll(' ', '')}'));
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(AppLocalizations.of(context)!.contact + ': ',
+                              style: const TextStyle(fontSize: 16)),
+                          Text(v,
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    );
+                  }),
+              const SizedBox(height: 10),
+              SizedBox(
                   width: double.infinity,
                   child: CupertinoButton.filled(
                       child: Text(AppLocalizations.of(context)!.navigate),
                       onPressed: () {
                         _openMap(aed.location.latitude, aed.location.longitude);
                       })),
-            ),
-            const SizedBox(height: 12),
-            CrossFade<String>(
-                duration: const Duration(milliseconds: 200),
-                value: _translateMeters(selectedAED!.distance!),
-                builder: (context, v) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(v, style: const TextStyle(color: Colors.orange)),
-                    ],
-                  );
-                })
-          ],
+              const SizedBox(height: 12),
+              CrossFade<String>(
+                  duration: const Duration(milliseconds: 200),
+                  value: _translateMeters(selectedAED!.distance!),
+                  builder: (context, v) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(v, style: const TextStyle(color: Colors.orange)),
+                      ],
+                    );
+                  }),
+              const SizedBox(height: 24),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Opacity(opacity: 0.5, child: Text('Image of defibrillator')),
+                ],
+              ),
+              const SizedBox(height: 8),
+              // aed.image != null
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    child: CachedNetworkImage(
+                        imageUrl: aed.image ??
+                            'https://f003.backblazeb2.com/file/aedphotos/warszawaUM1285.jpg')),
+              ),
+
+              // : Container(),
+            ],
+          ),
         ),
-      )
-    ]);
+      ],
+    );
   }
 
   ColorFilter colorFilter = const ColorFilter.matrix(<double>[
@@ -584,7 +610,8 @@ class _HomeScreenState extends State<HomeScreen>
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  Store.instance.authenticate();
+                  // Store.instance.authenticate();
+                  showNodeForm();
                 },
                 child: Card(
                   color: _brightness == Brightness.dark
@@ -697,5 +724,20 @@ class _HomeScreenState extends State<HomeScreen>
     } else {
       MapsLauncher.launchCoordinates(latitude, longitude);
     }
+  }
+
+  void showNodeForm() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: const <Widget>[CupertinoTextField(placeholder: 'Aa',)],
+              ),
+            ),
+          );
+        });
   }
 }
