@@ -87,8 +87,8 @@ class Store {
 
   String? token;
 
-  authenticate() async {
-    if (token != null) return;
+  Future<bool> authenticate() async {
+    if (token != null) return true;
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     final result = await FlutterWebAuth.authenticate(
@@ -107,6 +107,7 @@ class Store {
     if (kDebugMode) {
       print('Got OAuth2 token: $token');
     }
+    return token != null;
   }
 
   Future<int> getChangesetId() async {
@@ -165,5 +166,4 @@ class Store {
     }
     return aed;
   }
-
 }

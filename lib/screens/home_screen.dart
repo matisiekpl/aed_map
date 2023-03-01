@@ -306,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen>
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () async {
-                      await Store.instance.authenticate();
+                      if (!await Store.instance.authenticate()) return;
                       AED updatedAed = await Navigator.of(context).push(
                           CupertinoPageRoute(
                               builder: (context) =>
@@ -746,7 +746,7 @@ class _HomeScreenState extends State<HomeScreen>
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () async {
-                  await Store.instance.authenticate();
+                  if (!await Store.instance.authenticate()) return;
                   panel.hide();
                   setState(() {
                     _editMode = true;
