@@ -50,13 +50,16 @@ class _EditFormState extends State<EditForm> {
             tiles: <SettingsTile>[
               SettingsTile(
                 leading: const Icon(CupertinoIcons.placemark),
-                title: const Text('Opis'),
-                value: TextField(
-                  controller: _descriptionEditingController,
-                  decoration: const InputDecoration.collapsed(
-                      hintText: 'Wpisz opis lokalizacji'),
+                // title: const Text('Opis'),
+                title: Flexible(
+                  child: TextField(
+                    controller: _descriptionEditingController,
+                    decoration: const InputDecoration.collapsed(
+                        hintText: 'Wpisz opis lokalizacji'),
+                  ),
                 ),
               ),
+              
               SettingsTile.navigation(
                 leading: const Icon(CupertinoIcons.arrow_clockwise_circle),
                 title: const Text('Dostęp'),
@@ -77,31 +80,26 @@ class _EditFormState extends State<EditForm> {
               ),
               SettingsTile(
                 leading: const Icon(CupertinoIcons.person_2),
-                title: const Text('Operator'),
-                value: TextField(
-                  controller: _operatorEditingController,
-                  decoration: const InputDecoration.collapsed(
-                      hintText: 'Wpisz operatora'),
+                // title: const Text('Operator'),
+                title: Flexible(
+                  child: TextField(
+                    controller: _operatorEditingController,
+                    decoration: const InputDecoration.collapsed(
+                        hintText: 'Wpisz operatora'),
+                  ),
                 ),
               ),
               SettingsTile(
                 leading: const Icon(CupertinoIcons.phone),
-                title: const Text('Kontakt'),
-                value: TextField(
-                  controller: _phoneEditingController,
-                  decoration: const InputDecoration.collapsed(
-                      hintText: 'Wpisz numer telefonu'),
+                // title: const Text('Kontakt'),
+                title: Flexible(
+                  child: TextField(
+                    controller: _phoneEditingController,
+                    decoration: const InputDecoration.collapsed(
+                        hintText: 'Wpisz numer telefonu'),
+                  ),
                 ),
               ),
-              // SettingsTile(
-              //   leading: const Icon(CupertinoIcons.time),
-              //   title: const Text('Godziny otwarcia'),
-              //   value: TextField(
-              //     controller: _openingHoursEditingController,
-              //     decoration: const InputDecoration.collapsed(
-              //         hintText: 'Wpisz godziny otwarcia w formacie OSM'),
-              //   ),
-              // ),
             ],
           ),
           SettingsSection(

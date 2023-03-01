@@ -48,9 +48,9 @@
   "yes": "yes",
   "no": "no",
   "accessYes": "publicly accessible",
-  "accessCustomers": "accessible during work hours",
-  "accessPrivate": "accessible with owner's permit",
-  "accessPermissive": "publicly available until further notice",
+  "accessCustomers": "during work hours",
+  "accessPrivate": "with owner's permit",
+  "accessPermissive": "until further notice",
   "accessNo": "unavailable",
   "accessUnknown": "unknown access"
 }
