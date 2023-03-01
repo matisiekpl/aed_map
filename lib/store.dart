@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:xml/xml.dart';
 
 import 'constants.dart';
 import 'models/aed.dart';
@@ -108,5 +109,27 @@ class Store {
     if (kDebugMode) {
       print('Got OAuth2 token: $token');
     }
+  }
+
+  Future<int> getChangesetId() async {
+    final builder = XmlBuilder();
+    builder.processing('xml', 'version="1.0"');
+    builder.element('osm', attributes: {'version': '0.6'}, nest: () {
+      builder.element('changeset', nest: () {
+        builder.attribute('created_by', 'AED Map');
+        builder.attribute('comment', 'Modyfing defibrillators database');
+      });
+    });
+    final document = builder.buildDocument();
+    var response = await http.put(
+        Uri.parse('https://api.openstreetmap.org/api/0.6/changeset/create'),
+        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
+        body: document.toXmlString());
+    print(response.body);
+    return -1;
+  }
+
+  Future insertDefibrillator(AED aed) async {
+    var changesetId = await getChangesetId();
   }
 }

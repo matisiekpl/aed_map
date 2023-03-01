@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../models/aed.dart';
+import '../store.dart';
 import '../utils.dart';
 
 class EditForm extends StatefulWidget {
@@ -152,7 +153,10 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                 child: Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
               child: CupertinoButton.filled(
-                  child: const Text('Zapisz'), onPressed: () {}),
+                  child: const Text('Zapisz'),
+                  onPressed: () {
+                    Store.instance.insertDefibrillator(getAED());
+                  }),
             )),
             CustomSettingsSection(
                 child: Padding(
