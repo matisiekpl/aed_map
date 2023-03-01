@@ -36,7 +36,9 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.window.platformBrightness;
+    setState(() {
+      _brightness = WidgetsBinding.instance.window.platformBrightness;
+    });
 
     _descriptionEditingController.text = widget.aed.description ?? '';
     _operatorEditingController.text = widget.aed.operator ?? '';
@@ -182,8 +184,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                 child: Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
               child: CupertinoButton(
-                  child:
-                      const Text('Anuluj'),
+                  child: const Text('Anuluj'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   }),
