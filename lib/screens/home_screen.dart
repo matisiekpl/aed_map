@@ -182,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen>
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text('Wybierz lokalizację AED, który chcesz dodać',
+                Text(AppLocalizations.of(context)!.chooseLocation,
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 const SizedBox(height: 12),
                 Row(
@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen>
                             panel.show();
                           },
                           color: Colors.white,
-                          child: const Text('Anuluj',
+                          child: Text(AppLocalizations.of(context)!.cancel,
                               style: TextStyle(color: Colors.black))),
                     ),
                     const SizedBox(width: 12),
@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen>
                             _selectAED(newAed);
                           },
                           color: Colors.green,
-                          child: const Text('Dalej')),
+                          child: Text(AppLocalizations.of(context)!.next)),
                     )
                   ],
                 )
@@ -516,10 +516,11 @@ class _HomeScreenState extends State<HomeScreen>
                   ? Column(children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Opacity(
                               opacity: 0.5,
-                              child: Text('Image of defibrillator')),
+                              child: Text(AppLocalizations.of(context)!
+                                  .imageOfDefibrillator)),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -861,22 +862,4 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  void showNodeForm() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: const <Widget>[
-                  CupertinoTextField(
-                    placeholder: 'Aa',
-                  )
-                ],
-              ),
-            ),
-          );
-        });
-  }
 }

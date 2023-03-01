@@ -52,5 +52,19 @@
   "accessPrivate": "with owner's permit",
   "accessPermissive": "until further notice",
   "accessNo": "unavailable",
-  "accessUnknown": "unknown access"
+  "accessUnknown": "unknown access",
+  "chooseLocation": "Select the location of the AED you want to add",
+  "cancel": "Cancel",
+  "next": "Next",
+  "edit": "Edit",
+  "imageOfDefibrillator": "Image of defibrillator",
+  "save": "Save",
+  "editDefibrillator": "Edit defibrillator",
+  "information": "Information",
+  "enterDescription": "Enter description",
+  "enterOperator": "Enter operator",
+  "enterPhone": "Enter phone number",
+  "longitude": "Longitude",
+  "latitude": "Latitude",
+  "chooseAccess": "Choose access"
 }

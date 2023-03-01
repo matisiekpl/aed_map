@@ -52,5 +52,19 @@
   "accessPrivate": "za zgodą właściciela",
   "accessPermissive": "publicznie do odwołania",
   "accessNo": "niedostępny",
-  "accessUnknown": "nieznany"
+  "accessUnknown": "nieznany",
+  "chooseLocation": "Wybierz lokalizację AED, który chcesz dodać",
+  "cancel": "Anuluj",
+  "next": "Dalej",
+  "edit": "Edytuj",
+  "imageOfDefibrillator": "Zdjęcie defibrylatora",
+  "save": "Zapisz",
+  "editDefibrillator": "Edytuj defibrylator",
+  "information": "Informacje",
+  "enterDescription": "Wpisz opis lokalizacji",
+  "enterOperator": "Wpisz operatora",
+  "enterPhone": "Wpisz numer telefonu",
+  "longitude": "Długość geograficzna",
+  "latitude": "Szerokość geograficzna",
+  "chooseAccess": "Wybierz dostępność"
 }

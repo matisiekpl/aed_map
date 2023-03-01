@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/aed.dart';
 import '../store.dart';
@@ -63,7 +64,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
     bool isDarkMode = _brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edytuj defibrylator'),
+        title: Text(AppLocalizations.of(context)!.editDefibrillator),
         actions: <Widget>[
           IconButton(
             icon: const Icon(CupertinoIcons.globe),
@@ -79,22 +80,22 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
         child: SettingsList(
           sections: [
             SettingsSection(
-              title: const Text('Informacje'),
+              title: Text(AppLocalizations.of(context)!.information),
               tiles: <SettingsTile>[
                 SettingsTile(
                   leading: const Icon(CupertinoIcons.placemark),
-                  // title: const Text('Opis'),
                   title: ConditionalFlexible(
                     child: TextField(
                       controller: _descriptionEditingController,
-                      decoration: const InputDecoration.collapsed(
-                          hintText: 'Wpisz opis lokalizacji'),
+                      decoration: InputDecoration.collapsed(
+                          hintText:
+                              AppLocalizations.of(context)!.enterDescription),
                     ),
                   ),
                 ),
                 SettingsTile.navigation(
                   leading: const Icon(CupertinoIcons.arrow_clockwise_circle),
-                  title: const Text('Dostęp'),
+                  title: Text(AppLocalizations.of(context)!.access),
                   value: Text(translateAccessComment(access, context) ?? ''),
                   onPressed: (context) {
                     _selectAccess();
@@ -108,38 +109,37 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                   },
                   initialValue: indoor,
                   leading: const Icon(CupertinoIcons.home),
-                  title: const Text('Wewnątrz budynku?'),
+                  title: Text(AppLocalizations.of(context)!.insideBuilding),
                 ),
                 SettingsTile(
                   leading: const Icon(CupertinoIcons.person_2),
-                  // title: const Text('Operator'),
                   title: ConditionalFlexible(
                     child: TextField(
                       controller: _operatorEditingController,
-                      decoration: const InputDecoration.collapsed(
-                          hintText: 'Wpisz operatora'),
+                      decoration: InputDecoration.collapsed(
+                          hintText:
+                              AppLocalizations.of(context)!.enterOperator),
                     ),
                   ),
                 ),
                 SettingsTile(
                   leading: const Icon(CupertinoIcons.phone),
-                  // title: const Text('Kontakt'),
                   title: ConditionalFlexible(
                     child: TextField(
                       controller: _phoneEditingController,
-                      decoration: const InputDecoration.collapsed(
-                          hintText: 'Wpisz numer telefonu'),
+                      decoration: InputDecoration.collapsed(
+                          hintText: AppLocalizations.of(context)!.enterPhone),
                     ),
                   ),
                 ),
               ],
             ),
             SettingsSection(
-              title: const Text('Lokalizacja'),
+              title: Text(AppLocalizations.of(context)!.location),
               tiles: [
                 SettingsTile(
                     leading: const Icon(CupertinoIcons.globe),
-                    title: const Text('Długość geograficzna'),
+                    title: Text(AppLocalizations.of(context)!.longitude),
                     trailing: Text(
                         widget.aed.location.longitude
                             .toString()
@@ -150,7 +150,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                             color: isDarkMode ? Colors.white : Colors.black))),
                 SettingsTile(
                     leading: const Icon(CupertinoIcons.globe),
-                    title: const Text('Szerokość geograficzna'),
+                    title: Text(AppLocalizations.of(context)!.latitude),
                     trailing: Text(
                         widget.aed.location.latitude
                             .toString()
@@ -165,7 +165,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                 child: Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
               child: CupertinoButton.filled(
-                  child: const Text('Zapisz'),
+                  child: Text(AppLocalizations.of(context)!.save),
                   onPressed: () async {
                     if (widget.isEditing) {
                       AED aed =
@@ -182,8 +182,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                 child: Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
               child: CupertinoButton(
-                  child:
-                      const Text('Anuluj'),
+                  child: Text(AppLocalizations.of(context)!.cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   }),
@@ -210,7 +209,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
-          title: const Text('Wybierz dostępność'),
+          title: Text(AppLocalizations.of(context)!.chooseAccess),
           actions: [
                 'yes',
                 'customers',
@@ -235,7 +234,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Anuluj'),
+                  child: Text(AppLocalizations.of(context)!.cancel),
                 )
               ]),
     );
