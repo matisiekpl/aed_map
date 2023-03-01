@@ -89,7 +89,6 @@ class Store {
   String? token;
 
   authenticate() async {
-    return;
     if (token != null) return;
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
@@ -125,11 +124,47 @@ class Store {
         Uri.parse('https://api.openstreetmap.org/api/0.6/changeset/create'),
         headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
         body: document.toXmlString());
-    print(response.body);
-    return -1;
+    return int.parse(response.body.toString());
   }
 
-  Future insertDefibrillator(AED aed) async {
+  Future<AED> insertDefibrillator(AED aed) async {
     var changesetId = await getChangesetId();
+    var response = await http.put(
+        Uri.parse('https://api.openstreetmap.org/api/0.6/node/create'),
+        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
+        body: aed.toXml(changesetId, 1));
+    var id = int.parse(response.body.toString());
+    aed.id = id;
+    if (kDebugMode) {
+      print('https://www.openstreetmap.org/node/$id');
+    }
+    return aed;
   }
+
+  Future<AED> updateDefibrillator(AED aed) async {
+    var changesetId = await getChangesetId();
+    var fetchResponse = await http.get(
+        Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
+        headers: {
+          'Content-Type': 'text/xml',
+          'Authorization': 'Bearer $token'
+        });
+    final document = XmlDocument.parse(fetchResponse.body);
+    final oldVersion = document
+        .findAllElements('node')
+        .first
+        .attributes
+        .where((attr) => attr.name.toString() == 'version')
+        .first
+        .value;
+    await http.put(
+        Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
+        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
+        body: aed.toXml(changesetId, int.parse(oldVersion)));
+    if (kDebugMode) {
+      print('https://www.openstreetmap.org/node/${aed.id}');
+    }
+    return aed;
+  }
+
 }

@@ -40,8 +40,8 @@ class _HomeScreenState extends State<HomeScreen>
   AED? selectedAED;
   final PanelController panel = PanelController();
   final MapController mapController = MapController();
-  final SuperclusterImmutableController markersController =
-      SuperclusterImmutableController();
+  final SuperclusterMutableController markersController =
+      SuperclusterMutableController();
 
   Brightness? _brightness;
 
@@ -214,9 +214,17 @@ class _HomeScreenState extends State<HomeScreen>
                                 '',
                                 '',
                                 '');
-                            Navigator.of(context).push(CupertinoPageRoute(
-                                builder: (context) =>
-                                    EditForm(aed: aed, isEditing: false)));
+                            AED newAed = await Navigator.of(context).push(
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        EditForm(aed: aed, isEditing: false)));
+                            aeds.add(newAed);
+                            setState(() {
+                              _editMode = false;
+                            });
+                            markersController.replaceAll(_getMarkers());
+                            await panel.show();
+                            _selectAED(newAed);
                           },
                           color: Colors.green,
                           child: const Text('Dalej')),
@@ -296,9 +304,19 @@ class _HomeScreenState extends State<HomeScreen>
                     behavior: HitTestBehavior.translucent,
                     onTap: () async {
                       await Store.instance.authenticate();
-                      Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) =>
-                              EditForm(aed: aed, isEditing: true)));
+                      AED updatedAed = await Navigator.of(context).push(
+                          CupertinoPageRoute(
+                              builder: (context) =>
+                                  EditForm(aed: aed, isEditing: true)));
+
+                      int index = aeds.indexWhere((x) => x.id == updatedAed.id);
+                      aeds[index] = updatedAed;
+                      setState(() {
+                        _editMode = false;
+                      });
+                      markersController.replaceAll(_getMarkers());
+                      await panel.show();
+                      _selectAED(updatedAed);
                     },
                     child: Container(
                         decoration: BoxDecoration(
@@ -348,7 +366,8 @@ class _HomeScreenState extends State<HomeScreen>
                         const SizedBox(height: 8),
                         CrossFade<String>(
                             duration: const Duration(milliseconds: 200),
-                            value: aed.getAccessComment(context) ??
+                            value: toNullableString(
+                                    aed.getAccessComment(context)) ??
                                 AppLocalizations.of(context)!.noData,
                             builder: (context, v) {
                               return Row(
@@ -379,8 +398,8 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(height: 8),
               CrossFade<String>(
                   duration: const Duration(milliseconds: 200),
-                  value:
-                      aed.description ?? AppLocalizations.of(context)!.noData,
+                  value: toNullableString(aed.description) ??
+                      AppLocalizations.of(context)!.noData,
                   builder: (context, v) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,7 +415,8 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(height: 4),
               CrossFade<String>(
                   duration: const Duration(milliseconds: 200),
-                  value: aed.operator ?? AppLocalizations.of(context)!.noData,
+                  value: toNullableString(aed.operator) ??
+                      AppLocalizations.of(context)!.noData,
                   builder: (context, v) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -412,8 +432,9 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(height: 4),
               CrossFade<String>(
                   duration: const Duration(milliseconds: 200),
-                  value: formatOpeningHours(aed.openingHours) ??
-                      AppLocalizations.of(context)!.noData,
+                  value:
+                      toNullableString(formatOpeningHours(aed.openingHours)) ??
+                          AppLocalizations.of(context)!.noData,
                   builder: (context, v) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,7 +470,8 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(height: 4),
               CrossFade<String>(
                   duration: const Duration(milliseconds: 200),
-                  value: aed.phone ?? AppLocalizations.of(context)!.noData,
+                  value: toNullableString(aed.phone) ??
+                      AppLocalizations.of(context)!.noData,
                   builder: (context, v) {
                     return GestureDetector(
                       behavior: HitTestBehavior.translucent,
@@ -490,25 +512,28 @@ class _HomeScreenState extends State<HomeScreen>
                     );
                   }),
               const SizedBox(height: 24),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Opacity(opacity: 0.5, child: Text('Image of defibrillator')),
-                ],
-              ),
-              const SizedBox(height: 8),
-              // aed.image != null
-              Padding(
-                padding: const EdgeInsets.only(bottom: 24),
-                child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    child: CachedNetworkImage(
-                        imageUrl: aed.image ??
-                            'https://f003.backblazeb2.com/file/aedphotos/warszawaUM1285.jpg')),
-              ),
-
-              // : Container(),
+              aed.image != null
+                  ? Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Opacity(
+                              opacity: 0.5,
+                              child: Text('Image of defibrillator')),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            child: CachedNetworkImage(
+                                imageUrl: aed.image ??
+                                    'https://f003.backblazeb2.com/file/aedphotos/warszawaUM1285.jpg')),
+                      )
+                    ])
+                  : Container()
             ],
           ),
         ),
@@ -561,6 +586,12 @@ class _HomeScreenState extends State<HomeScreen>
     1,
     0,
   ]);
+
+  String? toNullableString(String? input) {
+    if (input == null) return null;
+    if (input.isEmpty) return null;
+    return input;
+  }
 
   bool _isConnected = true;
 
@@ -619,7 +650,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   : tileWidget;
                             }),
                         CurrentLocationLayer(),
-                        SuperclusterLayer.immutable(
+                        SuperclusterLayer.mutable(
                           initialMarkers: markers,
                           loadingOverlayBuilder: (context) => Container(),
                           controller: markersController,

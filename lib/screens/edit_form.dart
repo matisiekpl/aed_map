@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/aed.dart';
 import '../store.dart';
@@ -61,7 +62,18 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     bool isDarkMode = _brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(title: const Text('Edytuj defibrylator')),
+      appBar: AppBar(
+        title: const Text('Edytuj defibrylator'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(CupertinoIcons.globe),
+            onPressed: () {
+              launchUrl(Uri.parse(
+                  'https://www.openstreetmap.org/node/${widget.aed.id}'));
+            },
+          )
+        ],
+      ),
       body: Theme(
         data: isDarkMode ? ThemeData.dark() : ThemeData.light(),
         child: SettingsList(
@@ -154,21 +166,26 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
               padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
               child: CupertinoButton.filled(
                   child: const Text('Zapisz'),
-                  onPressed: () {
-                    Store.instance.insertDefibrillator(getAED());
+                  onPressed: () async {
+                    if (widget.isEditing) {
+                      AED aed =
+                          await Store.instance.updateDefibrillator(getAED());
+                      Navigator.of(context).pop(aed);
+                    } else {
+                      AED aed =
+                          await Store.instance.insertDefibrillator(getAED());
+                      Navigator.of(context).pop(aed);
+                    }
                   }),
             )),
             CustomSettingsSection(
                 child: Padding(
               padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
               child: CupertinoButton(
-                  child: Text(widget.isEditing ? 'Usuń' : 'Anuluj',
-                      style: const TextStyle(color: Colors.red)),
+                  child:
+                      const Text('Anuluj'),
                   onPressed: () {
-                    if (widget.isEditing) {
-                    } else {
-                      Navigator.of(context).pop();
-                    }
+                    Navigator.of(context).pop();
                   }),
             )),
           ],
@@ -185,7 +202,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
         indoor,
         _operatorEditingController.text,
         _phoneEditingController.text,
-        _operatorEditingController.text,
+        _openingHoursEditingController.text,
         access);
   }
 
@@ -218,7 +235,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Anuluj'),
+                  child: const Text('Anuluj'),
                 )
               ]),
     );

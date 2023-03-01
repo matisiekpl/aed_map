@@ -12,7 +12,7 @@ class AED {
   bool indoor;
   String? operator;
   String? phone;
-  int? distance;
+  int? distance = 0;
   String? openingHours;
   String? access;
   String? image;
@@ -33,6 +33,7 @@ class AED {
       'permissive': Colors.blue,
       'no': Colors.red,
       'unknown': Colors.grey,
+      '': Colors.grey,
     };
     return colors[access];
   }
@@ -46,18 +47,19 @@ class AED {
       'permissive': 'blue_aed.svg',
       'no': 'red_aed.svg',
       'unknown': 'grey_aed.svg',
+      '': 'grey_aed.svg',
     };
     return filenames[access];
   }
 
-  dynamic toXml(int changesetId) {
+  dynamic toXml(int changesetId, int version) {
     final builder = XmlBuilder();
     builder.processing('xml', 'version="1.0"');
     builder.element('osm', attributes: {'version': '0.6'}, nest: () {
       builder.element('node', nest: () {
         builder.attribute('id', id);
         builder.attribute('visible', 'true');
-        builder.attribute('version', '1');
+        builder.attribute('version', version);
         builder.attribute('changeset', changesetId.toString());
         builder.attribute('timestamp', DateTime.now().toString());
         builder.attribute('user', '');
@@ -68,10 +70,9 @@ class AED {
         builder.element('tag',
             attributes: {'k': 'access', 'v': access.toString()});
         builder.element('tag', attributes: {
-          'k': 'defibrillator:location:en',
+          'k': 'defibrillator:location:pl',
           'v': description.toString()
         });
-        builder.element('tag', attributes: {'k': 'access', 'v': access ?? ''});
         builder.element('tag',
             attributes: {'k': 'emergency', 'v': 'defibrillator'});
         builder.element('tag', attributes: {'k': 'image', 'v': image ?? ''});
