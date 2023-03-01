@@ -213,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 '',
                                 '',
                                 '',
-                                '');
+                                'yes');
                             AED newAed = await Navigator.of(context).push(
                                 CupertinoPageRoute(
                                     builder: (context) =>
@@ -861,5 +861,4 @@ class _HomeScreenState extends State<HomeScreen>
       MapsLauncher.launchCoordinates(latitude, longitude);
     }
   }
-
 }

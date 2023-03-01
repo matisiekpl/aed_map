@@ -37,7 +37,9 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.window.platformBrightness;
+    setState(() {
+      _brightness = WidgetsBinding.instance.window.platformBrightness;
+    });
 
     _descriptionEditingController.text = widget.aed.description ?? '';
     _operatorEditingController.text = widget.aed.operator ?? '';
@@ -64,17 +66,16 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
     bool isDarkMode = _brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.editDefibrillator),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(CupertinoIcons.globe),
-            onPressed: () {
-              launchUrl(Uri.parse(
-                  'https://www.openstreetmap.org/node/${widget.aed.id}'));
-            },
-          )
-        ],
-      ),
+          title: Text(AppLocalizations.of(context)!.editDefibrillator),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(CupertinoIcons.globe),
+              onPressed: () {
+                launchUrl(Uri.parse(
+                    'https://www.openstreetmap.org/node/${widget.aed.id}'));
+              },
+            )
+          ]),
       body: Theme(
         data: isDarkMode ? ThemeData.dark() : ThemeData.light(),
         child: SettingsList(
