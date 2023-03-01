@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../models/aed.dart';
+import '../utils.dart';
 
 class EditForm extends StatefulWidget {
   final AED aed;
@@ -40,7 +41,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
     _phoneEditingController.text = widget.aed.phone ?? '';
     _openingHoursEditingController.text = widget.aed.openingHours ?? '';
     indoor = widget.aed.indoor;
-    access = widget.aed.access ?? '';
+    access = widget.aed.access ?? 'yes';
   }
 
   Brightness? _brightness;
@@ -70,7 +71,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                 SettingsTile(
                   leading: const Icon(CupertinoIcons.placemark),
                   // title: const Text('Opis'),
-                  title: Flexible(
+                  title: ConditionalFlexible(
                     child: TextField(
                       controller: _descriptionEditingController,
                       decoration: const InputDecoration.collapsed(
@@ -99,7 +100,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                 SettingsTile(
                   leading: const Icon(CupertinoIcons.person_2),
                   // title: const Text('Operator'),
-                  title: Flexible(
+                  title: ConditionalFlexible(
                     child: TextField(
                       controller: _operatorEditingController,
                       decoration: const InputDecoration.collapsed(
@@ -110,7 +111,7 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
                 SettingsTile(
                   leading: const Icon(CupertinoIcons.phone),
                   // title: const Text('Kontakt'),
-                  title: Flexible(
+                  title: ConditionalFlexible(
                     child: TextField(
                       controller: _phoneEditingController,
                       decoration: const InputDecoration.collapsed(

@@ -82,14 +82,13 @@ class Store {
     }).toList();
     aeds.sort((a, b) => a.distance!.compareTo(b.distance!));
 
-    print(aeds[0].toXml(777));
-
     return aeds;
   }
 
   String? token;
 
   authenticate() async {
+    return;
     if (token != null) return;
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
