@@ -87,7 +87,10 @@ class Store {
     return aeds;
   }
 
-  void authenticate() async {
+  String? token;
+
+  authenticate() async {
+    if (token != null) return;
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     final result = await FlutterWebAuth.authenticate(
@@ -102,7 +105,7 @@ class Store {
         Uri.parse(
             'https://www.openstreetmap.org/oauth2/token?grant_type=authorization_code&redirect_uri=aedmap://success&client_id=$clientId&client_secret=$clientSecret&code=$code'),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'});
-    var token = json.decode(response.body)['access_token'];
+    token = json.decode(response.body)['access_token'];
     if (kDebugMode) {
       print('Got OAuth2 token: $token');
     }

@@ -21,16 +21,7 @@ class AED {
       this.phone, this.openingHours, this.access);
 
   String? getAccessComment(BuildContext context) {
-    if (access == null) return null;
-    Map comments = {
-      'yes': AppLocalizations.of(context)!.accessYes,
-      'customers': AppLocalizations.of(context)!.accessCustomers,
-      'private': AppLocalizations.of(context)!.accessPrivate,
-      'permissive': AppLocalizations.of(context)!.accessPermissive,
-      'no': AppLocalizations.of(context)!.accessNo,
-      'unknown': AppLocalizations.of(context)!.accessUnknown,
-    };
-    return comments[access];
+    return translateAccessComment(access, context);
   }
 
   Color getColor() {
@@ -97,4 +88,17 @@ class AED {
     final document = builder.buildDocument();
     return document.toXmlString();
   }
+}
+
+String? translateAccessComment(String? access, BuildContext context) {
+  if (access == null) return null;
+  Map comments = {
+    'yes': AppLocalizations.of(context)!.accessYes,
+    'customers': AppLocalizations.of(context)!.accessCustomers,
+    'private': AppLocalizations.of(context)!.accessPrivate,
+    'permissive': AppLocalizations.of(context)!.accessPermissive,
+    'no': AppLocalizations.of(context)!.accessNo,
+    'unknown': AppLocalizations.of(context)!.accessUnknown,
+  };
+  return comments[access];
 }

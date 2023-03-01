@@ -60,6 +60,7 @@ dependencies:
   intl: any
   flutter_web_auth: ^0.5.0
   xml: ^6.2.2
+  settings_ui: ^2.0.2
 
 dev_dependencies:
   flutter_test:

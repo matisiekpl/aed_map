@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:aed_map/constants.dart';
+import 'package:aed_map/screens/edit_form.dart';
 import 'package:aed_map/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -163,10 +164,86 @@ class _HomeScreenState extends State<HomeScreen>
                           duration: const Duration(milliseconds: 300),
                           child: _buildBottomPanel(sc)),
                       body: SafeArea(top: false, child: _buildMap())),
-                  SafeArea(child: _buildHeader())
+                  SafeArea(child: _buildHeader()),
+                  SafeArea(child: _buildMarkerSelectionFooter())
                 ],
               ));
   }
+
+  Widget _buildMarkerSelectionFooter() {
+    return AnimatedOpacity(
+      opacity: _editMode ? 1 : 0,
+      duration: const Duration(milliseconds: 150),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Text('Wybierz lokalizację AED, który chcesz dodać',
+                    style: TextStyle(fontWeight: FontWeight.w600)),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: CupertinoButton(
+                          onPressed: () {
+                            setState(() {
+                              _editMode = false;
+                            });
+                            panel.show();
+                          },
+                          color: Colors.white,
+                          child: const Text('Anuluj',
+                              style: TextStyle(color: Colors.black))),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: CupertinoButton(
+                          onPressed: () async {
+                            AED aed = AED(
+                                LatLng(mapController.center.latitude,
+                                    mapController.center.longitude),
+                                0,
+                                '',
+                                false,
+                                '',
+                                '',
+                                '',
+                                '');
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) =>
+                                    EditForm(aed: aed, isEditing: false)));
+                          },
+                          color: Colors.green,
+                          child: const Text('Dalej')),
+                    )
+                  ],
+                )
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Transform.translate(
+                        offset: const Offset(0, -36),
+                        child: SvgPicture.asset('assets/pin.svg', height: 36))
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  bool _editMode = false;
 
   Widget _buildBottomPanel(ScrollController sc) {
     var aed = selectedAED!;
@@ -193,10 +270,10 @@ class _HomeScreenState extends State<HomeScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (aeds.first == selectedAED)
-                    Text('⚠️ ' + AppLocalizations.of(context)!.closestAED,
+                    Text('⚠️ ${AppLocalizations.of(context)!.closestAED}',
                         style: const TextStyle(
                             color: Colors.orange,
                             fontStyle: FontStyle.italic,
@@ -208,13 +285,29 @@ class _HomeScreenState extends State<HomeScreen>
                           _selectAED(aeds.first);
                         },
                         child: Text(
-                            '⚠️ ' +
-                                AppLocalizations.of(context)!
-                                    .closerAEDAvailable,
+                            '⚠️ ${AppLocalizations.of(context)!.closerAEDAvailable}',
                             style: const TextStyle(
                                 color: Colors.orange,
                                 fontStyle: FontStyle.italic,
                                 fontSize: 18))),
+                  GestureDetector(
+                    onTap: () async {
+                      await Store.instance.authenticate();
+                      Navigator.of(context).push(CupertinoPageRoute(
+                          builder: (context) =>
+                              EditForm(aed: aed, isEditing: true)));
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(12))),
+                        child: const Padding(
+                          padding: EdgeInsets.only(
+                              left: 8, right: 8, top: 4, bottom: 4),
+                          child: Text('Edit'),
+                        )),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -232,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen>
                             ClipRRect(
                                 borderRadius: BorderRadius.circular(4),
                                 child: SvgPicture.asset(
-                                    'assets/' + aed.getIconFilename(),
+                                    'assets/${aed.getIconFilename()}',
                                     width: 32)),
                             const SizedBox(width: 6),
                             Text(AppLocalizations.of(context)!.defibrillator,
@@ -253,8 +346,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                      AppLocalizations.of(context)!.access +
-                                          ": ",
+                                      "${AppLocalizations.of(context)!.access}: ",
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: aed.getColor() == Colors.yellow
@@ -334,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                            AppLocalizations.of(context)!.insideBuilding + ': ',
+                            '${AppLocalizations.of(context)!.insideBuilding}: ',
                             style: const TextStyle(fontSize: 16)),
                         Text(
                             v
@@ -359,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(AppLocalizations.of(context)!.contact + ': ',
+                          Text('${AppLocalizations.of(context)!.contact}: ',
                               style: const TextStyle(fontSize: 16)),
                           Text(v,
                               style: const TextStyle(
@@ -609,9 +701,12 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(height: 8),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  // Store.instance.authenticate();
-                  showNodeForm();
+                onTap: () async {
+                  await Store.instance.authenticate();
+                  panel.hide();
+                  setState(() {
+                    _editMode = true;
+                  });
                 },
                 child: Card(
                   color: _brightness == Brightness.dark
@@ -734,7 +829,11 @@ class _HomeScreenState extends State<HomeScreen>
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
-                children: const <Widget>[CupertinoTextField(placeholder: 'Aa',)],
+                children: const <Widget>[
+                  CupertinoTextField(
+                    placeholder: 'Aa',
+                  )
+                ],
               ),
             ),
           );
