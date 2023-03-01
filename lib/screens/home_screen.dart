@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:io';
 
@@ -11,7 +13,6 @@ import 'package:aed_map/cached_network_tile_provider.dart';
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
@@ -166,7 +167,9 @@ class _HomeScreenState extends State<HomeScreen>
                       body: SafeArea(
                           top: false, bottom: false, child: _buildMap())),
                   SafeArea(child: _buildHeader()),
-                  SafeArea(child: _buildMarkerSelectionFooter())
+                  _editMode
+                      ? SafeArea(child: _buildMarkerSelectionFooter())
+                      : Container()
                 ],
               ));
   }
@@ -183,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen>
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(AppLocalizations.of(context)!.chooseLocation,
-                    style: TextStyle(fontWeight: FontWeight.w600)),
+                    style: const TextStyle(fontWeight: FontWeight.w600)),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -198,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen>
                           },
                           color: Colors.white,
                           child: Text(AppLocalizations.of(context)!.cancel,
-                              style: TextStyle(color: Colors.black))),
+                              style: const TextStyle(color: Colors.black))),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -326,9 +329,9 @@ class _HomeScreenState extends State<HomeScreen>
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(12))),
                         child: Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               left: 8, right: 8, top: 4, bottom: 4),
-                          child: Text('Edit',
+                          child: Text(AppLocalizations.of(context)!.edit,
                               style: TextStyle(
                                   color: isDarkMode
                                       ? Colors.white

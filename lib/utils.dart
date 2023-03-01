@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:settings_ui/settings_ui.dart';
 import 'dart:io' show Platform;
 
 String? formatOpeningHours(String? input) {
@@ -25,6 +24,6 @@ class ConditionalFlexible extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Platform.isAndroid ? child : Flexible(child: child);
+    return Platform.isAndroid ? child : child;
   }
 }

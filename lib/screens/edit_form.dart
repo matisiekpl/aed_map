@@ -1,8 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/aed.dart';
@@ -66,16 +67,17 @@ class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
     bool isDarkMode = _brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.editDefibrillator),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(CupertinoIcons.globe),
-              onPressed: () {
-                launchUrl(Uri.parse(
-                    'https://www.openstreetmap.org/node/${widget.aed.id}'));
-              },
-            )
-          ]),
+        title: Text(AppLocalizations.of(context)!.editDefibrillator),
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: const Icon(CupertinoIcons.globe),
+        //     onPressed: () {
+        //       launchUrl(Uri.parse(
+        //           'https://www.openstreetmap.org/node/${widget.aed.id}'));
+        //     },
+        //   )
+        // ]
+      ),
       body: Theme(
         data: isDarkMode ? ThemeData.dark() : ThemeData.light(),
         child: SettingsList(
