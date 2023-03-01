@@ -16,7 +16,7 @@ class EditForm extends StatefulWidget {
   State<EditForm> createState() => _EditFormState();
 }
 
-class _EditFormState extends State<EditForm> {
+class _EditFormState extends State<EditForm> with WidgetsBindingObserver {
   final TextEditingController _descriptionEditingController =
       TextEditingController();
   final TextEditingController _operatorEditingController =
@@ -31,6 +31,10 @@ class _EditFormState extends State<EditForm> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.window.platformBrightness;
+
     _descriptionEditingController.text = widget.aed.description ?? '';
     _operatorEditingController.text = widget.aed.operator ?? '';
     _phoneEditingController.text = widget.aed.phone ?? '';
@@ -39,110 +43,131 @@ class _EditFormState extends State<EditForm> {
     access = widget.aed.access ?? '';
   }
 
+  Brightness? _brightness;
+
+  @override
+  void didChangePlatformBrightness() {
+    if (mounted) {
+      setState(() {
+        _brightness = WidgetsBinding.instance.window.platformBrightness;
+      });
+    }
+    super.didChangePlatformBrightness();
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = _brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(title: const Text('Edytuj defibrylator')),
-      body: SettingsList(
-        sections: [
-          SettingsSection(
-            title: const Text('Informacje'),
-            tiles: <SettingsTile>[
-              SettingsTile(
-                leading: const Icon(CupertinoIcons.placemark),
-                // title: const Text('Opis'),
-                title: Flexible(
-                  child: TextField(
-                    controller: _descriptionEditingController,
-                    decoration: const InputDecoration.collapsed(
-                        hintText: 'Wpisz opis lokalizacji'),
+      body: Theme(
+        data: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+        child: SettingsList(
+          sections: [
+            SettingsSection(
+              title: const Text('Informacje'),
+              tiles: <SettingsTile>[
+                SettingsTile(
+                  leading: const Icon(CupertinoIcons.placemark),
+                  // title: const Text('Opis'),
+                  title: Flexible(
+                    child: TextField(
+                      controller: _descriptionEditingController,
+                      decoration: const InputDecoration.collapsed(
+                          hintText: 'Wpisz opis lokalizacji'),
+                    ),
                   ),
                 ),
-              ),
-              
-              SettingsTile.navigation(
-                leading: const Icon(CupertinoIcons.arrow_clockwise_circle),
-                title: const Text('Dostęp'),
-                value: Text(translateAccessComment(access, context) ?? ''),
-                onPressed: (context) {
-                  _selectAccess();
-                },
-              ),
-              SettingsTile.switchTile(
-                onToggle: (value) {
-                  setState(() {
-                    indoor = value;
-                  });
-                },
-                initialValue: indoor,
-                leading: const Icon(CupertinoIcons.home),
-                title: const Text('Wewnątrz budynku?'),
-              ),
-              SettingsTile(
-                leading: const Icon(CupertinoIcons.person_2),
-                // title: const Text('Operator'),
-                title: Flexible(
-                  child: TextField(
-                    controller: _operatorEditingController,
-                    decoration: const InputDecoration.collapsed(
-                        hintText: 'Wpisz operatora'),
+                SettingsTile.navigation(
+                  leading: const Icon(CupertinoIcons.arrow_clockwise_circle),
+                  title: const Text('Dostęp'),
+                  value: Text(translateAccessComment(access, context) ?? ''),
+                  onPressed: (context) {
+                    _selectAccess();
+                  },
+                ),
+                SettingsTile.switchTile(
+                  onToggle: (value) {
+                    setState(() {
+                      indoor = value;
+                    });
+                  },
+                  initialValue: indoor,
+                  leading: const Icon(CupertinoIcons.home),
+                  title: const Text('Wewnątrz budynku?'),
+                ),
+                SettingsTile(
+                  leading: const Icon(CupertinoIcons.person_2),
+                  // title: const Text('Operator'),
+                  title: Flexible(
+                    child: TextField(
+                      controller: _operatorEditingController,
+                      decoration: const InputDecoration.collapsed(
+                          hintText: 'Wpisz operatora'),
+                    ),
                   ),
                 ),
-              ),
-              SettingsTile(
-                leading: const Icon(CupertinoIcons.phone),
-                // title: const Text('Kontakt'),
-                title: Flexible(
-                  child: TextField(
-                    controller: _phoneEditingController,
-                    decoration: const InputDecoration.collapsed(
-                        hintText: 'Wpisz numer telefonu'),
+                SettingsTile(
+                  leading: const Icon(CupertinoIcons.phone),
+                  // title: const Text('Kontakt'),
+                  title: Flexible(
+                    child: TextField(
+                      controller: _phoneEditingController,
+                      decoration: const InputDecoration.collapsed(
+                          hintText: 'Wpisz numer telefonu'),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          SettingsSection(
-            title: const Text('Lokalizacja'),
-            tiles: [
-              SettingsTile(
-                  leading: const Icon(CupertinoIcons.globe),
-                  title: const Text('Długość geograficzna'),
-                  trailing: Text(widget.aed.location.longitude
-                      .toString()
-                      .characters
-                      .take(12)
-                      .string)),
-              SettingsTile(
-                  leading: const Icon(CupertinoIcons.globe),
-                  title: const Text('Szerokość geograficzna'),
-                  trailing: Text(widget.aed.location.latitude
-                      .toString()
-                      .characters
-                      .take(12)
-                      .string)),
-            ],
-          ),
-          CustomSettingsSection(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
-            child: CupertinoButton.filled(
-                child: const Text('Zapisz'), onPressed: () {}),
-          )),
-          CustomSettingsSection(
-              child: Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
-            child: CupertinoButton(
-                child: Text(widget.isEditing ? 'Usuń' : 'Anuluj',
-                    style: const TextStyle(color: Colors.red)),
-                onPressed: () {
-                  if (widget.isEditing) {
-                  } else {
-                    Navigator.of(context).pop();
-                  }
-                }),
-          )),
-        ],
+              ],
+            ),
+            SettingsSection(
+              title: const Text('Lokalizacja'),
+              tiles: [
+                SettingsTile(
+                    leading: const Icon(CupertinoIcons.globe),
+                    title: const Text('Długość geograficzna'),
+                    trailing: Text(
+                        widget.aed.location.longitude
+                            .toString()
+                            .characters
+                            .take(12)
+                            .string,
+                        style: TextStyle(
+                            color: isDarkMode ? Colors.white : Colors.black))),
+                SettingsTile(
+                    leading: const Icon(CupertinoIcons.globe),
+                    title: const Text('Szerokość geograficzna'),
+                    trailing: Text(
+                        widget.aed.location.latitude
+                            .toString()
+                            .characters
+                            .take(12)
+                            .string,
+                        style: TextStyle(
+                            color: isDarkMode ? Colors.white : Colors.black))),
+              ],
+            ),
+            CustomSettingsSection(
+                child: Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
+              child: CupertinoButton.filled(
+                  child: const Text('Zapisz'), onPressed: () {}),
+            )),
+            CustomSettingsSection(
+                child: Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
+              child: CupertinoButton(
+                  child: Text(widget.isEditing ? 'Usuń' : 'Anuluj',
+                      style: const TextStyle(color: Colors.red)),
+                  onPressed: () {
+                    if (widget.isEditing) {
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  }),
+            )),
+          ],
+        ),
       ),
     );
   }

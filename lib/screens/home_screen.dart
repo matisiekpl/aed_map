@@ -163,7 +163,8 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
                           duration: const Duration(milliseconds: 300),
                           child: _buildBottomPanel(sc)),
-                      body: SafeArea(top: false, child: _buildMap())),
+                      body: SafeArea(
+                          top: false, bottom: false, child: _buildMap())),
                   SafeArea(child: _buildHeader()),
                   SafeArea(child: _buildMarkerSelectionFooter())
                 ],
@@ -247,6 +248,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildBottomPanel(ScrollController sc) {
     var aed = selectedAED!;
+    bool isDarkMode = _brightness == Brightness.dark;
     return ListView(
       padding: const EdgeInsets.all(0),
       controller: sc,
@@ -291,6 +293,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 fontStyle: FontStyle.italic,
                                 fontSize: 18))),
                   GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () async {
                       await Store.instance.authenticate();
                       Navigator.of(context).push(CupertinoPageRoute(
@@ -299,13 +302,19 @@ class _HomeScreenState extends State<HomeScreen>
                     },
                     child: Container(
                         decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
+                            color: isDarkMode
+                                ? Colors.grey.shade800
+                                : Colors.grey.shade300,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(12))),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.only(
                               left: 8, right: 8, top: 4, bottom: 4),
-                          child: Text('Edit'),
+                          child: Text('Edit',
+                              style: TextStyle(
+                                  color: isDarkMode
+                                      ? Colors.white
+                                      : Colors.black)),
                         )),
                   ),
                 ],
