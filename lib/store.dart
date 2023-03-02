@@ -115,8 +115,12 @@ class Store {
     builder.processing('xml', 'version="1.0"');
     builder.element('osm', attributes: {'version': '0.6'}, nest: () {
       builder.element('changeset', nest: () {
-        builder.attribute('created_by', 'AED Map');
-        builder.attribute('comment', 'Modyfing defibrillators database');
+        builder.element('tag',
+            attributes: {'k': 'created_by', 'v': 'AED Map for Android/iOS'});
+        builder.element('tag', attributes: {
+          'k': 'comment',
+          'v': 'Defibrillator modified via AED Map #aed'
+        });
       });
     });
     final document = builder.buildDocument();

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -66,23 +65,34 @@ class AED {
         builder.attribute('lat', location.latitude);
         builder.attribute('lon', location.longitude);
 
-        builder.element('tag',
-            attributes: {'k': 'access', 'v': access.toString()});
-        builder.element('tag', attributes: {
-          'k': 'defibrillator:location:pl',
-          'v': description.toString()
-        });
+        if (access.toString().isNotEmpty) {
+          builder.element('tag',
+              attributes: {'k': 'access', 'v': access.toString()});
+        }
+        if (description.toString().isNotEmpty) {
+          builder.element('tag', attributes: {
+            'k': 'defibrillator:location:pl',
+            'v': description.toString()
+          });
+        }
         builder.element('tag',
             attributes: {'k': 'emergency', 'v': 'defibrillator'});
-        builder.element('tag', attributes: {'k': 'image', 'v': image ?? ''});
+        if (image.toString().isNotEmpty) {
+          builder.element('tag', attributes: {'k': 'image', 'v': image ?? ''});
+        }
         builder.element('tag',
             attributes: {'k': 'indoor', 'v': indoor ? 'yes' : 'no'});
-        builder.element('tag',
-            attributes: {'k': 'opening_hours', 'v': openingHours ?? ''});
-        builder
-            .element('tag', attributes: {'k': 'operator', 'v': operator ?? ''});
-        builder.element('tag', attributes: {'k': 'phone', 'v': phone ?? ''});
-        builder.element('tag', attributes: {'k': 'source', 'v': 'aedmap'});
+        if (openingHours.toString().isNotEmpty) {
+          builder.element('tag',
+              attributes: {'k': 'opening_hours', 'v': openingHours ?? ''});
+        }
+        if (operator.toString().isNotEmpty) {
+          builder.element('tag',
+              attributes: {'k': 'operator', 'v': operator ?? ''});
+        }
+        if (phone.toString().isNotEmpty) {
+          builder.element('tag', attributes: {'k': 'phone', 'v': phone ?? ''});
+        }
       });
     });
     final document = builder.buildDocument();
