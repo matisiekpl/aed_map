@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
@@ -169,5 +170,19 @@ class Store {
       print('https://www.openstreetmap.org/node/${aed.id}');
     }
     return aed;
+  }
+
+  sendFeedback(UserFeedback feedback) async {
+    final now = DateTime.now();
+    final id = now.microsecondsSinceEpoch.toString();
+    var content = feedback.text;
+    await http.post(Uri.parse('http://54.144.199.58:5000/feedback'), body: {
+      'body': content,
+      'id': id.toString(),
+      'screenshot': base64Encode(feedback.screenshot)
+    });
+    if (kDebugMode) {
+      print('Feedback sent!');
+    }
   }
 }

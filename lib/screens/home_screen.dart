@@ -7,6 +7,7 @@ import 'package:aed_map/constants.dart';
 import 'package:aed_map/screens/edit_form.dart';
 import 'package:aed_map/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:aed_map/cached_network_tile_provider.dart';
@@ -759,6 +760,27 @@ class _HomeScreenState extends State<HomeScreen>
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Icon(CupertinoIcons.wand_rays,
+                        color: _brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  BetterFeedback.of(context).show((UserFeedback feedback) {
+                    Store.instance.sendFeedback(feedback);
+                  });
+                },
+                child: Card(
+                  color: _brightness == Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(CupertinoIcons.text_bubble,
                         color: _brightness == Brightness.dark
                             ? Colors.white
                             : Colors.black),

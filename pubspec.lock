@@ -185,6 +185,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  feedback:
+    dependency: "direct main"
+    description:
+      name: feedback
+      sha256: "912ffe11317f88585410818885a5312d044f025bd9b5633eab18f5808d28ac54"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.0"
   ffi:
     dependency: transitive
     description:
