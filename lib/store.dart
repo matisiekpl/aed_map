@@ -66,7 +66,8 @@ class Store {
           LatLng(row['geometry']['coordinates'][1],
               row['geometry']['coordinates'][0]),
           row['properties']['osm_id'],
-          row['properties']['defibrillator:location'],
+          row['properties']['defibrillator:location'] ??
+              row['properties']['defibrillator:location:pl'],
           row['properties']['indoor'] == 'yes',
           row['properties']['operator'],
           row['properties']['phone'],
@@ -162,10 +163,19 @@ class Store {
         .where((attr) => attr.name.toString() == 'version')
         .first
         .value;
+    var oldTags = document.findAllElements('tag');
+    var oldTagsPairs = oldTags.map((tag) {
+      return [
+        tag.attributes.where((attr) => attr.name.toString() == 'k').first.value,
+        tag.attributes.where((attr) => attr.name.toString() == 'v').first.value
+      ];
+    }).toList();
+    var xml =
+        aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
     await http.put(
         Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
         headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
-        body: aed.toXml(changesetId, int.parse(oldVersion)));
+        body: xml);
     if (kDebugMode) {
       print('https://www.openstreetmap.org/node/${aed.id}');
     }

@@ -50,7 +50,8 @@ class AED {
     return filenames[access];
   }
 
-  dynamic toXml(int changesetId, int version) {
+  dynamic toXml(int changesetId, int version,
+      {List<List<String>> oldTags = const []}) {
     final builder = XmlBuilder();
     builder.processing('xml', 'version="1.0"');
     builder.element('osm', attributes: {'version': '0.6'}, nest: () {
@@ -93,6 +94,20 @@ class AED {
         if (phone.toString().isNotEmpty) {
           builder.element('tag', attributes: {'k': 'phone', 'v': phone ?? ''});
         }
+
+        oldTags
+            .where((attr) => [
+                  'phone',
+                  'operator',
+                  'opening_hours',
+                  'indoor',
+                  'emergency',
+                  'access',
+                  'defibrillator:location:pl'
+                ].contains(attr[0]))
+            .forEach((attr) {
+          builder.element('tag', attributes: {'k': attr[0], 'v': attr[1]});
+        });
       });
     });
     final document = builder.buildDocument();
