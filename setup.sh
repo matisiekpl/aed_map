@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "Setting up the aed_map project 🛠"
 echo "Generating translations 🌐"
 flutter gen-l10n &>/dev/null
 
