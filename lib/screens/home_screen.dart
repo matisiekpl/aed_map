@@ -853,11 +853,12 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   _openMap(double latitude, double longitude) async {
+    var chooseMapAppLabel = AppLocalizations.of(context)!.chooseMapApp;
     if (Platform.isIOS) {
       showCupertinoModalPopup<void>(
         context: context,
         builder: (BuildContext context) => CupertinoActionSheet(
-          title: Text(AppLocalizations.of(context)!.chooseMapApp),
+          title: Text(chooseMapAppLabel),
           actions: <CupertinoActionSheetAction>[
             CupertinoActionSheetAction(
               onPressed: () {
