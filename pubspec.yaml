@@ -48,7 +48,7 @@ dependencies:
   flutter_map_dragmarker: ^4.1.2
   cross_fade: ^0.3.1
   connectivity_plus: ^3.0.2
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.13.1
   flutter_map_supercluster: ^2.2.0
   flutter_map_marker_cluster: ^1.0.1
   shared_preferences: ^2.0.17
