@@ -190,7 +190,8 @@ class Store {
     final now = DateTime.now();
     final id = now.microsecondsSinceEpoch.toString();
     var content = feedback.text;
-    await http.post(Uri.parse('http://54.144.199.58:5000/feedback'), body: {
+    await http
+        .post(Uri.parse('http://feedback.aedmapa.pl:5000/feedback'), body: {
       'body': content,
       'id': id.toString(),
       'screenshot': base64Encode(feedback.screenshot)

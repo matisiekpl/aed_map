@@ -97,41 +97,53 @@ class _HomeScreenState extends State<HomeScreen>
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => SvgPicture.asset('assets/green_aed.svg'),
+              builder: (ctx) => ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: SvgPicture.asset('assets/green_aed.svg')),
             );
           }
           if (aed.access == 'customers') {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => SvgPicture.asset('assets/yellow_aed.svg'),
+              builder: (ctx) => ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: SvgPicture.asset('assets/yellow_aed.svg')),
             );
           }
           if (aed.access == 'private' || aed.access == 'permissive') {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => SvgPicture.asset('assets/blue_aed.svg'),
+              builder: (ctx) => ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: SvgPicture.asset('assets/blue_aed.svg')),
             );
           }
           if (aed.access == 'no') {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => SvgPicture.asset('assets/red_aed.svg'),
+              builder: (ctx) => ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: SvgPicture.asset('assets/red_aed.svg')),
             );
           }
           if (aed.access == 'unknown') {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => SvgPicture.asset('assets/grey_aed.svg'),
+              builder: (ctx) => ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: SvgPicture.asset('assets/grey_aed.svg')),
             );
           }
           return Marker(
             point: aed.location,
             key: Key(aeds.indexOf(aed).toString()),
-            builder: (ctx) => SvgPicture.asset('assets/green_aed.svg'),
+            builder: (ctx) => ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: SvgPicture.asset('assets/green_aed.svg')),
           );
         })
         .cast<Marker>()
