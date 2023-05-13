@@ -243,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     color: Colors.red,
                                     child: Text(
                                         AppLocalizations.of(context)!.stop,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 16, color: Colors.white)),
                                     onPressed: () {
                                       setState(() {
@@ -386,6 +386,7 @@ class _HomeScreenState extends State<HomeScreen>
                       },
                       child: Text(
                           '⚠️ ${AppLocalizations.of(context)!.closestAED}',
+                          key: const Key('closestAed'),
                           style: const TextStyle(
                               color: Colors.orange,
                               fontStyle: FontStyle.italic,
@@ -602,6 +603,7 @@ class _HomeScreenState extends State<HomeScreen>
                     child: Opacity(
                       opacity: (_isRouting || !_isConnected) ? 0.5 : 1,
                       child: CupertinoButton.filled(
+                        key: const Key('navigate'),
                           onPressed: () async {
                             _navigate(aed);
                           },

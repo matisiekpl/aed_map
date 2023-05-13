@@ -69,6 +69,8 @@ dependencies:
   google_polyline_algorithm: ^3.1.0
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
 
