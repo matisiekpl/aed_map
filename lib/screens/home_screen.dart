@@ -7,6 +7,7 @@ import 'package:aed_map/constants.dart';
 import 'package:aed_map/screens/edit_form.dart';
 import 'package:aed_map/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,7 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hue_rotation/hue_rotation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -527,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ],
                     );
                   }),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
               aed.image != null
                   ? Column(children: [
                       Row(
@@ -550,12 +552,75 @@ class _HomeScreenState extends State<HomeScreen>
                                     'https://f003.backblazeb2.com/file/aedphotos/warszawaUM1285.jpg')),
                       )
                     ])
-                  : Container()
+                  : Padding(
+                      padding: const EdgeInsets.only(bottom: 36.0),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          _pickImage();
+                        },
+                        child: DottedBorder(
+                          color: isDarkMode ? Colors.white : Colors.grey,
+                          dashPattern: [7, 7],
+                          borderType: BorderType.RRect,
+                          radius: Radius.circular(6),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                      child: Text('Dodaj zdjęcie',
+                                          style: TextStyle(color: Colors.grey)))
+                                ]),
+                          ),
+                        ),
+                      ),
+                    )
             ],
           ),
         ),
       ],
     );
+  }
+
+  final ImagePicker picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Dodaj zdjęcie defibrylatora'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Postaraj się, aby defibrylator był na środku zdjęcia'),
+                Text(
+                    'Zapisanie zdjęcia w bazie danych wymaga zalogowania kontem OSM'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Rozumiem'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+    // if (!await Store.instance.authenticate()) return;
+    final XFile? photo = await picker.pickImage(source: ImageSource.gallery);
+    if (photo == null) return;
+    var link = await Store.instance.uploadImage(photo.path);
+    setState(() {
+      selectedAED!.image = link;
+    });
+    panel.open();
   }
 
   ColorFilter colorFilter = const ColorFilter.matrix(<double>[

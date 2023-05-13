@@ -61,6 +61,11 @@ dependencies:
   xml: ^6.2.2
   settings_ui: ^2.0.2
   feedback: ^2.5.0
+  dotted_border: ^2.0.0+3
+  image_picker: ^0.8.7+4
+  flutter_nude_detector: ^0.0.1
+  image: ^4.0.17
+  dio: ^5.1.2
 
 dev_dependencies:
   flutter_test:
@@ -122,3 +127,4 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/
+    - assets/ml_models/

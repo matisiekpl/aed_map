@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_nude_detector/flutter_nude_detector.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image/image.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -199,5 +203,21 @@ class Store {
     if (kDebugMode) {
       print('Feedback sent!');
     }
+  }
+
+  final String imagesApiUrl = "http://srv3.enteam.pl:1444";
+
+  Future<String?> uploadImage(String filename) async {
+    final image = decodeImage(File(filename).readAsBytesSync())!;
+    final thumbnail = copyResize(image, width: 512);
+    filename = '$filename.jpg';
+    File(filename).writeAsBytesSync(encodePng(thumbnail));
+    final hasNudity = await FlutterNudeDetector.detect(path: filename);
+    if (hasNudity) return null;
+    var formData = FormData.fromMap(
+        {'file': await MultipartFile.fromFile(filename, filename: filename)});
+    var response = await Dio().post('$imagesApiUrl/images', data: formData);
+    var tag = response.data['filename'];
+    return '$imagesApiUrl/$tag';
   }
 }
