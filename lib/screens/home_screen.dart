@@ -379,11 +379,18 @@ class _HomeScreenState extends State<HomeScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (aeds.first == selectedAED)
-                    Text('⚠️ ${AppLocalizations.of(context)!.closestAED}',
-                        style: const TextStyle(
-                            color: Colors.orange,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 18)),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        _selectAED(aeds.first);
+                      },
+                      child: Text(
+                          '⚠️ ${AppLocalizations.of(context)!.closestAED}',
+                          style: const TextStyle(
+                              color: Colors.orange,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 18)),
+                    ),
                   if (aeds.first != selectedAED)
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
@@ -590,16 +597,21 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(height: 10),
               SizedBox(
                   width: double.infinity,
-                  child: Opacity(
-                    opacity: _isRouting ? 0.8 : 1,
-                    child: CupertinoButton.filled(
-                        child: Text(_isRouting
-                            ? AppLocalizations.of(context)!.calculatingRoute
-                            : AppLocalizations.of(context)!.navigate),
-                        onPressed: () async {
-                          _navigate(aed);
-                          // _openMap(aed.location.latitude, aed.location.longitude);
-                        }),
+                  child: IgnorePointer(
+                    ignoring: _isRouting || !_isConnected,
+                    child: Opacity(
+                      opacity: (_isRouting || !_isConnected) ? 0.5 : 1,
+                      child: CupertinoButton.filled(
+                          onPressed: () async {
+                            _navigate(aed);
+                          },
+                          child: Text(_isConnected
+                              ? (_isRouting
+                                  ? AppLocalizations.of(context)!
+                                      .calculatingRoute
+                                  : AppLocalizations.of(context)!.navigate)
+                              : AppLocalizations.of(context)!.noNetwork)),
+                    ),
                   )),
               const SizedBox(height: 12),
               // aed.image != null
@@ -1023,7 +1035,6 @@ class _HomeScreenState extends State<HomeScreen>
       ],
     );
   }
-
 
   String _translateTimeAndLength() {
     return '${(_trip!.time > 60 ? ('${(_trip!.time / 60).floor()} ${AppLocalizations.of(context)!.minutes}') : ('${_trip!.time.floor()} ${AppLocalizations.of(context)!.seconds}'))} (${(_trip!.length * 1000).floor()} ${AppLocalizations.of(context)!.meters})';

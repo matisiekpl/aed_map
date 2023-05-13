@@ -104,11 +104,9 @@ class Store {
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     final result = await FlutterWebAuth.authenticate(
         url:
-        "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
+            "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
         callbackUrlScheme: "aedmap");
-    final code = Uri
-        .parse(result)
-        .queryParameters['code'];
+    final code = Uri.parse(result).queryParameters['code'];
     if (kDebugMode) {
       print('Got OAuth2 code: $code');
     }
@@ -177,18 +175,12 @@ class Store {
     var oldTags = document.findAllElements('tag');
     var oldTagsPairs = oldTags.map((tag) {
       return [
-        tag.attributes
-            .where((attr) => attr.name.toString() == 'k')
-            .first
-            .value,
-        tag.attributes
-            .where((attr) => attr.name.toString() == 'v')
-            .first
-            .value
+        tag.attributes.where((attr) => attr.name.toString() == 'k').first.value,
+        tag.attributes.where((attr) => attr.name.toString() == 'v').first.value
       ];
     }).toList();
     var xml =
-    aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
+        aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
     await http.put(
         Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
         headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
@@ -234,6 +226,9 @@ class Store {
     try {
       var payload = {
         'costing': 'pedestrian',
+        'costing_options': {
+          'pedestrian': {'walking_speed': 9}
+        },
         'units': 'meters',
         'id': 'aed_navigation',
         'locations': [
@@ -244,8 +239,8 @@ class Store {
           {'lat': aed.location.latitude, 'lon': aed.location.longitude}
         ]
       };
-      var response = await http.get(Uri.parse(
-          'http://srv3.enteam.pl:8002/route?json=${json.encode(payload)}'));
+      var response = await http
+          .get(Uri.parse('$valhalla/route?json=${json.encode(payload)}'));
       var result = json.decode(response.body);
       return Trip(
           result['trip']['legs'][0]['shape'],
