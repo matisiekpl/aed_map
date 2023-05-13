@@ -66,6 +66,7 @@ dependencies:
   flutter_nude_detector: ^0.0.1
   image: ^4.0.17
   dio: ^5.1.2
+  google_polyline_algorithm: ^3.1.0
 
 dev_dependencies:
   flutter_test:

@@ -66,5 +66,10 @@
   "enterPhone": "Enter phone number",
   "longitude": "Longitude",
   "latitude": "Latitude",
-  "chooseAccess": "Choose access"
+  "chooseAccess": "Choose access",
+  "calculatingRoute": "Calculating route...",
+  "stop": "stop",
+  "minutes": "minutes",
+  "seconds": "seconds",
+  "meters": "meters"
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
+import 'package:latlong2/latlong.dart';
+export 'package:google_polyline_algorithm/google_polyline_algorithm.dart'
+    show decodePolyline;
 
 String? formatOpeningHours(String? input) {
   if (input == null) return null;
@@ -26,4 +29,10 @@ class ConditionalFlexible extends StatelessWidget {
   Widget build(BuildContext context) {
     return Platform.isAndroid ? child : child;
   }
+}
+
+
+extension PolylineExt on List<List<num>> {
+  List<LatLng> unpackPolyline() =>
+      map((p) => LatLng(p[0].toDouble(), p[1].toDouble())).toList();
 }
