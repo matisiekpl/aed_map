@@ -66,5 +66,10 @@
   "enterPhone": "Wpisz numer telefonu",
   "longitude": "Długość geograficzna",
   "latitude": "Szerokość geograficzna",
-  "chooseAccess": "Wybierz dostępność"
+  "chooseAccess": "Wybierz dostępność",
+  "calculatingRoute": "Liczenie trasy...",
+  "stop": "Zakończ",
+  "minutes": "minut",
+  "seconds": "sekund",
+  "meters": "metrów"
 }

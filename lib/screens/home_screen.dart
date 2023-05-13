@@ -1,12 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/screens/edit_form.dart';
 import 'package:aed_map/utils.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -19,13 +17,14 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hue_rotation/hue_rotation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/aed.dart';
+import '../models/trip.dart';
 import '../store.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -55,15 +54,18 @@ class _HomeScreenState extends State<HomeScreen>
     _initAsync();
   }
 
+  LatLng? _position;
+
   _initAsync() async {
     List<AED> items = [];
     if (kDebugMode) {
+      _position = LatLng(warsaw.latitude, warsaw.longitude);
       items = await Store.instance
           .loadAEDs(LatLng(warsaw.latitude, warsaw.longitude));
     } else {
-      var position = await Store.instance.determinePosition();
+      _position = await Store.instance.determinePosition();
       items = await Store.instance
-          .loadAEDs(LatLng(position.latitude, position.longitude));
+          .loadAEDs(LatLng(_position!.latitude, _position!.longitude));
     }
     setState(() {
       aeds = items;
@@ -78,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen>
     Timer.periodic(const Duration(seconds: 4), (timer) {
       _checkNetwork();
     });
+    if (selectedAED != null) _navigate(selectedAED!, init: true);
   }
 
   @override
@@ -168,6 +171,11 @@ class _HomeScreenState extends State<HomeScreen>
                       borderRadius: radius,
                       parallaxEnabled: true,
                       parallaxOffset: 0.5,
+                      onPanelSlide: (value) {
+                        setState(() {
+                          _floatingPanelPosition = value;
+                        });
+                      },
                       panelBuilder: (ScrollController sc) => AnimatedContainer(
                           decoration: BoxDecoration(
                             borderRadius: radius,
@@ -180,11 +188,83 @@ class _HomeScreenState extends State<HomeScreen>
                       body: SafeArea(
                           top: false, bottom: false, child: _buildMap())),
                   SafeArea(child: _buildHeader()),
+                  SafeArea(child: _buildFloatingPanel()),
                   _editMode
                       ? SafeArea(child: _buildMarkerSelectionFooter())
                       : Container()
                 ],
               ));
+  }
+
+  double _floatingPanelPosition = 0;
+
+  Widget _buildFloatingPanel() {
+    bool isDarkMode = _brightness == Brightness.dark;
+    return Builder(builder: (context) {
+      if (_trip == null) return Container();
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: _floatingPanelPosition * 400 + 84),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    _animatedMapMove(
+                        await Store.instance.determinePosition(), 18);
+                  },
+                  child: Card(
+                      color: isDarkMode ? Colors.black : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(128),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 12),
+                        child: Row(
+                          children: [
+                            Text(_translateTimeAndLength(),
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: isDarkMode
+                                        ? Colors.white
+                                        : Colors.black)),
+                            const SizedBox(width: 8),
+                            SizedBox(
+                              height: 32,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: CupertinoButton(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4, horizontal: 6),
+                                    color: Colors.red,
+                                    child: Text(
+                                        AppLocalizations.of(context)!.stop,
+                                        style: const TextStyle(
+                                            fontSize: 16, color: Colors.white)),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isRouting = false;
+                                        _trip = null;
+                                      });
+                                      mapController.rotate(0);
+                                      panel.open();
+                                    }),
+                              ),
+                            )
+                          ],
+                        ),
+                      )),
+                ),
+              ],
+            ),
+          )
+        ],
+      );
+    });
   }
 
   Widget _buildMarkerSelectionFooter() {
@@ -299,11 +379,19 @@ class _HomeScreenState extends State<HomeScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (aeds.first == selectedAED)
-                    Text('⚠️ ${AppLocalizations.of(context)!.closestAED}',
-                        style: const TextStyle(
-                            color: Colors.orange,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 18)),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        _selectAED(aeds.first);
+                      },
+                      child: Text(
+                          '⚠️ ${AppLocalizations.of(context)!.closestAED}',
+                          key: const Key('closestAed'),
+                          style: const TextStyle(
+                              color: Colors.orange,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 18)),
+                    ),
                   if (aeds.first != selectedAED)
                     GestureDetector(
                         behavior: HitTestBehavior.translucent,
@@ -510,53 +598,131 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(height: 10),
               SizedBox(
                   width: double.infinity,
-                  child: CupertinoButton.filled(
-                      child: Text(AppLocalizations.of(context)!.navigate),
-                      onPressed: () {
-                        _openMap(aed.location.latitude, aed.location.longitude);
-                      })),
+                  child: IgnorePointer(
+                    ignoring: _isRouting || !_isConnected,
+                    child: Opacity(
+                      opacity: (_isRouting || !_isConnected) ? 0.5 : 1,
+                      child: CupertinoButton.filled(
+                        key: const Key('navigate'),
+                          onPressed: () async {
+                            _navigate(aed);
+                          },
+                          child: Text(_isConnected
+                              ? (_isRouting
+                                  ? AppLocalizations.of(context)!
+                                      .calculatingRoute
+                                  : AppLocalizations.of(context)!.navigate)
+                              : AppLocalizations.of(context)!.noNetwork)),
+                    ),
+                  )),
               const SizedBox(height: 12),
-              CrossFade<String>(
-                  duration: const Duration(milliseconds: 200),
-                  value: _translateMeters(selectedAED!.distance!),
-                  builder: (context, v) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(v, style: const TextStyle(color: Colors.orange)),
-                      ],
-                    );
-                  }),
-              const SizedBox(height: 24),
-              aed.image != null
-                  ? Column(children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Opacity(
-                              opacity: 0.5,
-                              child: Text(AppLocalizations.of(context)!
-                                  .imageOfDefibrillator)),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
-                        child: ClipRRect(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                            child: CachedNetworkImage(
-                                imageUrl: aed.image ??
-                                    'https://f003.backblazeb2.com/file/aedphotos/warszawaUM1285.jpg')),
-                      )
-                    ])
-                  : Container()
+              // aed.image != null
+              //     ? Column(children: [
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             Opacity(
+              //                 opacity: 0.5,
+              //                 child: Text(AppLocalizations.of(context)!
+              //                     .imageOfDefibrillator)),
+              //           ],
+              //         ),
+              //         const SizedBox(height: 8),
+              //         Padding(
+              //           padding: const EdgeInsets.only(bottom: 24),
+              //           child: ClipRRect(
+              //               borderRadius:
+              //                   const BorderRadius.all(Radius.circular(8)),
+              //               child: CachedNetworkImage(
+              //                   imageUrl: aed.image ??
+              //                       'https://f003.backblazeb2.com/file/aedphotos/warszawaUM1285.jpg')),
+              //         )
+              //       ])
+              //     : Padding(
+              //         padding: const EdgeInsets.only(bottom: 36.0),
+              //         child: GestureDetector(
+              //           behavior: HitTestBehavior.translucent,
+              //           onTap: () {
+              //             _pickImage();
+              //           },
+              //           child: DottedBorder(
+              //             color: isDarkMode ? Colors.white : Colors.grey,
+              //             dashPattern: const [7, 7],
+              //             borderType: BorderType.RRect,
+              //             radius: const Radius.circular(6),
+              //             child: Padding(
+              //               padding: const EdgeInsets.all(8.0),
+              //               child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.center,
+              //                   children: const [
+              //                     Text('Dodaj zdjęcie',
+              //                         style: TextStyle(color: Colors.grey))
+              //                   ]),
+              //             ),
+              //           ),
+              //         ),
+              //       )
             ],
           ),
         ),
       ],
     );
   }
+
+  _navigate(AED aed, {bool init = false}) async {
+    setState(() {
+      _isRouting = true;
+    });
+    var route = await Store.instance.navigate(_position!, aed);
+    setState(() {
+      _trip = route;
+      _isRouting = false;
+    });
+    panel.close();
+    var start = decodePolyline(_trip!.shape, accuracyExponent: 6)
+        .unpackPolyline()
+        .first;
+    if (!init) _animatedMapMove(LatLng(start.latitude, start.longitude), 18);
+  }
+
+  final ImagePicker picker = ImagePicker();
+
+  // Future<void> _pickImage() async {
+  //   await showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false, // user must tap button!
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Dodaj zdjęcie defibrylatora'),
+  //         content: SingleChildScrollView(
+  //           child: ListBody(
+  //             children: const <Widget>[
+  //               Text('Postaraj się, aby defibrylator był na środku zdjęcia'),
+  //               Text(
+  //                   'Zapisanie zdjęcia w bazie danych wymaga zalogowania kontem OSM'),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('Rozumiem'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  //   // if (!await Store.instance.authenticate()) return;
+  //   final XFile? photo = await picker.pickImage(source: ImageSource.gallery);
+  //   if (photo == null) return;
+  //   var link = await Store.instance.uploadImage(photo.path);
+  //   setState(() {
+  //     selectedAED!.image = link;
+  //   });
+  //   panel.open();
+  // }
 
   ColorFilter colorFilter = const ColorFilter.matrix(<double>[
     -1,
@@ -628,6 +794,9 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  Trip? _trip;
+  bool _isRouting = false;
+
   Widget _buildMap() {
     bool isDarkMode = _brightness == Brightness.dark;
     return FutureBuilder<LatLng>(
@@ -642,10 +811,10 @@ class _HomeScreenState extends State<HomeScreen>
                     FlutterMap(
                       mapController: mapController,
                       options: MapOptions(
-                        center: aeds.first.location,
+                        center: snapshot.data,
                         interactiveFlags:
                             InteractiveFlag.all & ~InteractiveFlag.rotate,
-                        zoom: 14,
+                        zoom: 18,
                         maxZoom: 18,
                         minZoom: 8,
                       ),
@@ -666,6 +835,18 @@ class _HomeScreenState extends State<HomeScreen>
                                     )
                                   : tileWidget;
                             }),
+                        if (_trip != null)
+                          PolylineLayer(
+                            polylines: [
+                              Polyline(
+                                  points: decodePolyline(_trip!.shape,
+                                          accuracyExponent: 6)
+                                      .unpackPolyline(),
+                                  color: Colors.blue,
+                                  strokeWidth: 5,
+                                  isDotted: true),
+                            ],
+                          ),
                         CurrentLocationLayer(),
                         SuperclusterLayer.mutable(
                           initialMarkers: markers,
@@ -809,6 +990,7 @@ class _HomeScreenState extends State<HomeScreen>
   _selectAED(AED aed) async {
     setState(() {
       selectedAED = aed;
+      _trip = null;
     });
     panel.open();
     _animatedMapMove(selectedAED!.location, 16);
@@ -856,47 +1038,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  String _translateMeters(int distance) {
-    if (distance > 10000) {
-      return AppLocalizations.of(context)!.distance((distance / 1000).floor());
-    }
-    return AppLocalizations.of(context)!
-        .runDistance((distance / 200).ceil(), distance);
-  }
-
-  _openMap(double latitude, double longitude) async {
-    var chooseMapAppLabel = AppLocalizations.of(context)!.chooseMapApp;
-    if (Platform.isIOS) {
-      showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context) => CupertinoActionSheet(
-          title: Text(chooseMapAppLabel),
-          actions: <CupertinoActionSheetAction>[
-            CupertinoActionSheetAction(
-              onPressed: () {
-                MapsLauncher.launchCoordinates(latitude, longitude);
-              },
-              child: const Text('Apple Maps'),
-            ),
-            CupertinoActionSheetAction(
-              onPressed: () async {
-                String googleUrl =
-                    'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-                // ignore: deprecated_member_use
-                if (await canLaunch(googleUrl)) {
-                  // ignore: deprecated_member_use
-                  await launch(googleUrl);
-                } else {
-                  throw 'Could not open the map.';
-                }
-              },
-              child: const Text('Google Maps'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      MapsLauncher.launchCoordinates(latitude, longitude);
-    }
+  String _translateTimeAndLength() {
+    return '${(_trip!.time > 60 ? ('${(_trip!.time / 60).floor()} ${AppLocalizations.of(context)!.minutes}') : ('${_trip!.time.floor()} ${AppLocalizations.of(context)!.seconds}'))} (${(_trip!.length * 1000).floor()} ${AppLocalizations.of(context)!.meters})';
   }
 }

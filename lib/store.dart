@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:aed_map/models/trip.dart';
+import 'package:dio/dio.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_nude_detector/flutter_nude_detector.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image/image.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -29,8 +34,8 @@ class Store {
         if (permission == LocationPermission.denied) return warsaw;
       }
       if (permission == LocationPermission.deniedForever) return warsaw;
-      var position = await Geolocator.getCurrentPosition(
-          timeLimit: const Duration(seconds: 2));
+      var position = await Geolocator.getLastKnownPosition();
+      if (position == null) return warsaw;
       return LatLng(position.latitude, position.longitude);
     } catch (err) {
       return warsaw;
@@ -198,6 +203,51 @@ class Store {
     });
     if (kDebugMode) {
       print('Feedback sent!');
+    }
+  }
+
+  final String imagesApiUrl = "http://srv3.enteam.pl:1444";
+
+  Future<String?> uploadImage(String filename) async {
+    final image = decodeImage(File(filename).readAsBytesSync())!;
+    final thumbnail = copyResize(image, width: 512);
+    filename = '$filename.jpg';
+    File(filename).writeAsBytesSync(encodePng(thumbnail));
+    final hasNudity = await FlutterNudeDetector.detect(path: filename);
+    if (hasNudity) return null;
+    var formData = FormData.fromMap(
+        {'file': await MultipartFile.fromFile(filename, filename: filename)});
+    var response = await Dio().post('$imagesApiUrl/images', data: formData);
+    var tag = response.data['filename'];
+    return '$imagesApiUrl/$tag';
+  }
+
+  Future<Trip?> navigate(LatLng current, AED aed) async {
+    try {
+      var payload = {
+        'costing': 'pedestrian',
+        'costing_options': {
+          'pedestrian': {'walking_speed': 9}
+        },
+        'units': 'meters',
+        'id': 'aed_navigation',
+        'locations': [
+          {
+            'lat': current.latitude,
+            'lon': current.longitude,
+          },
+          {'lat': aed.location.latitude, 'lon': aed.location.longitude}
+        ]
+      };
+      var response = await http
+          .get(Uri.parse('$valhalla/route?json=${json.encode(payload)}'));
+      var result = json.decode(response.body);
+      return Trip(
+          result['trip']['legs'][0]['shape'],
+          result['trip']['summary']['time'],
+          result['trip']['summary']['length']);
+    } catch (err) {
+      return null;
     }
   }
 }
