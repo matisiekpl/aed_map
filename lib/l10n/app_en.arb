@@ -45,6 +45,8 @@
     }
   },
   "noNetwork": "No network connection!",
+  "checkNetwork": "Check network connection",
+  "retry": "Retry",
   "yes": "yes",
   "no": "no",
   "accessYes": "publicly accessible",

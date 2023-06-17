@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   sliding_up_panel: ^2.0.0+1
-  vector_map_tiles: ^3.1.4
+  vector_map_tiles: ^3.3.5
   flutter_map: ^3.1.0
   latlong2: ^0.8.1
   geolocator: ^9.0.1

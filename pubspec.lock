@@ -197,10 +197,10 @@ packages:
     dependency: transitive
     description:
       name: executor_lib
-      sha256: "0bd5c9fe0dfe0f6ab058c94515c387a169e518f94173e08a372d3ea8dd05def3"
+      sha256: "49696532000c21a6201f768d34cd69e93afe8add4e621d52b5c1df6d3b907159"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
+    version: "1.1.0"
   fake_async:
     dependency: transitive
     description:
@@ -1109,10 +1109,10 @@ packages:
     dependency: "direct main"
     description:
       name: vector_map_tiles
-      sha256: a0411b32ec4a8b548eb2fdf74d0e1165310e86415c3a7a26459cedf0d4fd1bc0
+      sha256: ab89f321b6a59b66861bcff1cf423665a61a04fba15ad3ba233ac330045388e1
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.4"
+    version: "3.3.5"
   vector_math:
     dependency: transitive
     description:
@@ -1133,10 +1133,10 @@ packages:
     dependency: transitive
     description:
       name: vector_tile_renderer
-      sha256: "1d4c60b5d8e73b5d8286516f10b02880e3e51156fd2bb82ba2c1f3201e38b89e"
+      sha256: "53219efabfcc83053b860c81fba22b9c974028a9ca3be214e5fb00d0e2b0487b"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.4"
+    version: "3.2.1"
   vm_service:
     dependency: transitive
     description:

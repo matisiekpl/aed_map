@@ -45,6 +45,8 @@
     }
   },
   "noNetwork": "Brak połączenia sieciowego!",
+  "checkNetwork": "Sprawdź połączenie sieciowe",
+  "retry": "Ponów",
   "yes": "tak",
   "no": "nie",
   "accessYes": "publicznie dostępny",

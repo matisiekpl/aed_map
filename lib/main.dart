@@ -1,4 +1,5 @@
 import 'package:aed_map/screens/home_screen.dart';
+import 'package:aed_map/utils.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_driver/driver_extension.dart';
 void main() async {
   enableFlutterDriverExtension();
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const BetterFeedback(child: App()));
+  runApp(const RestartWidget(child: BetterFeedback(child: App())));
 }
 
 class App extends StatefulWidget {
@@ -33,11 +34,6 @@ class _AppState extends State<App> {
     ]);
     return const CupertinoApp(
       debugShowCheckedModeBanner: false,
-      // localizationsDelegates: [
-      //   DefaultMaterialLocalizations.delegate,
-      //   DefaultCupertinoLocalizations.delegate,
-      //   DefaultWidgetsLocalizations.delegate,
-      // ],
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

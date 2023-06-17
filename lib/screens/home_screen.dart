@@ -1,14 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
-
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/screens/edit_form.dart';
+import 'package:aed_map/screens/loading_widget.dart';
 import 'package:aed_map/utils.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:aed_map/cached_network_tile_provider.dart';
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +19,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vector_map_tiles/vector_map_tiles.dart';
 
 import '../models/aed.dart';
 import '../models/trip.dart';
@@ -47,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen>
   Brightness? _brightness;
 
   bool loaded = false;
+  late Style style;
 
   @override
   void initState() {
@@ -57,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen>
   LatLng? _position;
 
   _initAsync() async {
+    style = await _readStyle();
     List<AED> items = [];
     if (kDebugMode) {
       _position = LatLng(warsaw.latitude, warsaw.longitude);
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
     return CupertinoPageScaffold(
         child: !loaded
-            ? const Center(child: CircularProgressIndicator())
+            ? const LoadingWidget()
             : Stack(
                 children: [
                   SlidingUpPanel(
@@ -603,7 +603,7 @@ class _HomeScreenState extends State<HomeScreen>
                     child: Opacity(
                       opacity: (_isRouting || !_isConnected) ? 0.5 : 1,
                       child: CupertinoButton.filled(
-                        key: const Key('navigate'),
+                          key: const Key('navigate'),
                           onPressed: () async {
                             _navigate(aed);
                           },
@@ -819,22 +819,44 @@ class _HomeScreenState extends State<HomeScreen>
                         minZoom: 8,
                       ),
                       children: [
-                        TileLayer(
-                            urlTemplate:
-                                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                            userAgentPackageName: 'pl.enteam.aed_map',
-                            tileProvider: CachedNetworkTileProvider(),
-                            tileBuilder: (BuildContext context,
-                                Widget tileWidget, Tile tile) {
-                              return isDarkMode
-                                  ? HueRotation(
-                                      degrees: 180,
-                                      child: ColorFiltered(
-                                          colorFilter: invert,
-                                          child: tileWidget),
-                                    )
-                                  : tileWidget;
-                            }),
+                        HueRotation(
+                          degrees: isDarkMode ? 180 : 0,
+                          child: Builder(builder: (context) {
+                            var map = VectorTileLayer(
+                                tileProviders: style.providers,
+                                theme: style.theme,
+                                maximumZoom: 22,
+                                tileOffset: TileOffset.mapbox,
+                                layerMode: VectorTileLayerMode.vector);
+                            if (!isDarkMode) return map;
+                            return ColorFiltered(
+                              colorFilter: invert,
+                              child: map,
+                            );
+                          }),
+                        ),
+                        // VectorTileLayer(
+                        //     tileProviders: style.providers,
+                        //     theme: style.theme,
+                        //     maximumZoom: 22,
+                        //     tileOffset: TileOffset.mapbox,
+                        //     layerMode: VectorTileLayerMode.vector),
+                        // TileLayer(
+                        //     urlTemplate:
+                        //         "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        //     userAgentPackageName: 'pl.enteam.aed_map',
+                        //     tileProvider: CachedNetworkTileProvider(),
+                        //     tileBuilder: (BuildContext context,
+                        //         Widget tileWidget, Tile tile) {
+                        //       return isDarkMode
+                        //           ? HueRotation(
+                        //               degrees: 180,
+                        //               child: ColorFiltered(
+                        //                   colorFilter: invert,
+                        //                   child: tileWidget),
+                        //             )
+                        //           : tileWidget;
+                        //     }),
                         if (_trip != null)
                           PolylineLayer(
                             polylines: [
@@ -1041,4 +1063,6 @@ class _HomeScreenState extends State<HomeScreen>
   String _translateTimeAndLength() {
     return '${(_trip!.time > 60 ? ('${(_trip!.time / 60).floor()} ${AppLocalizations.of(context)!.minutes}') : ('${_trip!.time.floor()} ${AppLocalizations.of(context)!.seconds}'))} (${(_trip!.length * 1000).floor()} ${AppLocalizations.of(context)!.meters})';
   }
+
+  Future<Style> _readStyle() => StyleReader(uri: maps).read();
 }
