@@ -6,6 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_driver/driver_extension.dart';
+import 'package:plausible_analytics/navigator_observer.dart';
+import 'package:plausible_analytics/plausible_analytics.dart';
+
+import 'constants.dart';
+
+final analytics = Plausible(plausible, 'aedmapa.app');
 
 void main() async {
   enableFlutterDriverExtension();
@@ -32,16 +38,17 @@ class _AppState extends State<App> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return const CupertinoApp(
+    return CupertinoApp(
+      navigatorObservers: [PlausibleNavigatorObserver(analytics)],
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }

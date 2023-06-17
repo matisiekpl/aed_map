@@ -21,6 +21,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
 
+import '../main.dart';
 import '../models/aed.dart';
 import '../models/trip.dart';
 import '../store.dart';
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     _initAsync();
+    analytics.event();
   }
 
   LatLng? _position;
@@ -670,6 +672,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   _navigate(AED aed, {bool init = false}) async {
+    analytics.event(name: 'navigate');
     setState(() {
       _isRouting = true;
     });
@@ -1016,6 +1019,7 @@ class _HomeScreenState extends State<HomeScreen>
     });
     panel.open();
     _animatedMapMove(selectedAED!.location, 16);
+    analytics.event(name: 'select');
   }
 
   void _animatedMapMove(LatLng destLocation, double destZoom) {
