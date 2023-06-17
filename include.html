@@ -1,0 +1,11 @@
+<script>
+    function loadSize() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            document.body.innerHTML = document.body.innerHTML.replace('5400', JSON.parse(this.responseText).filter(x => x.country_code == 'PL')[0].feature_count);
+        }
+        xhttp.open("GET", "https://back.openaedmap.org/api/v1/countries/names", true);
+        xhttp.send();
+    }
+    window.onload = loadSize;
+</script>
