@@ -53,6 +53,7 @@ Aplikacja może zostać pobrana ze sklepów aplikacji.
 * dane pochodzą z [bazy danych OSM](https://openaedmap.org/)
 * silnikiem nawigacji pieszej jest [Valhalla](https://github.com/valhalla/valhalla/)
 * mapa jest renderowana wektorowo, z użyciem silnika [TileServer-gl](https://github.com/maptiler/tileserver-gl)
+* [analityka](https://analityka.aedmapa.pl/aedmapa.app) dostępna za pomocą [Plausible](https://plausible.io/)
 
 ## Kompilacja
 ```bash
