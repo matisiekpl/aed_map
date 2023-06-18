@@ -20,7 +20,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.16+16
 
 environment:
-#  sdk: '>=3.1.0-213.0.dev <4.0.0'
+  #  sdk: '>=3.1.0-213.0.dev <4.0.0'
   sdk: ">=2.18.0-257.0.dev <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
@@ -87,7 +87,7 @@ flutter_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/icon.jpg"
+  image_path: "assets/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
