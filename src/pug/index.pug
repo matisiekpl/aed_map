@@ -18,7 +18,7 @@ html(lang="en")
         style.
                     .footer {zoom: 0.8;}
                 
-        script(src="https://analytics.chatspell.co/js/script.js")
+        script(src="https://analytics.chatspell.co/js/script.outbound-links.tagged-events.js")
         script(type="text/javascript").
                     document.addEventListener('DOMContentLoaded', function() {
                 // open
@@ -67,10 +67,10 @@ html(lang="en")
                                 h1(class="text-3xl md:text-4xl font-extrabold font-heading md:mb-8 mb-2") Mapa AED
                                 p(class="text-xl font-extrabold leading-7 md:mb-6 mb-3") Przeglądaj dostępne w pobliżu defibrylatory AED, aby w razie potrzeby móc szybko udzielić pierwszej pomocy.
                                 div(class="lg:flex")
-                                    a(class="inline-block mr-4", href="https://apps.apple.com/us/app/mapa-aed/id1638495701")
+                                    a(class="inline-block mr-4 plausible-event-name=appstore", href="https://apps.apple.com/us/app/mapa-aed/id1638495701")
                                         img(src="nigodo-assets/apps/appstore.svg", alt="")
                                     |                   
-                                    a(class="inline-block", href="https://play.google.com/store/apps/details?id=pl.enteam.aed_map")
+                                    a(class="inline-block plausible-event-name=googleplay", href="https://play.google.com/store/apps/details?id=pl.enteam.aed_map")
                                         img(src="nigodo-assets/apps/google.svg", alt="")
                         div(class="w-full lg:w-1/2 px-4")
                             img(class="block mx-auto md:mt-6 -mt-6", src="images/banner.png", alt="")
