@@ -250,4 +250,12 @@ class Store {
       return null;
     }
   }
+
+  Future<LatLng> locate() async {
+    if (kDebugMode) {
+      return LatLng(warsaw.latitude, warsaw.longitude);
+    } else {
+      return await Store.instance.determinePosition();
+    }
+  }
 }

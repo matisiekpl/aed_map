@@ -1,7 +1,10 @@
+import 'package:aed_map/bloc/location/location_cubit.dart';
 import 'package:aed_map/bloc/map_style/map_style_cubit.dart';
+import 'package:aed_map/bloc/panel/panel_cubit.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
 import 'package:aed_map/bloc/points/points_state.dart';
-import 'package:aed_map/screens/home_screen.dart';
+import 'package:aed_map/bloc/routing/routing_cubit.dart';
+import 'package:aed_map/screens/map/map_screen.dart';
 import 'package:aed_map/utils.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,7 +62,16 @@ class _AppState extends State<App> {
         BlocProvider<PointsCubit>(
           create: (BuildContext context) => PointsCubit()..load(),
         ),
-      ], child: const HomeScreen()),
+        BlocProvider<RoutingCubit>(
+          create: (BuildContext context) => RoutingCubit(),
+        ),
+        BlocProvider<LocationCubit>(
+          create: (BuildContext context) => LocationCubit()..locate(),
+        ),
+        BlocProvider<PanelCubit>(
+          create: (BuildContext context) => PanelCubit(),
+        ),
+      ], child: const MapScreen()),
     );
   }
 }
