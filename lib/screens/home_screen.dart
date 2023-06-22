@@ -1,10 +1,14 @@
 import 'dart:async';
-import 'package:aed_map/constants.dart';
+import 'package:aed_map/bloc/map_style/map_style_cubit.dart';
+import 'package:aed_map/bloc/map_style/map_style_state.dart';
+import 'package:aed_map/bloc/points/points_cubit.dart';
+import 'package:aed_map/bloc/points/points_state.dart';
 import 'package:aed_map/screens/edit_form.dart';
 import 'package:aed_map/screens/loading_widget.dart';
 import 'package:aed_map/utils.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,18 +39,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  List<AED> aeds = [];
-  List<Marker> markers = [];
-  AED? selectedAED;
   final PanelController panel = PanelController();
   final MapController mapController = MapController();
   final SuperclusterMutableController markersController =
       SuperclusterMutableController();
 
   Brightness? _brightness;
-
-  bool loaded = false;
-  late Style style;
 
   @override
   void initState() {
@@ -58,31 +56,12 @@ class _HomeScreenState extends State<HomeScreen>
   LatLng? _position;
 
   _initAsync() async {
-    style = await _readStyle();
-    List<AED> items = [];
-    if (kDebugMode) {
-      _position = LatLng(warsaw.latitude, warsaw.longitude);
-      items = await Store.instance
-          .loadAEDs(LatLng(warsaw.latitude, warsaw.longitude));
-    } else {
-      _position = await Store.instance.determinePosition();
-      items = await Store.instance
-          .loadAEDs(LatLng(_position!.latitude, _position!.longitude));
-    }
-    setState(() {
-      aeds = items;
-      selectedAED = aeds.first;
-    });
-    _getMarkers();
-    setState(() {
-      loaded = true;
-    });
     WidgetsBinding.instance.addObserver(this);
     _brightness = WidgetsBinding.instance.window.platformBrightness;
     Timer.periodic(const Duration(seconds: 4), (timer) {
       _checkNetwork();
     });
-    if (selectedAED != null) _navigate(selectedAED!, init: true);
+    // if (selectedAED != null) _navigate(selectedAED!, init: true);
   }
 
   @override
@@ -95,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen>
     super.didChangePlatformBrightness();
   }
 
-  List<Marker> _getMarkers() {
-    markers = aeds
+  List<Marker> _getMarkers(List<AED> aeds) {
+    return aeds
         .map((aed) {
           if (aed.access == 'yes') {
             return Marker(
@@ -153,7 +132,6 @@ class _HomeScreenState extends State<HomeScreen>
         })
         .cast<Marker>()
         .toList();
-    return markers;
   }
 
   @override
@@ -163,39 +141,44 @@ class _HomeScreenState extends State<HomeScreen>
       topRight: Radius.circular(24.0),
     );
     return CupertinoPageScaffold(
-        child: !loaded
-            ? const LoadingWidget()
-            : Stack(
-                children: [
-                  SlidingUpPanel(
-                      controller: panel,
-                      maxHeight: 500,
+        child: BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
+      if (state is PointsStateLoading) {
+        return const LoadingWidget();
+      }
+      if (state is PointsStateLoaded) {
+        return Stack(
+          children: [
+            SlidingUpPanel(
+                controller: panel,
+                maxHeight: 500,
+                borderRadius: radius,
+                parallaxEnabled: true,
+                parallaxOffset: 0.5,
+                onPanelSlide: (value) {
+                  setState(() {
+                    _floatingPanelPosition = value;
+                  });
+                },
+                panelBuilder: (ScrollController sc) => AnimatedContainer(
+                    decoration: BoxDecoration(
                       borderRadius: radius,
-                      parallaxEnabled: true,
-                      parallaxOffset: 0.5,
-                      onPanelSlide: (value) {
-                        setState(() {
-                          _floatingPanelPosition = value;
-                        });
-                      },
-                      panelBuilder: (ScrollController sc) => AnimatedContainer(
-                          decoration: BoxDecoration(
-                            borderRadius: radius,
-                            color: _brightness == Brightness.dark
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                          duration: const Duration(milliseconds: 300),
-                          child: _buildBottomPanel(sc)),
-                      body: SafeArea(
-                          top: false, bottom: false, child: _buildMap())),
-                  SafeArea(child: _buildHeader()),
-                  SafeArea(child: _buildFloatingPanel()),
-                  _editMode
-                      ? SafeArea(child: _buildMarkerSelectionFooter())
-                      : Container()
-                ],
-              ));
+                      color: _brightness == Brightness.dark
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+                    duration: const Duration(milliseconds: 300),
+                    child: _buildBottomPanel(sc)),
+                body: SafeArea(top: false, bottom: false, child: _buildMap())),
+            SafeArea(child: _buildHeader()),
+            SafeArea(child: _buildFloatingPanel()),
+            _editMode
+                ? SafeArea(child: _buildMarkerSelectionFooter())
+                : Container()
+          ],
+        );
+      }
+      return Container();
+    }));
   }
 
   double _floatingPanelPosition = 0;
@@ -316,11 +299,11 @@ class _HomeScreenState extends State<HomeScreen>
                                 CupertinoPageRoute(
                                     builder: (context) =>
                                         EditForm(aed: aed, isEditing: false)));
-                            aeds.add(newAed);
+                            // aeds.add(newAed);
                             setState(() {
                               _editMode = false;
                             });
-                            markersController.replaceAll(_getMarkers());
+                            // markersController.replaceAll(_getMarkers());
                             await panel.show();
                             _selectAED(newAed);
                           },
@@ -353,322 +336,338 @@ class _HomeScreenState extends State<HomeScreen>
   bool _editMode = false;
 
   Widget _buildBottomPanel(ScrollController sc) {
-    var aed = selectedAED!;
     bool isDarkMode = _brightness == Brightness.dark;
-    return ListView(
-      padding: const EdgeInsets.all(0),
-      controller: sc,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(height: 24.0),
-            Container(
-              width: 30,
-              height: 5,
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: const BorderRadius.all(Radius.circular(12.0))),
+    return BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
+      if (state is PointsStateLoading) {
+        return Container();
+      }
+      if (state is PointsStateLoaded) {
+        return ListView(
+          padding: const EdgeInsets.all(0),
+          controller: sc,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(height: 24.0),
+                Container(
+                  width: 30,
+                  height: 5,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0))),
+                ),
+              ],
             ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (aeds.first == selectedAED)
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        _selectAED(aeds.first);
-                      },
-                      child: Text(
-                          '⚠️ ${AppLocalizations.of(context)!.closestAED}',
-                          key: const Key('closestAed'),
-                          style: const TextStyle(
-                              color: Colors.orange,
-                              fontStyle: FontStyle.italic,
-                              fontSize: 18)),
-                    ),
-                  if (aeds.first != selectedAED)
-                    GestureDetector(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (state.aeds.first == state.selected)
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            _selectAED(state.aeds.first);
+                          },
+                          child: Text(
+                              '⚠️ ${AppLocalizations.of(context)!.closestAED}',
+                              key: const Key('closestAed'),
+                              style: const TextStyle(
+                                  color: Colors.orange,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 18)),
+                        ),
+                      if (state.aeds.first != state.selected)
+                        GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              _selectAED(state.aeds.first);
+                            },
+                            child: Text(
+                                '⚠️ ${AppLocalizations.of(context)!.closerAEDAvailable}',
+                                style: const TextStyle(
+                                    color: Colors.orange,
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 18))),
+                      GestureDetector(
                         behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          _selectAED(aeds.first);
-                        },
-                        child: Text(
-                            '⚠️ ${AppLocalizations.of(context)!.closerAEDAvailable}',
-                            style: const TextStyle(
-                                color: Colors.orange,
-                                fontStyle: FontStyle.italic,
-                                fontSize: 18))),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () async {
-                      if (!await Store.instance.authenticate()) return;
-                      AED updatedAed = await Navigator.of(context).push(
-                          CupertinoPageRoute(
-                              builder: (context) =>
-                                  EditForm(aed: aed, isEditing: true)));
+                        onTap: () async {
+                          if (!await Store.instance.authenticate()) return;
+                          AED updatedAed = await Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                  builder: (context) => EditForm(
+                                      aed: state.selected, isEditing: true)));
 
-                      int index = aeds.indexWhere((x) => x.id == updatedAed.id);
-                      aeds[index] = updatedAed;
-                      setState(() {
-                        _editMode = false;
-                      });
-                      markersController.replaceAll(_getMarkers());
-                      await panel.show();
-                      _selectAED(updatedAed);
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: isDarkMode
-                                ? Colors.grey.shade800
-                                : Colors.grey.shade300,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8, right: 8, top: 4, bottom: 4),
-                          child: Text(AppLocalizations.of(context)!.edit,
-                              style: TextStyle(
-                                  color: isDarkMode
-                                      ? Colors.white
-                                      : Colors.black)),
-                        )),
+                          int index = state.aeds
+                              .indexWhere((x) => x.id == updatedAed.id);
+                          state.aeds[index] = updatedAed;
+                          setState(() {
+                            _editMode = false;
+                          });
+                          markersController.replaceAll(_getMarkers(state.aeds));
+                          await panel.show();
+                          _selectAED(updatedAed);
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: isDarkMode
+                                    ? Colors.grey.shade800
+                                    : Colors.grey.shade300,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(12))),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8, right: 8, top: 4, bottom: 4),
+                              child: Text(AppLocalizations.of(context)!.edit,
+                                  style: TextStyle(
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : Colors.black)),
+                            )),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  color: aed.getColor(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                  const SizedBox(height: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      color: state.selected.getColor(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
                           children: [
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(4),
-                                child: SvgPicture.asset(
-                                    'assets/${aed.getIconFilename()}',
-                                    width: 32)),
-                            const SizedBox(width: 6),
-                            Text(AppLocalizations.of(context)!.defibrillator,
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    color: aed.getColor() == Colors.yellow
-                                        ? Colors.black
-                                        : Colors.white))
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: SvgPicture.asset(
+                                        'assets/${state.selected.getIconFilename()}',
+                                        width: 32)),
+                                const SizedBox(width: 6),
+                                Text(
+                                    AppLocalizations.of(context)!.defibrillator,
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: state.selected.getColor() ==
+                                                Colors.yellow
+                                            ? Colors.black
+                                            : Colors.white))
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            CrossFade<String>(
+                                duration: const Duration(milliseconds: 200),
+                                value: toNullableString(state.selected
+                                        .getAccessComment(context)) ??
+                                    AppLocalizations.of(context)!.noData,
+                                builder: (context, v) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "${AppLocalizations.of(context)!.access}: ",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color:
+                                                  state.selected.getColor() ==
+                                                          Colors.yellow
+                                                      ? Colors.black
+                                                      : Colors.white)),
+                                      Text(v,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  state.selected.getColor() ==
+                                                          Colors.yellow
+                                                      ? Colors.black
+                                                      : Colors.white)),
+                                    ],
+                                  );
+                                }),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        CrossFade<String>(
-                            duration: const Duration(milliseconds: 200),
-                            value: toNullableString(
-                                    aed.getAccessComment(context)) ??
-                                AppLocalizations.of(context)!.noData,
-                            builder: (context, v) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      "${AppLocalizations.of(context)!.access}: ",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: aed.getColor() == Colors.yellow
-                                              ? Colors.black
-                                              : Colors.white)),
-                                  Text(v,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: aed.getColor() == Colors.yellow
-                                              ? Colors.black
-                                              : Colors.white)),
-                                ],
-                              );
-                            }),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              CrossFade<String>(
-                  duration: const Duration(milliseconds: 200),
-                  value: toNullableString(aed.description) ??
-                      AppLocalizations.of(context)!.noData,
-                  builder: (context, v) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(AppLocalizations.of(context)!.location,
-                            style: const TextStyle(fontSize: 16)),
-                        Text(v,
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                      ],
-                    );
-                  }),
-              const SizedBox(height: 4),
-              CrossFade<String>(
-                  duration: const Duration(milliseconds: 200),
-                  value: toNullableString(aed.operator) ??
-                      AppLocalizations.of(context)!.noData,
-                  builder: (context, v) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(AppLocalizations.of(context)!.operator,
-                            style: const TextStyle(fontSize: 16)),
-                        Text(v,
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                      ],
-                    );
-                  }),
-              const SizedBox(height: 4),
-              CrossFade<String>(
-                  duration: const Duration(milliseconds: 200),
-                  value:
-                      toNullableString(formatOpeningHours(aed.openingHours)) ??
+                  const SizedBox(height: 8),
+                  CrossFade<String>(
+                      duration: const Duration(milliseconds: 200),
+                      value: toNullableString(state.selected.description) ??
                           AppLocalizations.of(context)!.noData,
-                  builder: (context, v) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(AppLocalizations.of(context)!.openingHours,
-                            style: const TextStyle(fontSize: 16)),
-                        Text(v,
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                      ],
-                    );
-                  }),
-              const SizedBox(height: 4),
-              CrossFade<bool>(
-                  duration: const Duration(milliseconds: 200),
-                  value: aed.indoor,
-                  builder: (context, v) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                            '${AppLocalizations.of(context)!.insideBuilding}: ',
-                            style: const TextStyle(fontSize: 16)),
-                        Text(
-                            v
-                                ? AppLocalizations.of(context)!.yes
-                                : AppLocalizations.of(context)!.no,
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                      ],
-                    );
-                  }),
-              const SizedBox(height: 4),
-              CrossFade<String>(
-                  duration: const Duration(milliseconds: 200),
-                  value: toNullableString(aed.phone) ??
-                      AppLocalizations.of(context)!.noData,
-                  builder: (context, v) {
-                    return GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        launchUrl(Uri.parse(
-                            'tel:${aed.phone.toString().replaceAll(' ', '')}'));
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text('${AppLocalizations.of(context)!.contact}: ',
-                              style: const TextStyle(fontSize: 16)),
-                          Text(v,
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    );
-                  }),
-              const SizedBox(height: 10),
-              SizedBox(
-                  width: double.infinity,
-                  child: IgnorePointer(
-                    ignoring: _isRouting || !_isConnected,
-                    child: Opacity(
-                      opacity: (_isRouting || !_isConnected) ? 0.5 : 1,
-                      child: CupertinoButton.filled(
-                          key: const Key('navigate'),
-                          onPressed: () async {
-                            _navigate(aed);
+                      builder: (context, v) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(AppLocalizations.of(context)!.location,
+                                style: const TextStyle(fontSize: 16)),
+                            Text(v,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                          ],
+                        );
+                      }),
+                  const SizedBox(height: 4),
+                  CrossFade<String>(
+                      duration: const Duration(milliseconds: 200),
+                      value: toNullableString(state.selected.operator) ??
+                          AppLocalizations.of(context)!.noData,
+                      builder: (context, v) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(AppLocalizations.of(context)!.operator,
+                                style: const TextStyle(fontSize: 16)),
+                            Text(v,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                          ],
+                        );
+                      }),
+                  const SizedBox(height: 4),
+                  CrossFade<String>(
+                      duration: const Duration(milliseconds: 200),
+                      value: toNullableString(formatOpeningHours(
+                              state.selected.openingHours)) ??
+                          AppLocalizations.of(context)!.noData,
+                      builder: (context, v) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(AppLocalizations.of(context)!.openingHours,
+                                style: const TextStyle(fontSize: 16)),
+                            Text(v,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                          ],
+                        );
+                      }),
+                  const SizedBox(height: 4),
+                  CrossFade<bool>(
+                      duration: const Duration(milliseconds: 200),
+                      value: state.selected.indoor,
+                      builder: (context, v) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                                '${AppLocalizations.of(context)!.insideBuilding}: ',
+                                style: const TextStyle(fontSize: 16)),
+                            Text(
+                                v
+                                    ? AppLocalizations.of(context)!.yes
+                                    : AppLocalizations.of(context)!.no,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                          ],
+                        );
+                      }),
+                  const SizedBox(height: 4),
+                  CrossFade<String>(
+                      duration: const Duration(milliseconds: 200),
+                      value: toNullableString(state.selected.phone) ??
+                          AppLocalizations.of(context)!.noData,
+                      builder: (context, v) {
+                        return GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            launchUrl(Uri.parse(
+                                'tel:${state.selected.phone.toString().replaceAll(' ', '')}'));
                           },
-                          child: Text(_isConnected
-                              ? (_isRouting
-                                  ? AppLocalizations.of(context)!
-                                      .calculatingRoute
-                                  : AppLocalizations.of(context)!.navigate)
-                              : AppLocalizations.of(context)!.noNetwork)),
-                    ),
-                  )),
-              const SizedBox(height: 12),
-              // aed.image != null
-              //     ? Column(children: [
-              //         Row(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             Opacity(
-              //                 opacity: 0.5,
-              //                 child: Text(AppLocalizations.of(context)!
-              //                     .imageOfDefibrillator)),
-              //           ],
-              //         ),
-              //         const SizedBox(height: 8),
-              //         Padding(
-              //           padding: const EdgeInsets.only(bottom: 24),
-              //           child: ClipRRect(
-              //               borderRadius:
-              //                   const BorderRadius.all(Radius.circular(8)),
-              //               child: CachedNetworkImage(
-              //                   imageUrl: aed.image ??
-              //                       'https://f003.backblazeb2.com/file/aedphotos/warszawaUM1285.jpg')),
-              //         )
-              //       ])
-              //     : Padding(
-              //         padding: const EdgeInsets.only(bottom: 36.0),
-              //         child: GestureDetector(
-              //           behavior: HitTestBehavior.translucent,
-              //           onTap: () {
-              //             _pickImage();
-              //           },
-              //           child: DottedBorder(
-              //             color: isDarkMode ? Colors.white : Colors.grey,
-              //             dashPattern: const [7, 7],
-              //             borderType: BorderType.RRect,
-              //             radius: const Radius.circular(6),
-              //             child: Padding(
-              //               padding: const EdgeInsets.all(8.0),
-              //               child: Row(
-              //                   mainAxisAlignment: MainAxisAlignment.center,
-              //                   children: const [
-              //                     Text('Dodaj zdjęcie',
-              //                         style: TextStyle(color: Colors.grey))
-              //                   ]),
-              //             ),
-              //           ),
-              //         ),
-              //       )
-            ],
-          ),
-        ),
-      ],
-    );
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('${AppLocalizations.of(context)!.contact}: ',
+                                  style: const TextStyle(fontSize: 16)),
+                              Text(v,
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        );
+                      }),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                      width: double.infinity,
+                      child: IgnorePointer(
+                        ignoring: _isRouting || !_isConnected,
+                        child: Opacity(
+                          opacity: (_isRouting || !_isConnected) ? 0.5 : 1,
+                          child: CupertinoButton.filled(
+                              key: const Key('navigate'),
+                              onPressed: () async {
+                                _navigate(state.selected);
+                              },
+                              child: Text(_isConnected
+                                  ? (_isRouting
+                                      ? AppLocalizations.of(context)!
+                                          .calculatingRoute
+                                      : AppLocalizations.of(context)!.navigate)
+                                  : AppLocalizations.of(context)!.noNetwork)),
+                        ),
+                      )),
+                  const SizedBox(height: 12),
+                  // aed.image != null
+                  //     ? Column(children: [
+                  //         Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             Opacity(
+                  //                 opacity: 0.5,
+                  //                 child: Text(AppLocalizations.of(context)!
+                  //                     .imageOfDefibrillator)),
+                  //           ],
+                  //         ),
+                  //         const SizedBox(height: 8),
+                  //         Padding(
+                  //           padding: const EdgeInsets.only(bottom: 24),
+                  //           child: ClipRRect(
+                  //               borderRadius:
+                  //                   const BorderRadius.all(Radius.circular(8)),
+                  //               child: CachedNetworkImage(
+                  //                   imageUrl: aed.image ??
+                  //                       'https://f003.backblazeb2.com/file/aedphotos/warszawaUM1285.jpg')),
+                  //         )
+                  //       ])
+                  //     : Padding(
+                  //         padding: const EdgeInsets.only(bottom: 36.0),
+                  //         child: GestureDetector(
+                  //           behavior: HitTestBehavior.translucent,
+                  //           onTap: () {
+                  //             _pickImage();
+                  //           },
+                  //           child: DottedBorder(
+                  //             color: isDarkMode ? Colors.white : Colors.grey,
+                  //             dashPattern: const [7, 7],
+                  //             borderType: BorderType.RRect,
+                  //             radius: const Radius.circular(6),
+                  //             child: Padding(
+                  //               padding: const EdgeInsets.all(8.0),
+                  //               child: Row(
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: const [
+                  //                     Text('Dodaj zdjęcie',
+                  //                         style: TextStyle(color: Colors.grey))
+                  //                   ]),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+      return Container();
+    });
   }
 
   _navigate(AED aed, {bool init = false}) async {
@@ -825,12 +824,18 @@ class _HomeScreenState extends State<HomeScreen>
                         HueRotation(
                           degrees: isDarkMode ? 180 : 0,
                           child: Builder(builder: (context) {
-                            var map = VectorTileLayer(
-                                tileProviders: style.providers,
-                                theme: style.theme,
-                                maximumZoom: 22,
-                                tileOffset: TileOffset.mapbox,
-                                layerMode: VectorTileLayerMode.vector);
+                            var map = BlocBuilder<MapStyleCubit, MapStyleState>(
+                              builder: (BuildContext context, state) {
+                                var style = state.style;
+                                if (style == null) return Container();
+                                return VectorTileLayer(
+                                    tileProviders: style.providers,
+                                    theme: style.theme,
+                                    maximumZoom: 22,
+                                    tileOffset: TileOffset.mapbox,
+                                    layerMode: VectorTileLayerMode.vector);
+                              },
+                            );
                             if (!isDarkMode) return map;
                             return ColorFiltered(
                               colorFilter: invert,
@@ -838,28 +843,6 @@ class _HomeScreenState extends State<HomeScreen>
                             );
                           }),
                         ),
-                        // VectorTileLayer(
-                        //     tileProviders: style.providers,
-                        //     theme: style.theme,
-                        //     maximumZoom: 22,
-                        //     tileOffset: TileOffset.mapbox,
-                        //     layerMode: VectorTileLayerMode.vector),
-                        // TileLayer(
-                        //     urlTemplate:
-                        //         "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        //     userAgentPackageName: 'pl.enteam.aed_map',
-                        //     tileProvider: CachedNetworkTileProvider(),
-                        //     tileBuilder: (BuildContext context,
-                        //         Widget tileWidget, Tile tile) {
-                        //       return isDarkMode
-                        //           ? HueRotation(
-                        //               degrees: 180,
-                        //               child: ColorFiltered(
-                        //                   colorFilter: invert,
-                        //                   child: tileWidget),
-                        //             )
-                        //           : tileWidget;
-                        //     }),
                         if (_trip != null)
                           PolylineLayer(
                             polylines: [
@@ -873,39 +856,47 @@ class _HomeScreenState extends State<HomeScreen>
                             ],
                           ),
                         CurrentLocationLayer(),
-                        SuperclusterLayer.mutable(
-                          initialMarkers: markers,
-                          loadingOverlayBuilder: (context) => Container(),
-                          controller: markersController,
-                          minimumClusterSize: 3,
-                          onMarkerTap: (Marker marker) {
-                            _selectAED(aeds[int.parse(marker.key
-                                .toString()
-                                .replaceAll('[<\'', '')
-                                .replaceAll('\'>]', ''))]);
-                          },
-                          clusterWidgetSize: const Size(40, 40),
-                          anchor: AnchorPos.align(AnchorAlign.center),
-                          clusterZoomAnimation: const AnimationOptions.animate(
-                            curve: Curves.linear,
-                            velocity: 1,
-                          ),
-                          calculateAggregatedClusterData: true,
-                          builder: (context, position, markerCount,
-                              extraClusterData) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  color: Colors.brown),
-                              child: Center(
-                                child: Text(
-                                  markerCount.toString(),
-                                  style: const TextStyle(color: Colors.white),
-                                ),
+                        BlocBuilder<PointsCubit, PointsState>(
+                            builder: (context, state) {
+                          if (state is PointsStateLoaded) {
+                            return SuperclusterLayer.mutable(
+                              initialMarkers: _getMarkers(state.aeds),
+                              loadingOverlayBuilder: (context) => Container(),
+                              controller: markersController,
+                              minimumClusterSize: 3,
+                              onMarkerTap: (Marker marker) {
+                                _selectAED(state.aeds[int.parse(marker.key
+                                    .toString()
+                                    .replaceAll('[<\'', '')
+                                    .replaceAll('\'>]', ''))]);
+                              },
+                              clusterWidgetSize: const Size(40, 40),
+                              anchor: AnchorPos.align(AnchorAlign.center),
+                              clusterZoomAnimation:
+                                  const AnimationOptions.animate(
+                                curve: Curves.linear,
+                                velocity: 1,
                               ),
+                              calculateAggregatedClusterData: true,
+                              builder: (context, position, markerCount,
+                                  extraClusterData) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      color: Colors.brown),
+                                  child: Center(
+                                    child: Text(
+                                      markerCount.toString(),
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              },
                             );
-                          },
-                        ),
+                          }
+                          return Container();
+                        }),
                       ],
                     ),
                   ],
@@ -930,8 +921,17 @@ class _HomeScreenState extends State<HomeScreen>
               Text(AppLocalizations.of(context)!.heading,
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 32)),
-              Text(AppLocalizations.of(context)!.subheading(aeds.length),
-                  style: const TextStyle(fontSize: 14)),
+              BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
+                if (state is PointsStateLoaded) {
+                  return Text(
+                      AppLocalizations.of(context)!
+                          .subheading(state.aeds.length),
+                      style: const TextStyle(fontSize: 14));
+                } else {
+                  return Text(AppLocalizations.of(context)!.subheading(0),
+                      style: const TextStyle(fontSize: 14));
+                }
+              }),
               const SizedBox(height: 2),
               if (!_isConnected)
                 Text(AppLocalizations.of(context)!.noNetwork,
@@ -1013,12 +1013,12 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   _selectAED(AED aed) async {
+    context.read<PointsCubit>().select(aed);
     setState(() {
-      selectedAED = aed;
       _trip = null;
     });
     panel.open();
-    _animatedMapMove(selectedAED!.location, 16);
+    _animatedMapMove(aed.location, 16);
     analytics.event(name: 'select');
   }
 
@@ -1067,6 +1067,4 @@ class _HomeScreenState extends State<HomeScreen>
   String _translateTimeAndLength() {
     return '${(_trip!.time > 60 ? ('${(_trip!.time / 60).floor()} ${AppLocalizations.of(context)!.minutes}') : ('${_trip!.time.floor()} ${AppLocalizations.of(context)!.seconds}'))} (${(_trip!.length * 1000).floor()} ${AppLocalizations.of(context)!.meters})';
   }
-
-  Future<Style> _readStyle() => StyleReader(uri: maps).read();
 }

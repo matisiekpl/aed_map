@@ -1,8 +1,12 @@
+import 'package:aed_map/bloc/map_style/map_style_cubit.dart';
+import 'package:aed_map/bloc/points/points_cubit.dart';
+import 'package:aed_map/bloc/points/points_state.dart';
 import 'package:aed_map/screens/home_screen.dart';
 import 'package:aed_map/utils.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_driver/driver_extension.dart';
@@ -48,7 +52,14 @@ class _AppState extends State<App> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const HomeScreen(),
+      home: MultiBlocProvider(providers: [
+        BlocProvider<MapStyleCubit>(
+          create: (BuildContext context) => MapStyleCubit()..load(),
+        ),
+        BlocProvider<PointsCubit>(
+          create: (BuildContext context) => PointsCubit()..load(),
+        ),
+      ], child: const HomeScreen()),
     );
   }
 }
