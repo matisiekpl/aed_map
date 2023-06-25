@@ -55,8 +55,9 @@ class _MapScreenState extends State<MapScreen> {
           return Stack(
             children: [
               SlidingUpPanel(
+                  defaultPanelState: PanelState.OPEN,
                   controller: panel,
-                  maxHeight: 500,
+                  maxHeight: 450,
                   borderRadius: radius,
                   parallaxEnabled: true,
                   parallaxOffset: 0.5,

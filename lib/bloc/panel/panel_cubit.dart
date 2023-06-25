@@ -6,7 +6,7 @@ import '../../utils.dart';
 class PanelCubit extends Cubit<PanelState> {
   PanelCubit()
       : super(PanelState(
-            open: false, visible: true, hash: generateRandomString(32)));
+            open: true, visible: true, hash: generateRandomString(32)));
 
   open() => emit(state.copyWith(open: true, hash: generateRandomString(32)));
 

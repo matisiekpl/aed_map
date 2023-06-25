@@ -26,7 +26,8 @@ class RasterMap extends StatefulWidget {
 
 class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
   final MapController mapController = MapController();
-  final SuperclusterMutableController markersController = SuperclusterMutableController();
+  final SuperclusterMutableController markersController =
+      SuperclusterMutableController();
 
   bool isMapInitialized = false;
 
@@ -52,108 +53,173 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
               Flexible(
                   child: Stack(
                 children: [
-                  BlocBuilder<LocationCubit, LocationState>(builder: (context, state) {
+                  BlocBuilder<LocationCubit, LocationState>(
+                      builder: (context, state) {
                     if (state is LocationDetermined) {
-                      return FlutterMap(
-                        mapController: mapController,
-                        options: MapOptions(
-                          onPositionChanged: (MapPosition position, bool gesture) {
-                            var center = position.center;
-                            if (center != null) {
-                              context.read<EditCubit>().moveCursor(center);
-                            }
-                          },
-                          onMapReady: () {
-                            isMapInitialized = true;
-                            context.read<EditCubit>().moveCursor(mapController.center);
-                          },
-                          center: state.location,
-                          interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
-                          zoom: 18,
-                          maxZoom: 18,
-                          minZoom: 8,
-                        ),
-                        children: [
-                          HueRotation(
-                            degrees: MediaQuery.of(context).platformBrightness == Brightness.dark ? 180 : 0,
-                            child: Builder(builder: (context) {
-                              var map = TileLayer(
-                                userAgentPackageName: 'pl.enteam.aed_map',
-                                tileProvider: CachedNetworkTileProvider(),
-                                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                subdomains: const ['a', 'b', 'c'],
-                              );
-                              if (MediaQuery.of(context).platformBrightness != Brightness.dark) return map;
-                              return ColorFiltered(
-                                colorFilter: invert,
-                                child: map,
-                              );
-                            }),
-                          ),
-                          BlocListener<RoutingCubit, RoutingState>(
-                            listener: (BuildContext context, RoutingState state) {
-                              if (state is RoutingSuccess) {
-                                context.read<PanelCubit>().cancel();
-                                var start =
-                                    decodePolyline(state.trip.shape, accuracyExponent: 6).unpackPolyline().first;
-                                _animatedMapMove(LatLng(start.latitude, start.longitude), 18);
-                              }
-                            },
-                            child: BlocBuilder<RoutingCubit, RoutingState>(builder: (context, state) {
-                              if (state is RoutingSuccess) {
-                                return PolylineLayer(
-                                  polylines: [
-                                    Polyline(
-                                        points: decodePolyline(state.trip.shape, accuracyExponent: 6).unpackPolyline(),
-                                        color: Colors.blue,
-                                        strokeWidth: 5,
-                                        isDotted: true),
-                                  ],
-                                );
-                              }
-                              return Container();
-                            }),
-                          ),
-                          CurrentLocationLayer(),
-                          BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
-                            if (state is PointsLoadSuccess) {
-                              markersController.replaceAll(state.markers);
-                              return SuperclusterLayer.mutable(
+                      return BlocBuilder<PointsCubit, PointsState>(
+                          builder: (context, state) {
+                        if (state is PointsLoadSuccess) {
+                          return FlutterMap(
+                            mapController: mapController,
+                            options: MapOptions(
+                              onPositionChanged:
+                                  (MapPosition position, bool gesture) {
+                                var center = position.center;
+                                if (center != null) {
+                                  context.read<EditCubit>().moveCursor(center);
+                                }
+                              },
+                              onMapReady: () {
+                                isMapInitialized = true;
+                                context
+                                    .read<EditCubit>()
+                                    .moveCursor(mapController.center);
+                              },
+                              center: state.selected.location,
+                              interactiveFlags:
+                                  InteractiveFlag.all & ~InteractiveFlag.rotate,
+                              zoom: 18,
+                              maxZoom: 18,
+                              minZoom: 8,
+                            ),
+                            children: [
+                              HueRotation(
+                                degrees:
+                                    MediaQuery.of(context).platformBrightness ==
+                                            Brightness.dark
+                                        ? 180
+                                        : 0,
+                                child: Builder(builder: (context) {
+                                  var map = TileLayer(
+                                    userAgentPackageName: 'pl.enteam.aed_map',
+                                    tileProvider: CachedNetworkTileProvider(),
+                                    urlTemplate:
+                                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                    subdomains: const ['a', 'b', 'c'],
+                                  );
+                                  if (MediaQuery.of(context)
+                                          .platformBrightness !=
+                                      Brightness.dark) return map;
+                                  return ColorFiltered(
+                                    colorFilter: invert,
+                                    child: map,
+                                  );
+                                }),
+                              ),
+                              BlocListener<RoutingCubit, RoutingState>(
+                                listener:
+                                    (BuildContext context, RoutingState state) {
+                                  if (state is RoutingSuccess) {
+                                    context.read<PanelCubit>().cancel();
+                                    var start = decodePolyline(state.trip.shape,
+                                            accuracyExponent: 6)
+                                        .unpackPolyline()
+                                        .first;
+                                    _animatedMapMove(
+                                        LatLng(start.latitude, start.longitude),
+                                        18);
+                                  }
+                                },
+                                child: BlocBuilder<RoutingCubit, RoutingState>(
+                                    builder: (context, state) {
+                                  if (state is RoutingSuccess) {
+                                    return PolylineLayer(
+                                      polylines: [
+                                        Polyline(
+                                            points: decodePolyline(
+                                                    state.trip.shape,
+                                                    accuracyExponent: 6)
+                                                .unpackPolyline(),
+                                            color: Colors.blue,
+                                            strokeWidth: 5,
+                                            isDotted: true),
+                                      ],
+                                    );
+                                  }
+                                  return Container();
+                                }),
+                              ),
+                              CurrentLocationLayer(),
+                              // BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
+                              //   if (state is PointsLoadSuccess) {
+                              //     markersController.replaceAll(state.markers);
+                              //     return SuperclusterLayer.mutable(
+                              //       initialMarkers: state.markers,
+                              //       loadingOverlayBuilder: (context) => Container(),
+                              //       controller: markersController,
+                              //       minimumClusterSize: 3,
+                              //       onMarkerTap: (Marker marker) {
+                              //         var aed = state.aeds[
+                              //             int.parse(marker.key.toString().replaceAll('[<\'', '').replaceAll('\'>]', ''))];
+                              //         context.read<RoutingCubit>().cancel();
+                              //         context.read<PointsCubit>().select(aed);
+                              //       },
+                              //       clusterWidgetSize: const Size(40, 40),
+                              //       anchor: AnchorPos.align(AnchorAlign.center),
+                              //       clusterZoomAnimation: const AnimationOptions.animate(
+                              //         curve: Curves.linear,
+                              //         velocity: 1,
+                              //       ),
+                              //       calculateAggregatedClusterData: true,
+                              //       builder: (context, position, markerCount, extraClusterData) {
+                              //         return Container(
+                              //           decoration:
+                              //               BoxDecoration(borderRadius: BorderRadius.circular(20.0), color: Colors.brown),
+                              //           child: Center(
+                              //             child: Text(
+                              //               markerCount.toString(),
+                              //               style: const TextStyle(color: Colors.white),
+                              //             ),
+                              //           ),
+                              //         );
+                              //       },
+                              //     );
+                              //   }
+                              //   return Container();
+                              // }),
+                              SuperclusterLayer.mutable(
                                 initialMarkers: state.markers,
                                 loadingOverlayBuilder: (context) => Container(),
                                 controller: markersController,
                                 minimumClusterSize: 3,
                                 onMarkerTap: (Marker marker) {
-                                  var aed = state.aeds[
-                                      int.parse(marker.key.toString().replaceAll('[<\'', '').replaceAll('\'>]', ''))];
+                                  var aed = state.aeds[int.parse(marker.key
+                                      .toString()
+                                      .replaceAll('[<\'', '')
+                                      .replaceAll('\'>]', ''))];
                                   context.read<RoutingCubit>().cancel();
                                   context.read<PointsCubit>().select(aed);
                                 },
                                 clusterWidgetSize: const Size(40, 40),
                                 anchor: AnchorPos.align(AnchorAlign.center),
-                                clusterZoomAnimation: const AnimationOptions.animate(
+                                clusterZoomAnimation:
+                                    const AnimationOptions.animate(
                                   curve: Curves.linear,
                                   velocity: 1,
                                 ),
                                 calculateAggregatedClusterData: true,
-                                builder: (context, position, markerCount, extraClusterData) {
+                                builder: (context, position, markerCount,
+                                    extraClusterData) {
                                   return Container(
-                                    decoration:
-                                        BoxDecoration(borderRadius: BorderRadius.circular(20.0), color: Colors.brown),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        color: Colors.brown),
                                     child: Center(
                                       child: Text(
                                         markerCount.toString(),
-                                        style: const TextStyle(color: Colors.white),
+                                        style: const TextStyle(
+                                            color: Colors.white),
                                       ),
                                     ),
                                   );
                                 },
-                              );
-                            }
-                            return Container();
-                          }),
-                        ],
-                      );
+                              )
+                            ],
+                          );
+                        }
+                        return Container();
+                      });
                     }
                     return Container();
                   }),
@@ -170,15 +236,20 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
     if (!isMapInitialized) {
       return;
     }
-    final latTween = Tween<double>(begin: mapController.center.latitude, end: destLocation.latitude);
-    final lngTween = Tween<double>(begin: mapController.center.longitude, end: destLocation.longitude);
+    final latTween = Tween<double>(
+        begin: mapController.center.latitude, end: destLocation.latitude);
+    final lngTween = Tween<double>(
+        begin: mapController.center.longitude, end: destLocation.longitude);
     final zoomTween = Tween<double>(begin: mapController.zoom, end: destZoom);
 
-    final controller = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
-    final Animation<double> animation = CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+    final controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    final Animation<double> animation =
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
     controller.addListener(() {
       mapController.move(
-          LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)), zoomTween.evaluate(animation));
+          LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+          zoomTween.evaluate(animation));
     });
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {

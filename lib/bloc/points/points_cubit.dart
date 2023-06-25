@@ -1,6 +1,7 @@
 import 'package:aed_map/bloc/points/points_state.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
+import 'package:aed_map/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -24,13 +25,17 @@ class PointsCubit extends Cubit<PointsState> {
     var aeds = await pointsRepository
         .loadAEDs(LatLng(position.latitude, position.longitude));
     emit(PointsLoadSuccess(
-        aeds: aeds, selected: aeds.first, markers: _getMarkers(aeds)));
+        aeds: aeds,
+        selected: aeds.first,
+        markers: _getMarkers(aeds),
+        hash: generateRandomString(32)));
   }
 
   select(AED aed) {
     analytics.event(name: selectEvent);
     if (state is PointsLoadSuccess) {
-      emit((state as PointsLoadSuccess).copyWith(selected: aed));
+      emit((state as PointsLoadSuccess)
+          .copyWith(selected: aed, hash: generateRandomString(32)));
     }
   }
 
