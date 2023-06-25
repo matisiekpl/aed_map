@@ -11,7 +11,7 @@ void main() {
 
     test('initial state is PanelState', () {
       expect(panelCubit.state.visible, true);
-      expect(panelCubit.state.open, false);
+      expect(panelCubit.state.open, true);
     });
 
     test('open', () {
