@@ -68,7 +68,7 @@ class PointsRepository {
   String? token;
 
   Future<bool> authenticate() async {
-    if (token != null) return true;
+    if (token != null||kDebugMode) return true;
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     final result = await FlutterWebAuth.authenticate(

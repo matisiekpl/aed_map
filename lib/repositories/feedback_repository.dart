@@ -6,11 +6,21 @@ import 'package:http/http.dart' as http;
 
 class FeedbackRepository {
   sendFeedback(UserFeedback feedback) async {
+    if (kDebugMode || feedback.screenshot.isEmpty) {
+      print('Sending feedback...');
+      await Future.delayed(const Duration(seconds: 1));
+      return;
+    }
+
     final now = DateTime.now();
     final id = now.microsecondsSinceEpoch.toString();
     var content = feedback.text;
-    await http.post(Uri.parse('http://feedback.aedmapa.pl:5000/feedback'),
-        body: {'body': content, 'id': id.toString(), 'screenshot': base64Encode(feedback.screenshot)});
+    await http
+        .post(Uri.parse('http://feedback.aedmapa.pl:5000/feedback'), body: {
+      'body': content,
+      'id': id.toString(),
+      'screenshot': base64Encode(feedback.screenshot)
+    });
     if (kDebugMode) {
       print('Feedback sent!');
     }

@@ -7,6 +7,7 @@ import '../constants.dart';
 class GeolocationRepository {
   Future<LatLng> locate() async {
     if (kDebugMode) {
+      await Future.delayed(const Duration(milliseconds: 300));
       return warsaw;
     }
     try {
