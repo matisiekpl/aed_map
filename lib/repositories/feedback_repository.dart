@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 class FeedbackRepository {
   sendFeedback(UserFeedback feedback) async {
     if (kDebugMode || feedback.screenshot.isEmpty) {
-      print('Sending feedback...');
       await Future.delayed(const Duration(seconds: 1));
       return;
     }
