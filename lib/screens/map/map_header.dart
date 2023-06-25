@@ -18,6 +18,7 @@ class MapHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appLocalizations = AppLocalizations.of(context)!;
     return SafeArea(
         child: Padding(
       padding: const EdgeInsets.only(left: 16, top: 8, right: 16),
@@ -27,21 +28,27 @@ class MapHeader extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(AppLocalizations.of(context)!.heading,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 32)),
+              Text(appLocalizations.heading,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 32)),
               BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
                 if (state is PointsLoadSuccess) {
-                  return Text(AppLocalizations.of(context)!.subheading(state.aeds.length),
+                  return Text(appLocalizations.subheading(state.aeds.length),
                       style: const TextStyle(fontSize: 14));
                 } else {
-                  return Text(AppLocalizations.of(context)!.subheading(0), style: const TextStyle(fontSize: 14));
+                  return Text(appLocalizations.subheading(0),
+                      style: const TextStyle(fontSize: 14));
                 }
               }),
               const SizedBox(height: 2),
-              BlocBuilder<NetworkStatusCubit, NetworkStatusState>(builder: (context, state) {
+              BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
+                  builder: (context, state) {
                 if (state.connected) return const SizedBox();
-                return Text(AppLocalizations.of(context)!.noNetwork,
-                    style: const TextStyle(fontSize: 14, color: Colors.red, fontWeight: FontWeight.bold));
+                return Text(appLocalizations.noNetwork,
+                    style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold));
               })
             ],
           ),
@@ -53,12 +60,17 @@ class MapHeader extends StatelessWidget {
                   _showAboutDialog(context);
                 },
                 child: Card(
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.black : Colors.white,
+                  color: MediaQuery.of(context).platformBrightness ==
+                          Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Icon(CupertinoIcons.gear,
-                        color:
-                            MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black),
+                        color: MediaQuery.of(context).platformBrightness ==
+                                Brightness.dark
+                            ? Colors.white
+                            : Colors.black),
                   ),
                 ),
               ),
@@ -75,11 +87,15 @@ class MapHeader extends StatelessWidget {
                     context.read<EditCubit>().enter();
                   },
                   child: Card(
-                    color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.black : Colors.white,
+                    color: MediaQuery.of(context).platformBrightness ==
+                            Brightness.dark
+                        ? Colors.black
+                        : Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(CupertinoIcons.wand_rays,
-                          color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                          color: MediaQuery.of(context).platformBrightness ==
+                                  Brightness.dark
                               ? Colors.white
                               : Colors.black),
                     ),
@@ -95,12 +111,17 @@ class MapHeader extends StatelessWidget {
                   });
                 },
                 child: Card(
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.black : Colors.white,
+                  color: MediaQuery.of(context).platformBrightness ==
+                          Brightness.dark
+                      ? Colors.black
+                      : Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Icon(CupertinoIcons.text_bubble,
-                        color:
-                            MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black),
+                        color: MediaQuery.of(context).platformBrightness ==
+                                Brightness.dark
+                            ? Colors.white
+                            : Colors.black),
                   ),
                 ),
               ),
@@ -112,14 +133,18 @@ class MapHeader extends StatelessWidget {
   }
 
   _showAboutDialog(BuildContext context) {
+    var appLocalizations = AppLocalizations.of(context)!;
     showAboutDialog(
       context: context,
-      applicationIcon: const Image(image: AssetImage('assets/icon.png'), width: 64),
-      applicationName: AppLocalizations.of(context)!.heading,
+      applicationIcon:
+          const Image(image: AssetImage('assets/icon.png'), width: 64),
+      applicationName: appLocalizations.heading,
       applicationVersion: 'v1.0.2',
       applicationLegalese: 'By Mateusz Woźniak',
       children: <Widget>[
-        Padding(padding: const EdgeInsets.only(top: 15), child: Text(AppLocalizations.of(context)!.about)),
+        Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Text(appLocalizations.about)),
       ],
     );
   }

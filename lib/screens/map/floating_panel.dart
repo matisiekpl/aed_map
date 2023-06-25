@@ -16,6 +16,7 @@ class FloatingPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appLocalizations = AppLocalizations.of(context)!;
     return SafeArea(
       child: BlocBuilder<RoutingCubit, RoutingState>(builder: (context, state) {
         if (state is RoutingSuccess) {
@@ -65,8 +66,7 @@ class FloatingPanel extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 4, horizontal: 6),
                                         color: Colors.red,
-                                        child: Text(
-                                            AppLocalizations.of(context)!.stop,
+                                        child: Text(appLocalizations.stop,
                                             style: const TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.white)),
@@ -94,6 +94,7 @@ class FloatingPanel extends StatelessWidget {
   }
 
   String _translateTimeAndLength(BuildContext context, Trip trip) {
-    return '${(trip.time > 60 ? ('${(trip.time / 60).floor()} ${AppLocalizations.of(context)!.minutes}') : ('${trip.time.floor()} ${AppLocalizations.of(context)!.seconds}'))} (${(trip.length * 1000).floor()} ${AppLocalizations.of(context)!.meters})';
+    var appLocalizations = AppLocalizations.of(context)!;
+    return '${(trip.time > 60 ? ('${(trip.time / 60).floor()} ${appLocalizations.minutes}') : ('${trip.time.floor()} ${appLocalizations.seconds}'))} (${(trip.length * 1000).floor()} ${appLocalizations.meters})';
   }
 }

@@ -15,6 +15,7 @@ class MarkerSelectionFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appLocalizations = AppLocalizations.of(context)!;
     return BlocBuilder<EditCubit, EditState>(builder: (context, state) {
       if (!state.enabled) return Container();
       return SafeArea(
@@ -28,7 +29,7 @@ class MarkerSelectionFooter extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(AppLocalizations.of(context)!.chooseLocation,
+                    Text(appLocalizations.chooseLocation,
                         style: const TextStyle(fontWeight: FontWeight.w600)),
                     const SizedBox(height: 12),
                     Row(
@@ -41,7 +42,7 @@ class MarkerSelectionFooter extends StatelessWidget {
                                 context.read<PanelCubit>().show();
                               },
                               color: Colors.white,
-                              child: Text(AppLocalizations.of(context)!.cancel,
+                              child: Text(appLocalizations.cancel,
                                   style: const TextStyle(color: Colors.black))),
                         ),
                         const SizedBox(width: 12),
@@ -55,7 +56,7 @@ class MarkerSelectionFooter extends StatelessWidget {
                                 }
                               },
                               color: Colors.green,
-                              child: Text(AppLocalizations.of(context)!.next)),
+                              child: Text(appLocalizations.next)),
                         )
                       ],
                     )

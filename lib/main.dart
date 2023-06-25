@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
 import 'package:aed_map/bloc/location/location_cubit.dart';
-import 'package:aed_map/bloc/map_style/map_style_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/panel/panel_cubit.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
@@ -23,7 +24,8 @@ import 'package:plausible_analytics/plausible_analytics.dart';
 
 import 'constants.dart';
 
-final analytics = Plausible(plausible, 'aedmapa.app');
+final analytics = Plausible(plausible, 'aedmapa.app',
+    userAgent: Platform.isIOS ? iosUserAgent : androidUserAgent);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,27 +67,33 @@ class _AppState extends State<App> {
       supportedLocales: AppLocalizations.supportedLocales,
       home: MultiBlocProvider(
         providers: [
-          BlocProvider<MapStyleCubit>(
-            create: (BuildContext context) => MapStyleCubit()..load(),
-          ),
           BlocProvider<PointsCubit>(
-            create: (BuildContext context) =>
-                PointsCubit(pointsRepository: pointsRepository, geolocationRepository: geolocationRepository)..load(),
+            create: (BuildContext context) => PointsCubit(
+                pointsRepository: pointsRepository,
+                geolocationRepository: geolocationRepository)
+              ..load(),
           ),
           BlocProvider<RoutingCubit>(
-            create: (BuildContext context) =>
-                RoutingCubit(geolocationRepository: geolocationRepository, routingRepository: routingRepository),
+            create: (BuildContext context) => RoutingCubit(
+                geolocationRepository: geolocationRepository,
+                routingRepository: routingRepository),
           ),
           BlocProvider<LocationCubit>(
-            create: (BuildContext context) => LocationCubit(geolocationRepository: geolocationRepository)..locate(),
+            create: (BuildContext context) =>
+                LocationCubit(geolocationRepository: geolocationRepository)
+                  ..locate(),
           ),
           BlocProvider<PanelCubit>(
             create: (BuildContext context) => PanelCubit(),
           ),
-          BlocProvider<EditCubit>(create: (BuildContext context) => EditCubit(pointsRepository: pointsRepository)),
-          BlocProvider<NetworkStatusCubit>(create: (BuildContext context) => NetworkStatusCubit()),
+          BlocProvider<EditCubit>(
+              create: (BuildContext context) =>
+                  EditCubit(pointsRepository: pointsRepository)),
+          BlocProvider<NetworkStatusCubit>(
+              create: (BuildContext context) => NetworkStatusCubit()),
           BlocProvider<FeedbackCubit>(
-              create: (BuildContext context) => FeedbackCubit(feedbackRepository: feedbackRepository)),
+              create: (BuildContext context) =>
+                  FeedbackCubit(feedbackRepository: feedbackRepository)),
         ],
         child: const Home(),
       ),
@@ -99,7 +107,8 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<EditCubit, EditState>(
-        listenWhen: (previous, current) => previous is EditReady && current is EditInProgress,
+        listenWhen: (previous, current) =>
+            previous is EditReady && current is EditInProgress,
         listener: (BuildContext context, state) async {
           if (state is EditInProgress) {
             var editCubit = context.read<EditCubit>();

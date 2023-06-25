@@ -40,10 +40,12 @@ class _MapScreenState extends State<MapScreen> {
     return CupertinoPageScaffold(
         child: BlocListener<PanelCubit, panel_state.PanelState>(
       listener: (BuildContext context, state) {
-        if (state.open && panel.isPanelClosed) panel.open();
-        if (!state.open && panel.isPanelOpen) panel.close();
         if (state.visible && !panel.isPanelShown) panel.show();
         if (!state.visible && panel.isPanelShown) panel.hide();
+        if (state.visible) {
+          if (state.open && panel.isPanelClosed) panel.open();
+          if (!state.open && panel.isPanelOpen) panel.close();
+        }
       },
       child: BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
         if (state is PointsLoadInProgress) {
@@ -66,8 +68,7 @@ class _MapScreenState extends State<MapScreen> {
                   panelBuilder: (ScrollController sc) => Container(
                       decoration: BoxDecoration(borderRadius: radius),
                       child: BottomPanel(scrollController: sc)),
-                  body: const RasterMap()
-              ),
+                  body: const RasterMap()),
               const MapHeader(),
               FloatingPanel(floatingPanelPosition: _floatingPanelPosition),
               const MarkerSelectionFooter()

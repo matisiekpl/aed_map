@@ -16,7 +16,8 @@ class PointsRepository {
   updateAEDs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      var response = await http.get(Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
+      var response = await http.get(
+          Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
       await prefs.setString(aedListKey, response.body);
     } catch (err) {
       if (kDebugMode) {
@@ -40,9 +41,11 @@ class PointsRepository {
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
       aeds.add(AED(
-          location: LatLng(row['geometry']['coordinates'][1], row['geometry']['coordinates'][0]),
+          location: LatLng(row['geometry']['coordinates'][1],
+              row['geometry']['coordinates'][0]),
           id: row['properties']['osm_id'],
-          description: row['properties']['defibrillator:location'] ?? row['properties']['defibrillator:location:pl'],
+          description: row['properties']['defibrillator:location'] ??
+              row['properties']['defibrillator:location:pl'],
           indoor: row['properties']['indoor'] == 'yes',
           operator: row['properties']['operator'],
           phone: row['properties']['phone'],
@@ -65,7 +68,6 @@ class PointsRepository {
   String? token;
 
   Future<bool> authenticate() async {
-    return true;
     if (token != null) return true;
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
@@ -93,21 +95,32 @@ class PointsRepository {
     builder.processing('xml', 'version="1.0"');
     builder.element('osm', attributes: {'version': '0.6'}, nest: () {
       builder.element('changeset', nest: () {
-        builder.element('tag', attributes: {'k': 'created_by', 'v': 'AED Map for Android/iOS'});
-        builder.element('tag', attributes: {'k': 'comment', 'v': 'Defibrillator modified via AED Map #aed'});
+        builder.element('tag',
+            attributes: {'k': 'created_by', 'v': 'AED Map for Android/iOS'});
+        builder.element('tag', attributes: {
+          'k': 'comment',
+          'v': 'Defibrillator modified via AED Map #aed'
+        });
       });
     });
     final document = builder.buildDocument();
-    var response = await http.put(Uri.parse('https://api.openstreetmap.org/api/0.6/changeset/create'),
-        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'}, body: document.toXmlString());
+    var response = await http.put(
+        Uri.parse('https://api.openstreetmap.org/api/0.6/changeset/create'),
+        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
+        body: document.toXmlString());
     return int.parse(response.body.toString());
   }
 
   Future<AED> insertDefibrillator(AED aed) async {
     try {
       var changesetId = await getChangesetId();
-      var response = await http.put(Uri.parse('https://api.openstreetmap.org/api/0.6/node/create'),
-          headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'}, body: aed.toXml(changesetId, 1));
+      var response = await http.put(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/create'),
+          headers: {
+            'Content-Type': 'text/xml',
+            'Authorization': 'Bearer $token'
+          },
+          body: aed.toXml(changesetId, 1));
       var id = int.parse(response.body.toString());
       aed.id = id;
       if (kDebugMode) {
@@ -125,8 +138,12 @@ class PointsRepository {
   Future<AED> updateDefibrillator(AED aed) async {
     try {
       var changesetId = await getChangesetId();
-      var fetchResponse = await http.get(Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
-          headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'});
+      var fetchResponse = await http.get(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
+          headers: {
+            'Content-Type': 'text/xml',
+            'Authorization': 'Bearer $token'
+          });
       final document = XmlDocument.parse(fetchResponse.body);
       final oldVersion = document
           .findAllElements('node')
@@ -138,13 +155,25 @@ class PointsRepository {
       var oldTags = document.findAllElements('tag');
       var oldTagsPairs = oldTags.map((tag) {
         return [
-          tag.attributes.where((attr) => attr.name.toString() == 'k').first.value,
-          tag.attributes.where((attr) => attr.name.toString() == 'v').first.value
+          tag.attributes
+              .where((attr) => attr.name.toString() == 'k')
+              .first
+              .value,
+          tag.attributes
+              .where((attr) => attr.name.toString() == 'v')
+              .first
+              .value
         ];
       }).toList();
-      var xml = aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
-      await http.put(Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
-          headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'}, body: xml);
+      var xml =
+          aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
+      await http.put(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
+          headers: {
+            'Content-Type': 'text/xml',
+            'Authorization': 'Bearer $token'
+          },
+          body: xml);
       if (kDebugMode) {
         print('https://www.openstreetmap.org/node/${aed.id}');
       }

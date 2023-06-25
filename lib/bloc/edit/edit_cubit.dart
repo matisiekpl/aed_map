@@ -4,14 +4,17 @@ import 'package:aed_map/repositories/points_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../main.dart';
 import '../../models/aed.dart';
 
 class EditCubit extends Cubit<EditState> {
-  EditCubit({required this.pointsRepository}) : super(EditReady(enabled: false, cursor: warsaw));
+  EditCubit({required this.pointsRepository})
+      : super(EditReady(enabled: false, cursor: warsaw));
 
   final PointsRepository pointsRepository;
 
   enter() async {
+    analytics.event(name:enterEditModeEvent);
     if (!await pointsRepository.authenticate()) return;
     emit(state.copyWith(enabled: true));
   }
@@ -23,7 +26,9 @@ class EditCubit extends Cubit<EditState> {
   cancel() => emit(EditReady(enabled: false, cursor: state.cursor));
 
   add() async {
-    AED aed = AED(location: LatLng(state.cursor.latitude, state.cursor.longitude), id: 0);
+    analytics.event(name: addEvent);
+    AED aed = AED(
+        location: LatLng(state.cursor.latitude, state.cursor.longitude), id: 0);
     emit(EditInProgress(
         enabled: false,
         cursor: state.cursor,
@@ -34,6 +39,7 @@ class EditCubit extends Cubit<EditState> {
   }
 
   edit(AED aed) async {
+    analytics.event(name: editEvent);
     if (!await pointsRepository.authenticate()) return;
     aed = aed.copyWith();
     emit(EditInProgress(
@@ -97,8 +103,10 @@ class EditCubit extends Cubit<EditState> {
     var s = state;
     if (s is EditInProgress) {
       if (s.aed.id == 0) {
+        analytics.event(name: saveInsertEvent);
         await pointsRepository.insertDefibrillator(s.aed);
       } else {
+        analytics.event(name: saveUpdateEvent);
         await pointsRepository.updateDefibrillator(s.aed);
       }
       emit(EditReady(enabled: false, cursor: state.cursor));

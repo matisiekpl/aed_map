@@ -10,8 +10,6 @@ import 'package:latlong2/latlong.dart';
 
 import '../../bloc/location/location_cubit.dart';
 import '../../bloc/location/location_state.dart';
-import '../../bloc/map_style/map_style_cubit.dart';
-import '../../bloc/map_style/map_style_state.dart';
 import '../../bloc/panel/panel_cubit.dart';
 import '../../bloc/points/points_cubit.dart';
 import '../../bloc/points/points_state.dart';
@@ -79,17 +77,11 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                           HueRotation(
                             degrees: MediaQuery.of(context).platformBrightness == Brightness.dark ? 180 : 0,
                             child: Builder(builder: (context) {
-                              var map = BlocBuilder<MapStyleCubit, MapStyleState>(
-                                builder: (BuildContext context, state) {
-                                  var style = state.style;
-                                  if (style == null) return Container();
-                                  return TileLayer(
-                                    userAgentPackageName: 'pl.enteam.aed_map',
-                                    tileProvider: CachedNetworkTileProvider(),
-                                    urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                    subdomains: const ['a', 'b', 'c'],
-                                  );
-                                },
+                              var map = TileLayer(
+                                userAgentPackageName: 'pl.enteam.aed_map',
+                                tileProvider: CachedNetworkTileProvider(),
+                                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                subdomains: const ['a', 'b', 'c'],
                               );
                               if (MediaQuery.of(context).platformBrightness != Brightness.dark) return map;
                               return ColorFiltered(

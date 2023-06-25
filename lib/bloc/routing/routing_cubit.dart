@@ -7,7 +7,8 @@ import 'package:latlong2/latlong.dart';
 import '../../models/aed.dart';
 
 class RoutingCubit extends Cubit<RoutingState> {
-  RoutingCubit({required this.geolocationRepository, required this.routingRepository})
+  RoutingCubit(
+      {required this.geolocationRepository, required this.routingRepository})
       : super(RoutingReady());
 
   final GeolocationRepository geolocationRepository;
@@ -15,7 +16,8 @@ class RoutingCubit extends Cubit<RoutingState> {
 
   navigate(LatLng source, AED aed) async {
     emit(RoutingCalculatingInProgress());
-    var trip = await routingRepository.navigate(await geolocationRepository.locate(), aed);
+    var trip = await routingRepository.navigate(
+        await geolocationRepository.locate(), aed);
     if (trip != null) {
       emit(RoutingSuccess(trip: trip));
     } else {
