@@ -8,12 +8,12 @@ import 'network_status_state.dart';
 
 class NetworkStatusCubit extends Cubit<NetworkStatusState> {
   NetworkStatusCubit() : super(const NetworkStatusState(connected: true)) {
-    _tickerSubscription = _ticker.tick(seconds: 1).listen((duration) async {
+    _tickerSubscription =
+        const Ticker().tick(seconds: 1).listen((duration) async {
       ping();
     });
   }
 
-  final Ticker _ticker = const Ticker();
   StreamSubscription<int>? _tickerSubscription;
 
   @override

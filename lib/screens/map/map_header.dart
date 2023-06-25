@@ -29,6 +29,7 @@ class MapHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(appLocalizations.heading,
+                  key: const Key('title'),
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 32)),
               BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {

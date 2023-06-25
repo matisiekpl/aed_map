@@ -177,6 +177,7 @@ class BottomPanel extends StatelessWidget {
                                                       ? Colors.black
                                                       : Colors.white)),
                                           Text(v,
+                                              key: const Key('access'),
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
@@ -205,6 +206,7 @@ class BottomPanel extends StatelessWidget {
                                 Text(appLocalizations.location,
                                     style: const TextStyle(fontSize: 16)),
                                 Text(v,
+                                    key: const Key('description'),
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
@@ -307,7 +309,7 @@ class BottomPanel extends StatelessWidget {
                                     child: Opacity(
                                       opacity: 0.5,
                                       child: CupertinoButton.filled(
-                                          key: const Key('navigate'),
+                                          key: const Key('navigate_in_progress'),
                                           onPressed: () async {
                                             context
                                                 .read<RoutingCubit>()
@@ -346,7 +348,7 @@ class BottomPanel extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 10)
+                const SizedBox(height: 10)
               ],
             ),
           );
