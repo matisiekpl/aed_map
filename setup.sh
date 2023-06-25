@@ -2,11 +2,11 @@
 
 echo "Setting up the aed_map project 🛠"
 echo "Generating translations 🌐"
-flutter gen-l10n &>/dev/null
+flutter gen-l10n
 
 echo "Generating icons 🎨"
-flutter pub get &>/dev/null
-flutter pub run flutter_launcher_icons &>/dev/null
+flutter pub get
+dart run flutter_launcher_icons
 
 echo "Downloading fresh defibrillators database 📦"
 cd assets || exit
