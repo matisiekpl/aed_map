@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import '../../models/aed.dart';
 
@@ -7,27 +8,31 @@ class PointsState extends Equatable {
   List<Object?> get props => [];
 }
 
-class PointsStateLoading extends PointsState {}
+class PointsLoadInProgress extends PointsState {}
 
-class PointsStateLoaded extends PointsState {
+class PointsLoadSuccess extends PointsState {
   final List<AED> aeds;
   final AED selected;
+  final List<Marker> markers;
 
   @override
-  List<Object?> get props => [aeds, selected];
+  List<Object?> get props => [aeds, selected, markers];
 
-  PointsStateLoaded({
+  PointsLoadSuccess({
     required this.aeds,
     required this.selected,
+    required this.markers,
   });
 
-  PointsStateLoaded copyWith({
+  PointsLoadSuccess copyWith({
     List<AED>? aeds,
     AED? selected,
+    List<Marker>? markers,
   }) {
-    return PointsStateLoaded(
+    return PointsLoadSuccess(
       aeds: aeds ?? this.aeds,
       selected: selected ?? this.selected,
+      markers: markers ?? this.markers,
     );
   }
 }

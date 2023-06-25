@@ -6,17 +6,33 @@ class LocationState extends Equatable {
   List<Object?> get props => [];
 }
 
-class LocationStateReady extends LocationState {}
+class LocationReady extends LocationState {}
 
-class LocationStateDetermining extends LocationState {}
+class LocationDetermining extends LocationState {}
 
-class LocationStateLocated extends LocationState {
+class LocationDetermined extends LocationState {
   final LatLng location;
+  final LatLng center;
+  final int zoom;
 
-  LocationStateLocated({
+  LocationDetermined({
     required this.location,
+    required this.center,
+    required this.zoom,
   });
 
   @override
-  List<Object?> get props => [location];
+  List<Object?> get props => [location, center];
+
+  LocationDetermined copyWith({
+    LatLng? location,
+    LatLng? center,
+    int? zoom,
+  }) {
+    return LocationDetermined(
+      location: location ?? this.location,
+      center: center ?? this.center,
+      zoom: zoom ?? this.zoom,
+    );
+  }
 }

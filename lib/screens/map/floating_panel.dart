@@ -1,3 +1,4 @@
+import 'package:aed_map/bloc/location/location_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class FloatingPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocBuilder<RoutingCubit, RoutingState>(builder: (context, state) {
-        if (state is RoutingStateShowing) {
+        if (state is RoutingSuccess) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,8 +31,7 @@ class FloatingPanel extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // _animatedMapMove(
-                        //     await Store.instance.determinePosition(), 18);
+                        context.read<LocationCubit>().center();
                       },
                       child: Card(
                           color: MediaQuery.of(context).platformBrightness ==

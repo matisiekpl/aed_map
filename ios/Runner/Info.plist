@@ -59,6 +59,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	  <key>FLTEnableImpeller</key>
-      <false />
+      <true />
+
 </dict>
 </plist>

@@ -7,14 +7,14 @@ class RoutingState extends Equatable {
   List<Object?> get props => [];
 }
 
-class RoutingStateNotShowing extends RoutingState {}
+class RoutingReady extends RoutingState {}
 
-class RoutingStateCalculating extends RoutingState {}
+class RoutingCalculatingInProgress extends RoutingState {}
 
-class RoutingStateShowing extends RoutingState {
+class RoutingSuccess extends RoutingState {
   final Trip trip;
 
-  RoutingStateShowing({
+  RoutingSuccess({
     required this.trip,
   });
 }

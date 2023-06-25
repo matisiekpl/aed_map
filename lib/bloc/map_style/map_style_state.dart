@@ -4,7 +4,7 @@ import 'package:vector_map_tiles/vector_map_tiles.dart';
 class MapStyleState extends Equatable {
   final Style? style;
 
-  MapStyleState({this.style});
+  const MapStyleState({this.style});
 
   MapStyleState copyWith({
     Style? style,

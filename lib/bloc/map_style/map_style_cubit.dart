@@ -5,7 +5,7 @@ import '../../constants.dart';
 import 'map_style_state.dart';
 
 class MapStyleCubit extends Cubit<MapStyleState> {
-  MapStyleCubit() : super(MapStyleState());
+  MapStyleCubit() : super(const MapStyleState());
 
   load() async {
     var style = await StyleReader(uri: maps).read();
