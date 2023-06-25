@@ -15,11 +15,18 @@ class AED {
   String? access;
   String? image;
 
-  AED(this.location, this.id, this.description, this.indoor, this.operator,
-      this.phone, this.openingHours, this.access);
+  AED(
+      {required this.location,
+      required this.id,
+      this.description,
+      this.indoor = false,
+      this.operator,
+      this.phone,
+      this.openingHours,
+      this.access = 'yes'});
 
-  String? getAccessComment(BuildContext context) {
-    return translateAccessComment(access, context);
+  String? getAccessComment(AppLocalizations appLocalizations) {
+    return translateAccessComment(access, appLocalizations);
   }
 
   Color getColor() {
@@ -113,17 +120,44 @@ class AED {
     final document = builder.buildDocument();
     return document.toXmlString();
   }
+
+  AED copyWith({
+    LatLng? location,
+    String? description,
+    int? id,
+    bool? indoor,
+    String? operator,
+    String? phone,
+    int? distance,
+    String? openingHours,
+    String? access,
+    String? image,
+    Map? colors,
+    Map? filenames,
+  }) {
+    return AED(
+      location: location ?? this.location,
+      description: description ?? this.description,
+      id: id ?? this.id,
+      indoor: indoor ?? this.indoor,
+      operator: operator ?? this.operator,
+      phone: phone ?? this.phone,
+      openingHours: openingHours ?? this.openingHours,
+      access: access ?? this.access,
+    );
+  }
 }
 
-String? translateAccessComment(String? access, BuildContext context) {
-  if (access == null) return null;
+String translateAccessComment(
+    String? access, AppLocalizations appLocalizations) {
+  if (access == null) return '';
   Map comments = {
-    'yes': AppLocalizations.of(context)!.accessYes,
-    'customers': AppLocalizations.of(context)!.accessCustomers,
-    'private': AppLocalizations.of(context)!.accessPrivate,
-    'permissive': AppLocalizations.of(context)!.accessPermissive,
-    'no': AppLocalizations.of(context)!.accessNo,
-    'unknown': AppLocalizations.of(context)!.accessUnknown,
+    'yes': appLocalizations.accessYes,
+    'customers': appLocalizations.accessCustomers,
+    'private': appLocalizations.accessPrivate,
+    'permissive': appLocalizations.accessPermissive,
+    'no': appLocalizations.accessNo,
+    'unknown': appLocalizations.accessUnknown,
   };
-  return comments[access];
+  return comments[access] ?? '';
 }

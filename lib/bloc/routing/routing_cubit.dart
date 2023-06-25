@@ -1,0 +1,31 @@
+import 'package:aed_map/bloc/routing/routing_state.dart';
+import 'package:aed_map/repositories/geolocation_repository.dart';
+import 'package:aed_map/repositories/routing_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong2/latlong.dart';
+
+import '../../models/aed.dart';
+
+class RoutingCubit extends Cubit<RoutingState> {
+  RoutingCubit(
+      {required this.geolocationRepository, required this.routingRepository})
+      : super(RoutingReady());
+
+  final GeolocationRepository geolocationRepository;
+  final RoutingRepository routingRepository;
+
+  navigate(LatLng source, AED aed) async {
+    emit(RoutingCalculatingInProgress());
+    var trip = await routingRepository.navigate(
+        await geolocationRepository.locate(), aed);
+    if (trip != null) {
+      emit(RoutingSuccess(trip: trip));
+    } else {
+      emit(RoutingReady());
+    }
+  }
+
+  cancel() {
+    emit(RoutingReady());
+  }
+}
