@@ -2,9 +2,9 @@
     function loadSize() {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function () {
-            document.body.innerHTML = document.body.innerHTML.replace('5400', JSON.parse(this.responseText)['features'].length);
+            document.body.innerHTML = document.body.innerHTML.replace('5400', JSON.parse(this.responseText)['elements'].length);
         }
-        xhttp.open("GET", "https://aed.openstreetmap.org.pl/aed_poland.geojson", true);
+        xhttp.open("GET", "https://raw.githubusercontent.com/openstreetmap-polska/aed_backup/master/aed_overpass.json", true);
         xhttp.send();
     }
 
