@@ -1,0 +1,77 @@
+{
+  "heading": "Mapa de DEA",
+  "subheading": "{count} DEA disponibles",
+  "@subheading": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "4878"
+      }
+    }
+  },
+  "access": "Acceso",
+  "closestAED": "DEA más cercano",
+  "closerAEDAvailable": "DEA más cercano disponible (tocar)",
+  "location": "Ubicación",
+  "operator": "Operador",
+  "openingHours": "Horario de apertura",
+  "insideBuilding": "Dentro del edificio",
+  "contact": "Contacto",
+  "noData": "Sin datos",
+  "navigate": "Navegar",
+  "chooseMapApp": "Elegir aplicación de mapas",
+  "about": "Fuente de datos: openaedmap.org",
+  "defibrillator": "Desfibrilador",
+  "runDistance": "Aproximadamente {minutes} minuto(s) corriendo ({meters}m)",
+  "@runDistance": {
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "3"
+      },
+      "meters": {
+        "type": "int",
+        "example": "772"
+      }
+    }
+  },
+  "distance": "a unos {kilometers}km de aquí",
+  "@distance": {
+    "placeholders": {
+      "kilometers": {
+        "type": "int",
+        "example": "772"
+      }
+    }
+  },
+  "noNetwork": "¡Sin conexión de red!",
+  "checkNetwork": "Verificar conexión de red",
+  "retry": "Reintentar",
+  "yes": "sí",
+  "no": "no",
+  "accessYes": "accesible al público",
+  "accessCustomers": "durante horas de trabajo",
+  "accessPrivate": "con permiso del propietario",
+  "accessPermissive": "hasta nuevo aviso",
+  "accessNo": "no disponible",
+  "accessUnknown": "acceso desconocido",
+  "chooseLocation": "Selecciona la ubicación del DEA que deseas agregar",
+  "cancel": "Cancelar",
+  "next": "Siguiente",
+  "edit": "Editar",
+  "imageOfDefibrillator": "Imagen del desfibrilador",
+  "save": "Guardar",
+  "editDefibrillator": "Editar desfibrilador",
+  "information": "Información",
+  "enterDescription": "Ingrese una descripción",
+  "enterOperator": "Ingrese el operador",
+  "enterPhone": "Ingrese el número de teléfono",
+  "longitude": "Longitud",
+  "latitude": "Latitud",
+  "chooseAccess": "Elegir acceso",
+  "calculatingRoute": "Calculando ruta...",
+  "stop": "detener",
+  "minutes": "minutos",
+  "seconds": "segundos",
+  "meters": "metros"
+}
