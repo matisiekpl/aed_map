@@ -1,7 +1,7 @@
 import 'package:latlong2/latlong.dart';
 
 final warsaw = LatLng(52.237049, 21.017532);
-const valhalla = 'https://routing.aedmapa.pl';
+const valhalla = 'https://sa.tt.com.pl/valhalla2Move/raw_route.php';
 const plausible = 'https://analytics.chatspell.co';
 const iosUserAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1';
