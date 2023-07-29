@@ -11,7 +11,7 @@
   },
   "access": "Zugang",
   "closestAED": "Nächster AED",
-  "closerAEDAvailable": "Näherer AED ist verfügbar (antippen)",
+  "closerAEDAvailable": "Näherer AED ist verfügbar",
   "location": "Standort",
   "operator": "Betreiber",
   "openingHours": "Öffnungszeiten",
