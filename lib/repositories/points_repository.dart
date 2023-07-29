@@ -17,7 +17,10 @@ class PointsRepository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var response = await http.get(
-          Uri.parse('https://aed.openstreetmap.org.pl/aed_poland.geojson'));
+          Uri.parse(
+              'https://back.openaedmap.org/data/world.geojson'
+              // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
+          ));
       await prefs.setString(aedListKey, response.body);
     } catch (err) {
       if (kDebugMode) {
@@ -28,7 +31,8 @@ class PointsRepository {
 
   loadLocalAEDs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String data = await rootBundle.loadString("assets/aed_poland.geojson");
+    String data = await rootBundle.loadString("assets/world.geojson");
+    data = data.replaceAll("@osm_id", "osm_id");
     await prefs.setString(aedListKey, data);
   }
 
@@ -38,12 +42,16 @@ class PointsRepository {
     if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
     updateAEDs();
     var contents = prefs.getString(aedListKey)!;
+    var idLabel = 'osm_id';
+    if (contents.contains('@osm_id')) {
+      idLabel = '@osm_id';
+    }
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
       aeds.add(AED(
           location: LatLng(row['geometry']['coordinates'][1],
               row['geometry']['coordinates'][0]),
-          id: row['properties']['osm_id'],
+          id: row['properties'][idLabel],
           description: row['properties']['defibrillator:location'] ??
               row['properties']['defibrillator:location:pl'],
           indoor: row['properties']['indoor'] == 'yes',
@@ -61,8 +69,7 @@ class PointsRepository {
       return aed;
     }).toList();
     aeds.sort((a, b) => a.distance!.compareTo(b.distance!));
-
-    return aeds;
+    return aeds.toList();
   }
 
   String? token;

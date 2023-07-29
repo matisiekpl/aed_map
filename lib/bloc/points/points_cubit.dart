@@ -59,6 +59,7 @@ class PointsCubit extends Cubit<PointsState> {
   }
 
   List<Marker> _getMarkers(List<AED> aeds) => aeds
+      .take(1000)
       .map((aed) {
         if (aed.access == 'yes') {
           return Marker(

@@ -1,0 +1,77 @@
+{
+  "heading": "Mappa DAE",
+  "subheading": "{count} DAE disponibili",
+  "@subheading": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "4878"
+      }
+    }
+  },
+  "access": "Accesso",
+  "closestAED": "DAE più vicino",
+  "closerAEDAvailable": "È disponibile un DAE più vicino",
+  "location": "Posizione",
+  "operator": "Operatore",
+  "openingHours": "Orario di apertura",
+  "insideBuilding": "All'interno del edificio",
+  "contact": "Contatto",
+  "noData": "Nessun dato",
+  "navigate": "Naviga",
+  "chooseMapApp": "Scegli l'applicazione di mappe",
+  "about": "Fonte dati: openaedmap.org",
+  "defibrillator": "Defibrillatore",
+  "runDistance": "Circa {minutes} minuti di corsa ({meters}m)",
+  "@runDistance": {
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "3"
+      },
+      "meters": {
+        "type": "int",
+        "example": "772"
+      }
+    }
+  },
+  "distance": "circa {kilometers}km da qui",
+  "@distance": {
+    "placeholders": {
+      "kilometers": {
+        "type": "int",
+        "example": "772"
+      }
+    }
+  },
+  "noNetwork": "Connessione di rete assente!",
+  "checkNetwork": "Verifica la connessione di rete",
+  "retry": "Riprova",
+  "yes": "sì",
+  "no": "no",
+  "accessYes": "accessibile al pubblico",
+  "accessCustomers": "durante l'orario di lavoro",
+  "accessPrivate": "con permesso del proprietario",
+  "accessPermissive": "fino a nuovo avviso",
+  "accessNo": "non disponibile",
+  "accessUnknown": "accesso sconosciuto",
+  "chooseLocation": "Seleziona la posizione del DAE che desideri aggiungere",
+  "cancel": "Annulla",
+  "next": "Avanti",
+  "edit": "Modifica",
+  "imageOfDefibrillator": "Immagine del defibrillatore",
+  "save": "Salva",
+  "editDefibrillator": "Modifica defibrillatore",
+  "information": "Informazioni",
+  "enterDescription": "Inserisci una descrizione",
+  "enterOperator": "Inserisci l'operatore",
+  "enterPhone": "Inserisci il numero di telefono",
+  "longitude": "Longitudine",
+  "latitude": "Latitudine",
+  "chooseAccess": "Scegli l'accesso",
+  "calculatingRoute": "Calcolo del percorso in corso...",
+  "stop": "stop",
+  "minutes": "minuti",
+  "seconds": "secondi",
+  "meters": "metri"
+}

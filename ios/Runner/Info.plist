@@ -36,7 +36,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app allows users to take an image of defibrillator for better localization</string>
 	<key>NSCameraUsageDescription</key>
-    <string>This app allows users to take an image of defibrillator for better localization</string>
+	<string>This app allows users to take an image of defibrillator for better localization</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -58,8 +58,16 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	  <key>FLTEnableImpeller</key>
-      <true />
-
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>pl</string>
+		<string>de</string>
+		<string>en</string>
+		<string>es</string>
+		<string>fr</string>
+		<string>it</string>
+	</array>
+	<key>FLTEnableImpeller</key>
+	<true/>
 </dict>
 </plist>
