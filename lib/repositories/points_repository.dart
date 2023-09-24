@@ -18,7 +18,7 @@ class PointsRepository {
     try {
       var response = await http.get(
           Uri.parse(
-              'https://back.openaedmap.org/data/world.geojson'
+              'https://back.openaedmap.org/api/v1/countries/WORLD.geojson'
               // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
           ));
       await prefs.setString(aedListKey, response.body);
