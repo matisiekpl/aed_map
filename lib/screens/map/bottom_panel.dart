@@ -1,6 +1,7 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/panel/panel_cubit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,8 @@ class BottomPanel extends StatelessWidget {
             ),
             child: ListView(
               padding: const EdgeInsets.all(0),
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
               controller: scrollController,
               children: [
                 Row(
@@ -309,7 +312,8 @@ class BottomPanel extends StatelessWidget {
                                     child: Opacity(
                                       opacity: 0.5,
                                       child: CupertinoButton.filled(
-                                          key: const Key('navigate_in_progress'),
+                                          key:
+                                              const Key('navigate_in_progress'),
                                           onPressed: () async {
                                             context
                                                 .read<RoutingCubit>()
@@ -345,10 +349,22 @@ class BottomPanel extends StatelessWidget {
                             return Container();
                           })),
                       const SizedBox(height: 12),
+                      if ((state.selected.image ?? '').isNotEmpty)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: CachedNetworkImage(
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            imageUrl: state.selected.image ?? '',
+                            placeholder: (context, url) => Container(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                        ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 10)
+                const SizedBox(height: 30)
               ],
             ),
           );

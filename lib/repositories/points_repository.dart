@@ -17,9 +17,8 @@ class PointsRepository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var response = await http.get(
-          Uri.parse(
-              'https://back.openaedmap.org/api/v1/countries/WORLD.geojson'
-              // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
+          Uri.parse('https://back.openaedmap.org/api/v1/countries/WORLD.geojson'
+            // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
           ));
       await prefs.setString(aedListKey, response.body);
     } catch (err) {
@@ -75,14 +74,16 @@ class PointsRepository {
   String? token;
 
   Future<bool> authenticate() async {
-    if (token != null||kDebugMode) return true;
+    if (token != null || kDebugMode) return true;
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     final result = await FlutterWebAuth.authenticate(
         url:
-            "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
+        "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
         callbackUrlScheme: "aedmap");
-    final code = Uri.parse(result).queryParameters['code'];
+    final code = Uri
+        .parse(result)
+        .queryParameters['code'];
     if (kDebugMode) {
       print('Got OAuth2 code: $code');
     }
@@ -173,7 +174,7 @@ class PointsRepository {
         ];
       }).toList();
       var xml =
-          aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
+      aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
       await http.put(
           Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
           headers: {
@@ -191,5 +192,24 @@ class PointsRepository {
       }
     }
     return aed;
+  }
+
+  Future<String?> getImage(AED aed) async {
+    try {
+      var response = await http
+          .get(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'));
+      final document = XmlDocument.parse(response.body);
+      final image = document
+          .findAllElements('node')
+          .first
+          .attributes
+          .where((attr) => attr.name.toString() == 'image')
+          .first
+          .value;
+      return image;
+    } catch (err) {
+      return null;
+    }
   }
 }
