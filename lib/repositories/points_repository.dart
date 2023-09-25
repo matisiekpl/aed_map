@@ -11,7 +11,7 @@ import 'package:xml/xml.dart';
 import '../models/aed.dart';
 
 class PointsRepository {
-  static const String aedListKey = 'aed_list_json';
+  static const String aedListKey = 'aed_list_json_2';
 
   updateAEDs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
