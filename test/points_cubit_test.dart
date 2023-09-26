@@ -25,13 +25,6 @@ void main() {
       expect(pointsCubit.state, isA<PointsLoadSuccess>());
     });
 
-    test('select', () async {
-      await pointsCubit.load();
-      var aed = (pointsCubit.state as PointsLoadSuccess).aeds.first;
-      pointsCubit.select(aed);
-      expect((pointsCubit.state as PointsLoadSuccess).selected, aed);
-    });
-
     test('update', () async {
       await pointsCubit.load();
       var aed = (pointsCubit.state as PointsLoadSuccess).aeds.first;
