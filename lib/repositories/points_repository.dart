@@ -11,17 +11,16 @@ import 'package:xml/xml.dart';
 import '../models/aed.dart';
 
 class PointsRepository {
-  static const String aedListKey = 'aed_list_json';
+  static const String aedListKey = 'aed_list_json_2';
 
   updateAEDs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var response = await http.get(
-          Uri.parse(
-              'https://back.openaedmap.org/api/v1/countries/WORLD.geojson'
+          Uri.parse('https://back.openaedmap.org/api/v1/countries/WORLD.geojson'
               // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
-          ));
-      await prefs.setString(aedListKey, response.body);
+              ));
+      await prefs.setString(aedListKey, utf8.decode(response.bodyBytes));
     } catch (err) {
       if (kDebugMode) {
         print('Failed to load AEDs from internet!');
@@ -75,7 +74,7 @@ class PointsRepository {
   String? token;
 
   Future<bool> authenticate() async {
-    if (token != null||kDebugMode) return true;
+    if (token != null || kDebugMode) return true;
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     final result = await FlutterWebAuth.authenticate(
@@ -191,5 +190,32 @@ class PointsRepository {
       }
     }
     return aed;
+  }
+
+  Future<String?> getImage(AED aed) async {
+    try {
+      var response = await http.get(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'));
+      final document = XmlDocument.parse(response.body);
+
+      String? image;
+      document.findAllElements('tag').forEach((element) {
+        if (element.attributes
+            .where((attr) => attr.name.toString() == 'k')
+            .first
+            .value
+            .toString()
+            .contains('image')) {
+          image = element.attributes
+              .where((attr) => attr.name.toString() == 'v')
+              .first
+              .value
+              .toString();
+        }
+      });
+      return image;
+    } catch (err) {
+      return null;
+    }
   }
 }

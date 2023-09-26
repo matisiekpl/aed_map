@@ -3,6 +3,7 @@ import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:aed_map/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
@@ -32,11 +33,14 @@ class PointsCubit extends Cubit<PointsState> {
   }
 
   select(AED aed) {
+    HapticFeedback.mediumImpact();
     analytics.event(name: selectEvent);
     if (state is PointsLoadSuccess) {
       emit((state as PointsLoadSuccess)
           .copyWith(selected: aed, hash: generateRandomString(32)));
     }
+
+    loadImage();
   }
 
   update(AED aed) {
@@ -116,4 +120,13 @@ class PointsCubit extends Cubit<PointsState> {
       })
       .cast<Marker>()
       .toList();
+
+  loadImage() async {
+    var state = this.state;
+    if (state is PointsLoadSuccess) {
+      var url = await pointsRepository.getImage(state.selected);
+      var aed = state.selected.copyWith(image: url);
+      emit(state.copyWith(selected: aed, hash: generateRandomString(32)));
+    }
+  }
 }
