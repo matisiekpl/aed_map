@@ -18,9 +18,9 @@ class PointsRepository {
     try {
       var response = await http.get(
           Uri.parse('https://back.openaedmap.org/api/v1/countries/WORLD.geojson'
-            // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
-          ));
-      await prefs.setString(aedListKey, response.body);
+              // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
+              ));
+      await prefs.setString(aedListKey, utf8.decode(response.bodyBytes));
     } catch (err) {
       if (kDebugMode) {
         print('Failed to load AEDs from internet!');
@@ -79,11 +79,9 @@ class PointsRepository {
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     final result = await FlutterWebAuth.authenticate(
         url:
-        "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
+            "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
         callbackUrlScheme: "aedmap");
-    final code = Uri
-        .parse(result)
-        .queryParameters['code'];
+    final code = Uri.parse(result).queryParameters['code'];
     if (kDebugMode) {
       print('Got OAuth2 code: $code');
     }
@@ -174,7 +172,7 @@ class PointsRepository {
         ];
       }).toList();
       var xml =
-      aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
+          aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
       await http.put(
           Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
           headers: {
@@ -196,17 +194,25 @@ class PointsRepository {
 
   Future<String?> getImage(AED aed) async {
     try {
-      var response = await http
-          .get(
+      var response = await http.get(
           Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'));
       final document = XmlDocument.parse(response.body);
-      final image = document
-          .findAllElements('node')
-          .first
-          .attributes
-          .where((attr) => attr.name.toString() == 'image')
-          .first
-          .value;
+
+      String? image;
+      document.findAllElements('tag').forEach((element) {
+        if (element.attributes
+            .where((attr) => attr.name.toString() == 'k')
+            .first
+            .value
+            .toString()
+            .contains('image')) {
+          image = element.attributes
+              .where((attr) => attr.name.toString() == 'v')
+              .first
+              .value
+              .toString();
+        }
+      });
       return image;
     } catch (err) {
       return null;

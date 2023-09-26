@@ -15,15 +15,15 @@ class AED {
   String? access;
   String? image;
 
-  AED(
-      {required this.location,
-      required this.id,
-      this.description,
-      this.indoor = false,
-      this.operator,
-      this.phone,
-      this.openingHours,
-      this.access = 'yes'});
+  AED({required this.location,
+    required this.id,
+    this.description,
+    this.indoor = false,
+    this.operator,
+    this.phone,
+    this.openingHours,
+    this.image = '',
+    this.access = 'yes'});
 
   String? getAccessComment(AppLocalizations appLocalizations) {
     return translateAccessComment(access, appLocalizations);
@@ -73,11 +73,15 @@ class AED {
         builder.attribute('lat', location.latitude);
         builder.attribute('lon', location.longitude);
 
-        if (access.toString().isNotEmpty) {
+        if (access
+            .toString()
+            .isNotEmpty) {
           builder.element('tag',
               attributes: {'k': 'access', 'v': access.toString()});
         }
-        if (description.toString().isNotEmpty) {
+        if (description
+            .toString()
+            .isNotEmpty) {
           builder.element('tag', attributes: {
             'k': 'defibrillator:location:pl',
             'v': description.toString()
@@ -85,33 +89,42 @@ class AED {
         }
         builder.element('tag',
             attributes: {'k': 'emergency', 'v': 'defibrillator'});
-        if (image.toString().isNotEmpty) {
+        if (image
+            .toString()
+            .isNotEmpty) {
           builder.element('tag', attributes: {'k': 'image', 'v': image ?? ''});
         }
         builder.element('tag',
             attributes: {'k': 'indoor', 'v': indoor ? 'yes' : 'no'});
-        if (openingHours.toString().isNotEmpty) {
+        if (openingHours
+            .toString()
+            .isNotEmpty) {
           builder.element('tag',
               attributes: {'k': 'opening_hours', 'v': openingHours ?? ''});
         }
-        if (operator.toString().isNotEmpty) {
+        if (operator
+            .toString()
+            .isNotEmpty) {
           builder.element('tag',
               attributes: {'k': 'operator', 'v': operator ?? ''});
         }
-        if (phone.toString().isNotEmpty) {
+        if (phone
+            .toString()
+            .isNotEmpty) {
           builder.element('tag', attributes: {'k': 'phone', 'v': phone ?? ''});
         }
 
         oldTags
-            .where((attr) => [
-                  'phone',
-                  'operator',
-                  'opening_hours',
-                  'indoor',
-                  'emergency',
-                  'access',
-                  'defibrillator:location:pl'
-                ].contains(attr[0]))
+            .where((attr) =>
+            [
+              'phone',
+              'operator',
+              'opening_hours',
+              'indoor',
+              'emergency',
+              'access',
+              'defibrillator:location:pl'
+            ].contains(attr[0]))
             .forEach((attr) {
           builder.element('tag', attributes: {'k': attr[0], 'v': attr[1]});
         });
@@ -144,12 +157,13 @@ class AED {
       phone: phone ?? this.phone,
       openingHours: openingHours ?? this.openingHours,
       access: access ?? this.access,
+      image: image ?? this.image,
     );
   }
 }
 
-String translateAccessComment(
-    String? access, AppLocalizations appLocalizations) {
+String translateAccessComment(String? access,
+    AppLocalizations appLocalizations) {
   if (access == null) return '';
   Map comments = {
     'yes': appLocalizations.accessYes,

@@ -125,9 +125,8 @@ class PointsCubit extends Cubit<PointsState> {
     var state = this.state;
     if (state is PointsLoadSuccess) {
       var url = await pointsRepository.getImage(state.selected);
-      emit(state.copyWith(
-          selected: state.selected.copyWith(image: url),
-          hash: generateRandomString(32)));
+      var aed = state.selected.copyWith(image: url);
+      emit(state.copyWith(selected: aed, hash: generateRandomString(32)));
     }
   }
 }

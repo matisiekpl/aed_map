@@ -78,7 +78,7 @@ class BottomPanel extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (state.aeds.first == state.selected)
+                          if (state.aeds.first.id == state.selected.id)
                             GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
@@ -91,7 +91,7 @@ class BottomPanel extends StatelessWidget {
                                       fontStyle: FontStyle.italic,
                                       fontSize: 18)),
                             ),
-                          if (state.aeds.first != state.selected)
+                          if (state.aeds.first.id != state.selected.id)
                             GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
@@ -351,7 +351,7 @@ class BottomPanel extends StatelessWidget {
                       const SizedBox(height: 12),
                       if ((state.selected.image ?? '').isNotEmpty)
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(8),
                           child: CachedNetworkImage(
                             width: double.infinity,
                             fit: BoxFit.cover,
