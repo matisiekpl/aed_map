@@ -194,26 +194,13 @@ class PointsRepository {
 
   Future<String?> getImage(AED aed) async {
     try {
-      var response = await http.get(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'));
-      final document = XmlDocument.parse(response.body);
-
-      String? image;
-      document.findAllElements('tag').forEach((element) {
-        if (element.attributes
-            .where((attr) => attr.name.toString() == 'k')
-            .first
-            .value
-            .toString()
-            .contains('image')) {
-          image = element.attributes
-              .where((attr) => attr.name.toString() == 'v')
-              .first
-              .value
-              .toString();
-        }
-      });
-      return image;
+      var response = await http
+          .get(Uri.parse('https://back.openaedmap.org/api/v1/node/${aed.id}'));
+      var result = jsonDecode(response.body);
+      if (result['elements'][0]['@photo_url'].toString().length > 10) {
+        return 'https://back.openaedmap.org${result['elements'][0]['@photo_url']}';
+      }
+      return null;
     } catch (err) {
       return null;
     }

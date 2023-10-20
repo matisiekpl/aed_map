@@ -73,5 +73,17 @@
   "stop": "stop",
   "minutes": "minuti",
   "seconds": "secondi",
-  "meters": "metri"
+  "meters": "metri",
+      "heading": "Informazioni",
+      "datasetHeading": "Database dei punti",
+      "datasetDescription": "Il database dei punti AED proviene dal progetto openaedmap.org",
+      "defibrillatorsInDataset": "Defibrillatori nel database",
+      "defibrillatorsWithin5km": "Defibrillatori entro 5 km",
+      "defibrillatorsWithImages": "Punti con immagini",
+      "about": "Informazioni sull'applicazione",
+      "version": "Versione",
+      "website": "Sito web del progetto",
+      "author": "Autore",
+      "contact": "Contatto"
+
 }
