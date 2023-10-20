@@ -75,24 +75,7 @@ class _SettingsPageState extends State<SettingsPage>
                               return const Text('-');
                             });
                           }),
-                        ),
-                        SettingsTile(
-                          leading: const Icon(CupertinoIcons.photo),
-                          title:
-                              Text(appLocalizations.defibrillatorsWithImages),
-                          description:
-                              Text(appLocalizations.datasetDescription),
-                          value: BlocBuilder<PointsCubit, PointsState>(
-                              builder: (context, pointsState) {
-                            if (pointsState is PointsLoadSuccess) {
-                              return Text(
-                                  getDefibrillatorsWithImages(pointsState.aeds)
-                                      .length
-                                      .toString());
-                            }
-                            return const Text('-');
-                          }),
-                        ),
+                        )
                       ],
                     ),
                     SettingsSection(
