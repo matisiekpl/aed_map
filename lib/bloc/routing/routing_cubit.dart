@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aed_map/bloc/routing/routing_state.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/routing_repository.dart';
@@ -17,7 +19,6 @@ class RoutingCubit extends Cubit<RoutingState> {
   final RoutingRepository routingRepository;
 
   navigate(LatLng source, AED aed) async {
-    FirebaseAnalytics.instance.logSearch(searchTerm: aed.id.toString());
     HapticFeedback.lightImpact();
     emit(RoutingCalculatingInProgress());
     var trip = await routingRepository.navigate(
@@ -27,6 +28,9 @@ class RoutingCubit extends Cubit<RoutingState> {
       emit(RoutingSuccess(trip: trip));
     } else {
       emit(RoutingReady());
+    }
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      FirebaseAnalytics.instance.logSearch(searchTerm: aed.id.toString());
     }
   }
 
