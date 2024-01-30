@@ -1,8 +1,10 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
+import 'package:aed_map/bloc/location/location_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_state.dart';
+import 'package:aed_map/screens/settings/settings_page.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +60,18 @@ class MapHeader extends StatelessWidget {
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  _showAboutDialog(context);
+                  var pointsCubit = context.read<PointsCubit>();
+                  var locationCubit = context.read<LocationCubit>();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                              value: locationCubit,
+                              child: BlocProvider.value(
+                                  value: pointsCubit,
+                                  child: const SettingsPage()),
+                            )),
+                  );
                 },
                 child: Card(
                   color: MediaQuery.of(context).platformBrightness ==
@@ -131,22 +144,5 @@ class MapHeader extends StatelessWidget {
         ],
       ),
     ));
-  }
-
-  _showAboutDialog(BuildContext context) {
-    var appLocalizations = AppLocalizations.of(context)!;
-    showAboutDialog(
-      context: context,
-      applicationIcon:
-          const Image(image: AssetImage('assets/icon.png'), width: 64),
-      applicationName: appLocalizations.heading,
-      applicationVersion: 'v1.0.2',
-      applicationLegalese: 'By Mateusz Woźniak',
-      children: <Widget>[
-        Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Text(appLocalizations.about)),
-      ],
-    );
   }
 }
