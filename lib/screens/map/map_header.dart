@@ -145,21 +145,4 @@ class MapHeader extends StatelessWidget {
       ),
     ));
   }
-
-  _showAboutDialog(BuildContext context) {
-    var appLocalizations = AppLocalizations.of(context)!;
-    showAboutDialog(
-      context: context,
-      applicationIcon:
-          const Image(image: AssetImage('assets/icon.png'), width: 64),
-      applicationName: appLocalizations.heading,
-      applicationVersion: 'v1.0.2',
-      applicationLegalese: 'By Mateusz Woźniak',
-      children: <Widget>[
-        Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Text(appLocalizations.about)),
-      ],
-    );
-  }
 }
