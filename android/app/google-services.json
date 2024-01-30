@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "418947801169",
+    "project_id": "aedmapwozniak",
+    "storage_bucket": "aedmapwozniak.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418947801169:android:5fe0ffea3ab8b3552b9870",
+        "android_client_info": {
+          "package_name": "pl.enteam.aed_map"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418947801169-jqpd5mecvs5s13th6miblffbgkpkp0ip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc3NQDAGWECfXeaBBcuTGMweXq1ZtmHKc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418947801169-jqpd5mecvs5s13th6miblffbgkpkp0ip.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

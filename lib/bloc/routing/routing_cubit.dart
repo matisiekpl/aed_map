@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:aed_map/bloc/routing/routing_state.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/routing_repository.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
@@ -25,6 +28,9 @@ class RoutingCubit extends Cubit<RoutingState> {
       emit(RoutingSuccess(trip: trip));
     } else {
       emit(RoutingReady());
+    }
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      FirebaseAnalytics.instance.logSearch(searchTerm: aed.id.toString());
     }
   }
 
