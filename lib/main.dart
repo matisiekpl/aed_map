@@ -15,11 +15,13 @@ import 'package:aed_map/repositories/routing_repository.dart';
 import 'package:aed_map/screens/edit/edit_form.dart';
 import 'package:aed_map/screens/map/map_screen.dart';
 import 'package:feedback/feedback.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:plausible_analytics/plausible_analytics.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'constants.dart';
 
@@ -28,7 +30,15 @@ final analytics = Plausible(plausible, 'aedmapa.app',
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const BetterFeedback(child: App()));
+  await Firebase.initializeApp();
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://492fa94bb5e0bdf492c5a8b8a108d84e@o337011.ingest.sentry.io/4506661810274304';
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(const BetterFeedback(child: App())),
+  );
 }
 
 class App extends StatefulWidget {
