@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
@@ -97,12 +98,15 @@ class PointsRepository {
   }
 
   Future<int> getChangesetId() async {
+    var packageInfo = await PackageInfo.fromPlatform();
     final builder = XmlBuilder();
     builder.processing('xml', 'version="1.0"');
     builder.element('osm', attributes: {'version': '0.6'}, nest: () {
       builder.element('changeset', nest: () {
-        builder.element('tag',
-            attributes: {'k': 'created_by', 'v': 'AED Map for Android/iOS'});
+        builder.element('tag', attributes: {
+          'k': 'created_by',
+          'v': 'AED Map for Android/iOS (aedmap v${packageInfo.version})'
+        });
         builder.element('tag', attributes: {
           'k': 'comment',
           'v': 'Defibrillator modified via AED Map #aed'

@@ -282,8 +282,10 @@ class BottomPanel extends StatelessWidget {
                             return GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                launchUrl(Uri.parse(
-                                    'tel:${state.selected.phone.toString().replaceAll(' ', '')}'));
+                                if (state.selected.phone.purge() != null) {
+                                  launchUrl(Uri.parse(
+                                      'tel:${state.selected.phone.toString().replaceAll(' ', '')}'));
+                                }
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
