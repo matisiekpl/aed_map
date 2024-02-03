@@ -60,7 +60,7 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion 23
         targetSdkVersion flutter.targetSdkVersion
-        versionCode vcode.toInteger()
+        versionCode flutterVersionCode.toInteger() + 1000000000
         versionName flutterVersionName
     }
 
