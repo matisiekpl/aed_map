@@ -20,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:plausible_analytics/plausible_analytics.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -28,9 +29,12 @@ import 'constants.dart';
 final analytics = Plausible(plausible, 'aedmapa.app',
     userAgent: Platform.isIOS ? iosUserAgent : androidUserAgent);
 
+late final Mixpanel mixpanel;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  mixpanel = await Mixpanel.init(mixpanelToken, trackAutomaticEvents: true);
   await SentryFlutter.init(
     (options) {
       options.dsn =

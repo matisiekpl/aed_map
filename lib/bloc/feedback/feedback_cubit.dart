@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aed_map/bloc/feedback/feedback_state.dart';
 import 'package:aed_map/repositories/feedback_repository.dart';
 import 'package:feedback/feedback.dart';
@@ -7,12 +9,16 @@ import '../../constants.dart';
 import '../../main.dart';
 
 class FeedbackCubit extends Cubit<FeedbackState> {
-  FeedbackCubit({required this.feedbackRepository}) : super(const FeedbackReady());
+  FeedbackCubit({required this.feedbackRepository})
+      : super(const FeedbackReady());
 
   final FeedbackRepository feedbackRepository;
 
   send(UserFeedback feedback) async {
-    analytics.event(name:feedbackEvent);
+    analytics.event(name: feedbackEvent);
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      mixpanel.track(feedbackEvent);
+    }
     emit(const FeedbackSending());
     await feedbackRepository.sendFeedback(feedback);
     emit(const FeedbackReady());
