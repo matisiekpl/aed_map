@@ -66,7 +66,8 @@ class PointsCubit extends Cubit<PointsState> {
   }
 
   List<Marker> _getMarkers(List<AED> aeds) {
-    var brightness = MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+    var brightness = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
         .platformBrightness;
     return aeds
         .take(1000)
