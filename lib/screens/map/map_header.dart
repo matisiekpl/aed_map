@@ -63,6 +63,7 @@ class MapHeader extends StatelessWidget {
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
                   mixpanel.track(aboutEvent);
+                  mixpanel.flush();
                   var pointsCubit = context.read<PointsCubit>();
                   var locationCubit = context.read<LocationCubit>();
                   Navigator.push(
