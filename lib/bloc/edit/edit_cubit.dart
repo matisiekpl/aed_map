@@ -14,8 +14,9 @@ class EditCubit extends Cubit<EditState> {
   final PointsRepository pointsRepository;
 
   enter() async {
-    analytics.event(name:enterEditModeEvent);
     if (!await pointsRepository.authenticate()) return;
+    analytics.event(name: enterEditModeEvent);
+    mixpanel.track(enterEditModeEvent);
     emit(state.copyWith(enabled: true));
   }
 
@@ -27,6 +28,7 @@ class EditCubit extends Cubit<EditState> {
 
   add() async {
     analytics.event(name: addEvent);
+    mixpanel.track(addEvent);
     AED aed = AED(
         location: LatLng(state.cursor.latitude, state.cursor.longitude), id: 0);
     emit(EditInProgress(
@@ -40,6 +42,7 @@ class EditCubit extends Cubit<EditState> {
 
   edit(AED aed) async {
     analytics.event(name: editEvent);
+    mixpanel.track(editEvent);
     if (!await pointsRepository.authenticate()) return;
     aed = aed.copyWith();
     emit(EditInProgress(
@@ -104,9 +107,11 @@ class EditCubit extends Cubit<EditState> {
     if (s is EditInProgress) {
       if (s.aed.id == 0) {
         analytics.event(name: saveInsertEvent);
+        mixpanel.track(saveInsertEvent, properties: {'aed': s.aed.id});
         await pointsRepository.insertDefibrillator(s.aed);
       } else {
         analytics.event(name: saveUpdateEvent);
+        mixpanel.track(saveUpdateEvent, properties: {'aed': s.aed.id});
         await pointsRepository.updateDefibrillator(s.aed);
       }
       emit(EditReady(enabled: false, cursor: state.cursor));

@@ -7,12 +7,14 @@ import '../../constants.dart';
 import '../../main.dart';
 
 class FeedbackCubit extends Cubit<FeedbackState> {
-  FeedbackCubit({required this.feedbackRepository}) : super(const FeedbackReady());
+  FeedbackCubit({required this.feedbackRepository})
+      : super(const FeedbackReady());
 
   final FeedbackRepository feedbackRepository;
 
   send(UserFeedback feedback) async {
-    analytics.event(name:feedbackEvent);
+    analytics.event(name: feedbackEvent);
+    mixpanel.track(feedbackEvent);
     emit(const FeedbackSending());
     await feedbackRepository.sendFeedback(feedback);
     emit(const FeedbackReady());

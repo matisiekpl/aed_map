@@ -14,6 +14,8 @@ const iosUserAgent =
 const androidUserAgent =
     'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Mobile Safari/537.36';
 
+const mixpanelToken = '7aa0fecdfd096ba41039b52c5a16ec47';
+
 const enterEditModeEvent = 'enter_edit_mode';
 const addEvent = 'add';
 const editEvent = 'edit';
@@ -22,3 +24,7 @@ const saveUpdateEvent = 'save_update';
 const feedbackEvent = 'feedback';
 const selectEvent = 'select';
 const navigateEvent = 'navigate';
+const loginEvent = 'login';
+const authenticatedEvent = 'authenticated';
+const aboutEvent = 'about';
+const phoneEvent = 'phone';

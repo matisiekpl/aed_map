@@ -1,6 +1,8 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/panel/panel_cubit.dart';
+import 'package:aed_map/constants.dart';
+import 'package:aed_map/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
@@ -283,6 +285,7 @@ class BottomPanel extends StatelessWidget {
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
                                 if (state.selected.phone.purge() != null) {
+                                  mixpanel.track(phoneEvent);
                                   launchUrl(Uri.parse(
                                       'tel:${state.selected.phone.toString().replaceAll(' ', '')}'));
                                 }

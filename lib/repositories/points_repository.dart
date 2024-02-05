@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:aed_map/constants.dart';
+import 'package:aed_map/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
@@ -76,6 +78,7 @@ class PointsRepository {
 
   Future<bool> authenticate() async {
     if (token != null || kDebugMode) return true;
+    mixpanel.track(loginEvent);
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     final result = await FlutterWebAuth.authenticate(
@@ -94,6 +97,7 @@ class PointsRepository {
     if (kDebugMode) {
       print('Got OAuth2 token: $token');
     }
+    mixpanel.track(authenticatedEvent);
     return token != null;
   }
 

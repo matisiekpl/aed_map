@@ -75,6 +75,7 @@ dependencies:
   sentry_flutter: ^7.16.0
   firebase_analytics: ^10.8.0
   firebase_core: ^2.24.2
+  mixpanel_flutter: ^2.2.0
 
 dev_dependencies:
   integration_test:

@@ -38,6 +38,7 @@ class PointsCubit extends Cubit<PointsState> {
         .logSelectContent(contentType: 'aed', itemId: aed.id.toString());
     HapticFeedback.mediumImpact();
     analytics.event(name: selectEvent);
+    mixpanel.track(selectEvent, properties: {'aed': aed.id});
     if (state is PointsLoadSuccess) {
       emit((state as PointsLoadSuccess)
           .copyWith(selected: aed, hash: generateRandomString(32)));
