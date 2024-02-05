@@ -65,64 +65,129 @@ class PointsCubit extends Cubit<PointsState> {
     }
   }
 
-  List<Marker> _getMarkers(List<AED> aeds) => aeds
-      .take(1000)
-      .map((aed) {
-        if (aed.access == 'yes') {
+  List<Marker> _getMarkers(List<AED> aeds) {
+    var brightness = MediaQueryData.fromView(
+            WidgetsBinding.instance.platformDispatcher.views.single)
+        .platformBrightness;
+    return aeds
+        .take(1000)
+        .map((aed) {
+          if (aed.access == 'yes') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      width: 2),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: SvgPicture.asset('assets/green_aed.svg')),
+              ),
+            );
+          }
+          if (aed.access == 'customers') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      width: 2),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: SvgPicture.asset('assets/yellow_aed.svg')),
+              ),
+            );
+          }
+          if (aed.access == 'private' || aed.access == 'permissive') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      width: 2),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: SvgPicture.asset('assets/blue_aed.svg')),
+              ),
+            );
+          }
+          if (aed.access == 'no') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      width: 2),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: SvgPicture.asset('assets/red_aed.svg')),
+              ),
+            );
+          }
+          if (aed.access == 'unknown') {
+            return Marker(
+              point: aed.location,
+              key: Key(aeds.indexOf(aed).toString()),
+              builder: (ctx) => Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      width: 2),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: SvgPicture.asset('assets/grey_aed.svg')),
+              ),
+            );
+          }
           return Marker(
             point: aed.location,
             key: Key(aeds.indexOf(aed).toString()),
-            builder: (ctx) => ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: SvgPicture.asset('assets/green_aed.svg')),
+            builder: (ctx) => Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: brightness == Brightness.light
+                        ? Colors.black
+                        : Colors.white,
+                    width: 2),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              ),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: SvgPicture.asset('assets/green_aed.svg')),
+            ),
           );
-        }
-        if (aed.access == 'customers') {
-          return Marker(
-            point: aed.location,
-            key: Key(aeds.indexOf(aed).toString()),
-            builder: (ctx) => ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: SvgPicture.asset('assets/yellow_aed.svg')),
-          );
-        }
-        if (aed.access == 'private' || aed.access == 'permissive') {
-          return Marker(
-            point: aed.location,
-            key: Key(aeds.indexOf(aed).toString()),
-            builder: (ctx) => ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: SvgPicture.asset('assets/blue_aed.svg')),
-          );
-        }
-        if (aed.access == 'no') {
-          return Marker(
-            point: aed.location,
-            key: Key(aeds.indexOf(aed).toString()),
-            builder: (ctx) => ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: SvgPicture.asset('assets/red_aed.svg')),
-          );
-        }
-        if (aed.access == 'unknown') {
-          return Marker(
-            point: aed.location,
-            key: Key(aeds.indexOf(aed).toString()),
-            builder: (ctx) => ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: SvgPicture.asset('assets/grey_aed.svg')),
-          );
-        }
-        return Marker(
-          point: aed.location,
-          key: Key(aeds.indexOf(aed).toString()),
-          builder: (ctx) => ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: SvgPicture.asset('assets/green_aed.svg')),
-        );
-      })
-      .cast<Marker>()
-      .toList();
+        })
+        .cast<Marker>()
+        .toList();
+  }
 
   loadImage() async {
     var state = this.state;
