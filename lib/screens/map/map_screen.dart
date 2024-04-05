@@ -8,7 +8,9 @@ import 'package:aed_map/screens/map/raster_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../bloc/panel/panel_cubit.dart';
 import '../../bloc/panel/panel_state.dart' as panel_state;
@@ -29,6 +31,42 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     analytics.event();
+    init();
+  }
+
+  init() async {
+    await Future.delayed(const Duration(milliseconds: 400));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('firstEnter') == true) {
+      return false;
+    }
+    prefs.setBool('firstEnter', true);
+    showFirstEnterDialog();
+  }
+
+  showFirstEnterDialog() {
+    var appLocalizations = AppLocalizations.of(context)!;
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          surfaceTintColor: Colors.red.shade400,
+          title: Text(appLocalizations.dataSource),
+          content: Text(appLocalizations.dataSourceDescription),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: Text(appLocalizations.understand),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

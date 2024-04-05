@@ -20,7 +20,7 @@ class PointsRepository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var response = await http.get(
-          Uri.parse('https://back.openaedmap.org/api/v1/countries/WORLD.geojson'
+          Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'
               // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
               ));
       await prefs.setString(aedListKey, utf8.decode(response.bodyBytes));
