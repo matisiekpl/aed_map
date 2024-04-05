@@ -72,7 +72,9 @@ class _AppState extends State<App> {
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      supportedLocales: List.from(AppLocalizations.supportedLocales)
+        ..sort((a, b) =>
+            const Locale('en').languageCode.compareTo(a.languageCode)),
       home: MultiBlocProvider(
         providers: [
           BlocProvider<PointsCubit>(
