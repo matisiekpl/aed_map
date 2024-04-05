@@ -84,6 +84,9 @@
       "version": "Versione",
       "website": "Sito web del progetto",
       "author": "Autore",
-      "contact": "Contatto"
+      "contact": "Contatto",
+      "understand": "Capisco",
+"dataSource": "Fonte dei dati",
+"dataSourceDescription": "I dati sulla posizione dei defibrillatori provengono da OpenStreetMap. La loro qualità può variare. L'autore non è responsabile per la correttezza dei dati. Ti incoraggiamo a co-creare il database su openstreetmap.org"
 
 }
