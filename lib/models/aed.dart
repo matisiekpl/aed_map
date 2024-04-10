@@ -80,7 +80,7 @@ class AED {
         }
         if (description != null && description.toString().isNotEmpty) {
           builder.element('tag', attributes: {
-            'k': 'defibrillator:location:pl',
+            'k': 'defibrillator:location',
             'v': description.toString()
           });
         }
@@ -111,7 +111,7 @@ class AED {
                   'indoor',
                   'emergency',
                   'access',
-                  'defibrillator:location:pl'
+                  'defibrillator:location'
                 ].contains(attr[0]))
             .forEach((attr) {
           builder.element('tag', attributes: {'k': attr[0], 'v': attr[1]});
