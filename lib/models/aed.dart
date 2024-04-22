@@ -41,6 +41,7 @@ class AED {
       'unknown': Colors.grey,
       '': Colors.grey,
     };
+    if (!colors.containsKey(access)) return colors[''];
     return colors[access];
   }
 
@@ -55,6 +56,7 @@ class AED {
       'unknown': 'grey_aed.svg',
       '': 'grey_aed.svg',
     };
+    if (!filenames.containsKey(access)) return filenames[''];
     return filenames[access];
   }
 

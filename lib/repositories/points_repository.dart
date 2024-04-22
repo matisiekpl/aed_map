@@ -19,8 +19,8 @@ class PointsRepository {
   updateAEDs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      var response = await http.get(
-          Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'
+      var response = await http
+          .get(Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'
               // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
               ));
       await prefs.setString(aedListKey, utf8.decode(response.bodyBytes));
@@ -81,24 +81,28 @@ class PointsRepository {
     mixpanel.track(loginEvent);
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
-    final result = await FlutterWebAuth.authenticate(
-        url:
-            "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
-        callbackUrlScheme: "aedmap");
-    final code = Uri.parse(result).queryParameters['code'];
-    if (kDebugMode) {
-      print('Got OAuth2 code: $code');
+    try {
+      final result = await FlutterWebAuth.authenticate(
+          url:
+              "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
+          callbackUrlScheme: "aedmap");
+      final code = Uri.parse(result).queryParameters['code'];
+      if (kDebugMode) {
+        print('Got OAuth2 code: $code');
+      }
+      var response = await http.post(
+          Uri.parse(
+              'https://www.openstreetmap.org/oauth2/token?grant_type=authorization_code&redirect_uri=aedmap://success&client_id=$clientId&client_secret=$clientSecret&code=$code'),
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'});
+      token = json.decode(response.body)['access_token'];
+      if (kDebugMode) {
+        print('Got OAuth2 token: $token');
+      }
+      mixpanel.track(authenticatedEvent);
+      return token != null;
+    } on Exception catch (_) {
+      return false;
     }
-    var response = await http.post(
-        Uri.parse(
-            'https://www.openstreetmap.org/oauth2/token?grant_type=authorization_code&redirect_uri=aedmap://success&client_id=$clientId&client_secret=$clientSecret&code=$code'),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'});
-    token = json.decode(response.body)['access_token'];
-    if (kDebugMode) {
-      print('Got OAuth2 token: $token');
-    }
-    mixpanel.track(authenticatedEvent);
-    return token != null;
   }
 
   Future<int> getChangesetId() async {
