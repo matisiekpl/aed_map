@@ -46,13 +46,6 @@ void main() async {
   );
 }
 
-// This method is used to notify the analytics service about the app launch.
-void notifyAnalytics() {
-  try {
-    http.post(Uri.parse('https://aedproxy.enteam.pl/example.com'));
-  } on Exception catch (_) {}
-}
-
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
@@ -64,7 +57,6 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    notifyAnalytics();
   }
 
   final GeolocationRepository geolocationRepository = GeolocationRepository();
