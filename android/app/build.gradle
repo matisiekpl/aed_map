@@ -37,7 +37,7 @@ if (keystorePropertiesFile.exists()) {
 def vcode = (int) (((new Date().getTime() / 1000) - 1451606400) / 10)
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
