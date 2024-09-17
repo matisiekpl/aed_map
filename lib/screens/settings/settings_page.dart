@@ -4,6 +4,7 @@ import 'package:aed_map/bloc/points/points_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -75,6 +76,45 @@ class _SettingsPageState extends State<SettingsPage>
                               return const Text('-');
                             });
                           }),
+                        ),
+                        SettingsTile(
+                          leading: const Icon(CupertinoIcons.clock),
+                          title: Text(appLocalizations.lastUpdate),
+                          value: BlocBuilder<PointsCubit, PointsState>(
+                            builder: (context, state) {
+                              if (state is PointsLoadSuccess) {
+                                return Text(DateFormat('dd-MM-yyyy HH:mm')
+                                    .format(state.lastUpdateTime));
+                              }
+                              return const Text('-');
+                            },
+                          ),
+                        ),
+                        SettingsTile(
+                          leading: const Icon(CupertinoIcons.refresh,
+                              color: Colors.blue),
+                          title: BlocBuilder<PointsCubit, PointsState>(
+                              builder: (context, state) {
+                            if (state is PointsLoadSuccess) {
+                              return Text(
+                                state.refreshing
+                                    ? appLocalizations.refreshing
+                                    : appLocalizations.refresh,
+                                style: const TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            }
+                            return Container();
+                          }),
+                          onPressed: (context) {
+                            var state = context.read<PointsCubit>().state;
+                            if (state is PointsLoadSuccess &&
+                                state.refreshing) {
+                              return;
+                            }
+                            context.read<PointsCubit>().refresh();
+                          },
                         )
                       ],
                     ),

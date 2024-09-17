@@ -30,6 +30,26 @@ class PointsCubit extends Cubit<PointsState> {
         aeds: aeds,
         selected: aeds.first,
         markers: _getMarkers(aeds),
+        lastUpdateTime: await pointsRepository.getLastUpdateTime(),
+        refreshing: false,
+        hash: generateRandomString(32)));
+  }
+
+  refresh() async {
+    var s = state;
+    if (s is PointsLoadSuccess) {
+      emit(s.copyWith(refreshing: true));
+    }
+    await pointsRepository.updateAEDs();
+    var position = await geolocationRepository.locate();
+    var aeds = await pointsRepository
+        .loadAEDs(LatLng(position.latitude, position.longitude));
+    emit(PointsLoadSuccess(
+        aeds: aeds,
+        selected: aeds.first,
+        markers: _getMarkers(aeds),
+        lastUpdateTime: await pointsRepository.getLastUpdateTime(),
+        refreshing: false,
         hash: generateRandomString(32)));
   }
 

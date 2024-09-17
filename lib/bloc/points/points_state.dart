@@ -15,15 +15,20 @@ class PointsLoadSuccess extends PointsState {
   final AED selected;
   final List<Marker> markers;
   final String hash;
+  final DateTime lastUpdateTime;
+  final bool refreshing;
 
   @override
-  List<Object?> get props => [aeds, selected, markers, hash];
+  List<Object?> get props =>
+      [aeds, selected, markers, hash, lastUpdateTime, refreshing];
 
   PointsLoadSuccess({
     required this.aeds,
     required this.selected,
     required this.markers,
     required this.hash,
+    required this.lastUpdateTime,
+    required this.refreshing,
   });
 
   PointsLoadSuccess copyWith({
@@ -31,12 +36,16 @@ class PointsLoadSuccess extends PointsState {
     AED? selected,
     List<Marker>? markers,
     String? hash,
+    DateTime? lastUpdateTime,
+    bool? refreshing,
   }) {
     return PointsLoadSuccess(
       aeds: aeds ?? this.aeds,
       selected: selected ?? this.selected,
       markers: markers ?? this.markers,
       hash: hash ?? this.hash,
+      lastUpdateTime: lastUpdateTime ?? this.lastUpdateTime,
+      refreshing: refreshing ?? this.refreshing,
     );
   }
 }

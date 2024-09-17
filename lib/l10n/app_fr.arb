@@ -87,5 +87,8 @@
   "contact": "Contact",
   "understand": "Je comprends",
   "dataSource": "Source de données",
-  "dataSourceDescription": "Les données sur l'emplacement des défibrillateurs proviennent d'OpenStreetMap. Leur qualité peut varier. L'auteur n'est pas responsable de l'exactitude des données. Nous vous encourageons à co-créer la base de données sur openaedmap.org"
+  "dataSourceDescription": "Les données sur l'emplacement des défibrillateurs proviennent d'OpenStreetMap. Leur qualité peut varier. L'auteur n'est pas responsable de l'exactitude des données. Nous vous encourageons à co-créer la base de données sur openaedmap.org",
+  "lastUpdate": "Dernière mise à jour",
+  "refreshing": "Actualisation en cours",
+  "refresh": "Actualiser maintenant"
 }

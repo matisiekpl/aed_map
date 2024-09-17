@@ -15,6 +15,7 @@ import '../models/aed.dart';
 
 class PointsRepository {
   static const String aedListKey = 'aed_list_json_2';
+  static const String aedUpdateTimestamp = 'aed_update';
 
   updateAEDs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -24,6 +25,8 @@ class PointsRepository {
               // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
               ));
       await prefs.setString(aedListKey, utf8.decode(response.bodyBytes));
+      await prefs.setString(
+          aedUpdateTimestamp, DateTime.now().toIso8601String());
     } catch (err) {
       if (kDebugMode) {
         print('Failed to load AEDs from internet!');
@@ -36,6 +39,13 @@ class PointsRepository {
     String data = await rootBundle.loadString("assets/world.geojson");
     data = data.replaceAll("@osm_id", "osm_id");
     await prefs.setString(aedListKey, data);
+  }
+
+  Future<DateTime> getLastUpdateTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var value = prefs.getString(aedUpdateTimestamp);
+    if (value == null) return DateTime.now();
+    return DateTime.parse(value);
   }
 
   Future<List<AED>> loadAEDs(LatLng currentLocation) async {

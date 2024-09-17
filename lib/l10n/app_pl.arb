@@ -87,5 +87,8 @@
   "contact": "Kontakt",
   "understand": "Rozumiem",
   "dataSource": "Pochodzenie danych",
-  "dataSourceDescription": "Dane o lokalizacji defibrylatorów pochodzą z OpenStreetMap. Ich jakość może się różnić. Autor nie ponosi odpowiedzialności za poprawność danych. Zachęcamy do współtworzenia bazy na openaedmap.org"
+  "dataSourceDescription": "Dane o lokalizacji defibrylatorów pochodzą z OpenStreetMap. Ich jakość może się różnić. Autor nie ponosi odpowiedzialności za poprawność danych. Zachęcamy do współtworzenia bazy na openaedmap.org",
+  "lastUpdate": "Ostatnia aktualizacja",
+  "refreshing": "Odświeżanie",
+  "refresh": "Odśwież teraz"
 }
