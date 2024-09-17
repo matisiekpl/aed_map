@@ -23,7 +23,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:plausible_analytics/plausible_analytics.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:http/http.dart' as http;
 
 import 'constants.dart';
 
