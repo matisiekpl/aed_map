@@ -191,12 +191,12 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                   context.read<PointsCubit>().select(aed);
                                 },
                                 clusterWidgetSize: const Size(40, 40),
-                                anchor: AnchorPos.align(AnchorAlign.center),
-                                clusterZoomAnimation:
-                                    const AnimationOptions.animate(
-                                  curve: Curves.linear,
-                                  velocity: 1,
-                                ),
+                                // anchor: AnchorPos.align(AnchorAlign.center),
+                                // clusterZoomAnimation:
+                                //     const AnimationOptions.animate(
+                                //   curve: Curves.linear,
+                                //   velocity: 1,
+                                // ),
                                 calculateAggregatedClusterData: true,
                                 builder: (context, position, markerCount,
                                     extraClusterData) {

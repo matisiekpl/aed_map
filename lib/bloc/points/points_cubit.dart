@@ -97,7 +97,7 @@ class PointsCubit extends Cubit<PointsState> {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => Container(
+              child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
                       color: brightness == Brightness.light
@@ -116,7 +116,7 @@ class PointsCubit extends Cubit<PointsState> {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => Container(
+              child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
                       color: brightness == Brightness.light
@@ -135,7 +135,7 @@ class PointsCubit extends Cubit<PointsState> {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => Container(
+              child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
                       color: brightness == Brightness.light
@@ -154,7 +154,7 @@ class PointsCubit extends Cubit<PointsState> {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => Container(
+              child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
                       color: brightness == Brightness.light
@@ -173,7 +173,7 @@ class PointsCubit extends Cubit<PointsState> {
             return Marker(
               point: aed.location,
               key: Key(aeds.indexOf(aed).toString()),
-              builder: (ctx) => Container(
+              child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
                       color: brightness == Brightness.light
@@ -191,7 +191,7 @@ class PointsCubit extends Cubit<PointsState> {
           return Marker(
             point: aed.location,
             key: Key(aeds.indexOf(aed).toString()),
-            builder: (ctx) => Container(
+            child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
                     color: brightness == Brightness.light
