@@ -90,6 +90,9 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+dependency_overrides:
+  win32: ^5.5.4
+
 flutter_icons:
   android: true
   ios: true
