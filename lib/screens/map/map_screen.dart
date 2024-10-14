@@ -17,7 +17,7 @@ import '../../bloc/panel/panel_state.dart' as panel_state;
 import '../../main.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+  const MapScreen({super.key});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -32,6 +32,7 @@ class _MapScreenState extends State<MapScreen> {
     super.initState();
     analytics.event();
     init();
+    context.read<PointsCubit>().refresh();
   }
 
   init() async {

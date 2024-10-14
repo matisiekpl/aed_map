@@ -73,12 +73,13 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                 isMapInitialized = true;
                                 context
                                     .read<EditCubit>()
-                                    .moveCursor(mapController.center);
+                                    .moveCursor(mapController.camera.center);
                               },
-                              center: state.selected.location,
-                              interactiveFlags:
-                                  InteractiveFlag.all & ~InteractiveFlag.rotate,
-                              zoom: 18,
+                              initialCenter: state.selected.location,
+                              interactionOptions: InteractionOptions(
+                                  flags: InteractiveFlag.all &
+                                      ~InteractiveFlag.rotate),
+                              initialZoom: 18,
                               maxZoom: 18,
                               minZoom: 8,
                             ),
@@ -237,10 +238,13 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
       return;
     }
     final latTween = Tween<double>(
-        begin: mapController.center.latitude, end: destLocation.latitude);
+        begin: mapController.camera.center.latitude,
+        end: destLocation.latitude);
     final lngTween = Tween<double>(
-        begin: mapController.center.longitude, end: destLocation.longitude);
-    final zoomTween = Tween<double>(begin: mapController.zoom, end: destZoom);
+        begin: mapController.camera.center.longitude,
+        end: destLocation.longitude);
+    final zoomTween =
+        Tween<double>(begin: mapController.camera.zoom, end: destZoom);
 
     final controller = AnimationController(
         duration: const Duration(milliseconds: 500), vsync: this);

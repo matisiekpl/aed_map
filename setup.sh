@@ -16,7 +16,7 @@ wget https://aed.openstreetmap.org.pl/aed_poland.geojson &>/dev/null
 wget https://openaedmap.org/api/v1/countries/WORLD.geojson &>/dev/null
 mv WORLD.geojson world.geojson
 cd ..
-COUNT=$(jq '.features | length' assets/aed_poland.geojson)x
+COUNT=$(jq '.features | length' assets/aed_poland.geojson)
 COUNT_WORLD=$(jq '.features | length' assets/world.geojson)
 echo "Found $COUNT AEDs in Poland 🫀"
 echo "Found $COUNT_WORLD AEDs worldwide 🫀"
