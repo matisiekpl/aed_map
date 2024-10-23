@@ -119,29 +119,6 @@ class MapHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  BetterFeedback.of(context).show((UserFeedback feedback) {
-                    context.read<FeedbackCubit>().send(feedback);
-                  });
-                },
-                child: Card(
-                  color: MediaQuery.of(context).platformBrightness ==
-                          Brightness.dark
-                      ? Colors.black
-                      : Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(CupertinoIcons.text_bubble,
-                        color: MediaQuery.of(context).platformBrightness ==
-                                Brightness.dark
-                            ? Colors.white
-                            : Colors.black),
-                  ),
-                ),
-              ),
             ],
           )
         ],
