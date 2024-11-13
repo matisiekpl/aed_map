@@ -1,7 +1,7 @@
 import 'package:aed_map/bloc/points/points_state.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
-import 'package:aed_map/utils.dart';
+import 'package:aed_map/shared/utils.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

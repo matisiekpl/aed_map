@@ -1,7 +1,7 @@
 import 'package:aed_map/bloc/panel/panel_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../utils.dart';
+import '../../shared/utils.dart';
 
 class PanelCubit extends Cubit<PanelState> {
   PanelCubit()

@@ -3,6 +3,7 @@ import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/panel/panel_cubit.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
+import 'package:aed_map/shared/translations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +21,7 @@ import '../../bloc/points/points_state.dart';
 import '../../bloc/routing/routing_cubit.dart';
 import '../../bloc/routing/routing_state.dart';
 import '../../models/aed.dart';
-import '../../utils.dart';
+import '../../shared/utils.dart';
 
 class BottomPanel extends StatelessWidget {
   const BottomPanel({super.key, required this.scrollController});
@@ -239,7 +240,8 @@ class BottomPanel extends StatelessWidget {
                       const SizedBox(height: 4),
                       CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
-                          value: formatOpeningHours(state.selected.openingHours)
+                          value: formatOpeningHours(state.selected.openingHours,
+                                      appLocalizations.localeName)
                                   .purge() ??
                               appLocalizations.noData,
                           builder: (context, v) {

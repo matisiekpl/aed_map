@@ -1,13 +1,11 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
-import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
 import 'package:aed_map/bloc/location/location_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
 import 'package:aed_map/screens/settings/settings_page.dart';
-import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

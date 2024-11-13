@@ -2,6 +2,7 @@ import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/models/aed.dart';
+import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +12,9 @@ void main() {
     late EditCubit editCubit;
 
     setUp(() {
-      editCubit = EditCubit(pointsRepository: PointsRepository());
+      editCubit = EditCubit(
+          pointsRepository: PointsRepository(),
+          geolocationRepository: GeolocationRepository());
     });
 
     test('initial state is EditInitial', () {
@@ -52,12 +55,20 @@ void main() {
 
     test('edit', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(id: 7, location: warsaw, description: 'test_description', indoor: false, access: 'yes', operator: 'test_operator',phone:'test_phone'));
+      await editCubit.edit(AED(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: false,
+          access: 'yes',
+          operator: 'test_operator',
+          phone: 'test_phone'));
       expect(editCubit.state.enabled, false);
       expect(editCubit.state, isA<EditInProgress>());
       expect((editCubit.state as EditInProgress).aed, isA<AED>());
       expect((editCubit.state as EditInProgress).aed.id, 7);
-      expect((editCubit.state as EditInProgress).aed.description, 'test_description');
+      expect((editCubit.state as EditInProgress).aed.description,
+          'test_description');
       expect((editCubit.state as EditInProgress).indoor, false);
       expect((editCubit.state as EditInProgress).access, 'yes');
       expect((editCubit.state as EditInProgress).aed.operator, 'test_operator');
@@ -66,16 +77,32 @@ void main() {
 
     test('editDescription', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(id: 7, location: warsaw, description: 'test_description', indoor: false, access: 'yes', operator: 'test_operator',phone:'test_phone'));
+      await editCubit.edit(AED(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: false,
+          access: 'yes',
+          operator: 'test_operator',
+          phone: 'test_phone'));
       editCubit.editDescription('test_description2');
       expect(editCubit.state, isA<EditInProgress>());
-      expect((editCubit.state as EditInProgress).aed.description, 'test_description2');
-      expect((editCubit.state as EditInProgress).description, 'test_description2');
+      expect((editCubit.state as EditInProgress).aed.description,
+          'test_description2');
+      expect(
+          (editCubit.state as EditInProgress).description, 'test_description2');
     });
 
     test('editIndoor', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(id: 7, location: warsaw, description: 'test_description', indoor: false, access: 'yes', operator: 'test_operator',phone:'test_phone'));
+      await editCubit.edit(AED(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: false,
+          access: 'yes',
+          operator: 'test_operator',
+          phone: 'test_phone'));
       editCubit.editIndoor(true);
       expect(editCubit.state, isA<EditInProgress>());
       expect((editCubit.state as EditInProgress).aed.indoor, true);
@@ -84,21 +111,34 @@ void main() {
 
     test('editAccess', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(id: 7, location: warsaw, description: 'test_description', indoor: false, access: 'yes', operator: 'test_operator',phone:'test_phone'));
+      await editCubit.edit(AED(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: false,
+          access: 'yes',
+          operator: 'test_operator',
+          phone: 'test_phone'));
       editCubit.editAccess('no');
       expect(editCubit.state, isA<EditInProgress>());
       expect((editCubit.state as EditInProgress).aed.access, 'no');
       expect((editCubit.state as EditInProgress).access, 'no');
     });
 
-    test('editAccess',() async {
+    test('editAccess', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(id: 7, location: warsaw, description: 'test_description', indoor: false, access: 'yes', operator: 'test_operator',phone:'test_phone'));
+      await editCubit.edit(AED(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: false,
+          access: 'yes',
+          operator: 'test_operator',
+          phone: 'test_phone'));
       editCubit.editAccess('test_access');
       expect(editCubit.state, isA<EditInProgress>());
       expect((editCubit.state as EditInProgress).aed.access, 'test_access');
       expect((editCubit.state as EditInProgress).access, 'test_access');
     });
-
   });
 }

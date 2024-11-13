@@ -97,8 +97,9 @@ class _AppState extends State<App> {
             create: (BuildContext context) => PanelCubit(),
           ),
           BlocProvider<EditCubit>(
-              create: (BuildContext context) =>
-                  EditCubit(pointsRepository: pointsRepository)),
+              create: (BuildContext context) => EditCubit(
+                  pointsRepository: pointsRepository,
+                  geolocationRepository: geolocationRepository)),
           BlocProvider<NetworkStatusCubit>(
               create: (BuildContext context) => NetworkStatusCubit()),
           BlocProvider<FeedbackCubit>(
