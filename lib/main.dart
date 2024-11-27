@@ -40,8 +40,12 @@ void main() async {
       options.dsn =
           'https://492fa94bb5e0bdf492c5a8b8a108d84e@o337011.ingest.sentry.io/4506661810274304';
       options.tracesSampleRate = 1.0;
+      options.attachScreenshot = true;
+      options.experimental.replay.sessionSampleRate = 1.0;
+      options.experimental.replay.onErrorSampleRate = 1.0;
     },
-    appRunner: () => runApp(const BetterFeedback(child: App())),
+    appRunner: () =>
+        runApp(SentryWidget(child: const BetterFeedback(child: App()))),
   );
 }
 

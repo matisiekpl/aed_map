@@ -1,11 +1,10 @@
 import 'dart:convert';
 
+import 'package:aed_map/constants.dart';
+import 'package:aed_map/models/aed.dart';
+import 'package:aed_map/models/trip.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
-
-import '../constants.dart';
-import '../models/aed.dart';
-import '../models/trip.dart';
 
 class RoutingRepository {
   Future<Trip?> navigate(LatLng current, AED aed) async {

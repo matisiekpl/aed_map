@@ -2,13 +2,12 @@ import 'dart:io';
 
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/constants.dart';
+import 'package:aed_map/main.dart';
+import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../../main.dart';
-import '../../models/aed.dart';
 
 class EditCubit extends Cubit<EditState> {
   EditCubit(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
+import 'package:aed_map/models/aed.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
@@ -11,8 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 
-import '../models/aed.dart';
-
 class PointsRepository {
   static const String aedListKey = 'aed_list_json_2';
   static const String aedUpdateTimestamp = 'aed_update';
@@ -20,10 +19,8 @@ class PointsRepository {
   updateAEDs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      var response = await http
-          .get(Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'
-              // 'https://aed.openstreetmap.org.pl/aed_poland.geojson'
-              ));
+      var response = await http.get(
+          Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'));
       await prefs.setString(aedListKey, utf8.decode(response.bodyBytes));
       await prefs.setString(
           aedUpdateTimestamp, DateTime.now().toIso8601String());

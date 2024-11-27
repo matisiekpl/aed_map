@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:aed_map/bloc/routing/routing_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
+import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/routing_repository.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../../models/aed.dart';
 
 class RoutingCubit extends Cubit<RoutingState> {
   RoutingCubit(

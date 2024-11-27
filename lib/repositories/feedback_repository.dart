@@ -1,27 +1,23 @@
-import 'dart:convert';
-
+import 'package:aed_map/constants.dart';
 import 'package:feedback/feedback.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class FeedbackRepository {
   sendFeedback(UserFeedback feedback) async {
-    if (kDebugMode || feedback.screenshot.isEmpty) {
+    if (feedback.screenshot.isEmpty) {
       await Future.delayed(const Duration(seconds: 1));
       return;
     }
-
-    final now = DateTime.now();
-    final id = now.microsecondsSinceEpoch.toString();
-    var content = feedback.text;
-    await http
-        .post(Uri.parse('http://feedback.aedmapa.pl:5000/feedback'), body: {
-      'body': content,
-      'id': id.toString(),
-      'screenshot': base64Encode(feedback.screenshot)
+    final attachment =
+        SentryAttachment.fromUint8List(feedback.screenshot, 'captured.png');
+    var sentryId =
+        await Sentry.captureMessage(feedbackEvent, withScope: (scope) {
+      scope.addAttachment(attachment);
     });
-    if (kDebugMode) {
-      print('Feedback sent!');
-    }
+    final userFeedback = SentryFeedback(
+      associatedEventId: sentryId,
+      message: feedback.text,
+    );
+    await Sentry.captureFeedback(userFeedback);
   }
 }

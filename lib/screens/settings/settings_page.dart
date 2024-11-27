@@ -1,6 +1,8 @@
+import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
 import 'package:aed_map/bloc/location/location_cubit.dart';
 import 'package:aed_map/bloc/location/location_state.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
+import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -147,6 +149,18 @@ class _SettingsPageState extends State<SettingsPage>
                           title: Text(appLocalizations.contact),
                           value: const Text('mateusz@aedmapa.pl'),
                         ),
+                        SettingsTile.navigation(
+                          title: Text('Feedback'),
+                          leading: const Icon(CupertinoIcons.ant_circle),
+                          onPressed: (context) {
+                            var feedbackCubit = context.read<FeedbackCubit>();
+                            Navigator.of(context).pop();
+                            BetterFeedback.of(context)
+                                .show((UserFeedback feedback) {
+                              feedbackCubit.send(feedback);
+                            });
+                          },
+                        )
                       ],
                     ),
                   ],

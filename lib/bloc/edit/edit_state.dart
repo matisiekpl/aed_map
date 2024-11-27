@@ -1,7 +1,6 @@
+import 'package:aed_map/models/aed.dart';
 import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../../models/aed.dart';
 
 abstract class EditState extends Equatable {
   final bool enabled;

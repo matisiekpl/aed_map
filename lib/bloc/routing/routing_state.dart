@@ -1,6 +1,5 @@
+import 'package:aed_map/models/trip.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../models/trip.dart';
 
 class RoutingState extends Equatable {
   @override

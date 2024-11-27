@@ -1,4 +1,7 @@
 import 'package:aed_map/bloc/points/points_state.dart';
+import 'package:aed_map/constants.dart';
+import 'package:aed_map/main.dart';
+import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:aed_map/shared/utils.dart';
@@ -9,10 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../../constants.dart';
-import '../../main.dart';
-import '../../models/aed.dart';
 
 class PointsCubit extends Cubit<PointsState> {
   PointsCubit(

@@ -1,7 +1,6 @@
+import 'package:aed_map/models/aed.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_map/flutter_map.dart';
-
-import '../../models/aed.dart';
 
 class PointsState extends Equatable {
   @override

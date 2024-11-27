@@ -1,5 +1,6 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
+import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
 import 'package:aed_map/bloc/location/location_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_state.dart';
@@ -63,14 +64,18 @@ class MapHeader extends StatelessWidget {
                   mixpanel.track(aboutEvent);
                   var pointsCubit = context.read<PointsCubit>();
                   var locationCubit = context.read<LocationCubit>();
+                  var feedbackCubit = context.read<FeedbackCubit>();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => BlocProvider.value(
                               value: locationCubit,
                               child: BlocProvider.value(
-                                  value: pointsCubit,
-                                  child: const SettingsPage()),
+                                value: feedbackCubit,
+                                child: BlocProvider.value(
+                                    value: pointsCubit,
+                                    child: const SettingsPage()),
+                              ),
                             )),
                   );
                 },
@@ -108,7 +113,7 @@ class MapHeader extends StatelessWidget {
                         : Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Icon(CupertinoIcons.wand_rays,
+                      child: Icon(CupertinoIcons.plus,
                           color: MediaQuery.of(context).platformBrightness ==
                                   Brightness.dark
                               ? Colors.white
