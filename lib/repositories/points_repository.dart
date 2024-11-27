@@ -73,7 +73,7 @@ class PointsRepository {
       print('Loaded ${aeds.length} AEDs!');
     }
     aeds = aeds.map((aed) {
-      const Distance distance = Distance();
+      const Distance distance = Distance(calculator: Haversine());
       aed.distance = distance(currentLocation, aed.location).ceil();
       return aed;
     }).toList();
