@@ -50,7 +50,7 @@ void main() {
       expect(editCubit.state.enabled, false);
       expect((editCubit.state as EditInProgress).aed, isA<AED>());
       expect((editCubit.state as EditInProgress).aed.id, 0);
-      expect((editCubit.state as EditInProgress).indoor, false);
+      expect((editCubit.state as EditInProgress).indoor, 'no');
     });
 
     test('edit', () async {
@@ -59,7 +59,7 @@ void main() {
           id: 7,
           location: warsaw,
           description: 'test_description',
-          indoor: false,
+          indoor: 'no',
           access: 'yes',
           operator: 'test_operator',
           phone: 'test_phone'));
@@ -69,7 +69,7 @@ void main() {
       expect((editCubit.state as EditInProgress).aed.id, 7);
       expect((editCubit.state as EditInProgress).aed.description,
           'test_description');
-      expect((editCubit.state as EditInProgress).indoor, false);
+      expect((editCubit.state as EditInProgress).indoor, 'no');
       expect((editCubit.state as EditInProgress).access, 'yes');
       expect((editCubit.state as EditInProgress).aed.operator, 'test_operator');
       expect((editCubit.state as EditInProgress).aed.phone, 'test_phone');
@@ -81,7 +81,7 @@ void main() {
           id: 7,
           location: warsaw,
           description: 'test_description',
-          indoor: false,
+          indoor: 'no',
           access: 'yes',
           operator: 'test_operator',
           phone: 'test_phone'));
@@ -99,14 +99,14 @@ void main() {
           id: 7,
           location: warsaw,
           description: 'test_description',
-          indoor: false,
+          indoor: 'yes',
           access: 'yes',
           operator: 'test_operator',
           phone: 'test_phone'));
       editCubit.editIndoor(true);
       expect(editCubit.state, isA<EditInProgress>());
-      expect((editCubit.state as EditInProgress).aed.indoor, true);
-      expect((editCubit.state as EditInProgress).indoor, true);
+      expect((editCubit.state as EditInProgress).aed.indoor, 'yes');
+      expect((editCubit.state as EditInProgress).indoor, 'yes');
     });
 
     test('editAccess', () async {
@@ -115,7 +115,7 @@ void main() {
           id: 7,
           location: warsaw,
           description: 'test_description',
-          indoor: false,
+          indoor: 'no',
           access: 'yes',
           operator: 'test_operator',
           phone: 'test_phone'));
@@ -131,7 +131,7 @@ void main() {
           id: 7,
           location: warsaw,
           description: 'test_description',
-          indoor: false,
+          indoor: 'no',
           access: 'yes',
           operator: 'test_operator',
           phone: 'test_phone'));

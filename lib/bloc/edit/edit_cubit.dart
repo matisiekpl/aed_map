@@ -45,7 +45,7 @@ class EditCubit extends Cubit<EditState> {
         cursor: state.cursor,
         aed: aed,
         access: aed.access ?? 'yes',
-        indoor: aed.indoor,
+        indoor: aed.indoor ?? 'no',
         description: aed.description ?? ''));
   }
 
@@ -61,7 +61,7 @@ class EditCubit extends Cubit<EditState> {
         cursor: state.cursor,
         aed: aed,
         access: aed.access ?? 'yes',
-        indoor: aed.indoor,
+        indoor: aed.indoor ?? 'no',
         description: aed.description ?? ''));
   }
 
@@ -100,8 +100,9 @@ class EditCubit extends Cubit<EditState> {
   editIndoor(bool value) {
     var s = state;
     if (s is EditInProgress) {
-      s.aed.indoor = value;
-      emit(s.copyWith(aed: s.aed, indoor: value));
+      var contents = value ? 'yes' : 'no';
+      s.aed.indoor = contents;
+      emit(s.copyWith(aed: s.aed, indoor: contents));
     }
   }
 

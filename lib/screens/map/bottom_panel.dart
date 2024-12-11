@@ -258,19 +258,16 @@ class BottomPanel extends StatelessWidget {
                             );
                           }),
                       const SizedBox(height: 4),
-                      CrossFade<bool>(
+                      CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
-                          value: state.selected.indoor,
+                          value: state.selected.getIndoorText(appLocalizations),
                           builder: (context, v) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text('${appLocalizations.insideBuilding}: ',
                                     style: const TextStyle(fontSize: 16)),
-                                Text(
-                                    v
-                                        ? appLocalizations.yes
-                                        : appLocalizations.no,
+                                Text(v,
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),

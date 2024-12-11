@@ -40,12 +40,12 @@ class EditInProgress extends EditState {
       {required super.enabled,
       required super.cursor,
       required this.aed,
-      this.indoor = false,
+      this.indoor = 'no',
       this.access = 'public',
       this.description = ''});
 
   final AED aed;
-  final bool indoor;
+  final String indoor;
   final String access;
 
   final String description;
@@ -59,7 +59,7 @@ class EditInProgress extends EditState {
     AED? aed,
     bool? enabled,
     LatLng? cursor,
-    bool? indoor,
+    String? indoor,
     String? access,
     String? description,
   }) {

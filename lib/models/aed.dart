@@ -7,7 +7,7 @@ class AED {
   LatLng location;
   String? description;
   int id;
-  bool indoor;
+  String? indoor;
   String? operator;
   String? phone;
   int? distance = 0;
@@ -19,7 +19,7 @@ class AED {
       {required this.location,
       required this.id,
       this.description,
-      this.indoor = false,
+      this.indoor,
       this.operator,
       this.phone,
       this.openingHours,
@@ -43,6 +43,12 @@ class AED {
     };
     if (!colors.containsKey(access)) return colors[''];
     return colors[access];
+  }
+
+  String getIndoorText(AppLocalizations appLocalizations) {
+    if (indoor == 'yes') return appLocalizations.yes;
+    if (indoor == 'no') return appLocalizations.no;
+    return indoor ?? 'unknown';
   }
 
   String getIconFilename() {
@@ -91,8 +97,8 @@ class AED {
         if (image != null && image.toString().isNotEmpty) {
           builder.element('tag', attributes: {'k': 'image', 'v': image ?? ''});
         }
-        builder.element('tag',
-            attributes: {'k': 'indoor', 'v': indoor ? 'yes' : 'no'});
+        builder
+            .element('tag', attributes: {'k': 'indoor', 'v': indoor ?? 'no'});
         if (openingHours != null && openingHours.toString().isNotEmpty) {
           builder.element('tag',
               attributes: {'k': 'opening_hours', 'v': openingHours ?? ''});
@@ -128,7 +134,7 @@ class AED {
     LatLng? location,
     String? description,
     int? id,
-    bool? indoor,
+    String? indoor,
     String? operator,
     String? phone,
     int? distance,

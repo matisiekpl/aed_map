@@ -22,7 +22,9 @@ class EditForm extends StatelessWidget {
         middle: Text(appLocalizations.editDefibrillator),
       ),
       child: Theme(
-          data: MediaQuery.of(context).platformBrightness == Brightness.dark ? ThemeData.dark() : ThemeData.light(),
+          data: MediaQuery.of(context).platformBrightness == Brightness.dark
+              ? ThemeData.dark()
+              : ThemeData.light(),
           child: BlocBuilder<EditCubit, EditState>(builder: (context, state) {
             if (state is EditInProgress) {
               return SafeArea(
@@ -37,7 +39,8 @@ class EditForm extends StatelessWidget {
     );
   }
 
-  List<AbstractSettingsSection> _buildSections(BuildContext context, EditInProgress state) {
+  List<AbstractSettingsSection> _buildSections(
+      BuildContext context, EditInProgress state) {
     var appLocalizations = AppLocalizations.of(context)!;
     return [
       SettingsSection(
@@ -48,7 +51,8 @@ class EditForm extends StatelessWidget {
             title: TextFormField(
               initialValue: state.aed.description,
               onChanged: context.read<EditCubit>().editDescription,
-              decoration: InputDecoration.collapsed(hintText: appLocalizations.enterDescription),
+              decoration: InputDecoration.collapsed(
+                  hintText: appLocalizations.enterDescription),
             ),
           ),
           SettingsTile.navigation(
@@ -56,12 +60,13 @@ class EditForm extends StatelessWidget {
             title: Text(appLocalizations.access),
             value: Text(translateAccessComment(state.access, appLocalizations)),
             onPressed: (_) {
-              _selectAccess(context, appLocalizations, context.read<EditCubit>());
+              _selectAccess(
+                  context, appLocalizations, context.read<EditCubit>());
             },
           ),
           SettingsTile.switchTile(
             onToggle: context.read<EditCubit>().editIndoor,
-            initialValue: state.aed.indoor,
+            initialValue: state.aed.indoor == 'yes',
             leading: const Icon(CupertinoIcons.home),
             title: Text(appLocalizations.insideBuilding),
           ),
@@ -70,7 +75,8 @@ class EditForm extends StatelessWidget {
             title: TextFormField(
               initialValue: state.aed.operator,
               onChanged: context.read<EditCubit>().editOperator,
-              decoration: InputDecoration.collapsed(hintText: appLocalizations.enterOperator),
+              decoration: InputDecoration.collapsed(
+                  hintText: appLocalizations.enterOperator),
             ),
           ),
           SettingsTile(
@@ -78,7 +84,8 @@ class EditForm extends StatelessWidget {
             title: TextFormField(
               initialValue: state.aed.phone,
               onChanged: context.read<EditCubit>().editPhone,
-              decoration: InputDecoration.collapsed(hintText: appLocalizations.enterPhone),
+              decoration: InputDecoration.collapsed(
+                  hintText: appLocalizations.enterPhone),
             ),
           ),
         ],
@@ -89,17 +96,31 @@ class EditForm extends StatelessWidget {
           SettingsTile(
               leading: const Icon(CupertinoIcons.globe),
               title: Text(appLocalizations.longitude),
-              trailing: Text(state.aed.location.longitude.toString().characters.take(10).string,
+              trailing: Text(
+                  state.aed.location.longitude
+                      .toString()
+                      .characters
+                      .take(10)
+                      .string,
                   style: TextStyle(
-                      color:
-                          MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black))),
+                      color: MediaQuery.of(context).platformBrightness ==
+                              Brightness.dark
+                          ? Colors.white
+                          : Colors.black))),
           SettingsTile(
               leading: const Icon(CupertinoIcons.globe),
               title: Text(appLocalizations.latitude),
-              trailing: Text(state.aed.location.latitude.toString().characters.take(10).string,
+              trailing: Text(
+                  state.aed.location.latitude
+                      .toString()
+                      .characters
+                      .take(10)
+                      .string,
                   style: TextStyle(
-                      color:
-                          MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black))),
+                      color: MediaQuery.of(context).platformBrightness ==
+                              Brightness.dark
+                          ? Colors.white
+                          : Colors.black))),
         ],
       ),
       CustomSettingsSection(
@@ -129,17 +150,26 @@ class EditForm extends StatelessWidget {
     ];
   }
 
-  void _selectAccess(BuildContext context, AppLocalizations appLocalizations, EditCubit editCubit) {
+  void _selectAccess(BuildContext context, AppLocalizations appLocalizations,
+      EditCubit editCubit) {
     showCupertinoModalPopup<void>(
         context: context,
         builder: (BuildContext context) {
-          var actions = ['yes', 'customers', 'private', 'permissive', 'no', 'unknown']
+          var actions = [
+            'yes',
+            'customers',
+            'private',
+            'permissive',
+            'no',
+            'unknown'
+          ]
               .map((label) => CupertinoActionSheetAction(
                     onPressed: () async {
                       editCubit.editAccess(label);
                       Navigator.of(context).pop();
                     },
-                    child: Text(translateAccessComment(label, appLocalizations)),
+                    child:
+                        Text(translateAccessComment(label, appLocalizations)),
                   ))
               .toList();
           actions.add(CupertinoActionSheetAction(
@@ -148,7 +178,8 @@ class EditForm extends StatelessWidget {
             },
             child: Text(appLocalizations.cancel),
           ));
-          return CupertinoActionSheet(title: Text(appLocalizations.chooseAccess), actions: actions);
+          return CupertinoActionSheet(
+              title: Text(appLocalizations.chooseAccess), actions: actions);
         });
   }
 }

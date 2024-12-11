@@ -63,7 +63,7 @@ class PointsRepository {
           id: row['properties'][idLabel],
           description: row['properties']['defibrillator:location'] ??
               row['properties']['defibrillator:location:pl'],
-          indoor: row['properties']['indoor'] == 'yes',
+          indoor: row['properties']['indoor'],
           operator: row['properties']['operator'],
           phone: row['properties']['phone'],
           openingHours: row['properties']['opening_hours'],

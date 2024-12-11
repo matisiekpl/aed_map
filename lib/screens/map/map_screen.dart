@@ -51,7 +51,7 @@ class _MapScreenState extends State<MapScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          surfaceTintColor: Colors.red.shade400,
+          surfaceTintColor: Colors.green.shade400,
           title: Text(appLocalizations.dataSource),
           content: Text(appLocalizations.dataSourceDescription),
           actions: <Widget>[
