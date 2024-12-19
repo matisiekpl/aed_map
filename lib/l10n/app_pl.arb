@@ -90,5 +90,13 @@
   "dataSourceDescription": "Dane o lokalizacji defibrylatorów pochodzą z OpenStreetMap. Ich jakość może się różnić. Autor nie ponosi odpowiedzialności za poprawność danych. Zachęcamy do współtworzenia bazy na openaedmap.org",
   "lastUpdate": "Ostatnia aktualizacja",
   "refreshing": "Odświeżanie",
-  "refresh": "Odśwież teraz"
+  "refresh": "Odśwież teraz",
+  "onboardingTitle0": "Witamy w aplikacji AED Map!",
+  "onboardingBody0": "Aplikacja stworzona do znajdowania defibrylatorów w Twojej okolicy",
+  "onboardingTitle1": "Zobacz pobliskie defibrylatory",
+  "onboardingBody1": "Znajdź najbliższy defibrylator w Twojej lokalizacji",
+  "onboardingTitle2": "Trasa do najbliższego defibrylatora",
+  "onboardingBody2": "Uzyskaj wskazówki do najbliższego defibrylatora",
+  "onboardingTitle3": "Używamy bazy danych OpenStreetMap",
+  "onboardingBody3": "Pamiętaj, że dane mogą nie być w 100% aktualne"
 }
