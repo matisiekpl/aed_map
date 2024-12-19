@@ -88,7 +88,8 @@ class _MapScreenState extends State<MapScreen> {
       },
       child: BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
         if (state is PointsLoadInProgress) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(color: Colors.green.shade400));
         }
         if (state is PointsLoadSuccess) {
           return Stack(
