@@ -90,5 +90,13 @@
   "dataSourceDescription": "Los datos sobre la ubicación de los desfibriladores provienen de OpenStreetMap. Su calidad puede variar. El autor no es responsable de la exactitud de los datos. Te animamos a co-crear la base de datos en openaedmap.org",
   "lastUpdate": "Última actualización",
   "refreshing": "Actualizando",
-  "refresh": "Actualizar ahora"
+  "refresh": "Actualizar ahora",
+  "onboardingTitle0": "¡Bienvenido a la aplicación Mapa de DEA!",
+  "onboardingBody0": "Aplicación hecha para encontrar desfibriladores en tu área",
+  "onboardingTitle1": "Ver desfibriladores cercanos",
+  "onboardingBody1": "Encuentra el desfibrilador más cercano a tu ubicación",
+  "onboardingTitle2": "Ruta al desfibrilador más cercano",
+  "onboardingBody2": "Obtén direcciones al desfibrilador más cercano",
+  "onboardingTitle3": "Estamos usando la base de datos de OpenStreetMap",
+  "onboardingBody3": "Ten en cuenta que los datos pueden no estar 100% actualizados"
 }

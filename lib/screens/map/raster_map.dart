@@ -109,7 +109,9 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                     );
                                     if (MediaQuery.of(context)
                                             .platformBrightness !=
-                                        Brightness.dark) return map;
+                                        Brightness.dark) {
+                                      return map;
+                                    }
                                     return ColorFiltered(
                                       colorFilter: invert,
                                       child: map,

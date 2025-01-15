@@ -90,5 +90,13 @@
   "dataSourceDescription": "Les données sur l'emplacement des défibrillateurs proviennent d'OpenStreetMap. Leur qualité peut varier. L'auteur n'est pas responsable de l'exactitude des données. Nous vous encourageons à co-créer la base de données sur openaedmap.org",
   "lastUpdate": "Dernière mise à jour",
   "refreshing": "Actualisation en cours",
-  "refresh": "Actualiser maintenant"
+  "refresh": "Actualiser maintenant",
+  "onboardingTitle0": "Bienvenue dans l'application Carte des DAE !",
+  "onboardingBody0": "Application conçue pour trouver des défibrillateurs dans votre région",
+  "onboardingTitle1": "Voir les défibrillateurs à proximité",
+  "onboardingBody1": "Trouvez le défibrillateur le plus proche de votre emplacement",
+  "onboardingTitle2": "Itinéraire vers le défibrillateur le plus proche",
+  "onboardingBody2": "Obtenez des directions vers le défibrillateur le plus proche",
+  "onboardingTitle3": "Nous utilisons la base de données OpenStreetMap",
+  "onboardingBody3": "Gardez à l'esprit que les données peuvent ne pas être à jour à 100%"
 }

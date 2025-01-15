@@ -14,15 +14,19 @@ import 'package:aed_map/repositories/points_repository.dart';
 import 'package:aed_map/repositories/routing_repository.dart';
 import 'package:aed_map/screens/edit/edit_form.dart';
 import 'package:aed_map/screens/map/map_screen.dart';
+import 'package:aed_map/screens/onboarding/onboarding_screen.dart';
 import 'package:feedback/feedback.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:plausible_analytics/plausible_analytics.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 
@@ -44,13 +48,15 @@ void main() async {
       options.experimental.replay.sessionSampleRate = 1.0;
       options.experimental.replay.onErrorSampleRate = 1.0;
     },
-    appRunner: () =>
-        runApp(SentryWidget(child: const BetterFeedback(child: App()))),
+    appRunner: () => runApp(
+        SentryWidget(child: BetterFeedback(child: Phoenix(child: App())))),
   );
 }
 
 class App extends StatefulWidget {
-  const App({super.key});
+  const App({super.key, this.skipOnboarding = false});
+
+  final bool skipOnboarding;
 
   @override
   State<App> createState() => _AppState();
@@ -60,12 +66,28 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        if (!prefs.containsKey('onboarded')) {
+          home = OnboardingScreen();
+        } else {
+          home = Home();
+        }
+      });
+    });
   }
 
   final GeolocationRepository geolocationRepository = GeolocationRepository();
   final PointsRepository pointsRepository = PointsRepository();
   final FeedbackRepository feedbackRepository = FeedbackRepository();
   final RoutingRepository routingRepository = RoutingRepository();
+
+  Widget home = Scaffold(
+      body: Center(
+    child: CircularProgressIndicator(
+      color: Colors.green.shade400,
+    ),
+  ));
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +132,7 @@ class _AppState extends State<App> {
               create: (BuildContext context) =>
                   FeedbackCubit(feedbackRepository: feedbackRepository)),
         ],
-        child: const Home(),
+        child: widget.skipOnboarding ? Home() : home,
       ),
     );
   }
