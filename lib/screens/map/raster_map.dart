@@ -168,43 +168,6 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                     }),
                                   ),
                                   CurrentLocationLayer(),
-                                  // BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
-                                  //   if (state is PointsLoadSuccess) {
-                                  //     markersController.replaceAll(state.markers);
-                                  //     return SuperclusterLayer.mutable(
-                                  //       initialMarkers: state.markers,
-                                  //       loadingOverlayBuilder: (context) => Container(),
-                                  //       controller: markersController,
-                                  //       minimumClusterSize: 3,
-                                  //       onMarkerTap: (Marker marker) {
-                                  //         var aed = state.aeds[
-                                  //             int.parse(marker.key.toString().replaceAll('[<\'', '').replaceAll('\'>]', ''))];
-                                  //         context.read<RoutingCubit>().cancel();
-                                  //         context.read<PointsCubit>().select(aed);
-                                  //       },
-                                  //       clusterWidgetSize: const Size(40, 40),
-                                  //       anchor: AnchorPos.align(AnchorAlign.center),
-                                  //       clusterZoomAnimation: const AnimationOptions.animate(
-                                  //         curve: Curves.linear,
-                                  //         velocity: 1,
-                                  //       ),
-                                  //       calculateAggregatedClusterData: true,
-                                  //       builder: (context, position, markerCount, extraClusterData) {
-                                  //         return Container(
-                                  //           decoration:
-                                  //               BoxDecoration(borderRadius: BorderRadius.circular(20.0), color: Colors.brown),
-                                  //           child: Center(
-                                  //             child: Text(
-                                  //               markerCount.toString(),
-                                  //               style: const TextStyle(color: Colors.white),
-                                  //             ),
-                                  //           ),
-                                  //         );
-                                  //       },
-                                  //     );
-                                  //   }
-                                  //   return Container();
-                                  // }),
                                   SuperclusterLayer.mutable(
                                     initialMarkers: state.markers,
                                     loadingOverlayBuilder: (context) =>
