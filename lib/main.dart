@@ -54,7 +54,9 @@ void main() async {
 }
 
 class App extends StatefulWidget {
-  const App({super.key});
+  const App({super.key, this.skipOnboarding = false});
+
+  final bool skipOnboarding;
 
   @override
   State<App> createState() => _AppState();
@@ -130,7 +132,7 @@ class _AppState extends State<App> {
               create: (BuildContext context) =>
                   FeedbackCubit(feedbackRepository: feedbackRepository)),
         ],
-        child: home,
+        child: widget.skipOnboarding ? Home() : home,
       ),
     );
   }

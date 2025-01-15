@@ -12,7 +12,7 @@ void main() {
 
   testWidgets('show nearest defibrillator on app open', (tester) async {
     await tester.runAsync(() async {
-      await tester.pumpWidget(const App());
+      await tester.pumpWidget(const App(skipOnboarding: true));
 
       // in case of sudden cardiac arrest, every second matters
       await Future.delayed(const Duration(seconds: 1));
