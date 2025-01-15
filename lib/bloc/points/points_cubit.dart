@@ -69,18 +69,18 @@ class PointsCubit extends Cubit<PointsState> {
   update(AED aed) {
     if (state is PointsLoadSuccess) {
       if (aed.id == 0) {
-        var newAeds = List<AED>.from((state as PointsLoadSuccess).aeds)
-          ..add(aed);
+        var newDefibrillators = List<AED>.from((state as PointsLoadSuccess).aeds)
+          ..insert(0, aed);
         emit((state as PointsLoadSuccess).copyWith(
-            aeds: newAeds, markers: _getMarkers(newAeds), selected: aed));
+            aeds: newDefibrillators, markers: _getMarkers(newDefibrillators), selected: aed));
       } else {
-        var updatedAeds = List<AED>.from((state as PointsLoadSuccess).aeds)
-            .map((e) => e.id == aed.id ? aed : e)
-            .toList();
+        var updatedDefibrillators = List<AED>.from((state as PointsLoadSuccess).aeds)
+          ..removeWhere((x) => x.id == aed.id)
+          ..insert(0, aed);
         emit((state as PointsLoadSuccess).copyWith(
             selected: aed,
-            aeds: updatedAeds,
-            markers: _getMarkers(updatedAeds)));
+            aeds: updatedDefibrillators,
+            markers: _getMarkers(updatedDefibrillators)));
       }
     }
   }
