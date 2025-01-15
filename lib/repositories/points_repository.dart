@@ -139,18 +139,20 @@ class PointsRepository {
   Future<AED> insertDefibrillator(AED aed) async {
     try {
       var changesetId = await getChangesetId();
-      var response = await http.put(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/create'),
-          headers: {
-            'Content-Type': 'text/xml',
-            'Authorization': 'Bearer $token'
-          },
-          body: aed.toXml(changesetId, 1));
-      var id = int.parse(response.body.toString());
-      aed.id = id;
-      if (kDebugMode) {
-        print('https://www.openstreetmap.org/node/$id');
+      if (!kDebugMode) {
+        var response = await http.put(
+            Uri.parse('https://api.openstreetmap.org/api/0.6/node/create'),
+            headers: {
+              'Content-Type': 'text/xml',
+              'Authorization': 'Bearer $token'
+            },
+            body: aed.toXml(changesetId, 1));
+        var id = int.parse(response.body.toString());
+        aed.id = id;
+      } else {
+        aed.id = 9999;
       }
+      if (kDebugMode) {}
       updateAEDs();
     } catch (err) {
       if (kDebugMode) {
@@ -161,6 +163,9 @@ class PointsRepository {
   }
 
   Future<AED> updateDefibrillator(AED aed) async {
+    if (kDebugMode) {
+      return aed;
+    }
     try {
       var changesetId = await getChangesetId();
       var fetchResponse = await http.get(
@@ -199,9 +204,6 @@ class PointsRepository {
             'Authorization': 'Bearer $token'
           },
           body: xml);
-      if (kDebugMode) {
-        print('https://www.openstreetmap.org/node/${aed.id}');
-      }
       updateAEDs();
     } catch (err) {
       if (kDebugMode) {
