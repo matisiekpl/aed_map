@@ -1,5 +1,5 @@
-import 'package:aed_map/shared/restart_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -91,10 +91,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           AppLocalizations.of(context)!.next,
           style: TextStyle(color: Colors.green.shade400),
         ),
-        onDone: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('onboarded', true);
-          RestartWidget.restartApp(context);
+        onDone: () {
+          SharedPreferences.getInstance().then((prefs) {
+            prefs.setBool('onboarded', true);
+          });
+          Phoenix.rebirth(context);
         },
       ),
     );
