@@ -24,7 +24,13 @@ class EditCubit extends Cubit<EditState> {
       mixpanel.track(enterEditModeEvent);
     }
     emit(state.copyWith(
-        enabled: true, cursor: await geolocationRepository.locate()));
+        enabled: true,
+        cursor: await geolocationRepository.locate(),
+        user: await pointsRepository.getUser()));
+  }
+
+  logout() async {
+    await pointsRepository.logout();
   }
 
   exit() => emit(state.copyWith(enabled: false));

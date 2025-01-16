@@ -98,5 +98,8 @@
   "onboardingTitle2": "Itinéraire vers le défibrillateur le plus proche",
   "onboardingBody2": "Obtenez des directions vers le défibrillateur le plus proche",
   "onboardingTitle3": "Nous utilisons la base de données OpenStreetMap",
-  "onboardingBody3": "Gardez à l'esprit que les données peuvent ne pas être à jour à 100%"
+  "onboardingBody3": "Gardez à l'esprit que les données peuvent ne pas être à jour à 100%",
+  "openStreetMapAccount": "Cuenta de OpenStreetMap",
+  "signedInAs": "Conectado como",
+  "logout": "Cerrar sesión"
 }
