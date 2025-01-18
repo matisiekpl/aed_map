@@ -65,6 +65,7 @@ class MapHeader extends StatelessWidget {
                   var pointsCubit = context.read<PointsCubit>();
                   var locationCubit = context.read<LocationCubit>();
                   var feedbackCubit = context.read<FeedbackCubit>();
+                  var editCubit = context.read<EditCubit>();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -74,7 +75,9 @@ class MapHeader extends StatelessWidget {
                                 value: feedbackCubit,
                                 child: BlocProvider.value(
                                     value: pointsCubit,
-                                    child: const SettingsPage()),
+                                    child: BlocProvider.value(
+                                        value: editCubit,
+                                        child: const SettingsPage())),
                               ),
                             )),
                   );

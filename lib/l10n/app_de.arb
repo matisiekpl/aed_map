@@ -98,5 +98,9 @@
   "onboardingTitle2": "Route zum nächstgelegenen Defibrillator",
   "onboardingBody2": "Erhalten Sie Wegbeschreibungen zum nächstgelegenen Defibrillator",
   "onboardingTitle3": "Wir verwenden die OpenStreetMap-Datenbank",
-  "onboardingBody3": "Beachten Sie, dass die Daten möglicherweise nicht zu 100% aktuell sind"
+  "onboardingBody3": "Beachten Sie, dass die Daten möglicherweise nicht zu 100% aktuell sind",
+  "openStreetMapAccount": "OpenStreetMap-Konto",
+  "signedInAs": "Angemeldet als",
+  "logout": "Abmelden",
+  "viewOpenStreetMapNode": "OpenStreetMap-Knoten anzeigen"
 }

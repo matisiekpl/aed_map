@@ -12,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 
+import '../models/user.dart';
+
 class PointsRepository {
   static const String aedListKey = 'aed_list_json_2';
   static const String aedUpdateTimestamp = 'aed_update';
@@ -91,7 +93,7 @@ class PointsRepository {
     try {
       final result = await FlutterWebAuth.authenticate(
           url:
-              "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api",
+              "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api%20read_prefs",
           callbackUrlScheme: "aedmap");
       final code = Uri.parse(result).queryParameters['code'];
       if (kDebugMode) {
@@ -110,6 +112,25 @@ class PointsRepository {
     } on Exception catch (_) {
       return false;
     }
+  }
+
+  Future<User?> getUser() async {
+    if (token == null) {
+      return null;
+    }
+    try {
+      var response = await http.get(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/user/details.json'),
+          headers: {'Authorization': 'Bearer $token'});
+      var user = json.decode(response.body)['user'];
+      return User(id: user['id'], name: user['display_name']);
+    } catch (err) {
+      return User(id: 0, name: 'Unknown');
+    }
+  }
+
+  Future<void> logout() async {
+    token = null;
   }
 
   Future<int> getChangesetId() async {

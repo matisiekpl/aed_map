@@ -98,5 +98,9 @@
   "onboardingTitle2": "Trasa do najbliższego defibrylatora",
   "onboardingBody2": "Uzyskaj wskazówki do najbliższego defibrylatora",
   "onboardingTitle3": "Używamy bazy danych OpenStreetMap",
-  "onboardingBody3": "Pamiętaj, że dane mogą nie być w 100% aktualne"
+  "onboardingBody3": "Pamiętaj, że dane mogą nie być w 100% aktualne",
+  "openStreetMapAccount": "Konto OpenStreetMap",
+  "signedInAs": "Zalogowany jako",
+  "logout": "Wyloguj się",
+  "viewOpenStreetMapNode": "Zobacz węzeł OpenStreetMap"
 }

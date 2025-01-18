@@ -98,5 +98,9 @@
   "onboardingTitle2": "Route to the nearest defibrillator",
   "onboardingBody2": "Get directions to the nearest defibrillator",
   "onboardingTitle3": "We are using OpenStreetMap database",
-  "onboardingBody3": "Keep in mind that the data may not be up 100% up to date"
+  "onboardingBody3": "Keep in mind that the data may not be up 100% up to date",
+  "openStreetMapAccount": "OpenStreetMap account",
+  "signedInAs": "Signed in as",
+  "logout": "Logout",
+  "viewOpenStreetMapNode": "View OpenStreetMap node"
 }
