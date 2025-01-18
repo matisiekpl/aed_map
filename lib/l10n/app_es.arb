@@ -101,5 +101,6 @@
   "onboardingBody3": "Ten en cuenta que los datos pueden no estar 100% actualizados",
   "openStreetMapAccount": "Cuenta de OpenStreetMap",
   "signedInAs": "Conectado como",
-  "logout": "Cerrar sesión"
+  "logout": "Cerrar sesión",
+  "viewOpenStreetMapNode": "Ver nodo de OpenStreetMap"
 }

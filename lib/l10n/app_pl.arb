@@ -101,5 +101,6 @@
   "onboardingBody3": "Pamiętaj, że dane mogą nie być w 100% aktualne",
   "openStreetMapAccount": "Konto OpenStreetMap",
   "signedInAs": "Zalogowany jako",
-  "logout": "Wyloguj się"
+  "logout": "Wyloguj się",
+  "viewOpenStreetMapNode": "Zobacz węzeł OpenStreetMap"
 }
