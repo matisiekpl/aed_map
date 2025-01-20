@@ -124,17 +124,23 @@ class EditCubit extends Cubit<EditState> {
     var s = state;
     if (s is EditInProgress) {
       if (s.aed.id == 0) {
+        await pointsRepository.insertDefibrillator(s.aed);
         analytics.event(name: saveInsertEvent);
         if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-          mixpanel.track(saveInsertEvent, properties: {'aed': s.aed.id});
+          mixpanel.track(saveInsertEvent, properties: {
+            'aed_id': s.aed.id,
+            'aed_node_url': osmNodePrefix + s.aed.id.toString()
+          });
         }
-        await pointsRepository.insertDefibrillator(s.aed);
       } else {
+        await pointsRepository.updateDefibrillator(s.aed);
         analytics.event(name: saveUpdateEvent);
         if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-          mixpanel.track(saveUpdateEvent, properties: {'aed': s.aed.id});
+          mixpanel.track(saveUpdateEvent, properties: {
+            'aed_id': s.aed.id,
+            'aed_node_url': osmNodePrefix + s.aed.id.toString()
+          });
         }
-        await pointsRepository.updateDefibrillator(s.aed);
       }
       emit(EditReady(enabled: false, cursor: state.cursor));
       return s.aed;
