@@ -2,6 +2,7 @@
 
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
+import 'package:aed_map/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -131,8 +132,7 @@ class EditForm extends StatelessWidget {
             leading: const Icon(CupertinoIcons.cube_box),
             title: Text(appLocalizations.viewOpenStreetMapNode),
             onPressed: (context) {
-              launchUrl(Uri.parse(
-                  'https://www.openstreetmap.org/node/${state.aed.id}'));
+              launchUrl(Uri.parse('$osmNodePrefix${state.aed.id}'));
             },
           ),
         ],
