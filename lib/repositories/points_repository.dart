@@ -132,6 +132,7 @@ class PointsRepository {
       if (payload.containsKey('img')) {
         user = user.copyWith(avatar: payload['img']['href']);
       }
+      mixpanel.identify(user.id.toString());
       mixpanel.getPeople().set('\$user_id', user.id);
       mixpanel.getPeople().set('\$name', user.name);
       mixpanel.getPeople().set('\$avatar', user.avatar);
@@ -143,6 +144,7 @@ class PointsRepository {
   }
 
   Future<void> logout() async {
+    await mixpanel.reset();
     token = null;
   }
 
