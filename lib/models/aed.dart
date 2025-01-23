@@ -1,3 +1,4 @@
+import 'package:aed_map/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -155,6 +156,21 @@ class AED {
       access: access ?? this.access,
       image: image ?? this.image,
     );
+  }
+
+  Map<String, dynamic> getEventProperties() {
+    return {
+      'aed_id': id,
+      'aed_node_url': osmNodePrefix + id.toString(),
+      'aed_latityde': location.latitude,
+      'aed_longitude': location.longitude,
+      'aed_indoor': indoor,
+      'aed_operator': operator,
+      'aed_phone': phone,
+      'aed_distance': distance,
+      'aed_opening_hours': openingHours,
+      'aed_access': access
+    };
   }
 }
 

@@ -108,6 +108,7 @@ class PointsRepository {
         print('Got OAuth2 token: $token');
       }
       mixpanel.track(authenticatedEvent);
+      await getUser();
       return token != null;
     } on Exception catch (_) {
       return false;
@@ -122,8 +123,11 @@ class PointsRepository {
       var response = await http.get(
           Uri.parse('https://api.openstreetmap.org/api/0.6/user/details.json'),
           headers: {'Authorization': 'Bearer $token'});
-      var user = json.decode(response.body)['user'];
-      return User(id: user['id'], name: user['display_name']);
+      var payload = json.decode(response.body)['user'];
+      var user = User(id: payload['id'], name: payload['display_name']);
+      mixpanel.getPeople().set('osm_user_id', user.id);
+      mixpanel.getPeople().set('name', user.name);
+      return user;
     } catch (err) {
       return User(id: 0, name: 'Unknown');
     }

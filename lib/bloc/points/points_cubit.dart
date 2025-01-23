@@ -57,7 +57,7 @@ class PointsCubit extends Cubit<PointsState> {
         .logSelectContent(contentType: 'aed', itemId: aed.id.toString());
     HapticFeedback.mediumImpact();
     analytics.event(name: selectEvent);
-    mixpanel.track(selectEvent, properties: {'aed': aed.id});
+    mixpanel.track(selectEvent, properties: aed.getEventProperties());
     if (state is PointsLoadSuccess) {
       emit((state as PointsLoadSuccess)
           .copyWith(selected: aed, hash: generateRandomString(32)));
@@ -69,14 +69,17 @@ class PointsCubit extends Cubit<PointsState> {
   update(AED aed) {
     if (state is PointsLoadSuccess) {
       if (aed.id == 0) {
-        var newDefibrillators = List<AED>.from((state as PointsLoadSuccess).aeds)
-          ..insert(0, aed);
+        var newDefibrillators =
+            List<AED>.from((state as PointsLoadSuccess).aeds)..insert(0, aed);
         emit((state as PointsLoadSuccess).copyWith(
-            aeds: newDefibrillators, markers: _getMarkers(newDefibrillators), selected: aed));
+            aeds: newDefibrillators,
+            markers: _getMarkers(newDefibrillators),
+            selected: aed));
       } else {
-        var updatedDefibrillators = List<AED>.from((state as PointsLoadSuccess).aeds)
-          ..removeWhere((x) => x.id == aed.id)
-          ..insert(0, aed);
+        var updatedDefibrillators =
+            List<AED>.from((state as PointsLoadSuccess).aeds)
+              ..removeWhere((x) => x.id == aed.id)
+              ..insert(0, aed);
         emit((state as PointsLoadSuccess).copyWith(
             selected: aed,
             aeds: updatedDefibrillators,
