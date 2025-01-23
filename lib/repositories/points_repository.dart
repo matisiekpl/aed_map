@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
@@ -48,6 +49,14 @@ class PointsRepository {
   }
 
   Future<List<AED>> loadAEDs(LatLng currentLocation) async {
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      await mixpanel.registerSuperProperties({
+        "\$latitude": currentLocation.latitude,
+        "\$longitude": currentLocation.longitude
+      });
+      mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
+      mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
+    }
     List<AED> aeds = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
@@ -108,6 +117,7 @@ class PointsRepository {
         print('Got OAuth2 token: $token');
       }
       mixpanel.track(authenticatedEvent);
+      await getUser();
       return token != null;
     } on Exception catch (_) {
       return false;
@@ -122,14 +132,28 @@ class PointsRepository {
       var response = await http.get(
           Uri.parse('https://api.openstreetmap.org/api/0.6/user/details.json'),
           headers: {'Authorization': 'Bearer $token'});
-      var user = json.decode(response.body)['user'];
-      return User(id: user['id'], name: user['display_name']);
+      var payload = json.decode(response.body)['user'];
+      var user = User(id: payload['id'], name: payload['display_name']);
+      if (payload.containsKey('img')) {
+        user = user.copyWith(avatar: payload['img']['href']);
+      }
+      if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+        mixpanel.identify(user.id.toString());
+        mixpanel.getPeople().set('\$user_id', user.id);
+        mixpanel.getPeople().set('\$name', user.name);
+        mixpanel.getPeople().set('\$avatar', user.avatar);
+        await mixpanel.flush();
+      }
+      return user;
     } catch (err) {
       return User(id: 0, name: 'Unknown');
     }
   }
 
   Future<void> logout() async {
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      await mixpanel.reset();
+    }
     token = null;
   }
 
