@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
@@ -48,12 +49,14 @@ class PointsRepository {
   }
 
   Future<List<AED>> loadAEDs(LatLng currentLocation) async {
-    await mixpanel.registerSuperProperties({
-      "\$latitude": currentLocation.latitude,
-      "\$longitude": currentLocation.longitude
-    });
-    mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
-    mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      await mixpanel.registerSuperProperties({
+        "\$latitude": currentLocation.latitude,
+        "\$longitude": currentLocation.longitude
+      });
+      mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
+      mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
+    }
     List<AED> aeds = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
@@ -134,11 +137,13 @@ class PointsRepository {
       if (payload.containsKey('img')) {
         user = user.copyWith(avatar: payload['img']['href']);
       }
-      mixpanel.identify(user.id.toString());
-      mixpanel.getPeople().set('\$user_id', user.id);
-      mixpanel.getPeople().set('\$name', user.name);
-      mixpanel.getPeople().set('\$avatar', user.avatar);
-      await mixpanel.flush();
+      if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+        mixpanel.identify(user.id.toString());
+        mixpanel.getPeople().set('\$user_id', user.id);
+        mixpanel.getPeople().set('\$name', user.name);
+        mixpanel.getPeople().set('\$avatar', user.avatar);
+        await mixpanel.flush();
+      }
       return user;
     } catch (err) {
       return User(id: 0, name: 'Unknown');
@@ -146,7 +151,9 @@ class PointsRepository {
   }
 
   Future<void> logout() async {
-    await mixpanel.reset();
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      await mixpanel.reset();
+    }
     token = null;
   }
 
