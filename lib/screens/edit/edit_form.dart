@@ -125,18 +125,19 @@ class EditForm extends StatelessWidget {
                           : Colors.black))),
         ],
       ),
-      SettingsSection(
-        title: Text('OpenStreetMap'),
-        tiles: [
-          SettingsTile.navigation(
-            leading: const Icon(CupertinoIcons.cube_box),
-            title: Text(appLocalizations.viewOpenStreetMapNode),
-            onPressed: (context) {
-              launchUrl(Uri.parse('$osmNodePrefix${state.aed.id}'));
-            },
-          ),
-        ],
-      ),
+      if (state.aed.id > 0)
+        SettingsSection(
+          title: Text('OpenStreetMap'),
+          tiles: [
+            SettingsTile.navigation(
+              leading: const Icon(CupertinoIcons.cube_box),
+              title: Text(appLocalizations.viewOpenStreetMapNode),
+              onPressed: (context) {
+                launchUrl(Uri.parse('$osmNodePrefix${state.aed.id}'));
+              },
+            ),
+          ],
+        ),
       CustomSettingsSection(
           child: Padding(
         padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
