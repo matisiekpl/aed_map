@@ -127,6 +127,7 @@ class PointsRepository {
       var user = User(id: payload['id'], name: payload['display_name']);
       mixpanel.getPeople().set('osm_user_id', user.id);
       mixpanel.getPeople().set('name', user.name);
+      mixpanel.flush();
       return user;
     } catch (err) {
       return User(id: 0, name: 'Unknown');
