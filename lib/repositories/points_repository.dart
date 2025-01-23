@@ -52,6 +52,8 @@ class PointsRepository {
       "\$latitude": currentLocation.latitude,
       "\$longitude": currentLocation.longitude
     });
+    mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
+    mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
     List<AED> aeds = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
