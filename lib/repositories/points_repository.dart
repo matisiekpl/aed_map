@@ -48,6 +48,10 @@ class PointsRepository {
   }
 
   Future<List<AED>> loadAEDs(LatLng currentLocation) async {
+    await mixpanel.registerSuperProperties({
+      "\$latitude": currentLocation.latitude,
+      "\$longitude": currentLocation.longitude
+    });
     List<AED> aeds = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
@@ -125,9 +129,13 @@ class PointsRepository {
           headers: {'Authorization': 'Bearer $token'});
       var payload = json.decode(response.body)['user'];
       var user = User(id: payload['id'], name: payload['display_name']);
-      mixpanel.getPeople().set('osm_user_id', user.id);
-      mixpanel.getPeople().set('name', user.name);
-      mixpanel.flush();
+      if (payload.containsKey('img')) {
+        user = user.copyWith(avatar: payload['img']['href']);
+      }
+      mixpanel.getPeople().set('\$user_id', user.id);
+      mixpanel.getPeople().set('\$name', user.name);
+      mixpanel.getPeople().set('\$avatar', user.avatar);
+      await mixpanel.flush();
       return user;
     } catch (err) {
       return User(id: 0, name: 'Unknown');
