@@ -162,7 +162,7 @@ class AED {
     return {
       'aed_id': id,
       'aed_node_url': osmNodePrefix + id.toString(),
-      'aed_latityde': location.latitude,
+      'aed_latitude': location.latitude,
       'aed_longitude': location.longitude,
       'aed_indoor': indoor,
       'aed_operator': operator,
