@@ -73,6 +73,7 @@ class PointsRepository {
       await loadLocalDefibrillators();
     }
     updateDefibrillators();
+    print('Using file ${(await cacheFile).path}');
     var contents = await (await cacheFile).readAsString();
     var idLabel = 'osm_id';
     if (contents.contains('@osm_id')) {
