@@ -24,6 +24,9 @@ class PointsRepository {
   static const devMode = kDebugMode;
 
   Future<File> get cacheFile async {
+    if (Platform.environment.containsKey('FLUTTER_TEST')) {
+      return File('ignore_$defibrillatorListKey.geojson');
+    }
     final directory = await getApplicationDocumentsDirectory();
     return File('${directory.path}/$defibrillatorListKey.geojson');
   }
@@ -33,9 +36,11 @@ class PointsRepository {
     try {
       var response = await http.get(
           Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'));
-      (await cacheFile).writeAsString(utf8.decode(response.bodyBytes));
-      await prefs.setString(
-          defibrillatorListUpdateTimestamp, DateTime.now().toIso8601String());
+      if (utf8.decode(response.bodyBytes).isNotEmpty) {
+        await (await cacheFile).writeAsString(utf8.decode(response.bodyBytes));
+        await prefs.setString(
+            defibrillatorListUpdateTimestamp, DateTime.now().toIso8601String());
+      }
     } catch (err) {
       print('Failed to load defibrillators from internet!');
     }
@@ -44,7 +49,7 @@ class PointsRepository {
   loadLocalDefibrillators() async {
     String data = await rootBundle.loadString("assets/world.geojson");
     data = data.replaceAll("@osm_id", "osm_id");
-    (await cacheFile).writeAsString(data);
+    await (await cacheFile).writeAsString(data);
   }
 
   Future<DateTime> getLastUpdateTime() async {
