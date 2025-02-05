@@ -24,7 +24,8 @@ class PointsRepository {
     try {
       var response = await http.get(
           Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'));
-      await prefs.setString(defibrillatorListKey, utf8.decode(response.bodyBytes));
+      await prefs.setString(
+          defibrillatorListKey, utf8.decode(response.bodyBytes));
       await prefs.setString(
           defibrillatorListUpdateTimestamp, DateTime.now().toIso8601String());
     } catch (err) {
@@ -59,7 +60,8 @@ class PointsRepository {
     }
     List<Defibrillator> defibrillators = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey(defibrillatorListKey)) await loadLocalDefibrillators();
+    if (!prefs.containsKey(defibrillatorListKey))
+      await loadLocalDefibrillators();
     updateDefibrillators();
     var contents = prefs.getString(defibrillatorListKey)!;
     var idLabel = 'osm_id';
@@ -85,7 +87,8 @@ class PointsRepository {
     }
     defibrillators = defibrillators.map((defibrillator) {
       const Distance distance = Distance(calculator: Haversine());
-      defibrillator.distance = distance(currentLocation, defibrillator.location).ceil();
+      defibrillator.distance =
+          distance(currentLocation, defibrillator.location).ceil();
       return defibrillator;
     }).toList();
     defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
@@ -214,7 +217,8 @@ class PointsRepository {
     try {
       var changesetId = await getChangesetId();
       var fetchResponse = await http.get(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
+          Uri.parse(
+              'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
           headers: {
             'Content-Type': 'text/xml',
             'Authorization': 'Bearer $token'
@@ -240,10 +244,11 @@ class PointsRepository {
               .value
         ];
       }).toList();
-      var xml =
-      defibrillator.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
+      var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
+          oldTags: oldTagsPairs);
       await http.put(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
+          Uri.parse(
+              'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
           headers: {
             'Content-Type': 'text/xml',
             'Authorization': 'Bearer $token'
@@ -260,8 +265,8 @@ class PointsRepository {
 
   Future<String?> getImage(Defibrillator defibrillator) async {
     try {
-      var response = await http
-          .get(Uri.parse('https://back.openaedmap.org/api/v1/node/${defibrillator.id}'));
+      var response = await http.get(Uri.parse(
+          'https://back.openaedmap.org/api/v1/node/${defibrillator.id}'));
       var result = jsonDecode(response.body);
       if (result['elements'][0]['@photo_url'].toString().length > 10) {
         return 'https://back.openaedmap.org${result['elements'][0]['@photo_url']}';
@@ -272,5 +277,26 @@ class PointsRepository {
     }
   }
 
-  // Future<Defibrillator>
+  Future<Defibrillator?> getNode(int id) async {
+    try {
+      var response = await http.get(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/$id.json'));
+      var payload = json.decode(response.body);
+      if ((payload['elements'] as List<dynamic>).isNotEmpty) {
+        var element = payload['elements'][0] as Map<String, dynamic>;
+        var tags = element['tags'] as Map<String, dynamic>;
+        return Defibrillator(
+          location: LatLng(element['lat'], element['lon']),
+          id: id,
+          access: tags['access'],
+          description: tags['defibrillator:location'],
+          indoor: tags['indoor'],
+          openingHours: tags['opening_hours'],
+          operator: tags['operator'],
+          phone: tags['phone'],
+        );
+      }
+    } catch (_) {}
+    return null;
+  }
 }
