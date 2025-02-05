@@ -4,7 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:xml/xml.dart';
 
-class AED {
+class Defibrillator {
   LatLng location;
   String? description;
   int id;
@@ -16,7 +16,7 @@ class AED {
   String? access;
   String? image;
 
-  AED(
+  Defibrillator(
       {required this.location,
       required this.id,
       this.description,
@@ -131,7 +131,7 @@ class AED {
     return document.toXmlString();
   }
 
-  AED copyWith({
+  Defibrillator copyWith({
     LatLng? location,
     String? description,
     int? id,
@@ -145,7 +145,7 @@ class AED {
     Map? colors,
     Map? filenames,
   }) {
-    return AED(
+    return Defibrillator(
       location: location ?? this.location,
       description: description ?? this.description,
       id: id ?? this.id,

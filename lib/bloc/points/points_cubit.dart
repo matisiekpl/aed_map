@@ -23,12 +23,12 @@ class PointsCubit extends Cubit<PointsState> {
 
   load() async {
     var position = await geolocationRepository.locate();
-    var aeds = await pointsRepository
-        .loadAEDs(LatLng(position.latitude, position.longitude));
+    var defibrillators = await pointsRepository
+        .loadDefibrillators(LatLng(position.latitude, position.longitude));
     emit(PointsLoadSuccess(
-        aeds: aeds,
-        selected: aeds.first,
-        markers: _getMarkers(aeds),
+        defibrillators: defibrillators,
+        selected: defibrillators.first,
+        markers: _getMarkers(defibrillators),
         lastUpdateTime: await pointsRepository.getLastUpdateTime(),
         refreshing: false,
         hash: generateRandomString(32)));
@@ -39,66 +39,66 @@ class PointsCubit extends Cubit<PointsState> {
     if (s is PointsLoadSuccess) {
       emit(s.copyWith(refreshing: true));
     }
-    await pointsRepository.updateAEDs();
+    await pointsRepository.updateDefibrillators();
     var position = await geolocationRepository.locate();
-    var aeds = await pointsRepository
-        .loadAEDs(LatLng(position.latitude, position.longitude));
+    var defibrillators = await pointsRepository
+        .loadDefibrillators(LatLng(position.latitude, position.longitude));
     emit(PointsLoadSuccess(
-        aeds: aeds,
-        selected: aeds.first,
-        markers: _getMarkers(aeds),
+        defibrillators: defibrillators,
+        selected: defibrillators.first,
+        markers: _getMarkers(defibrillators),
         lastUpdateTime: await pointsRepository.getLastUpdateTime(),
         refreshing: false,
         hash: generateRandomString(32)));
   }
 
-  select(AED aed) {
+  select(Defibrillator defibrillator) {
     FirebaseAnalytics.instance
-        .logSelectContent(contentType: 'aed', itemId: aed.id.toString());
+        .logSelectContent(contentType: 'aed', itemId: defibrillator.id.toString());
     HapticFeedback.mediumImpact();
     analytics.event(name: selectEvent);
-    mixpanel.track(selectEvent, properties: aed.getEventProperties());
+    mixpanel.track(selectEvent, properties: defibrillator.getEventProperties());
     if (state is PointsLoadSuccess) {
       emit((state as PointsLoadSuccess)
-          .copyWith(selected: aed, hash: generateRandomString(32)));
+          .copyWith(selected: defibrillator, hash: generateRandomString(32)));
     }
 
     loadImage();
   }
 
-  update(AED aed) {
+  update(Defibrillator defibrillator) {
     if (state is PointsLoadSuccess) {
-      if (aed.id == 0) {
+      if (defibrillator.id == 0) {
         var newDefibrillators =
-            List<AED>.from((state as PointsLoadSuccess).aeds)..insert(0, aed);
+            List<Defibrillator>.from((state as PointsLoadSuccess).defibrillators)..insert(0, defibrillator);
         emit((state as PointsLoadSuccess).copyWith(
-            aeds: newDefibrillators,
+            defibrillators: newDefibrillators,
             markers: _getMarkers(newDefibrillators),
-            selected: aed));
+            selected: defibrillator));
       } else {
         var updatedDefibrillators =
-            List<AED>.from((state as PointsLoadSuccess).aeds)
-              ..removeWhere((x) => x.id == aed.id)
-              ..insert(0, aed);
+            List<Defibrillator>.from((state as PointsLoadSuccess).defibrillators)
+              ..removeWhere((x) => x.id == defibrillator.id)
+              ..insert(0, defibrillator);
         emit((state as PointsLoadSuccess).copyWith(
-            selected: aed,
-            aeds: updatedDefibrillators,
+            selected: defibrillator,
+            defibrillators: updatedDefibrillators,
             markers: _getMarkers(updatedDefibrillators)));
       }
     }
   }
 
-  List<Marker> _getMarkers(List<AED> aeds) {
+  List<Marker> _getMarkers(List<Defibrillator> defibrillators) {
     var brightness = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .platformBrightness;
-    return aeds
+    return defibrillators
         .take(1000)
-        .map((aed) {
-          if (aed.access == 'yes') {
+        .map((defibrillator) {
+          if (defibrillator.access == 'yes') {
             return Marker(
-              point: aed.location,
-              key: Key(aeds.indexOf(aed).toString()),
+              point: defibrillator.location,
+              key: Key(defibrillators.indexOf(defibrillator).toString()),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -114,10 +114,10 @@ class PointsCubit extends Cubit<PointsState> {
               ),
             );
           }
-          if (aed.access == 'customers') {
+          if (defibrillator.access == 'customers') {
             return Marker(
-              point: aed.location,
-              key: Key(aeds.indexOf(aed).toString()),
+              point: defibrillator.location,
+              key: Key(defibrillators.indexOf(defibrillator).toString()),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -133,10 +133,10 @@ class PointsCubit extends Cubit<PointsState> {
               ),
             );
           }
-          if (aed.access == 'private' || aed.access == 'permissive') {
+          if (defibrillator.access == 'private' || defibrillator.access == 'permissive') {
             return Marker(
-              point: aed.location,
-              key: Key(aeds.indexOf(aed).toString()),
+              point: defibrillator.location,
+              key: Key(defibrillators.indexOf(defibrillator).toString()),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -152,10 +152,10 @@ class PointsCubit extends Cubit<PointsState> {
               ),
             );
           }
-          if (aed.access == 'no') {
+          if (defibrillator.access == 'no') {
             return Marker(
-              point: aed.location,
-              key: Key(aeds.indexOf(aed).toString()),
+              point: defibrillator.location,
+              key: Key(defibrillators.indexOf(defibrillator).toString()),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -171,10 +171,10 @@ class PointsCubit extends Cubit<PointsState> {
               ),
             );
           }
-          if (aed.access == 'unknown') {
+          if (defibrillator.access == 'unknown') {
             return Marker(
-              point: aed.location,
-              key: Key(aeds.indexOf(aed).toString()),
+              point: defibrillator.location,
+              key: Key(defibrillators.indexOf(defibrillator).toString()),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -191,8 +191,8 @@ class PointsCubit extends Cubit<PointsState> {
             );
           }
           return Marker(
-            point: aed.location,
-            key: Key(aeds.indexOf(aed).toString()),
+            point: defibrillator.location,
+            key: Key(defibrillators.indexOf(defibrillator).toString()),
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
@@ -216,8 +216,8 @@ class PointsCubit extends Cubit<PointsState> {
     var state = this.state;
     if (state is PointsLoadSuccess) {
       var url = await pointsRepository.getImage(state.selected);
-      var aed = state.selected.copyWith(image: url);
-      emit(state.copyWith(selected: aed, hash: generateRandomString(32)));
+      var defibrillator = state.selected.copyWith(image: url);
+      emit(state.copyWith(selected: defibrillator, hash: generateRandomString(32)));
     }
   }
 }

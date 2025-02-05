@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage>
                             value: BlocBuilder<PointsCubit, PointsState>(
                                 builder: (context, state) {
                               if (state is PointsLoadSuccess) {
-                                return Text(state.aeds.length.toString());
+                                return Text(state.defibrillators.length.toString());
                               }
                               return const Text('-');
                             }),
@@ -77,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage>
                                 if (locationState is LocationDetermined &&
                                     pointsState is PointsLoadSuccess) {
                                   return Text(getDefibrillatorsWithin5KM(
-                                          pointsState.aeds,
+                                          pointsState.defibrillators,
                                           locationState.location)
                                       .length
                                       .toString());

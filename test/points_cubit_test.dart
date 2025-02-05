@@ -27,9 +27,9 @@ void main() {
 
     test('update', () async {
       await pointsCubit.load();
-      var aed = (pointsCubit.state as PointsLoadSuccess).aeds.first;
-      pointsCubit.update(aed);
-      expect((pointsCubit.state as PointsLoadSuccess).selected, aed);
+      var defibrillator = (pointsCubit.state as PointsLoadSuccess).defibrillators.first;
+      pointsCubit.update(defibrillator);
+      expect((pointsCubit.state as PointsLoadSuccess).selected, defibrillator);
     });
 
     tearDown(() {

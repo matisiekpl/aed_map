@@ -36,7 +36,7 @@ void main() {
       pointsCubit.load();
       await Future.delayed(const Duration(seconds: 1));
       routingCubit.navigate(
-          warsaw, (pointsCubit.state as PointsLoadSuccess).aeds.first);
+          warsaw, (pointsCubit.state as PointsLoadSuccess).defibrillators.first);
       expect(routingCubit.state, isA<RoutingCalculatingInProgress>());
       await Future.delayed(const Duration(seconds: 5));
       expect(routingCubit.state, isA<RoutingSuccess>());

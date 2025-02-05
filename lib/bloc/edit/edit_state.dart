@@ -46,13 +46,13 @@ class EditInProgress extends EditState {
   const EditInProgress(
       {required super.enabled,
       required super.cursor,
-      required this.aed,
+      required this.defibrillator,
       super.user,
       this.indoor = 'no',
       this.access = 'public',
       this.description = ''});
 
-  final AED aed;
+  final Defibrillator defibrillator;
   final String indoor;
   final String access;
 
@@ -60,11 +60,11 @@ class EditInProgress extends EditState {
 
   @override
   List<Object?> get props =>
-      [enabled, cursor, indoor, access, aed.indoor, aed, description];
+      [enabled, cursor, indoor, access, defibrillator.indoor, defibrillator, description];
 
   @override
   EditInProgress copyWith({
-    AED? aed,
+    Defibrillator? defibrillator,
     bool? enabled,
     LatLng? cursor,
     String? indoor,
@@ -73,7 +73,7 @@ class EditInProgress extends EditState {
     User? user,
   }) {
     return EditInProgress(
-      aed: aed ?? this.aed,
+      defibrillator: defibrillator ?? this.defibrillator,
       enabled: enabled ?? this.enabled,
       cursor: cursor ?? this.cursor,
       indoor: indoor ?? this.indoor,

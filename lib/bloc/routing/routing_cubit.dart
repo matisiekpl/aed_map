@@ -19,11 +19,11 @@ class RoutingCubit extends Cubit<RoutingState> {
   final GeolocationRepository geolocationRepository;
   final RoutingRepository routingRepository;
 
-  navigate(LatLng source, AED aed) async {
+  navigate(LatLng source, Defibrillator defibrillator) async {
     HapticFeedback.lightImpact();
     emit(RoutingCalculatingInProgress());
     var trip = await routingRepository.navigate(
-        await geolocationRepository.locate(), aed);
+        await geolocationRepository.locate(), defibrillator);
     if (trip != null) {
       HapticFeedback.heavyImpact();
       emit(RoutingSuccess(trip: trip));
@@ -31,8 +31,8 @@ class RoutingCubit extends Cubit<RoutingState> {
       emit(RoutingReady());
     }
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      FirebaseAnalytics.instance.logSearch(searchTerm: aed.id.toString());
-      mixpanel.track(navigateEvent, properties: aed.getEventProperties());
+      FirebaseAnalytics.instance.logSearch(searchTerm: defibrillator.id.toString());
+      mixpanel.track(navigateEvent, properties: defibrillator.getEventProperties());
     }
   }
 

@@ -16,39 +16,39 @@ import 'package:xml/xml.dart';
 import '../models/user.dart';
 
 class PointsRepository {
-  static const String aedListKey = 'aed_list_json_2';
-  static const String aedUpdateTimestamp = 'aed_update';
+  static const String defibrillatorListKey = 'aed_list_json_2';
+  static const String defibrillatorListUpdateTimestamp = 'aed_update';
 
-  updateAEDs() async {
+  updateDefibrillators() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var response = await http.get(
           Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'));
-      await prefs.setString(aedListKey, utf8.decode(response.bodyBytes));
+      await prefs.setString(defibrillatorListKey, utf8.decode(response.bodyBytes));
       await prefs.setString(
-          aedUpdateTimestamp, DateTime.now().toIso8601String());
+          defibrillatorListUpdateTimestamp, DateTime.now().toIso8601String());
     } catch (err) {
       if (kDebugMode) {
-        print('Failed to load AEDs from internet!');
+        print('Failed to load defibrillators from internet!');
       }
     }
   }
 
-  loadLocalAEDs() async {
+  loadLocalDefibrillators() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String data = await rootBundle.loadString("assets/world.geojson");
     data = data.replaceAll("@osm_id", "osm_id");
-    await prefs.setString(aedListKey, data);
+    await prefs.setString(defibrillatorListKey, data);
   }
 
   Future<DateTime> getLastUpdateTime() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = prefs.getString(aedUpdateTimestamp);
+    var value = prefs.getString(defibrillatorListUpdateTimestamp);
     if (value == null) return DateTime.now();
     return DateTime.parse(value);
   }
 
-  Future<List<AED>> loadAEDs(LatLng currentLocation) async {
+  Future<List<Defibrillator>> loadDefibrillators(LatLng currentLocation) async {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       await mixpanel.registerSuperProperties({
         "\$latitude": currentLocation.latitude,
@@ -57,18 +57,18 @@ class PointsRepository {
       mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
       mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
     }
-    List<AED> aeds = [];
+    List<Defibrillator> defibrillators = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
-    updateAEDs();
-    var contents = prefs.getString(aedListKey)!;
+    if (!prefs.containsKey(defibrillatorListKey)) await loadLocalDefibrillators();
+    updateDefibrillators();
+    var contents = prefs.getString(defibrillatorListKey)!;
     var idLabel = 'osm_id';
     if (contents.contains('@osm_id')) {
       idLabel = '@osm_id';
     }
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
-      aeds.add(AED(
+      defibrillators.add(Defibrillator(
           location: LatLng(row['geometry']['coordinates'][1],
               row['geometry']['coordinates'][0]),
           id: row['properties'][idLabel],
@@ -81,15 +81,15 @@ class PointsRepository {
           access: row['properties']['access']));
     });
     if (kDebugMode) {
-      print('Loaded ${aeds.length} AEDs!');
+      print('Loaded ${defibrillators.length} defibrillators!');
     }
-    aeds = aeds.map((aed) {
+    defibrillators = defibrillators.map((defibrillator) {
       const Distance distance = Distance(calculator: Haversine());
-      aed.distance = distance(currentLocation, aed.location).ceil();
-      return aed;
+      defibrillator.distance = distance(currentLocation, defibrillator.location).ceil();
+      return defibrillator;
     }).toList();
-    aeds.sort((a, b) => a.distance!.compareTo(b.distance!));
-    return aeds.toList();
+    defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
+    return defibrillators.toList();
   }
 
   String? token;
@@ -181,7 +181,7 @@ class PointsRepository {
     return int.parse(response.body.toString());
   }
 
-  Future<AED> insertDefibrillator(AED aed) async {
+  Future<Defibrillator> insertDefibrillator(Defibrillator defibrillator) async {
     try {
       var changesetId = await getChangesetId();
       if (!kDebugMode) {
@@ -191,30 +191,30 @@ class PointsRepository {
               'Content-Type': 'text/xml',
               'Authorization': 'Bearer $token'
             },
-            body: aed.toXml(changesetId, 1));
+            body: defibrillator.toXml(changesetId, 1));
         var id = int.parse(response.body.toString());
-        aed.id = id;
+        defibrillator.id = id;
       } else {
-        aed.id = 9999;
+        defibrillator.id = 9999;
       }
       if (kDebugMode) {}
-      updateAEDs();
+      updateDefibrillators();
     } catch (err) {
       if (kDebugMode) {
         print(err);
       }
     }
-    return aed;
+    return defibrillator;
   }
 
-  Future<AED> updateDefibrillator(AED aed) async {
+  Future<Defibrillator> updateDefibrillator(Defibrillator defibrillator) async {
     if (kDebugMode) {
-      return aed;
+      return defibrillator;
     }
     try {
       var changesetId = await getChangesetId();
       var fetchResponse = await http.get(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
           headers: {
             'Content-Type': 'text/xml',
             'Authorization': 'Bearer $token'
@@ -241,27 +241,27 @@ class PointsRepository {
         ];
       }).toList();
       var xml =
-          aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
+      defibrillator.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
       await http.put(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
           headers: {
             'Content-Type': 'text/xml',
             'Authorization': 'Bearer $token'
           },
           body: xml);
-      updateAEDs();
+      updateDefibrillators();
     } catch (err) {
       if (kDebugMode) {
         print(err);
       }
     }
-    return aed;
+    return defibrillator;
   }
 
-  Future<String?> getImage(AED aed) async {
+  Future<String?> getImage(Defibrillator defibrillator) async {
     try {
       var response = await http
-          .get(Uri.parse('https://back.openaedmap.org/api/v1/node/${aed.id}'));
+          .get(Uri.parse('https://back.openaedmap.org/api/v1/node/${defibrillator.id}'));
       var result = jsonDecode(response.body);
       if (result['elements'][0]['@photo_url'].toString().length > 10) {
         return 'https://back.openaedmap.org${result['elements'][0]['@photo_url']}';
@@ -271,4 +271,6 @@ class PointsRepository {
       return null;
     }
   }
+
+  // Future<Defibrillator>
 }
