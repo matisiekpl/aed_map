@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
@@ -16,39 +17,49 @@ import 'package:xml/xml.dart';
 import '../models/user.dart';
 
 class PointsRepository {
-  static const String aedListKey = 'aed_list_json_2';
-  static const String aedUpdateTimestamp = 'aed_update';
+  static const String defibrillatorListKey = 'aed_list_json_2';
+  static const String defibrillatorListUpdateTimestamp = 'aed_update';
+  static const String originalDefibrillatorsListKey = 'original_defibrillators';
 
-  updateAEDs() async {
+  static const devMode = kDebugMode;
+
+  Future<File> get cacheFile async {
+    if (Platform.environment.containsKey('FLUTTER_TEST')) {
+      return File('ignore_$defibrillatorListKey.geojson');
+    }
+    final directory = await getApplicationDocumentsDirectory();
+    return File('${directory.path}/$defibrillatorListKey.geojson');
+  }
+
+  updateDefibrillators() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var response = await http.get(
           Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'));
-      await prefs.setString(aedListKey, utf8.decode(response.bodyBytes));
-      await prefs.setString(
-          aedUpdateTimestamp, DateTime.now().toIso8601String());
-    } catch (err) {
-      if (kDebugMode) {
-        print('Failed to load AEDs from internet!');
+      if (utf8.decode(response.bodyBytes).isNotEmpty) {
+        await (await cacheFile).writeAsString(utf8.decode(response.bodyBytes));
+        await prefs.setString(
+            defibrillatorListUpdateTimestamp, DateTime.now().toIso8601String());
       }
+    } catch (err) {
+      print('Failed to load defibrillators from internet!');
     }
   }
 
-  loadLocalAEDs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  loadLocalDefibrillators() async {
     String data = await rootBundle.loadString("assets/world.geojson");
     data = data.replaceAll("@osm_id", "osm_id");
-    await prefs.setString(aedListKey, data);
+    await (await cacheFile).writeAsString(data);
   }
 
   Future<DateTime> getLastUpdateTime() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var value = prefs.getString(aedUpdateTimestamp);
+    var value = prefs.getString(defibrillatorListUpdateTimestamp);
     if (value == null) return DateTime.now();
     return DateTime.parse(value);
   }
 
-  Future<List<AED>> loadAEDs(LatLng currentLocation) async {
+  Future<List<Defibrillator>> loadDefibrillators(LatLng currentLocation) async {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       await mixpanel.registerSuperProperties({
         "\$latitude": currentLocation.latitude,
@@ -57,45 +68,57 @@ class PointsRepository {
       mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
       mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
     }
-    List<AED> aeds = [];
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey(aedListKey)) await loadLocalAEDs();
-    updateAEDs();
-    var contents = prefs.getString(aedListKey)!;
+    List<Defibrillator> defibrillators = [];
+    if (!(await (await cacheFile).exists())) {
+      await loadLocalDefibrillators();
+    }
+    updateDefibrillators();
+    print('Using file ${(await cacheFile).path}');
+    var contents = await (await cacheFile).readAsString();
     var idLabel = 'osm_id';
     if (contents.contains('@osm_id')) {
       idLabel = '@osm_id';
     }
+
+    var originalDefibrillators = await fetchOriginalDefibrillators();
+    var originalDefibrillatorsIds = originalDefibrillators
+        .map((defibrillator) => defibrillator.id)
+        .toList();
+
+    defibrillators.addAll(originalDefibrillators);
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
-      aeds.add(AED(
-          location: LatLng(row['geometry']['coordinates'][1],
-              row['geometry']['coordinates'][0]),
-          id: row['properties'][idLabel],
-          description: row['properties']['defibrillator:location'] ??
-              row['properties']['defibrillator:location:pl'],
-          indoor: row['properties']['indoor'],
-          operator: row['properties']['operator'],
-          phone: row['properties']['phone'],
-          openingHours: row['properties']['opening_hours'],
-          access: row['properties']['access']));
+      var id = row['properties'][idLabel];
+      if (!originalDefibrillatorsIds.contains(id)) {
+        defibrillators.add(Defibrillator(
+            location: LatLng(row['geometry']['coordinates'][1],
+                row['geometry']['coordinates'][0]),
+            id: id,
+            description: row['properties']['defibrillator:location'] ??
+                row['properties']['defibrillator:location:pl'],
+            indoor: row['properties']['indoor'],
+            operator: row['properties']['operator'],
+            phone: row['properties']['phone'],
+            openingHours: row['properties']['opening_hours'],
+            access: row['properties']['access']));
+      }
     });
-    if (kDebugMode) {
-      print('Loaded ${aeds.length} AEDs!');
-    }
-    aeds = aeds.map((aed) {
+    print('Loaded ${defibrillators.length} defibrillators!');
+    print('Loaded ${originalDefibrillators.length} original defibrillators!');
+    defibrillators = defibrillators.map((defibrillator) {
       const Distance distance = Distance(calculator: Haversine());
-      aed.distance = distance(currentLocation, aed.location).ceil();
-      return aed;
+      defibrillator.distance =
+          distance(currentLocation, defibrillator.location).ceil();
+      return defibrillator;
     }).toList();
-    aeds.sort((a, b) => a.distance!.compareTo(b.distance!));
-    return aeds.toList();
+    defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
+    return defibrillators.toList();
   }
 
   String? token;
 
   Future<bool> authenticate() async {
-    if (token != null || kDebugMode) return true;
+    if (token != null || devMode) return true;
     mixpanel.track(loginEvent);
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
@@ -105,17 +128,13 @@ class PointsRepository {
               "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api%20read_prefs",
           callbackUrlScheme: "aedmap");
       final code = Uri.parse(result).queryParameters['code'];
-      if (kDebugMode) {
-        print('Got OAuth2 code: $code');
-      }
+      print('Got OAuth2 code: $code');
       var response = await http.post(
           Uri.parse(
               'https://www.openstreetmap.org/oauth2/token?grant_type=authorization_code&redirect_uri=aedmap://success&client_id=$clientId&client_secret=$clientSecret&code=$code'),
           headers: {'Content-Type': 'application/x-www-form-urlencoded'});
       token = json.decode(response.body)['access_token'];
-      if (kDebugMode) {
-        print('Got OAuth2 token: $token');
-      }
+      print('Got OAuth2 token: $token');
       mixpanel.track(authenticatedEvent);
       await getUser();
       return token != null;
@@ -181,40 +200,39 @@ class PointsRepository {
     return int.parse(response.body.toString());
   }
 
-  Future<AED> insertDefibrillator(AED aed) async {
+  Future<Defibrillator> insertDefibrillator(Defibrillator defibrillator) async {
     try {
-      var changesetId = await getChangesetId();
-      if (!kDebugMode) {
+      if (!devMode) {
+        var changesetId = await getChangesetId();
         var response = await http.put(
             Uri.parse('https://api.openstreetmap.org/api/0.6/node/create'),
             headers: {
               'Content-Type': 'text/xml',
               'Authorization': 'Bearer $token'
             },
-            body: aed.toXml(changesetId, 1));
+            body: defibrillator.toXml(changesetId, 1));
         var id = int.parse(response.body.toString());
-        aed.id = id;
+        defibrillator.id = id;
       } else {
-        aed.id = 9999;
+        defibrillator.id = 9999;
       }
-      if (kDebugMode) {}
-      updateAEDs();
+      addOriginalDefibrillator(defibrillator.id);
+      updateDefibrillators();
     } catch (err) {
-      if (kDebugMode) {
-        print(err);
-      }
+      print(err);
     }
-    return aed;
+    return defibrillator;
   }
 
-  Future<AED> updateDefibrillator(AED aed) async {
-    if (kDebugMode) {
-      return aed;
+  Future<Defibrillator> updateDefibrillator(Defibrillator defibrillator) async {
+    if (devMode) {
+      return defibrillator;
     }
     try {
       var changesetId = await getChangesetId();
       var fetchResponse = await http.get(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
+          Uri.parse(
+              'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
           headers: {
             'Content-Type': 'text/xml',
             'Authorization': 'Bearer $token'
@@ -240,28 +258,28 @@ class PointsRepository {
               .value
         ];
       }).toList();
-      var xml =
-          aed.toXml(changesetId, int.parse(oldVersion), oldTags: oldTagsPairs);
+      var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
+          oldTags: oldTagsPairs);
       await http.put(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/${aed.id}'),
+          Uri.parse(
+              'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
           headers: {
             'Content-Type': 'text/xml',
             'Authorization': 'Bearer $token'
           },
           body: xml);
-      updateAEDs();
+      addOriginalDefibrillator(defibrillator.id);
+      updateDefibrillators();
     } catch (err) {
-      if (kDebugMode) {
-        print(err);
-      }
+      print(err);
     }
-    return aed;
+    return defibrillator;
   }
 
-  Future<String?> getImage(AED aed) async {
+  Future<String?> getImage(Defibrillator defibrillator) async {
     try {
-      var response = await http
-          .get(Uri.parse('https://back.openaedmap.org/api/v1/node/${aed.id}'));
+      var response = await http.get(Uri.parse(
+          'https://back.openaedmap.org/api/v1/node/${defibrillator.id}'));
       var result = jsonDecode(response.body);
       if (result['elements'][0]['@photo_url'].toString().length > 10) {
         return 'https://back.openaedmap.org${result['elements'][0]['@photo_url']}';
@@ -270,5 +288,56 @@ class PointsRepository {
     } catch (err) {
       return null;
     }
+  }
+
+  Future<Defibrillator?> getNode(int id) async {
+    try {
+      var response = await http.get(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/$id.json'));
+      var payload = json.decode(response.body);
+      if ((payload['elements'] as List<dynamic>).isNotEmpty) {
+        var element = payload['elements'][0] as Map<String, dynamic>;
+        var tags = element['tags'] as Map<String, dynamic>;
+        return Defibrillator(
+          location: LatLng(element['lat'], element['lon']),
+          id: id,
+          access: tags['access'],
+          description: tags['defibrillator:location'],
+          indoor: tags['indoor'],
+          openingHours: tags['opening_hours'],
+          operator: tags['operator'],
+          phone: tags['phone'],
+        );
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  Future addOriginalDefibrillator(int id) async {
+    print('Adding original defibrillator $id');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var originalDefibrillators =
+        prefs.getStringList(originalDefibrillatorsListKey) ?? [];
+    originalDefibrillators.add(id.toString());
+    await prefs.setStringList(
+        originalDefibrillatorsListKey, originalDefibrillators);
+  }
+
+  Future<List<Defibrillator>> fetchOriginalDefibrillators() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var originalDefibrillators =
+        prefs.getStringList(originalDefibrillatorsListKey) ?? [];
+    var ids = originalDefibrillators.map((x) {
+      print('Has original defibrillator $x');
+      return int.parse(x);
+    }).toList();
+    var defibrillators = await Future.wait(ids.map((id) {
+      print('Fetching original defibrillator $id');
+      return getNode(id);
+    }).toList());
+    return defibrillators
+        .where((defibrillator) => defibrillator != null)
+        .cast<Defibrillator>()
+        .toList();
   }
 }

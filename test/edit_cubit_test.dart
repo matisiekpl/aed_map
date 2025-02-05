@@ -48,14 +48,14 @@ void main() {
       await editCubit.add();
       expect(editCubit.state, isA<EditInProgress>());
       expect(editCubit.state.enabled, false);
-      expect((editCubit.state as EditInProgress).aed, isA<AED>());
-      expect((editCubit.state as EditInProgress).aed.id, 0);
+      expect((editCubit.state as EditInProgress).defibrillator, isA<Defibrillator>());
+      expect((editCubit.state as EditInProgress).defibrillator.id, 0);
       expect((editCubit.state as EditInProgress).indoor, 'no');
     });
 
     test('edit', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(
+      await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
           description: 'test_description',
@@ -65,19 +65,19 @@ void main() {
           phone: 'test_phone'));
       expect(editCubit.state.enabled, false);
       expect(editCubit.state, isA<EditInProgress>());
-      expect((editCubit.state as EditInProgress).aed, isA<AED>());
-      expect((editCubit.state as EditInProgress).aed.id, 7);
-      expect((editCubit.state as EditInProgress).aed.description,
+      expect((editCubit.state as EditInProgress).defibrillator, isA<Defibrillator>());
+      expect((editCubit.state as EditInProgress).defibrillator.id, 7);
+      expect((editCubit.state as EditInProgress).defibrillator.description,
           'test_description');
       expect((editCubit.state as EditInProgress).indoor, 'no');
       expect((editCubit.state as EditInProgress).access, 'yes');
-      expect((editCubit.state as EditInProgress).aed.operator, 'test_operator');
-      expect((editCubit.state as EditInProgress).aed.phone, 'test_phone');
+      expect((editCubit.state as EditInProgress).defibrillator.operator, 'test_operator');
+      expect((editCubit.state as EditInProgress).defibrillator.phone, 'test_phone');
     });
 
     test('editDescription', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(
+      await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
           description: 'test_description',
@@ -87,7 +87,7 @@ void main() {
           phone: 'test_phone'));
       editCubit.editDescription('test_description2');
       expect(editCubit.state, isA<EditInProgress>());
-      expect((editCubit.state as EditInProgress).aed.description,
+      expect((editCubit.state as EditInProgress).defibrillator.description,
           'test_description2');
       expect(
           (editCubit.state as EditInProgress).description, 'test_description2');
@@ -95,7 +95,7 @@ void main() {
 
     test('editIndoor', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(
+      await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
           description: 'test_description',
@@ -105,13 +105,13 @@ void main() {
           phone: 'test_phone'));
       editCubit.editIndoor(true);
       expect(editCubit.state, isA<EditInProgress>());
-      expect((editCubit.state as EditInProgress).aed.indoor, 'yes');
+      expect((editCubit.state as EditInProgress).defibrillator.indoor, 'yes');
       expect((editCubit.state as EditInProgress).indoor, 'yes');
     });
 
     test('editAccess', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(
+      await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
           description: 'test_description',
@@ -121,13 +121,13 @@ void main() {
           phone: 'test_phone'));
       editCubit.editAccess('no');
       expect(editCubit.state, isA<EditInProgress>());
-      expect((editCubit.state as EditInProgress).aed.access, 'no');
+      expect((editCubit.state as EditInProgress).defibrillator.access, 'no');
       expect((editCubit.state as EditInProgress).access, 'no');
     });
 
     test('editAccess', () async {
       await editCubit.enter();
-      await editCubit.edit(AED(
+      await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
           description: 'test_description',
@@ -137,7 +137,7 @@ void main() {
           phone: 'test_phone'));
       editCubit.editAccess('test_access');
       expect(editCubit.state, isA<EditInProgress>());
-      expect((editCubit.state as EditInProgress).aed.access, 'test_access');
+      expect((editCubit.state as EditInProgress).defibrillator.access, 'test_access');
       expect((editCubit.state as EditInProgress).access, 'test_access');
     });
   });

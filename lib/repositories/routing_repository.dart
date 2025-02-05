@@ -7,7 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 
 class RoutingRepository {
-  Future<Trip?> navigate(LatLng current, AED aed) async {
+  Future<Trip?> navigate(LatLng current, Defibrillator defibrillator) async {
     try {
       var payload = {
         'costing': 'pedestrian',
@@ -21,7 +21,7 @@ class RoutingRepository {
             'lat': current.latitude,
             'lon': current.longitude,
           },
-          {'lat': aed.location.latitude, 'lon': aed.location.longitude}
+          {'lat': defibrillator.location.latitude, 'lon': defibrillator.location.longitude}
         ]
       };
       var response = await http.get(Uri.parse('$valhalla/route?json=${jsonEncode(payload)}'));

@@ -37,7 +37,7 @@ class MapHeader extends StatelessWidget {
                       fontWeight: FontWeight.bold, fontSize: 32)),
               BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
                 if (state is PointsLoadSuccess) {
-                  return Text(appLocalizations.subheading(state.aeds.length),
+                  return Text(appLocalizations.subheading(state.defibrillators.length),
                       style: const TextStyle(fontSize: 14));
                 } else {
                   return Text(appLocalizations.subheading(0),

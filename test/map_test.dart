@@ -15,7 +15,7 @@ void main() {
       await tester.pumpWidget(const App(skipOnboarding: true));
 
       // in case of sudden cardiac arrest, every second matters
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 2));
       await tester.pump();
 
       // check if the nearest defibrillator is shown

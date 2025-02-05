@@ -10,8 +10,8 @@ class PointsState extends Equatable {
 class PointsLoadInProgress extends PointsState {}
 
 class PointsLoadSuccess extends PointsState {
-  final List<AED> aeds;
-  final AED selected;
+  final List<Defibrillator> defibrillators;
+  final Defibrillator selected;
   final List<Marker> markers;
   final String hash;
   final DateTime lastUpdateTime;
@@ -19,10 +19,10 @@ class PointsLoadSuccess extends PointsState {
 
   @override
   List<Object?> get props =>
-      [aeds, selected, markers, hash, lastUpdateTime, refreshing];
+      [defibrillators, selected, markers, hash, lastUpdateTime, refreshing];
 
   PointsLoadSuccess({
-    required this.aeds,
+    required this.defibrillators,
     required this.selected,
     required this.markers,
     required this.hash,
@@ -31,15 +31,15 @@ class PointsLoadSuccess extends PointsState {
   });
 
   PointsLoadSuccess copyWith({
-    List<AED>? aeds,
-    AED? selected,
+    List<Defibrillator>? defibrillators,
+    Defibrillator? selected,
     List<Marker>? markers,
     String? hash,
     DateTime? lastUpdateTime,
     bool? refreshing,
   }) {
     return PointsLoadSuccess(
-      aeds: aeds ?? this.aeds,
+      defibrillators: defibrillators ?? this.defibrillators,
       selected: selected ?? this.selected,
       markers: markers ?? this.markers,
       hash: hash ?? this.hash,

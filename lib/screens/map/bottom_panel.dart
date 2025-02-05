@@ -81,11 +81,11 @@ class BottomPanel extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          if (state.aeds.first.id == state.selected.id)
+                          if (state.defibrillators.first.id == state.selected.id)
                             GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                _selectAED(context, state.aeds.first);
+                                _selectDefibrillator(context, state.defibrillators.first);
                               },
                               child: Text('⚠️ ${appLocalizations.closestAED}',
                                   key: const Key('closestAed'),
@@ -94,11 +94,11 @@ class BottomPanel extends StatelessWidget {
                                       fontStyle: FontStyle.italic,
                                       fontSize: 18)),
                             ),
-                          if (state.aeds.first.id != state.selected.id)
+                          if (state.defibrillators.first.id != state.selected.id)
                             GestureDetector(
                                 behavior: HitTestBehavior.translucent,
                                 onTap: () {
-                                  _selectAED(context, state.aeds.first);
+                                  _selectDefibrillator(context, state.defibrillators.first);
                                 },
                                 child: Text(
                                     '⚠️ ${appLocalizations.closerAEDAvailable}',
@@ -378,9 +378,9 @@ class BottomPanel extends StatelessWidget {
     );
   }
 
-  _selectAED(BuildContext context, AED aed) async {
+  _selectDefibrillator(BuildContext context, Defibrillator defibrillator) async {
     context.read<RoutingCubit>().cancel();
-    context.read<PointsCubit>().select(aed);
+    context.read<PointsCubit>().select(defibrillator);
     context.read<PanelCubit>().show();
   }
 }

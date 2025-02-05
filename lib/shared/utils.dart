@@ -84,12 +84,12 @@ const settingsListDarkTheme = SettingsThemeData(
     dividerColor: Color(0xFF363437),
     tileHighlightColor: Color(0xFF2C2C2F));
 
-List<AED> getDefibrillatorsWithin5KM(List<AED> aeds, LatLng location) =>
-    aeds.where((aed) {
+List<Defibrillator> getDefibrillatorsWithin5KM(List<Defibrillator> defibrillators, LatLng location) =>
+    defibrillators.where((defibrillator) {
       var distance = Geolocator.distanceBetween(location.latitude,
-          location.longitude, aed.location.latitude, aed.location.longitude);
+          location.longitude, defibrillator.location.latitude, defibrillator.location.longitude);
       return distance < 5000;
     }).toList();
 
-List<AED> getDefibrillatorsWithImages(List<AED> aeds) =>
-    aeds.where((aed) => aed.image?.isNotEmpty ?? false).toList();
+List<Defibrillator> getDefibrillatorsWithImages(List<Defibrillator> defibrillators) =>
+    defibrillators.where((defibrillator) => defibrillator.image?.isNotEmpty ?? false).toList();

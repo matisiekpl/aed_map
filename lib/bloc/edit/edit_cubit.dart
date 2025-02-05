@@ -44,62 +44,62 @@ class EditCubit extends Cubit<EditState> {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       mixpanel.track(addEvent);
     }
-    AED aed = AED(
+    Defibrillator defibrillator = Defibrillator(
         location: LatLng(state.cursor.latitude, state.cursor.longitude), id: 0);
     emit(EditInProgress(
         enabled: false,
         cursor: state.cursor,
-        aed: aed,
-        access: aed.access ?? 'yes',
-        indoor: aed.indoor ?? 'no',
-        description: aed.description ?? ''));
+        defibrillator: defibrillator,
+        access: defibrillator.access ?? 'yes',
+        indoor: defibrillator.indoor ?? 'no',
+        description: defibrillator.description ?? ''));
   }
 
-  edit(AED aed) async {
+  edit(Defibrillator defibrillator) async {
     analytics.event(name: editEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       mixpanel.track(editEvent);
     }
     if (!await pointsRepository.authenticate()) return;
-    aed = aed.copyWith();
+    defibrillator = defibrillator.copyWith();
     emit(EditInProgress(
         enabled: false,
         cursor: state.cursor,
-        aed: aed,
-        access: aed.access ?? 'yes',
-        indoor: aed.indoor ?? 'no',
-        description: aed.description ?? ''));
+        defibrillator: defibrillator,
+        access: defibrillator.access ?? 'yes',
+        indoor: defibrillator.indoor ?? 'no',
+        description: defibrillator.description ?? ''));
   }
 
   editDescription(String value) {
     var s = state;
     if (s is EditInProgress) {
-      s.aed.description = value;
-      emit(s.copyWith(aed: s.aed, description: value));
+      s.defibrillator.description = value;
+      emit(s.copyWith(defibrillator: s.defibrillator, description: value));
     }
   }
 
   editOperator(String value) {
     var s = state;
     if (s is EditInProgress) {
-      s.aed.operator = value;
-      emit(s.copyWith(aed: s.aed));
+      s.defibrillator.operator = value;
+      emit(s.copyWith(defibrillator: s.defibrillator));
     }
   }
 
   editPhone(String value) {
     var s = state;
     if (s is EditInProgress) {
-      s.aed.phone = value;
-      emit(s.copyWith(aed: s.aed));
+      s.defibrillator.phone = value;
+      emit(s.copyWith(defibrillator: s.defibrillator));
     }
   }
 
   editOpeningHours(String value) {
     var s = state;
     if (s is EditInProgress) {
-      s.aed.openingHours = value;
-      emit(s.copyWith(aed: s.aed));
+      s.defibrillator.openingHours = value;
+      emit(s.copyWith(defibrillator: s.defibrillator));
     }
   }
 
@@ -107,39 +107,39 @@ class EditCubit extends Cubit<EditState> {
     var s = state;
     if (s is EditInProgress) {
       var contents = value ? 'yes' : 'no';
-      s.aed.indoor = contents;
-      emit(s.copyWith(aed: s.aed, indoor: contents));
+      s.defibrillator.indoor = contents;
+      emit(s.copyWith(defibrillator: s.defibrillator, indoor: contents));
     }
   }
 
   editAccess(String value) {
     var s = state;
     if (s is EditInProgress) {
-      s.aed.access = value;
-      emit(s.copyWith(aed: s.aed, access: value));
+      s.defibrillator.access = value;
+      emit(s.copyWith(defibrillator: s.defibrillator, access: value));
     }
   }
 
-  Future<AED?> save() async {
+  Future<Defibrillator?> save() async {
     var s = state;
     if (s is EditInProgress) {
-      if (s.aed.id == 0) {
-        await pointsRepository.insertDefibrillator(s.aed);
+      if (s.defibrillator.id == 0) {
+        await pointsRepository.insertDefibrillator(s.defibrillator);
         analytics.event(name: saveInsertEvent);
         if (!Platform.environment.containsKey('FLUTTER_TEST')) {
           mixpanel.track(saveInsertEvent,
-              properties: s.aed.getEventProperties());
+              properties: s.defibrillator.getEventProperties());
         }
       } else {
-        await pointsRepository.updateDefibrillator(s.aed);
+        await pointsRepository.updateDefibrillator(s.defibrillator);
         analytics.event(name: saveUpdateEvent);
         if (!Platform.environment.containsKey('FLUTTER_TEST')) {
           mixpanel.track(saveUpdateEvent,
-              properties: s.aed.getEventProperties());
+              properties: s.defibrillator.getEventProperties());
         }
       }
       emit(EditReady(enabled: false, cursor: state.cursor));
-      return s.aed;
+      return s.defibrillator;
     }
     return null;
   }

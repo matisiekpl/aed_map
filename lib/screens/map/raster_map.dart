@@ -56,9 +56,9 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
           listenWhen: (previous, current) =>
               current is PointsLoadSuccess &&
               previous is PointsLoadSuccess &&
-              ((current.aeds.length != previous.aeds.length) ||
-                  (current.aeds.first.access != previous.aeds.first.access) ||
-                  (current.aeds.first.id != previous.aeds.first.id)),
+              ((current.defibrillators.length != previous.defibrillators.length) ||
+                  (current.defibrillators.first.access != previous.defibrillators.first.access) ||
+                  (current.defibrillators.first.id != previous.defibrillators.first.id)),
           child: BlocListener<PointsCubit, PointsState>(
             listener: (BuildContext context, PointsState state) {
               if (state is PointsLoadSuccess) {
@@ -175,12 +175,12 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                     controller: markersController,
                                     minimumClusterSize: 3,
                                     onMarkerTap: (Marker marker) {
-                                      var aed = state.aeds[int.parse(marker.key
+                                      var defibrillator = state.defibrillators[int.parse(marker.key
                                           .toString()
                                           .replaceAll('[<\'', '')
                                           .replaceAll('\'>]', ''))];
                                       context.read<RoutingCubit>().cancel();
-                                      context.read<PointsCubit>().select(aed);
+                                      context.read<PointsCubit>().select(defibrillator);
                                     },
                                     clusterWidgetSize: const Size(40, 40),
                                     calculateAggregatedClusterData: true,

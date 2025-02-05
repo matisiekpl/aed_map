@@ -179,3 +179,5 @@ dist
 public/
 # Local Netlify folder
 .netlify
+
+ignore_*.*
