@@ -3,7 +3,7 @@ description: App showing available AEDs
 
 publish_to: "none"
 
-version: 1.0.47+47
+version: 1.0.48+48
 
 environment:
   sdk: ^3.5.3
@@ -55,6 +55,7 @@ dependencies:
   introduction_screen: ^3.1.14
   flutter_phoenix: ^1.1.1
   path_provider: ^2.1.5
+  in_app_review: ^2.0.10
 
 dev_dependencies:
   integration_test:
