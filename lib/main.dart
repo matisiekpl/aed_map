@@ -17,6 +17,7 @@ import 'package:aed_map/screens/map/map_screen.dart';
 import 'package:aed_map/screens/onboarding/onboarding_screen.dart';
 import 'package:feedback/feedback.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +39,15 @@ late final Mixpanel mixpanel;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final remoteConfig = FirebaseRemoteConfig.instance;
+  await remoteConfig.setConfigSettings(RemoteConfigSettings(
+    fetchTimeout: const Duration(minutes: 1),
+    minimumFetchInterval: const Duration(hours: 1),
+  ));
+  await remoteConfig.setDefaults(const {
+    "request_review": false,
+  });
+  remoteConfig.fetchAndActivate();
   mixpanel = await Mixpanel.init(mixpanelToken, trackAutomaticEvents: true);
   await SentryFlutter.init(
     (options) {

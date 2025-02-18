@@ -29,3 +29,4 @@ const loginEvent = 'login';
 const authenticatedEvent = 'authenticated';
 const aboutEvent = 'about';
 const phoneEvent = 'phone';
+const requestReviewEvent = 'review_requested';

@@ -6,6 +6,7 @@ import 'package:aed_map/main.dart';
 import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:latlong2/latlong.dart';
@@ -141,8 +142,17 @@ class EditCubit extends Cubit<EditState> {
       }
       emit(EditReady(enabled: false, cursor: state.cursor));
       Future.delayed(const Duration(seconds: 2)).then((_) async {
-        if (Platform.isIOS && await InAppReview.instance.isAvailable()) {
-          await InAppReview.instance.requestReview();
+        final remoteConfig = FirebaseRemoteConfig.instance;
+        if (remoteConfig.getBool('request_review')) {
+          var isAvailable = await InAppReview.instance.isAvailable();
+          if (isAvailable) {
+            await InAppReview.instance.requestReview();
+          }
+          if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+            mixpanel.track(requestReviewEvent, properties: {
+              'available': isAvailable,
+            });
+          }
         }
       });
       return s.defibrillator;
