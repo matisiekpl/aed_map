@@ -137,6 +137,12 @@ class _SettingsPageState extends State<SettingsPage>
                                   value: Text(editState.user?.name ?? '-',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold))),
+                                            SettingsTile(
+                                  leading: const Icon(Icons.tag),
+                                  title: Text(appLocalizations.accountNumber),
+                                  value: Text(editState.user?.id.toString() ?? '-',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))),
                               SettingsTile.navigation(
                                   onPressed: (context) {
                                     context.read<EditCubit>().logout();

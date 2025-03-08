@@ -102,5 +102,7 @@
   "openStreetMapAccount": "Cuenta de OpenStreetMap",
   "signedInAs": "Conectado como",
   "logout": "Cerrar sesión",
-  "viewOpenStreetMapNode": "Voir le nœud OpenStreetMap"
+  "viewOpenStreetMapNode": "Voir le nœud OpenStreetMap",
+  "delete": "Supprimer",
+  "accountNumber": "Numéro de compte"
 }
