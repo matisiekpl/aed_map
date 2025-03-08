@@ -10,6 +10,7 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
@@ -162,6 +163,10 @@ class PointsRepository {
         mixpanel.getPeople().set('\$name', user.name);
         mixpanel.getPeople().set('\$avatar', user.avatar);
         await mixpanel.flush();
+        Sentry.configureScope((scope) => scope.setUser(SentryUser(
+              id: user.id.toString(),
+              username: user.name,
+            )));
       }
       return user;
     } catch (err) {
@@ -339,5 +344,63 @@ class PointsRepository {
         .where((defibrillator) => defibrillator != null)
         .cast<Defibrillator>()
         .toList();
+  }
+
+  Future<bool> deleteDefibrillator(int nodeId) async {
+    if (devMode) {
+      return true;
+    }
+    try {
+      var changesetId = await getChangesetId();
+      var fetchResponse = await http.get(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/$nodeId'),
+          headers: {
+            'Content-Type': 'text/xml',
+            'Authorization': 'Bearer $token'
+          });
+      final document = XmlDocument.parse(fetchResponse.body);
+      final oldVersion = document
+          .findAllElements('node')
+          .first
+          .attributes
+          .where((attr) => attr.name.toString() == 'version')
+          .first
+          .value;
+
+      final builder = XmlBuilder();
+      builder.processing('xml', 'version="1.0"');
+      builder.element('osm', nest: () {
+        builder.element('node', attributes: {
+          'id': nodeId.toString(),
+          'version': oldVersion,
+          'changeset': changesetId.toString(),
+          'lat': document.findAllElements('node').first.attributes.where((attr) => attr.name.toString() == 'lat').first.value,
+          'lon': document.findAllElements('node').first.attributes.where((attr) => attr.name.toString() == 'lon').first.value,
+        });
+      });
+      final deleteDocument = builder.buildDocument();
+
+      var response = await http.delete(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/$nodeId'),
+          headers: {
+            'Content-Type': 'text/xml',
+            'Authorization': 'Bearer $token'
+          },
+          body: deleteDocument.toXmlString());
+      
+      if (response.statusCode == 200) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var originalDefibrillators = prefs.getStringList(originalDefibrillatorsListKey) ?? [];
+        originalDefibrillators.remove(nodeId.toString());
+        await prefs.setStringList(originalDefibrillatorsListKey, originalDefibrillators);
+        await updateDefibrillators();
+        return true;
+      }
+      Sentry.captureMessage('Error deleting node: ${response.statusCode}, ${response.body}');
+      return false;
+    } catch (err) {
+      Sentry.captureException(err);
+      return false;
+    }
   }
 }

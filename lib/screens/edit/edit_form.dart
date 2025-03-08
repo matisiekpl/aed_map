@@ -3,11 +3,13 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/constants.dart';
+import 'package:aed_map/repositories/points_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/points/points_cubit.dart';
@@ -31,9 +33,16 @@ class EditForm extends StatelessWidget {
             if (state is EditInProgress) {
               return SafeArea(
                 bottom: false,
-                child: SettingsList(
-                  sections: _buildSections(context, state),
-                ),
+                child: FutureBuilder(
+                    future: SharedPreferences.getInstance(),
+                    builder: (context, snap) {
+                      if (snap.hasData) {
+                        return SettingsList(
+                          sections: _buildSections(context, state, snap.data!),
+                        );
+                      }
+                      return const Center(child: CupertinoActivityIndicator());
+                    }),
               );
             }
             return Container();
@@ -42,7 +51,7 @@ class EditForm extends StatelessWidget {
   }
 
   List<AbstractSettingsSection> _buildSections(
-      BuildContext context, EditInProgress state) {
+      BuildContext context, EditInProgress state, SharedPreferences prefs) {
     var appLocalizations = AppLocalizations.of(context)!;
     return [
       SettingsSection(
@@ -136,6 +145,21 @@ class EditForm extends StatelessWidget {
                 launchUrl(Uri.parse('$osmNodePrefix${state.defibrillator.id}'));
               },
             ),
+            if ((prefs.getStringList(
+                        PointsRepository.originalDefibrillatorsListKey) ??
+                    [])
+                .contains(state.defibrillator.id.toString()))
+              SettingsTile.navigation(
+                leading: const Icon(CupertinoIcons.trash),
+                title: Text(appLocalizations.delete),
+                onPressed: (context) async {
+                  await context
+                      .read<EditCubit>()
+                      .delete(state.defibrillator);
+                  await context.read<PointsCubit>().load();
+                  Navigator.of(context).pop();
+                },
+              ),
           ],
         ),
       CustomSettingsSection(

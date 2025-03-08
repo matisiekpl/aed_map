@@ -102,5 +102,7 @@
   "openStreetMapAccount": "OpenStreetMap account",
   "signedInAs": "Signed in as",
   "logout": "Logout",
-  "viewOpenStreetMapNode": "View OpenStreetMap node"
+  "viewOpenStreetMapNode": "View OpenStreetMap node",
+  "delete": "Delete",
+  "accountNumber": "Account number"
 }

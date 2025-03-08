@@ -159,4 +159,13 @@ class EditCubit extends Cubit<EditState> {
     }
     return null;
   }
+
+  delete(Defibrillator defibrillator) async {
+    await pointsRepository.deleteDefibrillator(defibrillator.id);
+    emit(EditReady(enabled: false, cursor: state.cursor));
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      mixpanel.track(deleteEvent,
+          properties: defibrillator.getEventProperties());
+    }
+  }
 }
