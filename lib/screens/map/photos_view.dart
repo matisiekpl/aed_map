@@ -63,11 +63,6 @@ class _PhotosViewState extends State<PhotosView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(l10n.reportImageConfirmation),
-            const SizedBox(height: 8),
-            Text(
-              l10n.reportImageDescription,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
           ],
         ),
         actions: [
