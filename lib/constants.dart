@@ -1,6 +1,8 @@
 import 'package:latlong2/latlong.dart';
 
 final warsaw = LatLng(52.237049, 21.017532);
+final cracow = LatLng(50.049683, 19.944544);
+final agh = LatLng(50.069461, 19.904939);
 final berlin = LatLng(52.520008, 13.404954);
 final london = LatLng(51.509865, -0.118092);
 final madrid = LatLng(40.416775, -3.703790);

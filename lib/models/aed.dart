@@ -15,6 +15,7 @@ class Defibrillator {
   String? openingHours;
   String? access;
   String? image;
+  List<String> images;
 
   Defibrillator(
       {required this.location,
@@ -25,7 +26,8 @@ class Defibrillator {
       this.phone,
       this.openingHours,
       this.image = '',
-      this.access = 'yes'});
+      this.access = 'yes',
+      this.images = const []});
 
   String? getAccessComment(AppLocalizations appLocalizations) {
     return translateAccessComment(access, appLocalizations);
@@ -142,6 +144,7 @@ class Defibrillator {
     String? openingHours,
     String? access,
     String? image,
+    List<String>? images,
     Map? colors,
     Map? filenames,
   }) {
@@ -155,6 +158,7 @@ class Defibrillator {
       openingHours: openingHours ?? this.openingHours,
       access: access ?? this.access,
       image: image ?? this.image,
+      images: images ?? this.images,
     );
   }
 

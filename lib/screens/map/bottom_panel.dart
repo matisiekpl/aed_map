@@ -353,18 +353,41 @@ class BottomPanel extends StatelessWidget {
                             return Container();
                           })),
                       const SizedBox(height: 12),
-                      if ((state.selected.image ?? '').isNotEmpty)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: CachedNetworkImage(
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            imageUrl: state.selected.image ?? '',
-                            placeholder: (context, url) => Container(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                      if (state.selected.images.isNotEmpty)
+                        if (state.selected.images.length == 1)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: CachedNetworkImage(
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              imageUrl: state.selected.images[0],
+                              placeholder: (context, url) => Container(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                          )
+                        else
+                          SizedBox(
+                            height: 200,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: state.selected.images.length,
+                              separatorBuilder: (context, index) => const SizedBox(width: 8),
+                              itemBuilder: (context, index) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: CachedNetworkImage(
+                                    width: 200,
+                                    fit: BoxFit.cover,
+                                    imageUrl: state.selected.images[index],
+                                    placeholder: (context, url) => Container(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
                     ],
                   ),
                 ),

@@ -281,17 +281,21 @@ class PointsRepository {
     return defibrillator;
   }
 
-  Future<String?> getImage(Defibrillator defibrillator) async {
+  Future<List<String>> getImages(Defibrillator defibrillator) async {
     try {
       var response = await http.get(Uri.parse(
           'https://back.openaedmap.org/api/v1/node/${defibrillator.id}'));
       var result = jsonDecode(response.body);
-      if (result['elements'][0]['@photo_url'].toString().length > 10) {
-        return 'https://back.openaedmap.org${result['elements'][0]['@photo_url']}';
+      var images = <String>[];
+      for (var element in result['elements']) {
+        if (element['@photo_url'].toString().length > 10) {
+          images.add('https://back.openaedmap.org${element['@photo_url']}');
+          images.add('https://back.openaedmap.org${element['@photo_url']}');
+        }
       }
-      return null;
+      return images;
     } catch (err) {
-      return null;
+      return [];
     }
   }
 
@@ -378,8 +382,20 @@ class PointsRepository {
           'id': nodeId.toString(),
           'version': oldVersion,
           'changeset': changesetId.toString(),
-          'lat': document.findAllElements('node').first.attributes.where((attr) => attr.name.toString() == 'lat').first.value,
-          'lon': document.findAllElements('node').first.attributes.where((attr) => attr.name.toString() == 'lon').first.value,
+          'lat': document
+              .findAllElements('node')
+              .first
+              .attributes
+              .where((attr) => attr.name.toString() == 'lat')
+              .first
+              .value,
+          'lon': document
+              .findAllElements('node')
+              .first
+              .attributes
+              .where((attr) => attr.name.toString() == 'lon')
+              .first
+              .value,
         });
       });
       final deleteDocument = builder.buildDocument();
@@ -391,16 +407,19 @@ class PointsRepository {
             'Authorization': 'Bearer $token'
           },
           body: deleteDocument.toXmlString());
-      
+
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        var originalDefibrillators = prefs.getStringList(originalDefibrillatorsListKey) ?? [];
+        var originalDefibrillators =
+            prefs.getStringList(originalDefibrillatorsListKey) ?? [];
         originalDefibrillators.remove(nodeId.toString());
-        await prefs.setStringList(originalDefibrillatorsListKey, originalDefibrillators);
+        await prefs.setStringList(
+            originalDefibrillatorsListKey, originalDefibrillators);
         await updateDefibrillators();
         return true;
       }
-      Sentry.captureMessage('Error deleting node: ${response.statusCode}, ${response.body}');
+      Sentry.captureMessage(
+          'Error deleting node: ${response.statusCode}, ${response.body}');
       return false;
     } catch (err) {
       Sentry.captureException(err);

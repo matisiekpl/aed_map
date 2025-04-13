@@ -53,8 +53,8 @@ class PointsCubit extends Cubit<PointsState> {
   }
 
   select(Defibrillator defibrillator) {
-    FirebaseAnalytics.instance
-        .logSelectContent(contentType: 'aed', itemId: defibrillator.id.toString());
+    FirebaseAnalytics.instance.logSelectContent(
+        contentType: 'aed', itemId: defibrillator.id.toString());
     HapticFeedback.mediumImpact();
     analytics.event(name: selectEvent);
     mixpanel.track(selectEvent, properties: defibrillator.getEventProperties());
@@ -69,17 +69,18 @@ class PointsCubit extends Cubit<PointsState> {
   update(Defibrillator defibrillator) {
     if (state is PointsLoadSuccess) {
       if (defibrillator.id == 0) {
-        var newDefibrillators =
-            List<Defibrillator>.from((state as PointsLoadSuccess).defibrillators)..insert(0, defibrillator);
+        var newDefibrillators = List<Defibrillator>.from(
+            (state as PointsLoadSuccess).defibrillators)
+          ..insert(0, defibrillator);
         emit((state as PointsLoadSuccess).copyWith(
             defibrillators: newDefibrillators,
             markers: _getMarkers(newDefibrillators),
             selected: defibrillator));
       } else {
-        var updatedDefibrillators =
-            List<Defibrillator>.from((state as PointsLoadSuccess).defibrillators)
-              ..removeWhere((x) => x.id == defibrillator.id)
-              ..insert(0, defibrillator);
+        var updatedDefibrillators = List<Defibrillator>.from(
+            (state as PointsLoadSuccess).defibrillators)
+          ..removeWhere((x) => x.id == defibrillator.id)
+          ..insert(0, defibrillator);
         emit((state as PointsLoadSuccess).copyWith(
             selected: defibrillator,
             defibrillators: updatedDefibrillators,
@@ -133,7 +134,8 @@ class PointsCubit extends Cubit<PointsState> {
               ),
             );
           }
-          if (defibrillator.access == 'private' || defibrillator.access == 'permissive') {
+          if (defibrillator.access == 'private' ||
+              defibrillator.access == 'permissive') {
             return Marker(
               point: defibrillator.location,
               key: Key(defibrillators.indexOf(defibrillator).toString()),
@@ -215,9 +217,11 @@ class PointsCubit extends Cubit<PointsState> {
   loadImage() async {
     var state = this.state;
     if (state is PointsLoadSuccess) {
-      var url = await pointsRepository.getImage(state.selected);
-      var defibrillator = state.selected.copyWith(image: url);
-      emit(state.copyWith(selected: defibrillator, hash: generateRandomString(32)));
+      var images = await pointsRepository.getImages(state.selected);
+      var defibrillator =
+          state.selected.copyWith(images: images, image: images.firstOrNull);
+      emit(state.copyWith(
+          selected: defibrillator, hash: generateRandomString(32)));
     }
   }
 }
