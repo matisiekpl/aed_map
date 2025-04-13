@@ -46,6 +46,7 @@ void main() async {
   ));
   await remoteConfig.setDefaults(const {
     "request_review": false,
+    "images_upload_enabled": false,
   });
   remoteConfig.fetchAndActivate();
   mixpanel = await Mixpanel.init(mixpanelToken, trackAutomaticEvents: true);

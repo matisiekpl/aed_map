@@ -7,6 +7,7 @@ import 'package:aed_map/screens/map/photos_view.dart';
 import 'package:aed_map/shared/translations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cross_fade/cross_fade.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -313,127 +314,129 @@ class BottomPanel extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 50,
-                              child: BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
-                                builder: (context, networkState) {
-                                  return BlocBuilder<EditCubit, EditState>(
-                                    builder: (context, editState) {
-                                      final appLocalizations =
-                                          AppLocalizations.of(context)!;
-                                      if (editState.isImageUploading) {
-                                        return IgnorePointer(
-                                          child: CupertinoButton.filled(
-                                            padding: EdgeInsets.zero,
-                                            onPressed: null,
-                                            child:
-                                                Text(appLocalizations.uploading),
-                                          ),
-                                        );
-                                      }
-                                      return CupertinoButton.filled(
-                                        padding: EdgeInsets.zero,
-                                        onPressed: networkState.connected
-                                            ? () async {
-                                                var editCubit = context
-                                                    .read<EditCubit>();
-                                                var pointsCubit = context
-                                                    .read<PointsCubit>();
-                                                var originalContext = context;
-                                                final imageFile =
-                                                    await editCubit.pickImage();
-                                                if (imageFile != null) {
-                                                  showDialog(
-                                                    context: originalContext,
-                                                    builder: (context) => AlertDialog(
-                                                      title: Text(appLocalizations.confirmPhoto),
-                                                      content: SizedBox(
-                                                        width: double.maxFinite,
-                                                        child: Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            Container(
-                                                              height: 200,
-                                                              width: double.infinity,
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(8),
-                                                                color: Colors.grey[200],
-                                                              ),
-                                                              child: ClipRRect(
-                                                                borderRadius: BorderRadius.circular(8),
-                                                                child: Image.file(
-                                                                  imageFile,
-                                                                  fit: BoxFit.cover,
+                          if (FirebaseRemoteConfig.instance.getBool('images_upload_enabled'))
+                            Expanded(
+                              child: SizedBox(
+                                height: 50,
+                                child: BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
+                                  builder: (context, networkState) {
+                                    return BlocBuilder<EditCubit, EditState>(
+                                      builder: (context, editState) {
+                                        final appLocalizations =
+                                            AppLocalizations.of(context)!;
+                                        if (editState.isImageUploading) {
+                                          return IgnorePointer(
+                                            child: CupertinoButton.filled(
+                                              padding: EdgeInsets.zero,
+                                              onPressed: null,
+                                              child:
+                                                  Text(appLocalizations.uploading),
+                                            ),
+                                          );
+                                        }
+                                        return CupertinoButton.filled(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: networkState.connected
+                                              ? () async {
+                                                  var editCubit = context
+                                                      .read<EditCubit>();
+                                                  var pointsCubit = context
+                                                      .read<PointsCubit>();
+                                                  var originalContext = context;
+                                                  final imageFile =
+                                                      await editCubit.pickImage();
+                                                  if (imageFile != null) {
+                                                    showDialog(
+                                                      context: originalContext,
+                                                      builder: (context) => AlertDialog(
+                                                        title: Text(appLocalizations.confirmPhoto),
+                                                        content: SizedBox(
+                                                          width: double.maxFinite,
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Container(
+                                                                height: 200,
+                                                                width: double.infinity,
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.circular(8),
+                                                                  color: Colors.grey[200],
+                                                                ),
+                                                                child: ClipRRect(
+                                                                  borderRadius: BorderRadius.circular(8),
+                                                                  child: Image.file(
+                                                                    imageFile,
+                                                                    fit: BoxFit.cover,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ],
+                                                            ],
+                                                          ),
                                                         ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () => Navigator.pop(context),
+                                                            child: Text(appLocalizations.cancel),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () async {
+                                                              Navigator.pop(context);
+                                                              final success = await editCubit.uploadImage(state.selected, imageFile);
+                                                              if (success) {
+                                                                await pointsCubit.loadImage();
+                                                                showDialog(
+                                                                  context: originalContext,
+                                                                  builder: (context) => AlertDialog(
+                                                                    title: Text(
+                                                                        appLocalizations.photoUploaded),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: () =>
+                                                                            Navigator.pop(context),
+                                                                        child: Text(appLocalizations
+                                                                            .understand),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              } else {
+                                                                showDialog(
+                                                                  context: originalContext,
+                                                                  builder: (context) => AlertDialog(
+                                                                    title: Text(
+                                                                        appLocalizations.photoUploadFailed),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: () =>
+                                                                            Navigator.pop(context),
+                                                                        child: Text(appLocalizations
+                                                                            .understand),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              }
+                                                            },
+                                                            child: Text(appLocalizations.confirm),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () => Navigator.pop(context),
-                                                          child: Text(appLocalizations.cancel),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () async {
-                                                            Navigator.pop(context);
-                                                            final success = await editCubit.uploadImage(state.selected, imageFile);
-                                                            if (success) {
-                                                              await pointsCubit.loadImage();
-                                                              showDialog(
-                                                                context: originalContext,
-                                                                builder: (context) => AlertDialog(
-                                                                  title: Text(
-                                                                      appLocalizations.photoUploaded),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      onPressed: () =>
-                                                                          Navigator.pop(context),
-                                                                      child: Text(appLocalizations
-                                                                          .understand),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              );
-                                                            } else {
-                                                              showDialog(
-                                                                context: originalContext,
-                                                                builder: (context) => AlertDialog(
-                                                                  title: Text(
-                                                                      appLocalizations.photoUploadFailed),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      onPressed: () =>
-                                                                          Navigator.pop(context),
-                                                                      child: Text(appLocalizations
-                                                                          .understand),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              );
-                                                            }
-                                                          },
-                                                          child: Text(appLocalizations.confirm),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
+                                                    );
+                                                  }
                                                 }
-                                              }
-                                            : null,
-                                        child: Text(networkState.connected
-                                            ? appLocalizations.addPhoto
-                                            : appLocalizations.noNetwork),
-                                      );
-                                    },
-                                  );
-                                },
+                                              : null,
+                                          child: Text(networkState.connected
+                                              ? appLocalizations.addPhoto
+                                              : appLocalizations.noNetwork),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
+                          if (FirebaseRemoteConfig.instance.getBool('images_upload_enabled'))
+                            const SizedBox(width: 8),
                           Expanded(
                             child: BlocBuilder<LocationCubit, LocationState>(
                                 builder: (context, locationState) {
