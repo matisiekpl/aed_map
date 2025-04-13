@@ -318,6 +318,10 @@ class PointsRepository {
     return null;
   }
 
+  // Original defibrillators are AED points that were created by the user of this app.
+  // They are stored separately from other AEDs to allow the user to edit and delete
+  // only the points they have created themselves. The IDs are stored in SharedPreferences
+  // and the actual data is fetched from OpenStreetMap API when needed.
   Future addOriginalDefibrillator(int id) async {
     print('Adding original defibrillator $id');
     SharedPreferences prefs = await SharedPreferences.getInstance();
