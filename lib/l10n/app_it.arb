@@ -112,5 +112,8 @@
   "addPhoto": "Aggiungi foto",
   "imageReported": "Immagine segnalata",
   "photoUploaded": "Foto caricata",
-  "uploading": "Caricamento in corso..."
+  "uploading": "Caricamento in corso...",
+  "confirmPhoto": "Conferma foto",
+  "confirm": "Conferma",
+  "photoUploadFailed": "Caricamento foto fallito"
 }

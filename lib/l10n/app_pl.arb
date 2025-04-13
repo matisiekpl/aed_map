@@ -111,6 +111,9 @@
   "report": "Zgłoś",
   "addPhoto": "Dodaj zdjęcie",
   "imageReported": "Zdjęcie zostało zgłoszone",
-  "photoUploaded": "Zdjęcie zostało dodane",
-  "uploading": "Przesyłanie..."
+  "photoUploaded": "Zdjęcie przesłane",
+  "uploading": "Przesyłanie...",
+  "confirmPhoto": "Potwierdź zdjęcie",
+  "confirm": "Potwierdź",
+  "photoUploadFailed": "Przesyłanie zdjęcia nie powiodło się"
 }

@@ -112,5 +112,8 @@
   "addPhoto": "Add photo",
   "imageReported": "Image has been reported",
   "photoUploaded": "Photo has been uploaded",
-  "uploading": "Uploading..."
+  "uploading": "Uploading...",
+  "confirmPhoto": "Confirm photo",
+  "confirm": "Confirm",
+  "photoUploadFailed": "Photo upload failed"
 }

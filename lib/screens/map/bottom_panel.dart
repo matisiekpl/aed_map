@@ -336,24 +336,86 @@ class BottomPanel extends StatelessWidget {
                                         padding: EdgeInsets.zero,
                                         onPressed: networkState.connected
                                             ? () async {
-                                                final success = await context
-                                                    .read<EditCubit>()
-                                                    .uploadImage(state.selected);
-                                                if (success) {
-                                                  await context
-                                                      .read<PointsCubit>()
-                                                      .loadImage();
+                                                var editCubit = context
+                                                    .read<EditCubit>();
+                                                var pointsCubit = context
+                                                    .read<PointsCubit>();
+                                                var originalContext = context;
+                                                final imageFile =
+                                                    await editCubit.pickImage();
+                                                if (imageFile != null) {
                                                   showDialog(
-                                                    context: context,
+                                                    context: originalContext,
                                                     builder: (context) => AlertDialog(
-                                                      title: Text(
-                                                          appLocalizations.photoUploaded),
+                                                      title: Text(appLocalizations.confirmPhoto),
+                                                      content: SizedBox(
+                                                        width: double.maxFinite,
+                                                        child: Column(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            Container(
+                                                              height: 200,
+                                                              width: double.infinity,
+                                                              decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(8),
+                                                                color: Colors.grey[200],
+                                                              ),
+                                                              child: ClipRRect(
+                                                                borderRadius: BorderRadius.circular(8),
+                                                                child: Image.file(
+                                                                  imageFile,
+                                                                  fit: BoxFit.cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
                                                       actions: [
                                                         TextButton(
-                                                          onPressed: () =>
-                                                              Navigator.pop(context),
-                                                          child: Text(appLocalizations
-                                                              .understand),
+                                                          onPressed: () => Navigator.pop(context),
+                                                          child: Text(appLocalizations.cancel),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            Navigator.pop(context);
+                                                            final success = await editCubit.uploadImage(state.selected, imageFile);
+                                                            if (success) {
+                                                              await pointsCubit.loadImage();
+                                                              showDialog(
+                                                                context: originalContext,
+                                                                builder: (context) => AlertDialog(
+                                                                  title: Text(
+                                                                      appLocalizations.photoUploaded),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: () =>
+                                                                          Navigator.pop(context),
+                                                                      child: Text(appLocalizations
+                                                                          .understand),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            } else {
+                                                              showDialog(
+                                                                context: originalContext,
+                                                                builder: (context) => AlertDialog(
+                                                                  title: Text(
+                                                                      appLocalizations.photoUploadFailed),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: () =>
+                                                                          Navigator.pop(context),
+                                                                      child: Text(appLocalizations
+                                                                          .understand),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            }
+                                                          },
+                                                          child: Text(appLocalizations.confirm),
                                                         ),
                                                       ],
                                                     ),

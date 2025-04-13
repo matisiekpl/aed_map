@@ -2,6 +2,7 @@ PODS:
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
+  - CropViewController (2.7.4)
   - Firebase/Analytics (11.8.0):
     - Firebase/Core
   - Firebase/Core (11.8.0):
@@ -120,6 +121,10 @@ PODS:
   - GoogleUtilities/UserDefaults (8.0.2):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
+  - hl_image_picker_ios (1.2.3):
+    - CropViewController
+    - Flutter
+    - TLPhotoPicker
   - image_picker_ios (0.0.1):
     - Flutter
   - in_app_review (2.0.0):
@@ -156,6 +161,7 @@ PODS:
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
+  - TLPhotoPicker (2.1.10)
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -169,6 +175,7 @@ DEPENDENCIES:
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
+  - hl_image_picker_ios (from `.symlinks/plugins/hl_image_picker_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
@@ -183,6 +190,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CropViewController
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -198,6 +206,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Sentry
+    - TLPhotoPicker
 
 EXTERNAL SOURCES:
   connectivity_plus:
@@ -218,6 +227,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_web_auth/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/ios"
+  hl_image_picker_ios:
+    :path: ".symlinks/plugins/hl_image_picker_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   in_app_review:
@@ -243,6 +254,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   connectivity_plus: 4c41c08fc6d7c91f63bc7aec70ffe3730b04f563
+  CropViewController: 3489bbf95a3e11c654382b0bae08ac645cdf1b93
   Firebase: d80354ed7f6df5f9aca55e9eb47cc4b634735eaf
   firebase_analytics: 9ff8855fd25b8232e217a08c3b827953775c0a8e
   firebase_core: 6e223dfa350b2edceb729cea505eaaef59330682
@@ -262,6 +274,7 @@ SPEC CHECKSUMS:
   geolocator_apple: 9bcea1918ff7f0062d98345d238ae12718acfbc1
   GoogleAppMeasurement: fc0817122bd4d4189164f85374e06773b9561896
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
+  hl_image_picker_ios: 623197af4060683f65de04abfaf260814c379b50
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
@@ -276,6 +289,7 @@ SPEC CHECKSUMS:
   sentry_flutter: 927eed60d66951d1b0f1db37fe94ff5cb7c80231
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
+  TLPhotoPicker: 3cc143dfe64d5fcb9956dc4bba55a4082e1d8e75
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
 PODFILE CHECKSUM: cc84c70bfeb9b0352a2f27b4b3bacb1f793b6dbf

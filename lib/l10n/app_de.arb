@@ -111,6 +111,9 @@
   "report": "Melden",
   "addPhoto": "Foto hinzufügen",
   "imageReported": "Bild wurde gemeldet",
-  "photoUploaded": "Foto wurde hochgeladen",
-  "uploading": "Wird hochgeladen..."
+  "photoUploaded": "Foto hochgeladen",
+  "uploading": "Wird hochgeladen...",
+  "confirmPhoto": "Foto bestätigen",
+  "confirm": "Bestätigen",
+  "photoUploadFailed": "Foto-Upload fehlgeschlagen"
 }

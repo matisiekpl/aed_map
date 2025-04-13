@@ -34,4 +34,5 @@ const phoneEvent = 'phone';
 const requestReviewEvent = 'review_requested';
 const deleteEvent = 'delete';
 const uploadImageEvent = 'upload_image';
+const uploadImageFailedEvent = 'upload_image_failed';
 const reportImageEvent = 'report_image';

@@ -171,27 +171,37 @@ class EditCubit extends Cubit<EditState> {
     }
   }
 
-  Future<bool> uploadImage(Defibrillator defibrillator) async {
+  Future<File?> pickImage() async {
     await pointsRepository.authenticate();
     var authenticated = await pointsRepository.authenticate();
-    if (!authenticated) return false;
+    if (!authenticated) return null;
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(
         source: kDebugMode ? ImageSource.gallery : ImageSource.camera);
     if (image != null) {
-      emit(state.copyWith(isImageUploading: true));
-      var success =
-          await pointsRepository.uploadImage(defibrillator, File(image.path));
-      emit(state.copyWith(isImageUploading: false));
-      if (success) {
-        analytics.event(name: uploadImageEvent);
-        if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-          mixpanel.track(uploadImageEvent,
-              properties: defibrillator.getEventProperties());
-        }
-      }
-      return success;
+      return File(image.path);
     }
-    return false;
+    return null;
+  }
+
+  Future<bool> uploadImage(Defibrillator defibrillator, File imageFile) async {
+    emit(state.copyWith(isImageUploading: true));
+    var success = await pointsRepository.uploadImage(defibrillator, imageFile);
+    emit(state.copyWith(isImageUploading: false));
+    if (success) {
+      analytics.event(name: uploadImageEvent);
+      if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+        mixpanel.track(uploadImageEvent,
+            properties: defibrillator.getEventProperties());
+      }
+    } else {
+      emit(state.copyWith(isImageUploading: false));
+      if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+        mixpanel.track(uploadImageFailedEvent,
+            properties: defibrillator.getEventProperties());
+      }
+      return false;
+    }
+    return success;
   }
 }

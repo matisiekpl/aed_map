@@ -1,7 +1,7 @@
 import 'package:aed_map/bloc/points/points_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
-  import 'package:aed_map/models/aed.dart';
+import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/models/image.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
@@ -46,13 +46,14 @@ class PointsCubit extends Cubit<PointsState> {
     var position = await geolocationRepository.locate();
     var defibrillators = await pointsRepository
         .loadDefibrillators(LatLng(position.latitude, position.longitude));
-    emit(PointsLoadSuccess(
-        defibrillators: defibrillators,
-        selected: defibrillators.first,
-        markers: _getMarkers(defibrillators),
-        lastUpdateTime: await pointsRepository.getLastUpdateTime(),
-        refreshing: false,
-        hash: generateRandomString(32)));
+
+    if (s is PointsLoadSuccess) {
+      emit(s.copyWith(
+          defibrillators: defibrillators,
+          markers: _getMarkers(defibrillators),
+          lastUpdateTime: await pointsRepository.getLastUpdateTime(),
+          refreshing: false));
+    }
   }
 
   select(Defibrillator defibrillator) {
@@ -62,8 +63,10 @@ class PointsCubit extends Cubit<PointsState> {
     analytics.event(name: selectEvent);
     mixpanel.track(selectEvent, properties: defibrillator.getEventProperties());
     if (state is PointsLoadSuccess) {
-      emit((state as PointsLoadSuccess)
-          .copyWith(selected: defibrillator, hash: generateRandomString(32)));
+      if ((state as PointsLoadSuccess).selected.id != defibrillator.id) {
+        emit((state as PointsLoadSuccess)
+            .copyWith(selected: defibrillator, hash: generateRandomString(32)));
+      }
     }
 
     loadImage();
@@ -221,8 +224,8 @@ class PointsCubit extends Cubit<PointsState> {
     var state = this.state;
     if (state is PointsLoadSuccess) {
       var images = await pointsRepository.getImages(state.selected);
-      var defibrillator =
-          state.selected.copyWith(images: images, image: images.firstOrNull?.url);
+      var defibrillator = state.selected
+          .copyWith(images: images, image: images.firstOrNull?.url);
       emit(state.copyWith(
           selected: defibrillator, hash: generateRandomString(32)));
     }
@@ -237,7 +240,8 @@ class PointsCubit extends Cubit<PointsState> {
     print('Reported image ${image.id} with result $result');
     analytics.event(name: reportImageEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      mixpanel.track(reportImageEvent, properties: {'photo_id': image.id, 'url': image.url});
+      mixpanel.track(reportImageEvent,
+          properties: {'photo_id': image.id, 'url': image.url});
     }
   }
 }

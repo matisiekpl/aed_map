@@ -112,5 +112,8 @@
   "addPhoto": "Ajouter une photo",
   "imageReported": "Image signalée",
   "photoUploaded": "Photo téléchargée",
-  "uploading": "Téléchargement en cours..."
+  "uploading": "Téléchargement en cours...",
+  "confirmPhoto": "Confirmer la photo",
+  "confirm": "Confirmer",
+  "photoUploadFailed": "Échec du téléchargement de la photo"
 }

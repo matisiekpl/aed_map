@@ -112,5 +112,8 @@
   "addPhoto": "Añadir foto",
   "imageReported": "Imagen reportada",
   "photoUploaded": "Foto subida",
-  "uploading": "Subiendo..."
+  "uploading": "Subiendo...",
+  "confirmPhoto": "Confirmar foto",
+  "confirm": "Confirmar",
+  "photoUploadFailed": "Error al subir la foto"
 }
