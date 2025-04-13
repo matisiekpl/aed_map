@@ -104,5 +104,9 @@
   "logout": "Cerrar sesión",
   "viewOpenStreetMapNode": "Voir le nœud OpenStreetMap",
   "delete": "Supprimer",
-  "accountNumber": "Numéro de compte"
+  "accountNumber": "Numéro de compte",
+  "reportImage": "Signaler l'image",
+  "reportImageConfirmation": "Êtes-vous sûr de vouloir signaler cette image ?",
+  "reportImageDescription": "Cela ouvrira OpenStreetMap dans votre navigateur où vous pourrez signaler des problèmes avec cette image.",
+  "report": "Signaler"
 }

@@ -104,5 +104,9 @@
   "logout": "Disconnetti",
   "viewOpenStreetMapNode": "Visualizza nodo OpenStreetMap",
   "delete": "Elimina",
-  "accountNumber": "Numero di account"
+  "accountNumber": "Numero di account",
+  "reportImage": "Segnala immagine",
+  "reportImageConfirmation": "Sei sicuro di voler segnalare questa immagine?",
+  "reportImageDescription": "Questo aprirà OpenStreetMap nel tuo browser dove potrai segnalare problemi con questa immagine.",
+  "report": "Segnala"
 }

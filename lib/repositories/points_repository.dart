@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
 import 'package:aed_map/models/aed.dart';
+import 'package:aed_map/models/image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:image/image.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -281,16 +283,19 @@ class PointsRepository {
     return defibrillator;
   }
 
-  Future<List<String>> getImages(Defibrillator defibrillator) async {
+  Future<List<AedImage>> getImages(Defibrillator defibrillator) async {
     try {
       var response = await http.get(Uri.parse(
           'https://back.openaedmap.org/api/v1/node/${defibrillator.id}'));
       var result = jsonDecode(response.body);
-      var images = <String>[];
+      print(result);
+      var images = <AedImage>[];
       for (var element in result['elements']) {
         if (element['@photo_url'].toString().length > 10) {
-          images.add('https://back.openaedmap.org${element['@photo_url']}');
-          images.add('https://back.openaedmap.org${element['@photo_url']}');
+          images.add(AedImage(
+            url: 'https://back.openaedmap.org${element['@photo_url']}',
+            description: element['@description']?.toString(),
+          ));
         }
       }
       return images;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:xml/xml.dart';
+import 'package:aed_map/models/image.dart';
 
 class Defibrillator {
   LatLng location;
@@ -15,7 +16,7 @@ class Defibrillator {
   String? openingHours;
   String? access;
   String? image;
-  List<String> images;
+  List<AedImage> images;
 
   Defibrillator(
       {required this.location,
@@ -144,7 +145,7 @@ class Defibrillator {
     String? openingHours,
     String? access,
     String? image,
-    List<String>? images,
+    List<AedImage>? images,
     Map? colors,
     Map? filenames,
   }) {

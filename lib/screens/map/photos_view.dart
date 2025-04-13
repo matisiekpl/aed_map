@@ -4,6 +4,7 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PhotosView extends StatefulWidget {
   final Defibrillator defibrillator;
@@ -50,7 +51,38 @@ class _PhotosViewState extends State<PhotosView> {
   }
 
   void _reportImage() {
-    launchUrl(Uri.parse('$osmNodePrefix${widget.defibrillator.id}'));
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.reportImage),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.reportImageConfirmation),
+            const SizedBox(height: 8),
+            Text(
+              l10n.reportImageDescription,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              launchUrl(Uri.parse('$osmNodePrefix${widget.defibrillator.id}'));
+            },
+            child: Text(l10n.report),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -72,7 +104,7 @@ class _PhotosViewState extends State<PhotosView> {
                 scrollPhysics: const BouncingScrollPhysics(),
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
-                    imageProvider: NetworkImage(widget.defibrillator.images[index]),
+                    imageProvider: NetworkImage(widget.defibrillator.images[index].url),
                     initialScale: PhotoViewComputedScale.contained,
                     minScale: PhotoViewComputedScale.contained,
                     maxScale: PhotoViewComputedScale.covered * 2,

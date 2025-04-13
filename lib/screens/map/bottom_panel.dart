@@ -372,7 +372,7 @@ class BottomPanel extends StatelessWidget {
                                 child: CachedNetworkImage(
                                   width: double.infinity,
                                   fit: BoxFit.cover,
-                                  imageUrl: state.selected.images.first,
+                                  imageUrl: state.selected.images.first.url,
                                   placeholder: (context, url) => Container(),
                                   errorWidget: (context, url, error) =>
                                       const Icon(Icons.error),
@@ -403,7 +403,7 @@ class BottomPanel extends StatelessWidget {
                                       child: CachedNetworkImage(
                                         width: 200,
                                         fit: BoxFit.cover,
-                                        imageUrl: state.selected.images[index],
+                                        imageUrl: state.selected.images[index].url,
                                         placeholder: (context, url) => Container(),
                                         errorWidget: (context, url, error) =>
                                             const Icon(Icons.error),

@@ -219,7 +219,7 @@ class PointsCubit extends Cubit<PointsState> {
     if (state is PointsLoadSuccess) {
       var images = await pointsRepository.getImages(state.selected);
       var defibrillator =
-          state.selected.copyWith(images: images, image: images.firstOrNull);
+          state.selected.copyWith(images: images, image: images.firstOrNull?.url);
       emit(state.copyWith(
           selected: defibrillator, hash: generateRandomString(32)));
     }

@@ -104,5 +104,9 @@
   "logout": "Wyloguj się",
   "viewOpenStreetMapNode": "Zobacz węzeł OpenStreetMap",
   "delete": "Usuń",
-  "accountNumber": "Numer konta"
+  "accountNumber": "Numer konta",
+  "reportImage": "Zgłoś obraz",
+  "reportImageConfirmation": "Czy na pewno chcesz zgłosić ten obraz?",
+  "reportImageDescription": "Spowoduje to otwarcie OpenStreetMap w przeglądarce, gdzie możesz zgłosić problemy z tym obrazem.",
+  "report": "Zgłoś"
 }
