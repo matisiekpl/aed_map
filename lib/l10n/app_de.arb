@@ -108,5 +108,7 @@
   "reportImage": "Bild melden",
   "reportImageConfirmation": "Sind Sie sicher, dass Sie dieses Bild melden möchten?",
   "reportImageDescription": "Dies öffnet OpenStreetMap in Ihrem Browser, wo Sie Probleme mit diesem Bild melden können.",
-  "report": "Melden"
+  "report": "Melden",
+  "addPhoto": "Foto hinzufügen",
+  "imageReported": "Bild wurde gemeldet"
 }

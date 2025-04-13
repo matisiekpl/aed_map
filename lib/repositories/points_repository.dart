@@ -283,18 +283,17 @@ class PointsRepository {
     return defibrillator;
   }
 
-  Future<List<AedImage>> getImages(Defibrillator defibrillator) async {
+  Future<List<DefibrillatorImage>> getImages(Defibrillator defibrillator) async {
     try {
       var response = await http.get(Uri.parse(
           'https://back.openaedmap.org/api/v1/node/${defibrillator.id}'));
       var result = jsonDecode(response.body);
-      print(result);
-      var images = <AedImage>[];
+      var images = <DefibrillatorImage>[];
       for (var element in result['elements']) {
         if (element['@photo_url'].toString().length > 10) {
-          images.add(AedImage(
+          images.add(DefibrillatorImage(
             url: 'https://back.openaedmap.org${element['@photo_url']}',
-            description: element['@description']?.toString(),
+            id: element['@photo_id'],
           ));
         }
       }
@@ -425,6 +424,71 @@ class PointsRepository {
       }
       Sentry.captureMessage(
           'Error deleting node: ${response.statusCode}, ${response.body}');
+      return false;
+    } catch (err) {
+      Sentry.captureException(err);
+      return false;
+    }
+  }
+
+  Future<bool> uploadImage(Defibrillator defibrillator, File imageFile) async {
+    if (token == null) {
+      return false;
+    }
+
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('https://back.openaedmap.org/api/v1/photos/upload'),
+      );
+
+      request.fields['node_id'] = defibrillator.id.toString();
+      request.fields['file_license'] = 'CC0';
+      request.fields['oauth2_credentials'] = jsonEncode({
+        'access_token': token,
+        'token_type': 'Bearer',
+        'scope': 'read_prefs',
+      });
+
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'file',
+          imageFile.path,
+        ),
+      );
+
+      var response = await request.send();
+      var responseBody = await response.stream.bytesToString();
+      
+      if (response.statusCode == 200) {
+        return true;
+      }
+      
+      Sentry.captureMessage(
+        'Error uploading image: ${response.statusCode}, $responseBody',
+      );
+      return false;
+    } catch (err) {
+      Sentry.captureException(err);
+      return false;
+    }
+  }
+
+  Future<bool> reportImage(String photoId) async {
+    try {
+      var response = await http.post(
+        Uri.parse('https://back.openaedmap.org/api/v1/photos/report'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+        body: 'id=${Uri.encodeComponent(photoId)}',
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      Sentry.captureMessage(
+        'Error reporting image: ${response.statusCode}, ${response.body}',
+      );
       return false;
     } catch (err) {
       Sentry.captureException(err);

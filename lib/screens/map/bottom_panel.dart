@@ -32,6 +32,7 @@ class BottomPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appLocalizations = AppLocalizations.of(context)!;
+    var pointsCubit = context.read<PointsCubit>();
     return BlocListener<PointsCubit, PointsState>(
       listener: (context, state) {
         if (state is PointsLoadSuccess) {
@@ -304,55 +305,81 @@ class BottomPanel extends StatelessWidget {
                             );
                           }),
                       const SizedBox(height: 10),
-                      SizedBox(
-                          width: double.infinity,
-                          child: BlocBuilder<LocationCubit, LocationState>(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: CupertinoButton.filled(
+                                padding: EdgeInsets.zero,
+                                onPressed: () async {
+                                  await context.read<EditCubit>().uploadImage(state.selected);
+                                  await context.read<PointsCubit>().loadImage();
+                                },
+                                child: Text(appLocalizations.addPhoto),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: BlocBuilder<LocationCubit, LocationState>(
                               builder: (context, locationState) {
-                            if (locationState is LocationDetermined) {
-                              return BlocBuilder<RoutingCubit, RoutingState>(
-                                  builder: (context, routingCubitState) {
-                                if (routingCubitState
-                                    is RoutingCalculatingInProgress) {
-                                  return IgnorePointer(
-                                    child: Opacity(
-                                      opacity: 0.5,
-                                      child: CupertinoButton.filled(
-                                          key:
-                                              const Key('navigate_in_progress'),
-                                          onPressed: () async {
-                                            context
-                                                .read<RoutingCubit>()
-                                                .navigate(
+                                if (locationState is LocationDetermined) {
+                                  return BlocBuilder<RoutingCubit, RoutingState>(
+                                    builder: (context, routingCubitState) {
+                                      if (routingCubitState is RoutingCalculatingInProgress) {
+                                        return IgnorePointer(
+                                          child: Opacity(
+                                            opacity: 0.5,
+                                            child: SizedBox(
+                                              height: 50,
+                                              child: CupertinoButton.filled(
+                                                padding: EdgeInsets.zero,
+                                                key: const Key('navigate_in_progress'),
+                                                onPressed: () async {
+                                                  context.read<RoutingCubit>().navigate(
                                                     locationState.location,
-                                                    state.selected);
-                                          },
-                                          child: Text(appLocalizations
-                                              .calculatingRoute)),
-                                    ),
+                                                    state.selected
+                                                  );
+                                                },
+                                                child: Text(appLocalizations.calculatingRoute)
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
+                                        builder: (context, networkState) {
+                                          return SizedBox(
+                                            height: 50,
+                                            child: CupertinoButton.filled(
+                                              padding: EdgeInsets.zero,
+                                              key: const Key('navigate'),
+                                              onPressed: networkState.connected
+                                                ? () async {
+                                                    context.read<RoutingCubit>().navigate(
+                                                      locationState.location,
+                                                      state.selected
+                                                    );
+                                                  }
+                                                : null,
+                                              child: Text(networkState.connected
+                                                ? appLocalizations.navigate
+                                                : appLocalizations.noNetwork)
+                                            ),
+                                          );
+                                        }
+                                      );
+                                    }
                                   );
                                 }
-                                return BlocBuilder<NetworkStatusCubit,
-                                        NetworkStatusState>(
-                                    builder: (context, networkState) {
-                                  return CupertinoButton.filled(
-                                      key: const Key('navigate'),
-                                      onPressed: networkState.connected
-                                          ? () async {
-                                              context
-                                                  .read<RoutingCubit>()
-                                                  .navigate(
-                                                      locationState.location,
-                                                      state.selected);
-                                            }
-                                          : null,
-                                      child: Text(networkState.connected
-                                          ? appLocalizations.navigate
-                                          : appLocalizations.noNetwork));
-                                });
-                              });
-                            }
-                            return Container();
-                          })),
+                                return Container();
+                              }
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 12),
                       if (state.selected.images.isNotEmpty)
                         state.selected.images.length == 1
@@ -361,8 +388,11 @@ class BottomPanel extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => PhotosView(
-                                      defibrillator: state.selected,
+                                    builder: (context) => BlocProvider.value(
+                                      value: pointsCubit,
+                                      child: PhotosView(
+                                        defibrillator: state.selected,
+                                      ),
                                     ),
                                   ),
                                 );
@@ -392,8 +422,11 @@ class BottomPanel extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => PhotosView(
-                                            defibrillator: state.selected,
+                                          builder: (context) => BlocProvider.value(
+                                            value: pointsCubit,
+                                            child: PhotosView(
+                                              defibrillator: state.selected,
+                                            ),
                                           ),
                                         ),
                                       );
@@ -416,7 +449,6 @@ class BottomPanel extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30)
               ],
             ),
           );

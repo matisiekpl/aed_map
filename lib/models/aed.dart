@@ -16,7 +16,7 @@ class Defibrillator {
   String? openingHours;
   String? access;
   String? image;
-  List<AedImage> images;
+  List<DefibrillatorImage> images;
 
   Defibrillator(
       {required this.location,
@@ -145,7 +145,7 @@ class Defibrillator {
     String? openingHours,
     String? access,
     String? image,
-    List<AedImage>? images,
+    List<DefibrillatorImage>? images,
     Map? colors,
     Map? filenames,
   }) {

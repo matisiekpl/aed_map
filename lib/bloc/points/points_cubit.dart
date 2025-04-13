@@ -1,7 +1,8 @@
 import 'package:aed_map/bloc/points/points_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
-import 'package:aed_map/models/aed.dart';
+  import 'package:aed_map/models/aed.dart';
+import 'package:aed_map/models/image.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:aed_map/shared/utils.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:latlong2/latlong.dart';
+import 'dart:io';
 
 class PointsCubit extends Cubit<PointsState> {
   PointsCubit(
@@ -222,6 +224,19 @@ class PointsCubit extends Cubit<PointsState> {
           state.selected.copyWith(images: images, image: images.firstOrNull?.url);
       emit(state.copyWith(
           selected: defibrillator, hash: generateRandomString(32)));
+    }
+  }
+
+  reportImage(DefibrillatorImage image) async {
+    if (image.id == null) {
+      print('Reporting image failed - ID is null. Image URL: ${image.url}');
+      return;
+    }
+    var result = await pointsRepository.reportImage(image.id!);
+    print('Reported image ${image.id} with result $result');
+    analytics.event(name: reportImageEvent);
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      mixpanel.track(reportImageEvent, properties: {'photo_id': image.id, 'url': image.url});
     }
   }
 }

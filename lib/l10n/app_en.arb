@@ -108,5 +108,7 @@
   "reportImage": "Report image",
   "reportImageConfirmation": "Are you sure you want to report this image?",
   "reportImageDescription": "This will open OpenStreetMap in your browser where you can report issues with this image.",
-  "report": "Report"
+  "report": "Report",
+  "addPhoto": "Add photo",
+  "imageReported": "Image has been reported"
 }

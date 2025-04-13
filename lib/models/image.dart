@@ -1,29 +1,23 @@
-class AedImage {
-  final String url;
-  final String? description;
-  final DateTime? createdAt;
+class DefibrillatorImage {
+  final String url; 
+  final String? id;
 
-  AedImage({
+  DefibrillatorImage({
     required this.url,
-    this.description,
-    this.createdAt,
+    this.id,
   });
 
-  factory AedImage.fromJson(Map<String, dynamic> json) {
-    return AedImage(
+  factory DefibrillatorImage.fromJson(Map<String, dynamic> json) {
+    return DefibrillatorImage(
       url: json['url'] as String,
-      description: json['description'] as String?,
-      createdAt: json['created_at'] != null 
-          ? DateTime.parse(json['created_at'] as String)
-          : null,
+      id: json['id'] as String?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'url': url,
-      'description': description,
-      'created_at': createdAt?.toIso8601String(),
+      'id': id,
     };
   }
 }

@@ -105,8 +105,10 @@
   "viewOpenStreetMapNode": "Zobacz węzeł OpenStreetMap",
   "delete": "Usuń",
   "accountNumber": "Numer konta",
-  "reportImage": "Zgłoś obraz",
-  "reportImageConfirmation": "Czy na pewno chcesz zgłosić ten obraz?",
-  "reportImageDescription": "Spowoduje to otwarcie OpenStreetMap w przeglądarce, gdzie możesz zgłosić problemy z tym obrazem.",
-  "report": "Zgłoś"
+  "reportImage": "Zgłoś zdjęcie",
+  "reportImageConfirmation": "Czy na pewno chcesz zgłosić to zdjęcie?",
+  "reportImageDescription": "Otworzy się strona OpenStreetMap w przeglądarce, gdzie możesz zgłosić problemy z tym zdjęciem.",
+  "report": "Zgłoś",
+  "addPhoto": "Dodaj zdjęcie",
+  "imageReported": "Zdjęcie zostało zgłoszone"
 }

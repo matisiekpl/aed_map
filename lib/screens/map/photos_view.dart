@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:aed_map/models/aed.dart';
-import 'package:aed_map/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:aed_map/bloc/points/points_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PhotosView extends StatefulWidget {
   final Defibrillator defibrillator;
 
-  const PhotosView({Key? key, required this.defibrillator}) : super(key: key);
+  const PhotosView({super.key, required this.defibrillator});
 
   @override
   State<PhotosView> createState() => _PhotosViewState();
@@ -51,7 +51,9 @@ class _PhotosViewState extends State<PhotosView> {
   }
 
   void _reportImage() {
+    var pointsCubit = context.read<PointsCubit>();
     final l10n = AppLocalizations.of(context)!;
+    var originalContext = context;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -74,9 +76,24 @@ class _PhotosViewState extends State<PhotosView> {
             child: Text(l10n.cancel),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              launchUrl(Uri.parse('$osmNodePrefix${widget.defibrillator.id}'));
+              final image = widget.defibrillator.images[currentIndex];
+              if (image.id != null) {
+                await pointsCubit.reportImage(image);
+                showDialog(
+                  context: originalContext,
+                  builder: (context) => AlertDialog(
+                    title: Text(l10n.imageReported),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(l10n.understand),
+                      ),
+                    ],
+                  ),
+                );
+              }
             },
             child: Text(l10n.report),
           ),
@@ -104,7 +121,8 @@ class _PhotosViewState extends State<PhotosView> {
                 scrollPhysics: const BouncingScrollPhysics(),
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
-                    imageProvider: NetworkImage(widget.defibrillator.images[index].url),
+                    imageProvider:
+                        NetworkImage(widget.defibrillator.images[index].url),
                     initialScale: PhotoViewComputedScale.contained,
                     minScale: PhotoViewComputedScale.contained,
                     maxScale: PhotoViewComputedScale.covered * 2,
@@ -132,6 +150,7 @@ class _PhotosViewState extends State<PhotosView> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (widget.defibrillator.images[currentIndex].id != null)
                         IconButton(
                           icon: const Icon(Icons.flag, color: Colors.white),
                           onPressed: _reportImage,
@@ -149,7 +168,8 @@ class _PhotosViewState extends State<PhotosView> {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     color: Colors.black54,
                     child: Text(
                       '${currentIndex + 1}/${widget.defibrillator.images.length}',

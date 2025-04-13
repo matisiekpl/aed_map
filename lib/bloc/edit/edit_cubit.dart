@@ -7,7 +7,9 @@ import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -166,6 +168,20 @@ class EditCubit extends Cubit<EditState> {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       mixpanel.track(deleteEvent,
           properties: defibrillator.getEventProperties());
+    }
+  }
+
+  uploadImage(Defibrillator defibrillator) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: kDebugMode ? ImageSource.gallery : ImageSource.camera);
+    if (image != null) {
+      var success = await pointsRepository.uploadImage(defibrillator, File(image.path));
+      if (success) {
+        analytics.event(name: uploadImageEvent);
+        if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+          mixpanel.track(uploadImageEvent);
+        }
+      }
     }
   }
 }

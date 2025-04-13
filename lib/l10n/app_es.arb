@@ -107,6 +107,8 @@
   "accountNumber": "Número de cuenta",
   "reportImage": "Reportar imagen",
   "reportImageConfirmation": "¿Estás seguro de que quieres reportar esta imagen?",
-  "reportImageDescription": "Esto abrirá OpenStreetMap en tu navegador donde podrás reportar problemas con esta imagen.",
-  "report": "Reportar"
+  "reportImageDescription": "Esto abrirá OpenStreetMap en tu navegador donde puedes reportar problemas con esta imagen.",
+  "report": "Reportar",
+  "addPhoto": "Añadir foto",
+  "imageReported": "Imagen reportada"
 }
