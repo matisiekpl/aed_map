@@ -110,5 +110,7 @@
   "reportImageDescription": "Esto abrirá OpenStreetMap en tu navegador donde puedes reportar problemas con esta imagen.",
   "report": "Reportar",
   "addPhoto": "Añadir foto",
-  "imageReported": "Imagen reportada"
+  "imageReported": "Imagen reportada",
+  "photoUploaded": "Foto subida",
+  "uploading": "Subiendo..."
 }

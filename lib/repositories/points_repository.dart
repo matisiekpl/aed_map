@@ -24,7 +24,7 @@ class PointsRepository {
   static const String defibrillatorListUpdateTimestamp = 'aed_update';
   static const String originalDefibrillatorsListKey = 'original_defibrillators';
 
-  static const devMode = kDebugMode;
+  static const devMode = false;
 
   Future<File> get cacheFile async {
     if (Platform.environment.containsKey('FLUTTER_TEST')) {

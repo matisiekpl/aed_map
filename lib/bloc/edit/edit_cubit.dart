@@ -171,17 +171,27 @@ class EditCubit extends Cubit<EditState> {
     }
   }
 
-  uploadImage(Defibrillator defibrillator) async {
+  Future<bool> uploadImage(Defibrillator defibrillator) async {
+    await pointsRepository.authenticate();
+    var authenticated = await pointsRepository.authenticate();
+    if (!authenticated) return false;
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: kDebugMode ? ImageSource.gallery : ImageSource.camera);
+    final XFile? image = await picker.pickImage(
+        source: kDebugMode ? ImageSource.gallery : ImageSource.camera);
     if (image != null) {
-      var success = await pointsRepository.uploadImage(defibrillator, File(image.path));
+      emit(state.copyWith(isImageUploading: true));
+      var success =
+          await pointsRepository.uploadImage(defibrillator, File(image.path));
+      emit(state.copyWith(isImageUploading: false));
       if (success) {
         analytics.event(name: uploadImageEvent);
         if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-          mixpanel.track(uploadImageEvent);
+          mixpanel.track(uploadImageEvent,
+              properties: defibrillator.getEventProperties());
         }
       }
+      return success;
     }
+    return false;
   }
 }

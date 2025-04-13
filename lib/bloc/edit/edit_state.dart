@@ -7,37 +7,42 @@ abstract class EditState extends Equatable {
   final bool enabled;
   final LatLng cursor;
   final User? user;
+  final bool isImageUploading;
 
   @override
-  List<Object?> get props => [enabled, cursor, user];
+  List<Object?> get props => [enabled, cursor, user, isImageUploading];
 
   const EditState({
     required this.enabled,
     required this.cursor,
     required this.user,
+    this.isImageUploading = false,
   });
 
   EditState copyWith({
     bool? enabled,
     LatLng? cursor,
     User? user,
+    bool? isImageUploading,
   });
 }
 
 class EditReady extends EditState {
   const EditReady(
-      {required super.enabled, required super.cursor, super.user});
+      {required super.enabled, required super.cursor, super.user, super.isImageUploading});
 
   @override
   EditReady copyWith({
     bool? enabled,
     LatLng? cursor,
     User? user,
+    bool? isImageUploading,
   }) {
     return EditReady(
       enabled: enabled ?? this.enabled,
       cursor: cursor ?? this.cursor,
       user: user ?? this.user,
+      isImageUploading: isImageUploading ?? this.isImageUploading,
     );
   }
 }
@@ -50,17 +55,17 @@ class EditInProgress extends EditState {
       super.user,
       this.indoor = 'no',
       this.access = 'public',
-      this.description = ''});
+      this.description = '',
+      super.isImageUploading});
 
   final Defibrillator defibrillator;
   final String indoor;
   final String access;
-
   final String description;
 
   @override
   List<Object?> get props =>
-      [enabled, cursor, indoor, access, defibrillator.indoor, defibrillator, description];
+      [enabled, cursor, indoor, access, defibrillator.indoor, defibrillator, description, isImageUploading];
 
   @override
   EditInProgress copyWith({
@@ -71,6 +76,7 @@ class EditInProgress extends EditState {
     String? access,
     String? description,
     User? user,
+    bool? isImageUploading,
   }) {
     return EditInProgress(
       defibrillator: defibrillator ?? this.defibrillator,
@@ -80,6 +86,7 @@ class EditInProgress extends EditState {
       access: access ?? this.access,
       description: description ?? this.description,
       user: user ?? this.user,
+      isImageUploading: isImageUploading ?? this.isImageUploading,
     );
   }
 }

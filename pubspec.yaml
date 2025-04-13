@@ -58,6 +58,7 @@ dependencies:
   in_app_review: ^2.0.10
   firebase_remote_config: ^5.4.1
   photo_view: ^0.15.0
+  hl_image_picker: ^1.2.16
 
 dev_dependencies:
   integration_test:

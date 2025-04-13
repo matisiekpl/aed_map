@@ -34,6 +34,7 @@ class PointsCubit extends Cubit<PointsState> {
         lastUpdateTime: await pointsRepository.getLastUpdateTime(),
         refreshing: false,
         hash: generateRandomString(32)));
+    await loadImage();
   }
 
   refresh() async {
