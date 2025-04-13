@@ -3,6 +3,7 @@ import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/panel/panel_cubit.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
+import 'package:aed_map/screens/map/photos_view.dart';
 import 'package:aed_map/shared/translations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cross_fade/cross_fade.dart';
@@ -354,40 +355,64 @@ class BottomPanel extends StatelessWidget {
                           })),
                       const SizedBox(height: 12),
                       if (state.selected.images.isNotEmpty)
-                        if (state.selected.images.length == 1)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              imageUrl: state.selected.images[0],
-                              placeholder: (context, url) => Container(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          )
-                        else
-                          SizedBox(
-                            height: 200,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: state.selected.images.length,
-                              separatorBuilder: (context, index) => const SizedBox(width: 8),
-                              itemBuilder: (context, index) {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: CachedNetworkImage(
-                                    width: 200,
-                                    fit: BoxFit.cover,
-                                    imageUrl: state.selected.images[index],
-                                    placeholder: (context, url) => Container(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
+                        state.selected.images.length == 1
+                          ? GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PhotosView(
+                                      defibrillator: state.selected,
+                                    ),
                                   ),
                                 );
                               },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: CachedNetworkImage(
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  imageUrl: state.selected.images.first,
+                                  placeholder: (context, url) => Container(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
+                              ),
+                            )
+                          : SizedBox(
+                              height: 200,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.selected.images.length,
+                                separatorBuilder: (context, index) => 
+                                  const SizedBox(width: 8),
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PhotosView(
+                                            defibrillator: state.selected,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: CachedNetworkImage(
+                                        width: 200,
+                                        fit: BoxFit.cover,
+                                        imageUrl: state.selected.images[index],
+                                        placeholder: (context, url) => Container(),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
                     ],
                   ),
                 ),
