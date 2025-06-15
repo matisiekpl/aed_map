@@ -35,6 +35,7 @@ if (keystorePropertiesFile.exists()) {
 def vcode = (int) (((new Date().getTime() / 1000) - 1451606400) / 10)
 
 android {
+    namespace "pl.enteam.aed_map"
     compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
