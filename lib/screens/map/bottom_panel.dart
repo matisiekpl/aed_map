@@ -378,7 +378,7 @@ class BottomPanel extends StatelessWidget {
     );
   }
 
-  _selectDefibrillator(BuildContext context, Defibrillator defibrillator) async {
+  Future<void> _selectDefibrillator(BuildContext context, Defibrillator defibrillator) async {
     context.read<RoutingCubit>().cancel();
     context.read<PointsCubit>().select(defibrillator);
     context.read<PanelCubit>().show();

@@ -19,7 +19,7 @@ class EditCubit extends Cubit<EditState> {
   final PointsRepository pointsRepository;
   final GeolocationRepository geolocationRepository;
 
-  enter() async {
+  Future<void> enter() async {
     if (!await pointsRepository.authenticate()) return;
     analytics.event(name: enterEditModeEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
@@ -31,17 +31,17 @@ class EditCubit extends Cubit<EditState> {
         user: await pointsRepository.getUser()));
   }
 
-  logout() async {
+  Future<void> logout() async {
     await pointsRepository.logout();
   }
 
-  exit() => emit(state.copyWith(enabled: false));
+  void exit() => emit(state.copyWith(enabled: false));
 
-  moveCursor(LatLng position) => emit(state.copyWith(cursor: position));
+  void moveCursor(LatLng position) => emit(state.copyWith(cursor: position));
 
-  cancel() => emit(EditReady(enabled: false, cursor: state.cursor));
+  void cancel() => emit(EditReady(enabled: false, cursor: state.cursor));
 
-  add() async {
+  Future<void> add() async {
     analytics.event(name: addEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       mixpanel.track(addEvent);
@@ -57,7 +57,7 @@ class EditCubit extends Cubit<EditState> {
         description: defibrillator.description ?? ''));
   }
 
-  edit(Defibrillator defibrillator) async {
+  Future<void> edit(Defibrillator defibrillator) async {
     analytics.event(name: editEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       mixpanel.track(editEvent);
@@ -73,7 +73,7 @@ class EditCubit extends Cubit<EditState> {
         description: defibrillator.description ?? ''));
   }
 
-  editDescription(String value) {
+  void editDescription(String value) {
     var s = state;
     if (s is EditInProgress) {
       s.defibrillator.description = value;
@@ -81,7 +81,7 @@ class EditCubit extends Cubit<EditState> {
     }
   }
 
-  editOperator(String value) {
+  void editOperator(String value) {
     var s = state;
     if (s is EditInProgress) {
       s.defibrillator.operator = value;
@@ -89,7 +89,7 @@ class EditCubit extends Cubit<EditState> {
     }
   }
 
-  editPhone(String value) {
+  void editPhone(String value) {
     var s = state;
     if (s is EditInProgress) {
       s.defibrillator.phone = value;
@@ -97,7 +97,7 @@ class EditCubit extends Cubit<EditState> {
     }
   }
 
-  editOpeningHours(String value) {
+  void editOpeningHours(String value) {
     var s = state;
     if (s is EditInProgress) {
       s.defibrillator.openingHours = value;
@@ -105,7 +105,7 @@ class EditCubit extends Cubit<EditState> {
     }
   }
 
-  editIndoor(bool value) {
+  void editIndoor(bool value) {
     var s = state;
     if (s is EditInProgress) {
       var contents = value ? 'yes' : 'no';
@@ -114,7 +114,7 @@ class EditCubit extends Cubit<EditState> {
     }
   }
 
-  editAccess(String value) {
+  void editAccess(String value) {
     var s = state;
     if (s is EditInProgress) {
       s.defibrillator.access = value;
@@ -160,7 +160,7 @@ class EditCubit extends Cubit<EditState> {
     return null;
   }
 
-  delete(Defibrillator defibrillator) async {
+  Future<void> delete(Defibrillator defibrillator) async {
     await pointsRepository.deleteDefibrillator(defibrillator.id);
     emit(EditReady(enabled: false, cursor: state.cursor));
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {

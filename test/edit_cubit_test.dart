@@ -28,18 +28,18 @@ void main() {
 
     test('exit', () async {
       await editCubit.enter();
-      await editCubit.exit();
+      editCubit.exit();
       expect(editCubit.state.enabled, false);
     });
 
     test('moveCursor', () async {
-      await editCubit.moveCursor(warsaw);
+      editCubit.moveCursor(warsaw);
       expect(editCubit.state.cursor, warsaw);
     });
 
     test('cancel', () async {
       await editCubit.enter();
-      await editCubit.cancel();
+      editCubit.cancel();
       expect(editCubit.state.enabled, false);
     });
 

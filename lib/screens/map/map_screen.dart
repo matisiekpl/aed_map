@@ -35,17 +35,17 @@ class _MapScreenState extends State<MapScreen> {
     context.read<PointsCubit>().refresh();
   }
 
-  init() async {
+  Future<void> init() async {
     await Future.delayed(const Duration(milliseconds: 400));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('firstEnter') == true) {
-      return false;
+      return;
     }
     prefs.setBool('firstEnter', true);
     showFirstEnterDialog();
   }
 
-  showFirstEnterDialog() {
+  void showFirstEnterDialog() {
     var appLocalizations = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,

@@ -19,7 +19,7 @@ class RoutingCubit extends Cubit<RoutingState> {
   final GeolocationRepository geolocationRepository;
   final RoutingRepository routingRepository;
 
-  navigate(LatLng source, Defibrillator defibrillator) async {
+  Future<void> navigate(LatLng source, Defibrillator defibrillator) async {
     HapticFeedback.lightImpact();
     emit(RoutingCalculatingInProgress());
     var trip = await routingRepository.navigate(
@@ -36,7 +36,7 @@ class RoutingCubit extends Cubit<RoutingState> {
     }
   }
 
-  cancel() {
+  void cancel() {
     emit(RoutingReady());
   }
 }

@@ -3,7 +3,7 @@ import 'package:feedback/feedback.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class FeedbackRepository {
-  sendFeedback(UserFeedback feedback) async {
+  Future<void> sendFeedback(UserFeedback feedback) async {
     if (feedback.screenshot.isEmpty) {
       await Future.delayed(const Duration(seconds: 1));
       return;

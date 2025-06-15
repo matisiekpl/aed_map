@@ -32,7 +32,7 @@ class PointsRepository {
     return File('${directory.path}/$defibrillatorListKey.geojson');
   }
 
-  updateDefibrillators() async {
+  Future<void> updateDefibrillators() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var response = await http.get(
@@ -47,7 +47,7 @@ class PointsRepository {
     }
   }
 
-  loadLocalDefibrillators() async {
+  Future<void> loadLocalDefibrillators() async {
     String data = await rootBundle.loadString("assets/world.geojson");
     data = data.replaceAll("@osm_id", "osm_id");
     await (await cacheFile).writeAsString(data);
