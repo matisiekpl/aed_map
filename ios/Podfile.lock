@@ -68,7 +68,7 @@ PODS:
     - Flutter
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
-  - flutter_web_auth (0.6.0):
+  - flutter_web_auth_2 (3.0.0):
     - Flutter
   - geolocator_apple (1.2.0):
     - Flutter
@@ -167,7 +167,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_compass (from `.symlinks/plugins/flutter_compass/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
-  - flutter_web_auth (from `.symlinks/plugins/flutter_web_auth/ios`)
+  - flutter_web_auth_2 (from `.symlinks/plugins/flutter_web_auth_2/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/darwin`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
@@ -214,8 +214,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_compass/ios"
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
-  flutter_web_auth:
-    :path: ".symlinks/plugins/flutter_web_auth/ios"
+  flutter_web_auth_2:
+    :path: ".symlinks/plugins/flutter_web_auth_2/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/darwin"
   image_picker_ios:
@@ -258,7 +258,7 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_compass: b236ab69b61545cce89fd58527f401a7587d5cc1
   flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
-  flutter_web_auth: e5618c2e8a6822d86a0dc49f08d00a7ba25cfafd
+  flutter_web_auth_2: 5c8d9dcd7848b5a9efb086d24e7a9adcae979c80
   geolocator_apple: ab36aa0e8b7d7a2d7639b3b4e48308394e8cef5e
   GoogleAppMeasurement: 0dfca1a4b534d123de3945e28f77869d10d0d600
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
