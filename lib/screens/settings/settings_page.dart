@@ -13,9 +13,9 @@ import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../bloc/points/points_state.dart';
+import '../../generated/i18n/app_localizations.dart';
 import '../../shared/utils.dart';
 
 class SettingsPage extends StatefulWidget {

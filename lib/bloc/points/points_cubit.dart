@@ -21,7 +21,7 @@ class PointsCubit extends Cubit<PointsState> {
   final PointsRepository pointsRepository;
   final GeolocationRepository geolocationRepository;
 
-  load() async {
+  Future<void> load() async {
     var position = await geolocationRepository.locate();
     var defibrillators = await pointsRepository
         .loadDefibrillators(LatLng(position.latitude, position.longitude));
@@ -34,7 +34,7 @@ class PointsCubit extends Cubit<PointsState> {
         hash: generateRandomString(32)));
   }
 
-  refresh() async {
+  Future<void> refresh() async {
     var s = state;
     if (s is PointsLoadSuccess) {
       emit(s.copyWith(refreshing: true));
@@ -52,7 +52,7 @@ class PointsCubit extends Cubit<PointsState> {
         hash: generateRandomString(32)));
   }
 
-  select(Defibrillator defibrillator) {
+  void select(Defibrillator defibrillator) {
     FirebaseAnalytics.instance
         .logSelectContent(contentType: 'aed', itemId: defibrillator.id.toString());
     HapticFeedback.mediumImpact();
@@ -66,7 +66,7 @@ class PointsCubit extends Cubit<PointsState> {
     loadImage();
   }
 
-  update(Defibrillator defibrillator) {
+  void update(Defibrillator defibrillator) {
     if (state is PointsLoadSuccess) {
       if (defibrillator.id == 0) {
         var newDefibrillators =
@@ -212,7 +212,7 @@ class PointsCubit extends Cubit<PointsState> {
         .toList();
   }
 
-  loadImage() async {
+  Future<void> loadImage() async {
     var state = this.state;
     if (state is PointsLoadSuccess) {
       var url = await pointsRepository.getImage(state.selected);

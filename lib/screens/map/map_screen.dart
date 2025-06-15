@@ -10,10 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../bloc/panel/panel_cubit.dart';
 import '../../bloc/panel/panel_state.dart' as panel_state;
+import '../../generated/i18n/app_localizations.dart';
 import '../../main.dart';
 
 class MapScreen extends StatefulWidget {
@@ -35,17 +35,17 @@ class _MapScreenState extends State<MapScreen> {
     context.read<PointsCubit>().refresh();
   }
 
-  init() async {
+  Future<void> init() async {
     await Future.delayed(const Duration(milliseconds: 400));
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('firstEnter') == true) {
-      return false;
+      return;
     }
     prefs.setBool('firstEnter', true);
     showFirstEnterDialog();
   }
 
-  showFirstEnterDialog() {
+  void showFirstEnterDialog() {
     var appLocalizations = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,

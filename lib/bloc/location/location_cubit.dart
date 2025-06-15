@@ -8,7 +8,7 @@ class LocationCubit extends Cubit<LocationState> {
 
   final GeolocationRepository geolocationRepository;
 
-  locate() async {
+  Future<void> locate() async {
     if (state is LocationReady) {
       emit(LocationDetermining());
       var location = await geolocationRepository.locate();
@@ -17,14 +17,14 @@ class LocationCubit extends Cubit<LocationState> {
     }
   }
 
-  move(LatLng center) {
+  void move(LatLng center) {
     var s = state;
     if (s is LocationDetermined) {
       emit(s.copyWith(center: center));
     }
   }
 
-  center() {
+  void center() {
     var s = state;
     if (s is LocationDetermined) {
       emit(s.copyWith(center: s.location, zoom: 18));

@@ -22,7 +22,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:plausible_analytics/plausible_analytics.dart';
@@ -30,6 +29,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
+import 'firebase_options.dart';
+import 'generated/i18n/app_localizations.dart';
 
 final analytics = Plausible(plausible, 'aedmapa.app',
     userAgent: Platform.isIOS ? iosUserAgent : androidUserAgent);
@@ -38,7 +39,7 @@ late final Mixpanel mixpanel;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final remoteConfig = FirebaseRemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(minutes: 1),

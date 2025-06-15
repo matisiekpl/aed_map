@@ -4,11 +4,11 @@ import 'package:aed_map/bloc/location/location_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../bloc/edit/edit_cubit.dart';
 import '../../bloc/panel/panel_cubit.dart';
+import '../../generated/i18n/app_localizations.dart';
 
 class MarkerSelectionFooter extends StatelessWidget {
   const MarkerSelectionFooter({super.key});
