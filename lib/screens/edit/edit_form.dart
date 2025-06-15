@@ -8,11 +8,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/points/points_cubit.dart';
+import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
 
 class EditForm extends StatelessWidget {

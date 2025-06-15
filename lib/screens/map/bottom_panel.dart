@@ -9,7 +9,6 @@ import 'package:cross_fade/cross_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,6 +19,7 @@ import '../../bloc/points/points_cubit.dart';
 import '../../bloc/points/points_state.dart';
 import '../../bloc/routing/routing_cubit.dart';
 import '../../bloc/routing/routing_state.dart';
+import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
 import '../../shared/utils.dart';
 

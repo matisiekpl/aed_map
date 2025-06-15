@@ -2,11 +2,11 @@ import 'package:aed_map/bloc/location/location_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../bloc/panel/panel_cubit.dart';
 import '../../bloc/routing/routing_cubit.dart';
 import '../../bloc/routing/routing_state.dart';
+import '../../generated/i18n/app_localizations.dart';
 import '../../models/trip.dart';
 
 class FloatingPanel extends StatelessWidget {

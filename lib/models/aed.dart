@@ -1,8 +1,9 @@
 import 'package:aed_map/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:xml/xml.dart';
+
+import '../generated/i18n/app_localizations.dart';
 
 class Defibrillator {
   LatLng location;
