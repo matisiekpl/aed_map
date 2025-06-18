@@ -7,9 +7,11 @@ import 'package:aed_map/bloc/network_status/network_status_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
 import 'package:aed_map/screens/settings/settings_page.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:solidchat/solidchat.dart';
 
 import '../../bloc/panel/panel_cubit.dart';
 import '../../bloc/points/points_cubit.dart';
@@ -21,6 +23,7 @@ class MapHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var livechatEnabled = FirebaseRemoteConfig.instance.getBool('livechat');
     var appLocalizations = AppLocalizations.of(context)!;
     return SafeArea(
         child: Padding(
@@ -37,7 +40,8 @@ class MapHeader extends StatelessWidget {
                       fontWeight: FontWeight.bold, fontSize: 32)),
               BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
                 if (state is PointsLoadSuccess) {
-                  return Text(appLocalizations.subheading(state.defibrillators.length),
+                  return Text(
+                      appLocalizations.subheading(state.defibrillators.length),
                       style: const TextStyle(fontSize: 14));
                 } else {
                   return Text(appLocalizations.subheading(0),
@@ -97,6 +101,28 @@ class MapHeader extends StatelessWidget {
                   ),
                 ),
               ),
+              if (livechatEnabled) const SizedBox(height: 8),
+              if (livechatEnabled)
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () async {
+                    SolidChat.open(context);
+                  },
+                  child: Card(
+                    color: MediaQuery.of(context).platformBrightness ==
+                            Brightness.dark
+                        ? Colors.black
+                        : Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(CupertinoIcons.chat_bubble_2,
+                          color: MediaQuery.of(context).platformBrightness ==
+                                  Brightness.dark
+                              ? Colors.white
+                              : Colors.black),
+                    ),
+                  ),
+                ),
               const SizedBox(height: 8),
               BlocListener<EditCubit, EditState>(
                 listener: (BuildContext context, state) {
