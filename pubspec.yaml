@@ -57,7 +57,7 @@ dependencies:
   in_app_review: ^2.0.10
   firebase_remote_config: ^5.4.1
   flutter_web_auth_2: ^4.1.0
-  solidchat: ^0.0.2
+  solidchat: ^0.0.3
 
 dev_dependencies:
   integration_test:

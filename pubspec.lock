@@ -1397,10 +1397,10 @@ packages:
     dependency: "direct main"
     description:
       name: solidchat
-      sha256: "9ded1a85a5bdd1259c836f1989fb7217d24cae380dd1f118ff2fe8be9d8e0ba5"
+      sha256: "5c6ba79fcb451ce1bb765f43b38409ee6337a08659ff1403edbc7c8be9d71312"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   source_map_stack_trace:
     dependency: transitive
     description:
