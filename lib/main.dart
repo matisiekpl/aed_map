@@ -49,7 +49,7 @@ void main() async {
   ));
   await remoteConfig.setDefaults(const {
     "request_review": false,
-    "livechat": true,
+    "livechat": false,
   });
   remoteConfig.fetchAndActivate();
   mixpanel = await Mixpanel.init(mixpanelToken, trackAutomaticEvents: true);
