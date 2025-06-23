@@ -7,10 +7,12 @@ import 'package:aed_map/bloc/network_status/network_status_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
 import 'package:aed_map/screens/settings/settings_page.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:solidchat/solidchat.dart';
 
 import '../../bloc/panel/panel_cubit.dart';
@@ -106,6 +108,8 @@ class MapHeader extends StatelessWidget {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () async {
+                    mixpanel.track(livechatEvent);
+                    FirebaseAnalytics.instance.logEvent(name: livechatEvent);
                     SolidChat.open(context);
                   },
                   child: Card(
