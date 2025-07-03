@@ -1,0 +1,80 @@
+# AED Map - Automatic External Defibrillator Map
+
+## Project Overview
+AED Map (Mapa AED) is a mobile application for Android and iOS that helps users locate automatic external defibrillators (AEDs) in their vicinity. The app's mission is to ensure that anyone providing first aid knows where to find the nearest defibrillator, potentially saving lives in emergency situations.
+
+## Purpose
+The primary purpose of this application is to provide quick and easy access to information about nearby defibrillators. In emergency situations where someone is experiencing cardiac arrest, rapid access to an AED can significantly increase survival chances. This app bridges the gap between emergency responders and available defibrillators by providing location data and navigation assistance.
+
+## Key Features
+- **Defibrillator Mapping**: Displays AEDs on a map with their locations
+- **Detailed Information**: Shows details about each defibrillator including:
+  - Location description
+  - Access type (public, private, during work hours, etc.)
+  - Whether it's inside a building
+  - Operator information
+  - Contact phone number
+  - Opening hours
+- **Color-Coded Access**: AEDs are color-coded based on their accessibility:
+  - Green: Publicly accessible
+  - Yellow: Available during work hours
+  - Blue: Available with owner's permission or until further notice
+  - Red: Unavailable
+  - Grey: Unknown access
+- **Navigation**: Provides pedestrian routing to the selected defibrillator
+- **Distance Information**: Shows distance and estimated time to reach the AED
+- **Editing Capabilities**: Users can add, edit, or delete defibrillator information (requires OpenStreetMap account)
+- **Offline Support**: Basic functionality works without internet connection using cached data
+- **Multilingual Support**: Available in multiple languages (English, Polish, German, French, Spanish, Italian)
+- **Dark Mode**: Supports system dark mode
+- **Feedback System**: Users can report issues or provide feedback
+
+## Distribution
+- **Google Play Store**: Available for Android devices with 50K+ downloads
+  - [Download on Google Play](https://play.google.com/store/apps/details?id=pl.enteam.aed_map)
+- **Apple App Store**: Available for iOS devices (iPhone, iPad) requiring iOS 12.0 or later
+  - [Download on App Store](https://apps.apple.com/us/app/aed-map-defibrillators/id1638495701)
+- **Official Website**: [aedmapa.pl](https://aedmapa.pl/) - Contains information about the project and direct links to app stores
+- **Compatibility**:
+  - Android: All modern Android devices
+  - iOS: iPhone and iPad with iOS 12.0+
+  - Mac: Apple Silicon Macs with macOS 11.0+
+  - Apple Vision: visionOS 1.0+
+- **App Size**: Approximately 90MB
+- **Cost**: Free to download and use
+- **Category**: Medical
+- **Content Rating**: Suitable for all ages (4+ on App Store, Everyone on Google Play)
+
+## Data Sources
+- The application uses data from [OpenStreetMap](https://openstreetmap.org) via the [OpenAEDMap](https://openaedmap.org) project
+- The app fetches AED data from `https://openaedmap.org/api/v1/countries/WORLD.geojson`
+- Users can contribute to the database by adding or editing AED information, which is then synchronized with OpenStreetMap
+
+## Technical Implementation
+- **Framework**: Built with Flutter for cross-platform compatibility (Android and iOS)
+- **Navigation Engine**: Uses [Valhalla](https://github.com/valhalla/valhalla/) for pedestrian routing
+- **Map Rendering**: Uses vector rendering with [TileServer-gl](https://github.com/maptiler/tileserver-gl)
+- **Authentication**: Implements OAuth2 for OpenStreetMap authentication
+
+## Data Model
+The core data model is the `Defibrillator` class which contains:
+- Geographic location (latitude/longitude)
+- Description of the location
+- OpenStreetMap node ID
+- Indoor status (yes/no)
+- Operator information
+- Contact phone number
+- Opening hours
+- Access type (yes, customers, private, permissive, no, unknown)
+- Image URL (if available)
+- Distance from user's location
+
+## User Flow
+1. User opens the app and sees nearby defibrillators on a map
+2. The app shows the closest AED by default
+3. User can select any AED to view its details
+4. User can navigate to the selected AED
+5. Authenticated users can edit AED information or add new AEDs
+
+## Contact
+For questions or collaboration opportunities: mateusz@aedmapa.pl 
