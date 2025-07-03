@@ -12,7 +12,6 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:solidchat/solidchat.dart';
 
 import '../../bloc/panel/panel_cubit.dart';
