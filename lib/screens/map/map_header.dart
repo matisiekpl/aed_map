@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
@@ -24,7 +26,9 @@ class MapHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var livechatEnabled = FirebaseRemoteConfig.instance.getBool('livechat');
+    var livechatEnabled = Platform.environment.containsKey('FLUTTER_TEST')
+        ? false
+        : FirebaseRemoteConfig.instance.getBool('livechat');
     var appLocalizations = AppLocalizations.of(context)!;
     return SafeArea(
         child: Padding(
