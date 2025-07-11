@@ -91,12 +91,16 @@ class PointsRepository {
     jsonList.forEach((row) {
       var id = row['properties'][idLabel];
       if (!originalDefibrillatorsIds.contains(id)) {
+        var descriptions = Map.from(row['properties'])
+            .entries
+            .where((a) => a.key.startsWith('defibrillator:location'))
+            .toList();
+        descriptions.sort((a, b) => b.key.length - a.key.length);
         defibrillators.add(Defibrillator(
             location: LatLng(row['geometry']['coordinates'][1],
                 row['geometry']['coordinates'][0]),
             id: id,
-            description: row['properties']['defibrillator:location'] ??
-                row['properties']['defibrillator:location:pl'],
+            description: descriptions.firstOrNull?.value,
             indoor: row['properties']['indoor'],
             operator: row['properties']['operator'],
             phone: row['properties']['phone'],
