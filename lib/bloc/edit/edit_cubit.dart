@@ -20,7 +20,6 @@ class EditCubit extends Cubit<EditState> {
   final GeolocationRepository geolocationRepository;
 
   Future<void> enter() async {
-    if (!await pointsRepository.authenticate()) return;
     analytics.event(name: enterEditModeEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       mixpanel.track(enterEditModeEvent);
@@ -123,6 +122,7 @@ class EditCubit extends Cubit<EditState> {
   }
 
   Future<Defibrillator?> save() async {
+    if (!await pointsRepository.authenticate()) return null;
     var s = state;
     if (s is EditInProgress) {
       if (s.defibrillator.id == 0) {

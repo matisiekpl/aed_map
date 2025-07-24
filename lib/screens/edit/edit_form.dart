@@ -171,8 +171,8 @@ class EditForm extends StatelessWidget {
                     var defibrillator = await context.read<EditCubit>().save();
                     if (defibrillator != null) {
                       context.read<PointsCubit>().update(defibrillator);
+                      Navigator.of(context).pop();
                     }
-                    Navigator.of(context).pop();
                   }
                 : null,
             child: Text(appLocalizations.save)),
