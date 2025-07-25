@@ -245,4 +245,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get accountNumber => 'Kontonummer';
+
+  @override
+  String get add => 'Hinzufügen';
 }

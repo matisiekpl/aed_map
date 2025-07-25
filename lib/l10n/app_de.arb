@@ -104,5 +104,6 @@
   "logout": "Abmelden",
   "viewOpenStreetMapNode": "OpenStreetMap-Knoten anzeigen",
   "delete": "Löschen",
-  "accountNumber": "Kontonummer"
+  "accountNumber": "Kontonummer",
+  "add": "Hinzufügen"
 }

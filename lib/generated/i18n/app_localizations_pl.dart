@@ -244,4 +244,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get accountNumber => 'Numer konta';
+
+  @override
+  String get add => 'Dodaj';
 }

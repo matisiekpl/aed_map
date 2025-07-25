@@ -104,5 +104,6 @@
   "logout": "Wyloguj się",
   "viewOpenStreetMapNode": "Zobacz węzeł OpenStreetMap",
   "delete": "Usuń",
-  "accountNumber": "Numer konta"
+  "accountNumber": "Numer konta",
+  "add": "Dodaj"
 }

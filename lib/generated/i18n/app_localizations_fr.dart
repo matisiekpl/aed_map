@@ -249,4 +249,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get accountNumber => 'Numéro de compte';
+
+  @override
+  String get add => 'Ajouter';
 }

@@ -65,98 +65,105 @@ class MapHeader extends StatelessWidget {
               })
             ],
           ),
-          Column(
+          Row(
             children: [
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  mixpanel.track(aboutEvent);
-                  var pointsCubit = context.read<PointsCubit>();
-                  var locationCubit = context.read<LocationCubit>();
-                  var feedbackCubit = context.read<FeedbackCubit>();
-                  var editCubit = context.read<EditCubit>();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BlocProvider.value(
-                              value: locationCubit,
-                              child: BlocProvider.value(
-                                value: feedbackCubit,
-                                child: BlocProvider.value(
-                                    value: pointsCubit,
+              Column(
+                children: [
+                  BlocListener<EditCubit, EditState>(
+                    listener: (BuildContext context, state) {
+                      if (state.enabled) {
+                        context.read<PanelCubit>().hide();
+                      }
+                    },
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () async {
+                        context.read<EditCubit>().enter();
+                      },
+                      child: Card(
+                          color: MediaQuery.of(context).platformBrightness ==
+                                  Brightness.dark
+                              ? Colors.black
+                              : Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            child: Text(appLocalizations.add,
+                                style: TextStyle(fontWeight: FontWeight.w500)),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 8),
+              Column(
+                children: [
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      mixpanel.track(aboutEvent);
+                      var pointsCubit = context.read<PointsCubit>();
+                      var locationCubit = context.read<LocationCubit>();
+                      var feedbackCubit = context.read<FeedbackCubit>();
+                      var editCubit = context.read<EditCubit>();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                                  value: locationCubit,
+                                  child: BlocProvider.value(
+                                    value: feedbackCubit,
                                     child: BlocProvider.value(
-                                        value: editCubit,
-                                        child: const SettingsPage())),
-                              ),
-                            )),
-                  );
-                },
-                child: Card(
-                  color: MediaQuery.of(context).platformBrightness ==
-                          Brightness.dark
-                      ? Colors.black
-                      : Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(CupertinoIcons.gear,
+                                        value: pointsCubit,
+                                        child: BlocProvider.value(
+                                            value: editCubit,
+                                            child: const SettingsPage())),
+                                  ),
+                                )),
+                      );
+                    },
+                    child: Card(
+                      color: MediaQuery.of(context).platformBrightness ==
+                              Brightness.dark
+                          ? Colors.black
+                          : Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(CupertinoIcons.gear,
+                            color: MediaQuery.of(context).platformBrightness ==
+                                    Brightness.dark
+                                ? Colors.white
+                                : Colors.black),
+                      ),
+                    ),
+                  ),
+                  if (livechatEnabled) const SizedBox(height: 8),
+                  if (livechatEnabled)
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () async {
+                        mixpanel.track(livechatEvent);
+                        FirebaseAnalytics.instance
+                            .logEvent(name: livechatEvent);
+                        SolidChat.open(context);
+                      },
+                      child: Card(
                         color: MediaQuery.of(context).platformBrightness ==
                                 Brightness.dark
-                            ? Colors.white
-                            : Colors.black),
-                  ),
-                ),
-              ),
-              if (livechatEnabled) const SizedBox(height: 8),
-              if (livechatEnabled)
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () async {
-                    mixpanel.track(livechatEvent);
-                    FirebaseAnalytics.instance.logEvent(name: livechatEvent);
-                    SolidChat.open(context);
-                  },
-                  child: Card(
-                    color: MediaQuery.of(context).platformBrightness ==
-                            Brightness.dark
-                        ? Colors.black
-                        : Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(CupertinoIcons.chat_bubble_2,
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.dark
-                              ? Colors.white
-                              : Colors.black),
+                            ? Colors.black
+                            : Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(CupertinoIcons.chat_bubble_2,
+                              color:
+                                  MediaQuery.of(context).platformBrightness ==
+                                          Brightness.dark
+                                      ? Colors.white
+                                      : Colors.black),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              const SizedBox(height: 8),
-              BlocListener<EditCubit, EditState>(
-                listener: (BuildContext context, state) {
-                  if (state.enabled) {
-                    context.read<PanelCubit>().hide();
-                  }
-                },
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () async {
-                    context.read<EditCubit>().enter();
-                  },
-                  child: Card(
-                    color: MediaQuery.of(context).platformBrightness ==
-                            Brightness.dark
-                        ? Colors.black
-                        : Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(CupertinoIcons.plus,
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.dark
-                              ? Colors.white
-                              : Colors.black),
-                    ),
-                  ),
-                ),
+                ],
               ),
             ],
           )

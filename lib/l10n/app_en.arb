@@ -104,5 +104,6 @@
   "logout": "Logout",
   "viewOpenStreetMapNode": "View OpenStreetMap node",
   "delete": "Delete",
-  "accountNumber": "Account number"
+  "accountNumber": "Account number",
+  "add": "Add"
 }
