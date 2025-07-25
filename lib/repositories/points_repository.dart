@@ -130,7 +130,7 @@ class PointsRepository {
     try {
       final result = await FlutterWebAuth2.authenticate(
           url:
-              "https://www.openstreetmap.org/oauth2/authorize?client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api%20read_prefs",
+              "https://www.openstreetmap.org/oauth2/authorize?preferred_auth_provider=google&client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api%20read_prefs",
           callbackUrlScheme: "aedmap");
       final code = Uri.parse(result).queryParameters['code'];
       print('Got OAuth2 code: $code');
