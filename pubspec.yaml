@@ -3,7 +3,7 @@ description: App showing available AEDs
 
 publish_to: "none"
 
-version: 1.0.58+58
+version: 1.0.59+59
 
 environment:
   sdk: ^3.5.3
@@ -57,7 +57,7 @@ dependencies:
   in_app_review: ^2.0.10
   firebase_remote_config: ^5.4.1
   flutter_web_auth_2: ^4.1.0
-  solidchat: ^0.0.3
+  solidchat: ^0.0.5
 
 dev_dependencies:
   integration_test:

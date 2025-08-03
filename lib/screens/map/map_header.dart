@@ -147,21 +147,39 @@ class MapHeader extends StatelessWidget {
                             .logEvent(name: livechatEvent);
                         SolidChat.open(context);
                       },
-                      child: Card(
-                        color: MediaQuery.of(context).platformBrightness ==
-                                Brightness.dark
-                            ? Colors.black
-                            : Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(CupertinoIcons.chat_bubble_2,
+                      child: StreamBuilder(
+                          stream: SolidChat.unreadConversationsCount,
+                          builder: (context, snap) {
+                            var card = Card(
                               color:
                                   MediaQuery.of(context).platformBrightness ==
                                           Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black),
-                        ),
-                      ),
+                                      ? Colors.black
+                                      : Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(CupertinoIcons.chat_bubble_2,
+                                    color: MediaQuery.of(context)
+                                                .platformBrightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black),
+                              ),
+                            );
+                            if (snap.hasError ||
+                                snap.data == null ||
+                                snap.data == 0) {
+                              return card;
+                            }
+                            return Badge.count(
+                              count: snap.data ?? 0,
+                              textStyle: TextStyle(fontSize: 14),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 2, vertical: 2),
+                              offset: Offset(-2, 0),
+                              child: card,
+                            );
+                          }),
                     ),
                 ],
               ),
