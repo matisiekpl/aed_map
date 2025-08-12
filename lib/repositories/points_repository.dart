@@ -128,9 +128,10 @@ class PointsRepository {
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     try {
+      var preferredAuthProvider = Platform.isIOS ? 'apple' : 'google';
       final result = await FlutterWebAuth2.authenticate(
           url:
-              "https://www.openstreetmap.org/oauth2/authorize?preferred_auth_provider=google&client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api%20read_prefs",
+              "https://www.openstreetmap.org/oauth2/authorize?preferred_auth_provider=$preferredAuthProvider&client_id=$clientId&redirect_uri=aedmap://success&response_type=code&scope=write_api%20read_prefs",
           callbackUrlScheme: "aedmap");
       final code = Uri.parse(result).queryParameters['code'];
       print('Got OAuth2 code: $code');
@@ -378,8 +379,20 @@ class PointsRepository {
           'id': nodeId.toString(),
           'version': oldVersion,
           'changeset': changesetId.toString(),
-          'lat': document.findAllElements('node').first.attributes.where((attr) => attr.name.toString() == 'lat').first.value,
-          'lon': document.findAllElements('node').first.attributes.where((attr) => attr.name.toString() == 'lon').first.value,
+          'lat': document
+              .findAllElements('node')
+              .first
+              .attributes
+              .where((attr) => attr.name.toString() == 'lat')
+              .first
+              .value,
+          'lon': document
+              .findAllElements('node')
+              .first
+              .attributes
+              .where((attr) => attr.name.toString() == 'lon')
+              .first
+              .value,
         });
       });
       final deleteDocument = builder.buildDocument();
@@ -391,16 +404,19 @@ class PointsRepository {
             'Authorization': 'Bearer $token'
           },
           body: deleteDocument.toXmlString());
-      
+
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        var originalDefibrillators = prefs.getStringList(originalDefibrillatorsListKey) ?? [];
+        var originalDefibrillators =
+            prefs.getStringList(originalDefibrillatorsListKey) ?? [];
         originalDefibrillators.remove(nodeId.toString());
-        await prefs.setStringList(originalDefibrillatorsListKey, originalDefibrillators);
+        await prefs.setStringList(
+            originalDefibrillatorsListKey, originalDefibrillators);
         await updateDefibrillators();
         return true;
       }
-      Sentry.captureMessage('Error deleting node: ${response.statusCode}, ${response.body}');
+      Sentry.captureMessage(
+          'Error deleting node: ${response.statusCode}, ${response.body}');
       return false;
     } catch (err) {
       Sentry.captureException(err);
