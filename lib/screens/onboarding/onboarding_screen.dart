@@ -17,20 +17,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     var titleTextStyle = TextStyle(
-      color: Colors.black,
+      color: MediaQuery.of(context).platformBrightness == Brightness.dark
+          ? Colors.white
+          : Colors.black,
       fontSize: 20,
       fontFamily: 'Manrope',
       fontWeight: FontWeight.w500,
     );
+    var bodyTextStyle = TextStyle(
+      color: MediaQuery.of(context).platformBrightness == Brightness.dark
+          ? Colors.white
+          : Colors.black,
+      fontSize: 18.0,
+      fontWeight: FontWeight.normal,
+    );
     return Container(
-      color: Colors.white,
+      color: MediaQuery.of(context).platformBrightness == Brightness.dark
+          ? Colors.black
+          : Colors.white,
       child: Theme(
         data: ThemeData(
           colorScheme: ColorScheme.light(primary: Colors.green.shade400),
         ),
         child: SafeArea(
           child: IntroductionScreen(
-            globalBackgroundColor: Colors.white,
+            globalBackgroundColor:
+                MediaQuery.of(context).platformBrightness == Brightness.dark
+                    ? Colors.black
+                    : Colors.white,
             dotsDecorator: DotsDecorator(
               activeColor: Colors.green.shade400,
             ),
@@ -52,6 +66,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     imageFlex: 2,
                     imagePadding: EdgeInsets.only(top: 24),
                     titleTextStyle: titleTextStyle,
+                    bodyTextStyle: bodyTextStyle,
                   )),
               PageViewModel(
                   title: AppLocalizations.of(context)!.onboardingTitle1,
@@ -63,6 +78,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     imageFlex: 4,
                     imagePadding: EdgeInsets.only(top: 24),
                     titleTextStyle: titleTextStyle,
+                    bodyTextStyle: bodyTextStyle,
                   )),
               PageViewModel(
                   title: AppLocalizations.of(context)!.onboardingTitle2,
@@ -74,6 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     imageFlex: 4,
                     imagePadding: EdgeInsets.only(top: 24),
                     titleTextStyle: titleTextStyle,
+                    bodyTextStyle: bodyTextStyle,
                   )),
               PageViewModel(
                   title: AppLocalizations.of(context)!.onboardingTitle3,
@@ -85,6 +102,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     imageFlex: 2,
                     imagePadding: EdgeInsets.only(top: 24),
                     titleTextStyle: titleTextStyle,
+                    bodyTextStyle: bodyTextStyle,
                   ))
             ],
             done: Text(
