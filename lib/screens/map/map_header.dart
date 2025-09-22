@@ -14,7 +14,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:solidchat/solidchat.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/panel/panel_cubit.dart';
 import '../../bloc/points/points_cubit.dart';
@@ -145,41 +145,23 @@ class MapHeader extends StatelessWidget {
                         mixpanel.track(livechatEvent);
                         FirebaseAnalytics.instance
                             .logEvent(name: livechatEvent);
-                        SolidChat.open(context);
+                        launchUrl(Uri.parse('https://pomoc.aedmapa.pl/'));
                       },
-                      child: StreamBuilder(
-                          stream: SolidChat.unreadConversationsCount,
-                          builder: (context, snap) {
-                            var card = Card(
+                      child: Card(
+                        color: MediaQuery.of(context).platformBrightness ==
+                                Brightness.dark
+                            ? Colors.black
+                            : Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(CupertinoIcons.question_circle,
                               color:
                                   MediaQuery.of(context).platformBrightness ==
                                           Brightness.dark
-                                      ? Colors.black
-                                      : Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(CupertinoIcons.chat_bubble_2,
-                                    color: MediaQuery.of(context)
-                                                .platformBrightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : Colors.black),
-                              ),
-                            );
-                            if (snap.hasError ||
-                                snap.data == null ||
-                                snap.data == 0) {
-                              return card;
-                            }
-                            return Badge.count(
-                              count: snap.data ?? 0,
-                              textStyle: TextStyle(fontSize: 14),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 2, vertical: 2),
-                              offset: Offset(-2, 0),
-                              child: card,
-                            );
-                          }),
+                                      ? Colors.white
+                                      : Colors.black),
+                        ),
+                      ),
                     ),
                 ],
               ),

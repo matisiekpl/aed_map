@@ -93,7 +93,7 @@ class PointsCubit extends Cubit<PointsState> {
             WidgetsBinding.instance.platformDispatcher.views.single)
         .platformBrightness;
     return defibrillators
-        .take(1000)
+        .take(500)
         .map((defibrillator) {
           if (defibrillator.access == 'yes') {
             return Marker(

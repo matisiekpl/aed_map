@@ -27,7 +27,6 @@ import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:plausible_analytics/plausible_analytics.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:solidchat/solidchat.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -41,7 +40,6 @@ late final Mixpanel mixpanel;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await SolidChat.initialize(key: 'd9413013-da35-4ec1-b2db-18f5668686bc');
   final remoteConfig = FirebaseRemoteConfig.instance;
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(minutes: 1),
