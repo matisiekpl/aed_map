@@ -18,7 +18,7 @@ html(lang="en")
                     (function() {
                         var lang = (navigator.languages && navigator.languages[0]) || navigator.language || '';
                         lang = (lang || '').toLowerCase();
-                        if (lang.indexOf('en') === 0) {
+                        if (lang.indexOf('pl') !== 0) {
                             var path = window.location.pathname.toLowerCase();
                             var isEn = path.endsWith('/en.html') || path.endsWith('/en');
                             if (!isEn) {
