@@ -9,7 +9,7 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
-  String get heading => 'Informationen';
+  String get heading => 'AED-Karte';
 
   @override
   String subheading(int count) {
