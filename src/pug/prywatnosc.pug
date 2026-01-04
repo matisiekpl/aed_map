@@ -2,7 +2,16 @@ doctype html
 head
   meta(charset='utf-8')
   meta(name='viewport' content='width=device-width')
-  script(defer data-domain="aedmapa.pl" src="https://analytics.mateuszwozniak.com/js/script.outbound-links.js")
+  //- Privacy-friendly analytics by Plausible
+  script(async src="https://analytics.mateuszwozniak.com/js/pa-evdDW9680jQV9biX4-guf.js")
+  script.
+    window.plausible = window.plausible || function () {
+      (plausible.q = plausible.q || []).push(arguments)
+    }, plausible.init = plausible.init || function (i) {
+      plausible.o = i || {}
+    };
+    plausible.init()
+
   title Privacy Policy
   style.
     body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding:1em; }

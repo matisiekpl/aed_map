@@ -18,7 +18,16 @@ html(lang="en")
         style.
                     .footer {zoom: 0.8;}
                 
-        script(defer data-domain="aedmapa.pl" src="https://analytics.mateuszwozniak.com/js/script.outbound-links.js")
+        //- Privacy-friendly analytics by Plausible
+        script(async src="https://analytics.mateuszwozniak.com/js/pa-evdDW9680jQV9biX4-guf.js")
+        script.
+            window.plausible = window.plausible || function () {
+                (plausible.q = plausible.q || []).push(arguments)
+            }, plausible.init = plausible.init || function (i) {
+                plausible.o = i || {}
+            };
+            plausible.init()
+
         script(type="text/javascript").
                     document.addEventListener('DOMContentLoaded', function() {    // open    const burger = document.querySelectorAll('.navbar-burger');    const menu = document.querySelectorAll('.navbar-menu');    if (burger.length && menu.length) {        for (var i = 0; i < burger.length; i++) {            burger[i].addEventListener('click', function() {                for (var j = 0; j < menu.length; j++) {                    menu[j].classList.toggle('hidden');                }            });        }    }    // close    const close = document.querySelectorAll('.navbar-close');    const backdrop = document.querySelectorAll('.navbar-backdrop');    if (close.length) {        for (var i = 0; i < close.length; i++) {            close[i].addEventListener('click', function() {                for (var j = 0; j < menu.length; j++) {                    menu[j].classList.toggle('hidden');                }            });        }    }    if (backdrop.length) {        for (var i = 0; i < backdrop.length; i++) {            backdrop[i].addEventListener('click', function() {                for (var j = 0; j < menu.length; j++) {                    menu[j].classList.toggle('hidden');                }            });        }    }});
                 
