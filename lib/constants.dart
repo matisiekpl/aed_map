@@ -8,7 +8,7 @@ final paris = LatLng(48.864716, 2.349014);
 final rome = LatLng(41.902782, 12.496366);
 
 const valhalla = 'https://sa.tt.com.pl/valhalla2Move/raw_route.php';
-const plausible = 'https://analytics.enteam.pl';
+const plausible = 'https://analytics.mateuszwozniak.com';
 const osmNodePrefix = 'https://www.openstreetmap.org/node/';
 const iosUserAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1';
