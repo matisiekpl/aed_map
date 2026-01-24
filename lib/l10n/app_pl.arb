@@ -105,5 +105,6 @@
   "viewOpenStreetMapNode": "Zobacz węzeł OpenStreetMap",
   "delete": "Usuń",
   "accountNumber": "Numer konta",
-  "add": "Dodaj"
+  "add": "Dodaj",
+  "contactAuthorDescription": "Jeśli masz pytania lub uwagi, śmiało napisz do mnie na dowolnej z tych platform."
 }

@@ -249,4 +249,8 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get add => 'Aggiungi';
+
+  @override
+  String get contactAuthorDescription =>
+      'Se hai domande o feedback, non esitare a contattarmi su una di queste piattaforme.';
 }

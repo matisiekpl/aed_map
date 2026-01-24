@@ -105,5 +105,6 @@
   "viewOpenStreetMapNode": "Ver nodo de OpenStreetMap",
   "delete": "Eliminar",
   "accountNumber": "Número de cuenta",
-  "add": "Añadir"
+  "add": "Añadir",
+  "contactAuthorDescription": "Si tienes preguntas o comentarios, no dudes en escribirme en cualquiera de estas plataformas."
 }

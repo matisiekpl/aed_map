@@ -561,6 +561,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add'**
   String get add;
+
+  /// No description provided for @contactAuthorDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'If you\'ve any questions or feedback don\'t hesitate to message me on any of these platforms.'**
+  String get contactAuthorDescription;
 }
 
 class _AppLocalizationsDelegate

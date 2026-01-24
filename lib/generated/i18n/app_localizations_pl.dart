@@ -247,4 +247,8 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get add => 'Dodaj';
+
+  @override
+  String get contactAuthorDescription =>
+      'Jeśli masz pytania lub uwagi, śmiało napisz do mnie na dowolnej z tych platform.';
 }

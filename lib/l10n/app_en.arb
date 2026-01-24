@@ -105,5 +105,6 @@
   "viewOpenStreetMapNode": "View OpenStreetMap node",
   "delete": "Delete",
   "accountNumber": "Account number",
-  "add": "Add"
+  "add": "Add",
+  "contactAuthorDescription": "If you've any questions or feedback don't hesitate to message me on any of these platforms."
 }

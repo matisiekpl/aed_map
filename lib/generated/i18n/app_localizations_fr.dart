@@ -252,4 +252,8 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get add => 'Ajouter';
+
+  @override
+  String get contactAuthorDescription =>
+      'Si vous avez des questions ou des retours, n\'hésitez pas à me contacter sur l\'une de ces plateformes.';
 }

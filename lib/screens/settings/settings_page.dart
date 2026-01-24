@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -61,7 +62,8 @@ class _SettingsPageState extends State<SettingsPage>
                             value: BlocBuilder<PointsCubit, PointsState>(
                                 builder: (context, state) {
                               if (state is PointsLoadSuccess) {
-                                return Text(state.defibrillators.length.toString());
+                                return Text(
+                                    state.defibrillators.length.toString());
                               }
                               return const Text('-');
                             }),
@@ -137,10 +139,11 @@ class _SettingsPageState extends State<SettingsPage>
                                   value: Text(editState.user?.name ?? '-',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold))),
-                                            SettingsTile(
+                              SettingsTile(
                                   leading: const Icon(Icons.tag),
                                   title: Text(appLocalizations.accountNumber),
-                                  value: Text(editState.user?.id.toString() ?? '-',
+                                  value: Text(
+                                      editState.user?.id.toString() ?? '-',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold))),
                               SettingsTile.navigation(
@@ -175,19 +178,6 @@ class _SettingsPageState extends State<SettingsPage>
                             title: Text(appLocalizations.website),
                             value: const Text('aedmapa.pl'),
                           ),
-                          SettingsTile(
-                            leading: const Icon(CupertinoIcons.person),
-                            title: Text(appLocalizations.author),
-                            value: const Text('Mateusz Woźniak'),
-                          ),
-                          SettingsTile.navigation(
-                            onPressed: (context) {
-                              launchUrl(Uri.parse('mailto:mateusz@aedmapa.pl'));
-                            },
-                            leading: const Icon(CupertinoIcons.envelope),
-                            title: Text(appLocalizations.contact),
-                            value: const Text('mateusz@aedmapa.pl'),
-                          ),
                           SettingsTile.navigation(
                             title: Text('Feedback'),
                             leading: const Icon(CupertinoIcons.ant_circle),
@@ -202,6 +192,43 @@ class _SettingsPageState extends State<SettingsPage>
                           )
                         ],
                       ),
+                      SettingsSection(
+                          title: Text(appLocalizations.author),
+                          tiles: [
+                            SettingsTile(
+                              leading: const Icon(CupertinoIcons.person),
+                              title: Text(appLocalizations.author),
+                              value: const Text('Mateusz Woźniak'),
+                            ),
+                            SettingsTile.navigation(
+                              onPressed: (context) {
+                                launchUrl(
+                                    Uri.parse('mailto:mateusz@aedmapa.pl'));
+                              },
+                              leading: const Icon(CupertinoIcons.envelope),
+                              title: Text('Mail'),
+                              value: const Text('mateusz@aedmapa.pl'),
+                            ),
+                            SettingsTile.navigation(
+                              leading: FaIcon(FontAwesomeIcons.instagram),
+                              title: Text('Instagram'),
+                              value: const Text('@matisiek11'),
+                              onPressed: (context) {
+                                launchUrl(Uri.parse(
+                                    'https://www.instagram.com/matisiek11/'));
+                              },
+                            ),
+                            SettingsTile.navigation(
+                              leading: FaIcon(FontAwesomeIcons.xTwitter),
+                              title: Text('X (Twitter)'),
+                              value: const Text('@matisiekpl'),
+                              onPressed: (context) {
+                                launchUrl(
+                                    Uri.parse('https://x.com/matisiekpl'));
+                              },
+                              description: Text(appLocalizations.contactAuthorDescription),
+                            ),
+                          ])
                     ],
                   );
                 });

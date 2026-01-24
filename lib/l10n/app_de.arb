@@ -105,5 +105,6 @@
   "viewOpenStreetMapNode": "OpenStreetMap-Knoten anzeigen",
   "delete": "Löschen",
   "accountNumber": "Kontonummer",
-  "add": "Hinzufügen"
+  "add": "Hinzufügen",
+  "contactAuthorDescription": "Bei Fragen oder Feedback zögere nicht, mich auf einer dieser Plattformen zu kontaktieren."
 }

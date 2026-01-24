@@ -246,4 +246,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get add => 'Add';
+
+  @override
+  String get contactAuthorDescription =>
+      'If you\'ve any questions or feedback don\'t hesitate to message me on any of these platforms.';
 }
