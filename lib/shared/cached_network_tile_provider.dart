@@ -6,6 +6,7 @@ class CachedNetworkTileProvider extends TileProvider {
   @override
   ImageProvider<Object> getImage(
       TileCoordinates coordinates, TileLayer options) {
-    return CachedNetworkImageProvider(getTileUrl(coordinates, options));
+    return CachedNetworkImageProvider(getTileUrl(coordinates, options),
+        headers: {'User-Agent': 'pl.enteam.aed_map'});
   }
 }

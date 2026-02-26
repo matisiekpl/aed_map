@@ -54,6 +54,8 @@ class MapHeader extends StatelessWidget {
                 }
               }),
               const SizedBox(height: 2),
+              Text('OpenStreetMap contributors', style: const TextStyle(fontSize: 12)),
+              const SizedBox(height: 2),
               BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
                   builder: (context, state) {
                 if (state.connected) return const SizedBox();

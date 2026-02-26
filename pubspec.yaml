@@ -3,7 +3,7 @@ description: App showing available AEDs
 
 publish_to: "none"
 
-version: 1.0.65+65
+version: 1.0.66+66
 
 environment:
   sdk: ^3.5.3
