@@ -46,7 +46,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   equatable: ^2.0.8
   package_info_plus: ^10.0.0
-  sentry_flutter: ^8.9.0
+  sentry_flutter: ^9.17.0
   firebase_analytics: ^12.3.0
   firebase_core: ^4.7.0
   mixpanel_flutter: ^2.6.0
