@@ -33,8 +33,7 @@ void main() {
     });
 
     test('navigate', () async {
-      pointsCubit.load();
-      await Future.delayed(const Duration(seconds: 1));
+      await pointsCubit.load();
       routingCubit.navigate(
           warsaw, (pointsCubit.state as PointsLoadSuccess).defibrillators.first);
       expect(routingCubit.state, isA<RoutingCalculatingInProgress>());

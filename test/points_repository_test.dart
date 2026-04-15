@@ -17,12 +17,12 @@ void main() {
       var defibrillator = await pointsRepository.getNode(11197705644);
       expect(defibrillator, isNotNull);
       expect(defibrillator?.id, 11197705644);
-      expect(defibrillator?.access, 'customers');
-      expect(defibrillator?.description, 'W budynku Urzędu Gminy.');
-      expect(defibrillator?.location.longitude, 21.2887549);
-      expect(defibrillator?.location.latitude, 50.262342);
+      expect(defibrillator?.access, 'yes');
+      expect(defibrillator?.description, 'W czarnej kapsule przy wejściu do urzędu gminy');
+      expect(defibrillator?.location.longitude, 21.288825);
+      expect(defibrillator?.location.latitude, 50.2623153);
       expect(defibrillator?.indoor, 'yes');
-      expect(defibrillator?.openingHours, 'Mo-Fr 07:30-15:30');
+      expect(defibrillator?.openingHours, '24/7');
       expect(defibrillator?.operator, 'Urząd Gminy Wadowice Górne');
       expect(defibrillator?.phone, '+48 14 666 97 51');
     });
