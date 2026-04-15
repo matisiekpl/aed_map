@@ -3,7 +3,7 @@ description: App showing available AEDs
 
 publish_to: "none"
 
-version: 1.0.67+67
+version: 1.0.68+68
 
 environment:
   sdk: ^3.5.3
@@ -11,53 +11,52 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.9
   sliding_up_panel: ^2.0.0+1
   vector_map_tiles: ^7.3.1
   flutter_map: ^6.2.1
   latlong2: ^0.9.1
   geolocator: ^11.1.0
   flutter_map_location_marker: ^8.1.0
-  flutter_svg: ^2.0.10+1
-  http: ^1.2.2
+  flutter_svg: ^2.2.4
+  http: ^1.6.0
   maps_launcher: ^3.0.0+1
-  url_launcher: ^6.3.0
+  url_launcher: ^6.3.2
   flutter_map_dragmarker: ^6.0.0
   cross_fade: ^0.5.0
-  connectivity_plus: ^6.0.5
+  connectivity_plus: ^7.1.1
   flutter_launcher_icons: ^0.14.1
   flutter_map_supercluster: ^5.0.0-dev.1
   flutter_map_marker_cluster: ^1.0.1
-  shared_preferences: ^2.0.17
+  shared_preferences: ^2.5.5
   cached_network_image: ^3.3.1
-  hue_rotation: ^1.3.7
+  hue_rotation: ^2.0.0
   flutter_localizations:
     sdk: flutter
   intl: any
-  xml: ^6.2.2
-  settings_ui: ^2.0.2
-  feedback: ^3.1.0
-  dotted_border: ^3.0.1
-  image_picker: ^1.1.2
-  image: ^4.0.17
-  dio: ^5.1.2
+  xml: ^6.6.1
+  settings_ui: ^3.0.1
+  feedback: ^3.2.0
+  dotted_border: ^3.1.0
+  image_picker: ^1.2.1
+  image: ^4.8.0
+  dio: ^5.9.2
   google_polyline_algorithm: ^3.1.0
   plausible_analytics: ^0.3.0
   flutter_bloc: ^9.1.1
-  equatable: ^2.0.5
-  bloc_test: ^10.0.0
-  package_info_plus: ^8.0.3
-  sentry_flutter: ^8.9.0
-  firebase_analytics: ^11.3.3
-  firebase_core: ^3.6.0
-  mixpanel_flutter: ^2.2.0
-  introduction_screen: ^3.1.14
+  equatable: ^2.0.8
+  package_info_plus: ^10.0.0
+  sentry_flutter: ^9.17.0
+  firebase_analytics: ^12.3.0
+  firebase_core: ^4.7.0
+  mixpanel_flutter: ^2.6.0
+  introduction_screen: ^4.0.0
   flutter_phoenix: ^1.1.1
   path_provider: ^2.1.5
-  in_app_review: ^2.0.10
-  firebase_remote_config: ^5.4.1
-  flutter_web_auth_2: ^4.1.0
-  font_awesome_flutter: ^10.12.0
+  in_app_review: ^2.0.11
+  firebase_remote_config: ^6.4.0
+  flutter_web_auth_2: ^5.0.2
+  font_awesome_flutter: ^11.0.0
 
 dev_dependencies:
   integration_test:
@@ -65,6 +64,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  bloc_test: ^10.0.0
 
 dependency_overrides:
   geolocator_android: ^4.6.0

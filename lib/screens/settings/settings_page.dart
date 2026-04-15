@@ -59,7 +59,7 @@ class _SettingsPageState extends State<SettingsPage>
                             leading: const Icon(CupertinoIcons.location_solid),
                             title:
                                 Text(appLocalizations.defibrillatorsInDataset),
-                            value: BlocBuilder<PointsCubit, PointsState>(
+                            trailing: BlocBuilder<PointsCubit, PointsState>(
                                 builder: (context, state) {
                               if (state is PointsLoadSuccess) {
                                 return Text(
@@ -72,7 +72,7 @@ class _SettingsPageState extends State<SettingsPage>
                             leading: const Icon(CupertinoIcons.map),
                             title:
                                 Text(appLocalizations.defibrillatorsWithin5km),
-                            value: BlocBuilder<LocationCubit, LocationState>(
+                            trailing: BlocBuilder<LocationCubit, LocationState>(
                                 builder: (context, locationState) {
                               return BlocBuilder<PointsCubit, PointsState>(
                                   builder: (context, pointsState) {
@@ -91,13 +91,16 @@ class _SettingsPageState extends State<SettingsPage>
                           SettingsTile(
                             leading: const Icon(CupertinoIcons.clock),
                             title: Text(appLocalizations.lastUpdate),
-                            value: BlocBuilder<PointsCubit, PointsState>(
+                            trailing: BlocBuilder<PointsCubit, PointsState>(
                               builder: (context, state) {
                                 if (state is PointsLoadSuccess) {
-                                  return Text(DateFormat('dd-MM-yyyy HH:mm')
-                                      .format(state.lastUpdateTime));
+                                  return Text(
+                                      DateFormat('dd-MM-yyyy HH:mm')
+                                          .format(state.lastUpdateTime),
+                                      style: const TextStyle(fontSize: 12));
                                 }
-                                return const Text('-');
+                                return const Text('-',
+                                    style: TextStyle(fontSize: 12));
                               },
                             ),
                           ),
@@ -136,13 +139,13 @@ class _SettingsPageState extends State<SettingsPage>
                               SettingsTile(
                                   leading: const Icon(CupertinoIcons.person),
                                   title: Text(appLocalizations.signedInAs),
-                                  value: Text(editState.user?.name ?? '-',
+                                  trailing: Text(editState.user?.name ?? '-',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold))),
                               SettingsTile(
                                   leading: const Icon(Icons.tag),
                                   title: Text(appLocalizations.accountNumber),
-                                  value: Text(
+                                  trailing: Text(
                                       editState.user?.id.toString() ?? '-',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold))),
@@ -168,7 +171,7 @@ class _SettingsPageState extends State<SettingsPage>
                           SettingsTile(
                             leading: const Icon(CupertinoIcons.info),
                             title: Text(appLocalizations.version),
-                            value: Text(packageInfo.data?.version ?? '-'),
+                            trailing: Text(packageInfo.data?.version ?? '-'),
                           ),
                           SettingsTile.navigation(
                             onPressed: (context) {
@@ -176,7 +179,7 @@ class _SettingsPageState extends State<SettingsPage>
                             },
                             leading: const Icon(CupertinoIcons.doc),
                             title: Text(appLocalizations.website),
-                            value: const Text('aedmapa.pl'),
+                            trailing: const Text('aedmapa.pl'),
                           ),
                           SettingsTile.navigation(
                             title: Text('Feedback'),
@@ -198,7 +201,7 @@ class _SettingsPageState extends State<SettingsPage>
                             SettingsTile(
                               leading: const Icon(CupertinoIcons.person),
                               title: Text(appLocalizations.author),
-                              value: const Text('Mateusz Woźniak'),
+                              trailing: const Text('Mateusz Woźniak'),
                             ),
                             SettingsTile.navigation(
                               onPressed: (context) {
@@ -207,12 +210,12 @@ class _SettingsPageState extends State<SettingsPage>
                               },
                               leading: const Icon(CupertinoIcons.envelope),
                               title: Text('Mail'),
-                              value: const Text('mateusz@aedmapa.pl'),
+                              trailing: const Text('mateusz@aedmapa.pl'),
                             ),
                             SettingsTile.navigation(
                               leading: FaIcon(FontAwesomeIcons.instagram),
                               title: Text('Instagram'),
-                              value: const Text('@_matuesz_wozniak'),
+                              trailing: const Text('@_matuesz_wozniak'),
                               onPressed: (context) {
                                 launchUrl(Uri.parse(
                                     'https://www.instagram.com/_matuesz_wozniak/'));
@@ -221,7 +224,7 @@ class _SettingsPageState extends State<SettingsPage>
                             SettingsTile.navigation(
                               leading: FaIcon(FontAwesomeIcons.xTwitter),
                               title: Text('X (Twitter)'),
-                              value: const Text('@matisiekpl'),
+                              trailing: const Text('@matisiekpl'),
                               onPressed: (context) {
                                 launchUrl(
                                     Uri.parse('https://x.com/matisiekpl'));
