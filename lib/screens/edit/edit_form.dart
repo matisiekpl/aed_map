@@ -114,6 +114,7 @@ class EditForm extends StatelessWidget {
                       .take(10)
                       .string,
                   style: TextStyle(
+                      fontSize: 13,
                       color: MediaQuery.of(context).platformBrightness ==
                               Brightness.dark
                           ? Colors.white
@@ -128,6 +129,7 @@ class EditForm extends StatelessWidget {
                       .take(10)
                       .string,
                   style: TextStyle(
+                      fontSize: 13,
                       color: MediaQuery.of(context).platformBrightness ==
                               Brightness.dark
                           ? Colors.white
