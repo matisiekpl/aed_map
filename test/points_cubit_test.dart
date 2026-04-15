@@ -5,7 +5,10 @@ import 'package:aed_map/repositories/points_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'utils.dart';
+
 void main() {
+  CustomBindings();
   TestWidgetsFlutterBinding.ensureInitialized();
   group('PointsCubit', () {
     late PointsCubit pointsCubit;

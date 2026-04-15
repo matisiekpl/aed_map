@@ -1,7 +1,11 @@
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'utils.dart';
+
 void main() {
+  CustomBindings();
+  TestWidgetsFlutterBinding.ensureInitialized();
   group("PointsRepository", () {
     late PointsRepository pointsRepository;
 
