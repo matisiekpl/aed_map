@@ -571,7 +571,7 @@ abstract class AppLocalizations {
   /// No description provided for @pendingChangesBadge.
   ///
   /// In en, this message translates to:
-  /// **'{count} changes pending'**
+  /// **'{count, plural, =1{1 pending change} other{{count} pending changes}}'**
   String pendingChangesBadge(int count);
 
   /// No description provided for @pendingChangesTitle.

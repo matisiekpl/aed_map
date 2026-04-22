@@ -90,13 +90,12 @@ class BottomPanel extends StatelessWidget {
                           margin: const EdgeInsets.only(bottom: 8),
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(0.15),
+                            color: Colors.orange,
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.orange, width: 1),
                           ),
                           child: Text(
                             appLocalizations.pendingAedBannerText,
-                            style: const TextStyle(color: Colors.orange, fontSize: 13),
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                           ),
                         );
                       }),

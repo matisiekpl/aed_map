@@ -254,7 +254,14 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String pendingChangesBadge(int count) {
-    return '$count zmian oczekujących';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count oczekujących zmian',
+      few: '$count oczekujące zmiany',
+      one: '1 oczekująca zmiana',
+    );
+    return '$_temp0';
   }
 
   @override

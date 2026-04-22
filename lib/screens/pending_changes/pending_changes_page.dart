@@ -1,10 +1,12 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
+import 'package:aed_map/bloc/points/points_cubit.dart';
+import 'package:aed_map/bloc/points/points_state.dart';
+import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/models/pending_change.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../generated/i18n/app_localizations.dart';
@@ -56,12 +58,23 @@ class PendingChangesPage extends StatelessWidget {
     };
 
     final description = change.snapshot.description ?? '';
-    final formattedDate = DateFormat('dd-MM-yyyy HH:mm').format(change.createdAt);
 
     return SettingsTile(
       leading: icon,
       title: Text('$typeLabel${description.isNotEmpty ? ': $description' : ''}'),
-      description: Text(formattedDate),
+      onPressed: (context) {
+        final pointsCubit = context.read<PointsCubit>();
+        final state = pointsCubit.state;
+        Defibrillator target = change.snapshot;
+        if (state is PointsLoadSuccess) {
+          target = state.defibrillators.firstWhere(
+            (defibrillator) => defibrillator.id == change.defibrillatorId,
+            orElse: () => change.snapshot,
+          );
+        }
+        Navigator.of(context).pop();
+        pointsCubit.select(target);
+      },
     );
   }
 }

@@ -107,7 +107,7 @@
   "accountNumber": "Account number",
   "add": "Add",
   "contactAuthorDescription": "If you've any questions or feedback don't hesitate to message me on any of these platforms.",
-  "pendingChangesBadge": "{count} changes pending",
+  "pendingChangesBadge": "{count, plural, =1{1 pending change} other{{count} pending changes}}",
   "@pendingChangesBadge": {
     "placeholders": {
       "count": {

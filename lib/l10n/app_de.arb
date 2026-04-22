@@ -104,7 +104,7 @@
   "accountNumber": "Kontonummer",
   "add": "Hinzufügen",
   "contactAuthorDescription": "Bei Fragen oder Feedback zögere nicht, mich auf einer dieser Plattformen zu kontaktieren.",
-  "pendingChangesBadge": "{count} Änderungen ausstehend",
+  "pendingChangesBadge": "{count, plural, =1{1 ausstehende Änderung} other{{count} ausstehende Änderungen}}",
   "pendingChangesTitle": "Ausstehende Änderungen",
   "pendingAedBannerText": "Dieser AED wird von OpenStreetMap verarbeitet",
   "pendingChangeTypeAdd": "Hinzugefügt",

@@ -56,7 +56,7 @@ class MapHeader extends StatelessWidget {
               }),
               const SizedBox(height: 2),
               Text('OpenStreetMap contributors', style: const TextStyle(fontSize: 12)),
-              const SizedBox(height: 2),
+              const SizedBox(height: 6),
               BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
                 if (editState.pendingChanges.isEmpty) return const SizedBox();
                 var appLocalizations = AppLocalizations.of(context)!;
@@ -64,11 +64,15 @@ class MapHeader extends StatelessWidget {
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     var editCubit = context.read<EditCubit>();
+                    var pointsCubit = context.read<PointsCubit>();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BlocProvider.value(
-                          value: editCubit,
+                        builder: (context) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(value: editCubit),
+                            BlocProvider.value(value: pointsCubit),
+                          ],
                           child: const PendingChangesPage(),
                         ),
                       ),
@@ -76,13 +80,13 @@ class MapHeader extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.orange, width: 1),
+                      color: Colors.orange,
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Text(
                       appLocalizations.pendingChangesBadge(editState.pendingChanges.length),
-                      style: const TextStyle(fontSize: 11, color: Colors.orange, fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600),
                     ),
                   ),
                 );

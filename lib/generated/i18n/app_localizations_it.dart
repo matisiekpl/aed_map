@@ -256,7 +256,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String pendingChangesBadge(int count) {
-    return '$count modifiche in sospeso';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count modifiche in sospeso',
+      one: '1 modifica in sospeso',
+    );
+    return '$_temp0';
   }
 
   @override

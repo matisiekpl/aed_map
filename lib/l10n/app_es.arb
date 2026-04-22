@@ -104,7 +104,7 @@
   "accountNumber": "Número de cuenta",
   "add": "Añadir",
   "contactAuthorDescription": "Si tienes preguntas o comentarios, no dudes en escribirme en cualquiera de estas plataformas.",
-  "pendingChangesBadge": "{count} cambios pendientes",
+  "pendingChangesBadge": "{count, plural, =1{1 cambio pendiente} other{{count} cambios pendientes}}",
   "pendingChangesTitle": "Cambios pendientes",
   "pendingAedBannerText": "Este DEA está siendo procesado por OpenStreetMap",
   "pendingChangeTypeAdd": "Añadido",

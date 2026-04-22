@@ -104,7 +104,7 @@
   "accountNumber": "Numéro de compte",
   "add": "Ajouter",
   "contactAuthorDescription": "Si vous avez des questions ou des retours, n'hésitez pas à me contacter sur l'une de ces plateformes.",
-  "pendingChangesBadge": "{count} modifications en attente",
+  "pendingChangesBadge": "{count, plural, =1{1 modification en attente} other{{count} modifications en attente}}",
   "pendingChangesTitle": "Modifications en attente",
   "pendingAedBannerText": "Ce DAE est en cours de traitement par OpenStreetMap",
   "pendingChangeTypeAdd": "Ajouté",
