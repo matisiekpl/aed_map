@@ -188,6 +188,7 @@ ignore_*.*
 ios/Runner.ipa
 ios/Runner.app.dSYM.zip
 ios/fastlane/report.xml
+ios/fastlane/README.md
 
 android/fastlane/report.xml
 android/fastlane/README.md
