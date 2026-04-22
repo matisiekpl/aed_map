@@ -1,5 +1,5 @@
 {
-  "heading": "Mappa DAE",
+  "heading": "Informazioni",
   "subheading": "{count} DAE disponibili",
   "@subheading": {
     "placeholders": {
@@ -20,7 +20,7 @@
   "noData": "Nessun dato",
   "navigate": "Naviga",
   "chooseMapApp": "Scegli l'applicazione di mappe",
-  "about": "Fonte dati: openaedmap.org",
+  "about": "Informazioni sull'applicazione",
   "defibrillator": "Defibrillatore",
   "runDistance": "Circa {minutes} minuti di corsa ({meters}m)",
   "@runDistance": {
@@ -74,17 +74,14 @@
   "minutes": "minuti",
   "seconds": "secondi",
   "meters": "metri",
-  "heading": "Informazioni",
   "datasetHeading": "Database dei punti",
   "datasetDescription": "Il database dei punti AED proviene dal progetto openaedmap.org",
   "defibrillatorsInDataset": "Defibrillatori nel database",
   "defibrillatorsWithin5km": "Defibrillatori entro 5 km",
   "defibrillatorsWithImages": "Punti con immagini",
-  "about": "Informazioni sull'applicazione",
   "version": "Versione",
   "website": "Sito web del progetto",
   "author": "Autore",
-  "contact": "Contatto",
   "understand": "Capisco",
   "dataSource": "Fonte dei dati",
   "dataSourceDescription": "I dati sulla posizione dei defibrillatori provengono da OpenStreetMap. La loro qualità può variare. L'autore non è responsabile per la correttezza dei dati. Ti incoraggiamo a co-creare il database su openaedmap.org",
@@ -106,5 +103,31 @@
   "delete": "Elimina",
   "accountNumber": "Numero di account",
   "add": "Aggiungi",
-  "contactAuthorDescription": "Se hai domande o feedback, non esitare a contattarmi su una di queste piattaforme."
+  "contactAuthorDescription": "Se hai domande o feedback, non esitare a contattarmi su una di queste piattaforme.",
+  "pendingChangesBadge": "{count} modifiche in sospeso",
+  "pendingChangesTitle": "Modifiche in sospeso",
+  "pendingAedBannerText": "Questo DAE è in elaborazione da OpenStreetMap",
+  "pendingChangeTypeAdd": "Aggiunto",
+  "pendingChangeTypeEdit": "Modificato",
+  "pendingChangeTypeDelete": "Eliminato",
+  "osmErrorUnauthorized": "Accedi nuovamente a OpenStreetMap",
+  "osmErrorNotFound": "Questo DAE non esiste più su OpenStreetMap",
+  "osmErrorConflict": "Questo DAE è già stato modificato da qualcun altro. Aggiorna e riprova.",
+  "osmErrorGeneric": "Impossibile salvare le modifiche (HTTP {code})",
+  "@pendingChangesBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "@osmErrorGeneric": {
+    "placeholders": {
+      "code": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  }
 }

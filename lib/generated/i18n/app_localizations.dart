@@ -567,6 +567,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'If you\'ve any questions or feedback don\'t hesitate to message me on any of these platforms.'**
   String get contactAuthorDescription;
+
+  /// No description provided for @pendingChangesBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} changes pending'**
+  String pendingChangesBadge(int count);
+
+  /// No description provided for @pendingChangesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending changes'**
+  String get pendingChangesTitle;
+
+  /// No description provided for @pendingAedBannerText.
+  ///
+  /// In en, this message translates to:
+  /// **'This AED is being processed by OpenStreetMap'**
+  String get pendingAedBannerText;
+
+  /// No description provided for @pendingChangeTypeAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Added'**
+  String get pendingChangeTypeAdd;
+
+  /// No description provided for @pendingChangeTypeEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edited'**
+  String get pendingChangeTypeEdit;
+
+  /// No description provided for @pendingChangeTypeDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get pendingChangeTypeDelete;
+
+  /// No description provided for @osmErrorUnauthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in to OpenStreetMap again'**
+  String get osmErrorUnauthorized;
+
+  /// No description provided for @osmErrorNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This AED no longer exists on OpenStreetMap'**
+  String get osmErrorNotFound;
+
+  /// No description provided for @osmErrorConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'This AED was already changed by someone else. Please refresh and try again.'**
+  String get osmErrorConflict;
+
+  /// No description provided for @osmErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save changes (HTTP {code})'**
+  String osmErrorGeneric(int code);
 }
 
 class _AppLocalizationsDelegate

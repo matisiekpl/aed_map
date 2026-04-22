@@ -3,12 +3,11 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/constants.dart';
-import 'package:aed_map/repositories/points_repository.dart';
+import 'package:aed_map/repositories/user_created_defibrillator_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/points/points_cubit.dart';
@@ -29,29 +28,52 @@ class EditForm extends StatelessWidget {
           data: MediaQuery.of(context).platformBrightness == Brightness.dark
               ? ThemeData.dark()
               : ThemeData.light(),
-          child: BlocBuilder<EditCubit, EditState>(builder: (context, state) {
-            if (state is EditInProgress) {
-              return SafeArea(
-                bottom: false,
-                child: FutureBuilder(
-                    future: SharedPreferences.getInstance(),
+          child: BlocConsumer<EditCubit, EditState>(
+            listenWhen: (previous, current) => current.errorMessage != null,
+            listener: (context, state) {
+              final message = resolveErrorMessage(state.errorMessage!, appLocalizations);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(message),
+                backgroundColor: Colors.red,
+              ));
+            },
+            builder: (context, state) {
+              if (state is EditInProgress) {
+                return SafeArea(
+                  bottom: false,
+                  child: FutureBuilder<bool>(
+                    future: UserCreatedDefibrillatorRepository()
+                        .contains(state.defibrillator.id),
                     builder: (context, snap) {
                       if (snap.hasData) {
                         return SettingsList(
-                          sections: _buildSections(context, state, snap.data!),
+                          sections: buildSections(context, state, snap.data!),
                         );
                       }
                       return const Center(child: CupertinoActivityIndicator());
-                    }),
-              );
-            }
-            return Container();
-          })),
+                    },
+                  ),
+                );
+              }
+              return Container();
+            },
+          )),
     );
   }
 
-  List<AbstractSettingsSection> _buildSections(
-      BuildContext context, EditInProgress state, SharedPreferences prefs) {
+  String resolveErrorMessage(String errorCode, AppLocalizations appLocalizations) {
+    if (errorCode == 'osmErrorUnauthorized') return appLocalizations.osmErrorUnauthorized;
+    if (errorCode == 'osmErrorNotFound') return appLocalizations.osmErrorNotFound;
+    if (errorCode == 'osmErrorConflict') return appLocalizations.osmErrorConflict;
+    if (errorCode.startsWith('osmErrorGeneric:')) {
+      final code = int.tryParse(errorCode.split(':').last) ?? 0;
+      return appLocalizations.osmErrorGeneric(code);
+    }
+    return errorCode;
+  }
+
+  List<AbstractSettingsSection> buildSections(
+      BuildContext context, EditInProgress state, bool isUserCreated) {
     var appLocalizations = AppLocalizations.of(context)!;
     return [
       SettingsSection(
@@ -71,8 +93,7 @@ class EditForm extends StatelessWidget {
             title: Text(appLocalizations.access),
             value: Text(translateAccessComment(state.access, appLocalizations)),
             onPressed: (_) {
-              _selectAccess(
-                  context, appLocalizations, context.read<EditCubit>());
+              selectAccess(context, appLocalizations, context.read<EditCubit>());
             },
           ),
           SettingsTile.switchTile(
@@ -147,17 +168,12 @@ class EditForm extends StatelessWidget {
                 launchUrl(Uri.parse('$osmNodePrefix${state.defibrillator.id}'));
               },
             ),
-            if ((prefs.getStringList(
-                        PointsRepository.originalDefibrillatorsListKey) ??
-                    [])
-                .contains(state.defibrillator.id.toString()))
+            if (isUserCreated)
               SettingsTile.navigation(
                 leading: const Icon(CupertinoIcons.trash),
                 title: Text(appLocalizations.delete),
                 onPressed: (context) async {
-                  await context
-                      .read<EditCubit>()
-                      .delete(state.defibrillator);
+                  await context.read<EditCubit>().delete(state.defibrillator);
                   await context.read<PointsCubit>().load();
                   Navigator.of(context).pop();
                 },
@@ -191,7 +207,7 @@ class EditForm extends StatelessWidget {
     ];
   }
 
-  void _selectAccess(BuildContext context, AppLocalizations appLocalizations,
+  void selectAccess(BuildContext context, AppLocalizations appLocalizations,
       EditCubit editCubit) {
     showCupertinoModalPopup<void>(
         context: context,

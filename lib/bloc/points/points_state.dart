@@ -16,10 +16,11 @@ class PointsLoadSuccess extends PointsState {
   final String hash;
   final DateTime lastUpdateTime;
   final bool refreshing;
+  final Set<int> pendingIds;
 
   @override
   List<Object?> get props =>
-      [defibrillators, selected, markers, hash, lastUpdateTime, refreshing];
+      [defibrillators, selected, markers, hash, lastUpdateTime, refreshing, pendingIds];
 
   PointsLoadSuccess({
     required this.defibrillators,
@@ -28,6 +29,7 @@ class PointsLoadSuccess extends PointsState {
     required this.hash,
     required this.lastUpdateTime,
     required this.refreshing,
+    this.pendingIds = const {},
   });
 
   PointsLoadSuccess copyWith({
@@ -37,6 +39,7 @@ class PointsLoadSuccess extends PointsState {
     String? hash,
     DateTime? lastUpdateTime,
     bool? refreshing,
+    Set<int>? pendingIds,
   }) {
     return PointsLoadSuccess(
       defibrillators: defibrillators ?? this.defibrillators,
@@ -45,6 +48,7 @@ class PointsLoadSuccess extends PointsState {
       hash: hash ?? this.hash,
       lastUpdateTime: lastUpdateTime ?? this.lastUpdateTime,
       refreshing: refreshing ?? this.refreshing,
+      pendingIds: pendingIds ?? this.pendingIds,
     );
   }
 }

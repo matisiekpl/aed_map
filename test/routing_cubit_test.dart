@@ -1,11 +1,14 @@
+import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
 import 'package:aed_map/bloc/points/points_state.dart';
 import 'package:aed_map/bloc/routing/routing_cubit.dart';
 import 'package:aed_map/bloc/routing/routing_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
+import 'package:aed_map/repositories/pending_changes_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:aed_map/repositories/routing_repository.dart';
+import 'package:aed_map/repositories/user_created_defibrillator_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,9 +26,15 @@ void main() {
       routingCubit = RoutingCubit(
           routingRepository: RoutingRepository(),
           geolocationRepository: geolocationRepository);
+      final editCubit = EditCubit(
+          pointsRepository: PointsRepository(),
+          geolocationRepository: geolocationRepository,
+          pendingChangesRepository: PendingChangesRepository(),
+          userCreatedDefibrillatorRepository: UserCreatedDefibrillatorRepository());
       pointsCubit = PointsCubit(
           pointsRepository: PointsRepository(),
-          geolocationRepository: geolocationRepository);
+          geolocationRepository: geolocationRepository,
+          editCubit: editCubit);
     });
 
     test('initial state is RoutingInitial', () {

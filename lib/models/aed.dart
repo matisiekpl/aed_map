@@ -159,6 +159,15 @@ class Defibrillator {
     );
   }
 
+  static bool tagsEqual(Defibrillator a, Defibrillator b) {
+    return a.description == b.description &&
+        a.indoor == b.indoor &&
+        a.operator == b.operator &&
+        a.phone == b.phone &&
+        a.openingHours == b.openingHours &&
+        a.access == b.access;
+  }
+
   Map<String, dynamic> getEventProperties() {
     return {
       'aed_id': id,

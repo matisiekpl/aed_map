@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
 import 'package:aed_map/models/aed.dart';
+import 'package:aed_map/models/osm_api_exception.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -20,7 +21,6 @@ import '../models/user.dart';
 class PointsRepository {
   static const String defibrillatorListKey = 'aed_list_json_2';
   static const String defibrillatorListUpdateTimestamp = 'aed_update';
-  static const String originalDefibrillatorsListKey = 'original_defibrillators';
 
   static const devMode = kDebugMode;
 
@@ -81,35 +81,26 @@ class PointsRepository {
       idLabel = '@osm_id';
     }
 
-    var originalDefibrillators = await fetchOriginalDefibrillators();
-    var originalDefibrillatorsIds = originalDefibrillators
-        .map((defibrillator) => defibrillator.id)
-        .toList();
-
-    defibrillators.addAll(originalDefibrillators);
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
       var id = row['properties'][idLabel];
-      if (!originalDefibrillatorsIds.contains(id)) {
-        var descriptions = Map.from(row['properties'])
-            .entries
-            .where((a) => a.key.startsWith('defibrillator:location'))
-            .toList();
-        descriptions.sort((a, b) => b.key.length - a.key.length);
-        defibrillators.add(Defibrillator(
-            location: LatLng(row['geometry']['coordinates'][1],
-                row['geometry']['coordinates'][0]),
-            id: id,
-            description: descriptions.firstOrNull?.value,
-            indoor: row['properties']['indoor'],
-            operator: row['properties']['operator'],
-            phone: row['properties']['phone'],
-            openingHours: row['properties']['opening_hours'],
-            access: row['properties']['access']));
-      }
+      var descriptions = Map.from(row['properties'])
+          .entries
+          .where((a) => a.key.startsWith('defibrillator:location'))
+          .toList();
+      descriptions.sort((a, b) => b.key.length - a.key.length);
+      defibrillators.add(Defibrillator(
+          location: LatLng(row['geometry']['coordinates'][1],
+              row['geometry']['coordinates'][0]),
+          id: id,
+          description: descriptions.firstOrNull?.value,
+          indoor: row['properties']['indoor'],
+          operator: row['properties']['operator'],
+          phone: row['properties']['phone'],
+          openingHours: row['properties']['opening_hours'],
+          access: row['properties']['access']));
     });
     print('Loaded ${defibrillators.length} defibrillators!');
-    print('Loaded ${originalDefibrillators.length} original defibrillators!');
     defibrillators = defibrillators.map((defibrillator) {
       const Distance distance = Distance(calculator: Haversine());
       defibrillator.distance =
@@ -207,30 +198,31 @@ class PointsRepository {
         Uri.parse('https://api.openstreetmap.org/api/0.6/changeset/create'),
         headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
         body: document.toXmlString());
+    if (response.statusCode != 200) {
+      throw OsmApiException(response.statusCode, response.body);
+    }
     return int.parse(response.body.toString());
   }
 
   Future<Defibrillator> insertDefibrillator(Defibrillator defibrillator) async {
-    try {
-      if (!devMode) {
-        var changesetId = await getChangesetId();
-        var response = await http.put(
-            Uri.parse('https://api.openstreetmap.org/api/0.6/node/create'),
-            headers: {
-              'Content-Type': 'text/xml',
-              'Authorization': 'Bearer $token'
-            },
-            body: defibrillator.toXml(changesetId, 1));
-        var id = int.parse(response.body.toString());
-        defibrillator.id = id;
-      } else {
-        defibrillator.id = 9999;
+    if (!devMode) {
+      var changesetId = await getChangesetId();
+      var response = await http.put(
+          Uri.parse('https://api.openstreetmap.org/api/0.6/node/create'),
+          headers: {
+            'Content-Type': 'text/xml',
+            'Authorization': 'Bearer $token'
+          },
+          body: defibrillator.toXml(changesetId, 1));
+      if (response.statusCode != 200) {
+        throw OsmApiException(response.statusCode, response.body);
       }
-      addOriginalDefibrillator(defibrillator.id);
-      updateDefibrillators();
-    } catch (err) {
-      print(err);
+      var id = int.parse(response.body.toString());
+      defibrillator.id = id;
+    } else {
+      defibrillator.id = 9999;
     }
+    updateDefibrillators();
     return defibrillator;
   }
 
@@ -238,51 +230,52 @@ class PointsRepository {
     if (devMode) {
       return defibrillator;
     }
-    try {
-      var changesetId = await getChangesetId();
-      var fetchResponse = await http.get(
-          Uri.parse(
-              'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
-          headers: {
-            'Content-Type': 'text/xml',
-            'Authorization': 'Bearer $token'
-          });
-      final document = XmlDocument.parse(fetchResponse.body);
-      final oldVersion = document
-          .findAllElements('node')
-          .first
-          .attributes
-          .where((attr) => attr.name.toString() == 'version')
-          .first
-          .value;
-      var oldTags = document.findAllElements('tag');
-      var oldTagsPairs = oldTags.map((tag) {
-        return [
-          tag.attributes
-              .where((attr) => attr.name.toString() == 'k')
-              .first
-              .value,
-          tag.attributes
-              .where((attr) => attr.name.toString() == 'v')
-              .first
-              .value
-        ];
-      }).toList();
-      var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
-          oldTags: oldTagsPairs);
-      await http.put(
-          Uri.parse(
-              'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
-          headers: {
-            'Content-Type': 'text/xml',
-            'Authorization': 'Bearer $token'
-          },
-          body: xml);
-      addOriginalDefibrillator(defibrillator.id);
-      updateDefibrillators();
-    } catch (err) {
-      print(err);
+    var changesetId = await getChangesetId();
+    var fetchResponse = await http.get(
+        Uri.parse(
+            'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
+        headers: {
+          'Content-Type': 'text/xml',
+          'Authorization': 'Bearer $token'
+        });
+    if (fetchResponse.statusCode != 200) {
+      throw OsmApiException(fetchResponse.statusCode, fetchResponse.body);
     }
+    final document = XmlDocument.parse(fetchResponse.body);
+    final oldVersion = document
+        .findAllElements('node')
+        .first
+        .attributes
+        .where((attr) => attr.name.toString() == 'version')
+        .first
+        .value;
+    var oldTags = document.findAllElements('tag');
+    var oldTagsPairs = oldTags.map((tag) {
+      return [
+        tag.attributes
+            .where((attr) => attr.name.toString() == 'k')
+            .first
+            .value,
+        tag.attributes
+            .where((attr) => attr.name.toString() == 'v')
+            .first
+            .value
+      ];
+    }).toList();
+    var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
+        oldTags: oldTagsPairs);
+    var putResponse = await http.put(
+        Uri.parse(
+            'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
+        headers: {
+          'Content-Type': 'text/xml',
+          'Authorization': 'Bearer $token'
+        },
+        body: xml);
+    if (putResponse.statusCode != 200) {
+      throw OsmApiException(putResponse.statusCode, putResponse.body);
+    }
+    updateDefibrillators();
     return defibrillator;
   }
 
@@ -323,104 +316,69 @@ class PointsRepository {
     return null;
   }
 
-  Future addOriginalDefibrillator(int id) async {
-    print('Adding original defibrillator $id');
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var originalDefibrillators =
-        prefs.getStringList(originalDefibrillatorsListKey) ?? [];
-    originalDefibrillators.add(id.toString());
-    await prefs.setStringList(
-        originalDefibrillatorsListKey, originalDefibrillators);
-  }
-
-  Future<List<Defibrillator>> fetchOriginalDefibrillators() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var originalDefibrillators =
-        prefs.getStringList(originalDefibrillatorsListKey) ?? [];
-    var ids = originalDefibrillators.map((x) {
-      print('Has original defibrillator $x');
-      return int.parse(x);
-    }).toList();
-    var defibrillators = await Future.wait(ids.map((id) {
-      print('Fetching original defibrillator $id');
-      return getNode(id);
-    }).toList());
-    return defibrillators
-        .where((defibrillator) => defibrillator != null)
-        .cast<Defibrillator>()
-        .toList();
-  }
-
   Future<bool> deleteDefibrillator(int nodeId) async {
     if (devMode) {
       return true;
     }
-    try {
-      var changesetId = await getChangesetId();
-      var fetchResponse = await http.get(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/$nodeId'),
-          headers: {
-            'Content-Type': 'text/xml',
-            'Authorization': 'Bearer $token'
-          });
-      final document = XmlDocument.parse(fetchResponse.body);
-      final oldVersion = document
-          .findAllElements('node')
-          .first
-          .attributes
-          .where((attr) => attr.name.toString() == 'version')
-          .first
-          .value;
-
-      final builder = XmlBuilder();
-      builder.processing('xml', 'version="1.0"');
-      builder.element('osm', nest: () {
-        builder.element('node', attributes: {
-          'id': nodeId.toString(),
-          'version': oldVersion,
-          'changeset': changesetId.toString(),
-          'lat': document
-              .findAllElements('node')
-              .first
-              .attributes
-              .where((attr) => attr.name.toString() == 'lat')
-              .first
-              .value,
-          'lon': document
-              .findAllElements('node')
-              .first
-              .attributes
-              .where((attr) => attr.name.toString() == 'lon')
-              .first
-              .value,
+    var changesetId = await getChangesetId();
+    var fetchResponse = await http.get(
+        Uri.parse('https://api.openstreetmap.org/api/0.6/node/$nodeId'),
+        headers: {
+          'Content-Type': 'text/xml',
+          'Authorization': 'Bearer $token'
         });
+    if (fetchResponse.statusCode != 200) {
+      throw OsmApiException(fetchResponse.statusCode, fetchResponse.body);
+    }
+    final document = XmlDocument.parse(fetchResponse.body);
+    final oldVersion = document
+        .findAllElements('node')
+        .first
+        .attributes
+        .where((attr) => attr.name.toString() == 'version')
+        .first
+        .value;
+
+    final builder = XmlBuilder();
+    builder.processing('xml', 'version="1.0"');
+    builder.element('osm', nest: () {
+      builder.element('node', attributes: {
+        'id': nodeId.toString(),
+        'version': oldVersion,
+        'changeset': changesetId.toString(),
+        'lat': document
+            .findAllElements('node')
+            .first
+            .attributes
+            .where((attr) => attr.name.toString() == 'lat')
+            .first
+            .value,
+        'lon': document
+            .findAllElements('node')
+            .first
+            .attributes
+            .where((attr) => attr.name.toString() == 'lon')
+            .first
+            .value,
       });
-      final deleteDocument = builder.buildDocument();
+    });
+    final deleteDocument = builder.buildDocument();
 
-      var response = await http.delete(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/$nodeId'),
-          headers: {
-            'Content-Type': 'text/xml',
-            'Authorization': 'Bearer $token'
-          },
-          body: deleteDocument.toXmlString());
+    var response = await http.delete(
+        Uri.parse('https://api.openstreetmap.org/api/0.6/node/$nodeId'),
+        headers: {
+          'Content-Type': 'text/xml',
+          'Authorization': 'Bearer $token'
+        },
+        body: deleteDocument.toXmlString());
 
-      if (response.statusCode == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var originalDefibrillators =
-            prefs.getStringList(originalDefibrillatorsListKey) ?? [];
-        originalDefibrillators.remove(nodeId.toString());
-        await prefs.setStringList(
-            originalDefibrillatorsListKey, originalDefibrillators);
-        await updateDefibrillators();
-        return true;
-      }
+    if (response.statusCode != 200) {
       Sentry.captureMessage(
           'Error deleting node: ${response.statusCode}, ${response.body}');
-      return false;
-    } catch (err) {
-      Sentry.captureException(err);
-      return false;
+      throw OsmApiException(response.statusCode, response.body);
     }
+
+    await updateDefibrillators();
+    return true;
   }
 }

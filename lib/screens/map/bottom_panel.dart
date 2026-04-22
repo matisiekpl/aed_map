@@ -15,6 +15,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/location/location_cubit.dart';
 import '../../bloc/location/location_state.dart';
 import '../../bloc/network_status/network_status_state.dart';
+import '../../bloc/edit/edit_cubit.dart';
+import '../../bloc/edit/edit_state.dart';
 import '../../bloc/points/points_cubit.dart';
 import '../../bloc/points/points_state.dart';
 import '../../bloc/routing/routing_cubit.dart';
@@ -78,6 +80,26 @@ class BottomPanel extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BlocBuilder<EditCubit, EditState>(
+                          builder: (context, editState) {
+                        final isPending = editState.pendingChanges
+                            .any((change) => change.defibrillatorId == state.selected.id);
+                        if (!isPending) return const SizedBox();
+                        return Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.orange, width: 1),
+                          ),
+                          child: Text(
+                            appLocalizations.pendingAedBannerText,
+                            style: const TextStyle(color: Colors.orange, fontSize: 13),
+                          ),
+                        );
+                      }),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

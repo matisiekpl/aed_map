@@ -8,6 +8,7 @@ import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
+import 'package:aed_map/screens/pending_changes/pending_changes_page.dart';
 import 'package:aed_map/screens/settings/settings_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -55,6 +56,37 @@ class MapHeader extends StatelessWidget {
               }),
               const SizedBox(height: 2),
               Text('OpenStreetMap contributors', style: const TextStyle(fontSize: 12)),
+              const SizedBox(height: 2),
+              BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
+                if (editState.pendingChanges.isEmpty) return const SizedBox();
+                var appLocalizations = AppLocalizations.of(context)!;
+                return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    var editCubit = context.read<EditCubit>();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                          value: editCubit,
+                          child: const PendingChangesPage(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.orange, width: 1),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: Text(
+                      appLocalizations.pendingChangesBadge(editState.pendingChanges.length),
+                      style: const TextStyle(fontSize: 11, color: Colors.orange, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                );
+              }),
               const SizedBox(height: 2),
               BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
                   builder: (context, state) {

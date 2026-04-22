@@ -253,4 +253,40 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get contactAuthorDescription =>
       'Se hai domande o feedback, non esitare a contattarmi su una di queste piattaforme.';
+
+  @override
+  String pendingChangesBadge(int count) {
+    return '$count modifiche in sospeso';
+  }
+
+  @override
+  String get pendingChangesTitle => 'Modifiche in sospeso';
+
+  @override
+  String get pendingAedBannerText =>
+      'Questo DAE è in elaborazione da OpenStreetMap';
+
+  @override
+  String get pendingChangeTypeAdd => 'Aggiunto';
+
+  @override
+  String get pendingChangeTypeEdit => 'Modificato';
+
+  @override
+  String get pendingChangeTypeDelete => 'Eliminato';
+
+  @override
+  String get osmErrorUnauthorized => 'Accedi nuovamente a OpenStreetMap';
+
+  @override
+  String get osmErrorNotFound => 'Questo DAE non esiste più su OpenStreetMap';
+
+  @override
+  String get osmErrorConflict =>
+      'Questo DAE è già stato modificato da qualcun altro. Aggiorna e riprova.';
+
+  @override
+  String osmErrorGeneric(int code) {
+    return 'Impossibile salvare le modifiche (HTTP $code)';
+  }
 }

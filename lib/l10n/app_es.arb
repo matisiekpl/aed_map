@@ -1,5 +1,5 @@
 {
-  "heading": "Mapa de DEA",
+  "heading": "Información",
   "subheading": "{count} DEA disponibles",
   "@subheading": {
     "placeholders": {
@@ -20,7 +20,7 @@
   "noData": "Sin datos",
   "navigate": "Navegar",
   "chooseMapApp": "Elegir aplicación de mapas",
-  "about": "Fuente de datos: openaedmap.org",
+  "about": "Acerca de la aplicación",
   "defibrillator": "Desfibrilador",
   "runDistance": "Aproximadamente {minutes} minuto(s) corriendo ({meters}m)",
   "@runDistance": {
@@ -74,17 +74,14 @@
   "minutes": "minutos",
   "seconds": "segundos",
   "meters": "metros",
-  "heading": "Información",
   "datasetHeading": "Base de datos de puntos",
   "datasetDescription": "La base de datos de puntos AED proviene del proyecto openaedmap.org",
   "defibrillatorsInDataset": "Desfibriladores en la base de datos",
   "defibrillatorsWithin5km": "Desfibriladores en un radio de 5 km",
   "defibrillatorsWithImages": "Puntos con imágenes",
-  "about": "Acerca de la aplicación",
   "version": "Versión",
   "website": "Sitio web del proyecto",
   "author": "Autor",
-  "contact": "Contacto",
   "understand": "Entiendo",
   "dataSource": "Fuente de datos",
   "dataSourceDescription": "Los datos sobre la ubicación de los desfibriladores provienen de OpenStreetMap. Su calidad puede variar. El autor no es responsable de la exactitud de los datos. Te animamos a co-crear la base de datos en openaedmap.org",
@@ -106,5 +103,31 @@
   "delete": "Eliminar",
   "accountNumber": "Número de cuenta",
   "add": "Añadir",
-  "contactAuthorDescription": "Si tienes preguntas o comentarios, no dudes en escribirme en cualquiera de estas plataformas."
+  "contactAuthorDescription": "Si tienes preguntas o comentarios, no dudes en escribirme en cualquiera de estas plataformas.",
+  "pendingChangesBadge": "{count} cambios pendientes",
+  "pendingChangesTitle": "Cambios pendientes",
+  "pendingAedBannerText": "Este DEA está siendo procesado por OpenStreetMap",
+  "pendingChangeTypeAdd": "Añadido",
+  "pendingChangeTypeEdit": "Editado",
+  "pendingChangeTypeDelete": "Eliminado",
+  "osmErrorUnauthorized": "Por favor, inicia sesión de nuevo en OpenStreetMap",
+  "osmErrorNotFound": "Este DEA ya no existe en OpenStreetMap",
+  "osmErrorConflict": "Este DEA ya fue modificado por otra persona. Por favor, actualiza e inténtalo de nuevo.",
+  "osmErrorGeneric": "No se pudieron guardar los cambios (HTTP {code})",
+  "@pendingChangesBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "@osmErrorGeneric": {
+    "placeholders": {
+      "code": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  }
 }

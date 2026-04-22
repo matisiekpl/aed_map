@@ -1,5 +1,5 @@
 {
-  "heading": "Carte des DAE",
+  "heading": "Informations",
   "subheading": "{count} DAE disponibles",
   "@subheading": {
     "placeholders": {
@@ -20,7 +20,7 @@
   "noData": "Pas de données",
   "navigate": "Naviguer",
   "chooseMapApp": "Choisir l'application de cartes",
-  "about": "Source de données : openaedmap.org",
+  "about": "À propos de l'application",
   "defibrillator": "Défibrillateur",
   "runDistance": "Environ {minutes} minute(s) de course ({meters}m)",
   "@runDistance": {
@@ -74,17 +74,14 @@
   "minutes": "minutes",
   "seconds": "secondes",
   "meters": "mètres",
-  "heading": "Informations",
   "datasetHeading": "Base de données des points",
   "datasetDescription": "La base de données des points AED provient du projet openaedmap.org",
   "defibrillatorsInDataset": "Défibrillateurs dans la base de données",
   "defibrillatorsWithin5km": "Défibrillateurs dans un rayon de 5 km",
   "defibrillatorsWithImages": "Points avec des images",
-  "about": "À propos de l'application",
   "version": "Version",
   "website": "Site web du projet",
   "author": "Auteur",
-  "contact": "Contact",
   "understand": "Je comprends",
   "dataSource": "Source de données",
   "dataSourceDescription": "Les données sur l'emplacement des défibrillateurs proviennent d'OpenStreetMap. Leur qualité peut varier. L'auteur n'est pas responsable de l'exactitude des données. Nous vous encourageons à co-créer la base de données sur openaedmap.org",
@@ -106,5 +103,31 @@
   "delete": "Supprimer",
   "accountNumber": "Numéro de compte",
   "add": "Ajouter",
-  "contactAuthorDescription": "Si vous avez des questions ou des retours, n'hésitez pas à me contacter sur l'une de ces plateformes."
+  "contactAuthorDescription": "Si vous avez des questions ou des retours, n'hésitez pas à me contacter sur l'une de ces plateformes.",
+  "pendingChangesBadge": "{count} modifications en attente",
+  "pendingChangesTitle": "Modifications en attente",
+  "pendingAedBannerText": "Ce DAE est en cours de traitement par OpenStreetMap",
+  "pendingChangeTypeAdd": "Ajouté",
+  "pendingChangeTypeEdit": "Modifié",
+  "pendingChangeTypeDelete": "Supprimé",
+  "osmErrorUnauthorized": "Veuillez vous reconnecter à OpenStreetMap",
+  "osmErrorNotFound": "Ce DAE n'existe plus sur OpenStreetMap",
+  "osmErrorConflict": "Ce DAE a déjà été modifié par quelqu'un d'autre. Veuillez actualiser et réessayer.",
+  "osmErrorGeneric": "Échec de la sauvegarde des modifications (HTTP {code})",
+  "@pendingChangesBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "@osmErrorGeneric": {
+    "placeholders": {
+      "code": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  }
 }
