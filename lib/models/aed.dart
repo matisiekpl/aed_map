@@ -114,14 +114,15 @@ class Defibrillator {
         }
 
         oldTags
-            .where((attr) => [
+            .where((attr) => ![
                   'phone',
                   'operator',
                   'opening_hours',
                   'indoor',
                   'emergency',
                   'access',
-                  'defibrillator:location'
+                  'defibrillator:location',
+                  'image',
                 ].contains(attr[0]))
             .forEach((attr) {
           builder.element('tag', attributes: {'k': attr[0], 'v': attr[1]});

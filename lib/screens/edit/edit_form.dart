@@ -32,10 +32,19 @@ class EditForm extends StatelessWidget {
             listenWhen: (previous, current) => current.errorMessage != null,
             listener: (context, state) {
               final message = resolveErrorMessage(state.errorMessage!, appLocalizations);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(message),
-                backgroundColor: Colors.red,
-              ));
+              showCupertinoDialog(
+                context: context,
+                builder: (dialogContext) => CupertinoAlertDialog(
+                  content: Text(message),
+                  actions: [
+                    CupertinoDialogAction(
+                      isDefaultAction: true,
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
             },
             builder: (context, state) {
               if (state is EditInProgress) {
@@ -66,8 +75,13 @@ class EditForm extends StatelessWidget {
     if (errorCode == 'osmErrorNotFound') return appLocalizations.osmErrorNotFound;
     if (errorCode == 'osmErrorConflict') return appLocalizations.osmErrorConflict;
     if (errorCode.startsWith('osmErrorGeneric:')) {
-      final code = int.tryParse(errorCode.split(':').last) ?? 0;
-      return appLocalizations.osmErrorGeneric(code);
+      final rest = errorCode.substring('osmErrorGeneric:'.length);
+      final separatorIndex = rest.indexOf(':');
+      final codeString = separatorIndex == -1 ? rest : rest.substring(0, separatorIndex);
+      final body = separatorIndex == -1 ? '' : rest.substring(separatorIndex + 1);
+      final code = int.tryParse(codeString) ?? 0;
+      final base = appLocalizations.osmErrorGeneric(code);
+      return body.isEmpty ? base : '$base\n\n$body';
     }
     return errorCode;
   }

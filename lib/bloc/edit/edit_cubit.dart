@@ -240,7 +240,7 @@ class EditCubit extends Cubit<EditState> {
       case 409:
         return 'osmErrorConflict';
       default:
-        return 'osmErrorGeneric:${exception.statusCode}';
+        return 'osmErrorGeneric:${exception.statusCode}:${exception.body}';
     }
   }
 
