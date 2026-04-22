@@ -15,7 +15,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/location/location_cubit.dart';
 import '../../bloc/location/location_state.dart';
 import '../../bloc/network_status/network_status_state.dart';
-import '../../bloc/edit/edit_cubit.dart';
 import '../../bloc/edit/edit_state.dart';
 import '../../bloc/points/points_cubit.dart';
 import '../../bloc/points/points_state.dart';
