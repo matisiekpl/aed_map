@@ -44,6 +44,7 @@ class _SettingsPageState extends State<SettingsPage>
                   return DefaultTextStyle.merge(
                     style: TextStyle(color: CupertinoColors.label.resolveFrom(context)),
                     child: SettingsList(
+                    platform: DevicePlatform.iOS,
                     applicationType: ApplicationType.cupertino,
                     lightTheme: const SettingsThemeData(),
                     darkTheme: settingsListDarkTheme,

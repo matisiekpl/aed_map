@@ -59,6 +59,7 @@ class EditForm extends StatelessWidget {
                         return DefaultTextStyle.merge(
                           style: TextStyle(color: CupertinoColors.label.resolveFrom(context)),
                           child: SettingsList(
+                            platform: DevicePlatform.iOS,
                             applicationType: ApplicationType.cupertino,
                             lightTheme: const SettingsThemeData(),
                             darkTheme: settingsListDarkTheme,
