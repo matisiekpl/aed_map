@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,34 +18,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     var titleTextStyle = TextStyle(
-      color: MediaQuery.of(context).platformBrightness == Brightness.dark
-          ? Colors.white
-          : Colors.black,
+      color: CupertinoColors.label.resolveFrom(context),
       fontSize: 20,
       fontFamily: 'Manrope',
       fontWeight: FontWeight.w500,
     );
     var bodyTextStyle = TextStyle(
-      color: MediaQuery.of(context).platformBrightness == Brightness.dark
-          ? Colors.white
-          : Colors.black,
+      color: CupertinoColors.label.resolveFrom(context),
       fontSize: 18.0,
       fontWeight: FontWeight.normal,
     );
     return Container(
-      color: MediaQuery.of(context).platformBrightness == Brightness.dark
-          ? Colors.black
-          : Colors.white,
+      color: CupertinoColors.systemBackground.resolveFrom(context),
       child: Theme(
         data: ThemeData(
           colorScheme: ColorScheme.light(primary: Colors.green.shade400),
         ),
         child: SafeArea(
           child: IntroductionScreen(
-            globalBackgroundColor:
-                MediaQuery.of(context).platformBrightness == Brightness.dark
-                    ? Colors.black
-                    : Colors.white,
+            globalBackgroundColor: CupertinoColors.systemBackground.resolveFrom(context),
             dotsDecorator: DotsDecorator(
               activeColor: Colors.green.shade400,
             ),

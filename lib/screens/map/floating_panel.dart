@@ -35,10 +35,7 @@ class FloatingPanel extends StatelessWidget {
                         context.read<LocationCubit>().center();
                       },
                       child: Card(
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.dark
-                              ? Colors.black
-                              : Colors.white,
+                          color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(128),
                           ),
@@ -50,13 +47,7 @@ class FloatingPanel extends StatelessWidget {
                                 Text(
                                     _translateTimeAndLength(
                                         context, state.trip),
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        color: MediaQuery.of(context)
-                                                    .platformBrightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black)),
+                                    style: TextStyle(fontSize: 17, color: CupertinoColors.label.resolveFrom(context))),
                                 const SizedBox(width: 8),
                                 SizedBox(
                                   height: 32,

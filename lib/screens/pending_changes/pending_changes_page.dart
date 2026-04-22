@@ -18,27 +18,32 @@ class PendingChangesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appLocalizations = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(appLocalizations.pendingChangesTitle),
-        backgroundColor: Colors.green,
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(appLocalizations.pendingChangesTitle),
       ),
-      body: BlocBuilder<EditCubit, EditState>(
+      child: SafeArea(
+        bottom: false,
+        child: BlocBuilder<EditCubit, EditState>(
         builder: (context, state) {
-          return SettingsList(
-            lightTheme: MediaQuery.of(context).platformBrightness == Brightness.light
-                ? const SettingsThemeData()
-                : settingsListDarkTheme,
-            sections: [
-              SettingsSection(
-                title: Text(appLocalizations.pendingChangesTitle),
-                tiles: state.pendingChanges
-                    .map((change) => buildChangeTile(context, change, appLocalizations))
-                    .toList(),
-              ),
-            ],
+          return DefaultTextStyle.merge(
+            style: TextStyle(color: CupertinoColors.label.resolveFrom(context)),
+            child: SettingsList(
+              applicationType: ApplicationType.cupertino,
+              lightTheme: const SettingsThemeData(),
+              darkTheme: settingsListDarkTheme,
+              sections: [
+                SettingsSection(
+                  title: Text(appLocalizations.pendingChangesTitle),
+                  tiles: state.pendingChanges
+                      .map((change) => buildChangeTile(context, change, appLocalizations))
+                      .toList(),
+                ),
+              ],
+            ),
           );
         },
+      ),
       ),
     );
   }

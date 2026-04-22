@@ -121,6 +121,7 @@ class _AppState extends State<App> {
     );
 
     return CupertinoApp(
+      theme: const CupertinoThemeData(brightness: null),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: List.from(AppLocalizations.supportedLocales)

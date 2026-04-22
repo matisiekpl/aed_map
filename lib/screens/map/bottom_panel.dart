@@ -110,8 +110,8 @@ class BottomPanel extends StatelessWidget {
                               },
                               child: Text('⚠️ ${appLocalizations.closestAED}',
                                   key: const Key('closestAed'),
-                                  style: const TextStyle(
-                                      color: Colors.orange,
+                                  style: TextStyle(
+                                      color: CupertinoColors.systemOrange.resolveFrom(context),
                                       fontStyle: FontStyle.italic,
                                       fontSize: 18)),
                             ),
@@ -123,8 +123,8 @@ class BottomPanel extends StatelessWidget {
                                 },
                                 child: Text(
                                     '⚠️ ${appLocalizations.closerAEDAvailable}',
-                                    style: const TextStyle(
-                                        color: Colors.orange,
+                                    style: TextStyle(
+                                        color: CupertinoColors.systemOrange.resolveFrom(context),
                                         fontStyle: FontStyle.italic,
                                         fontSize: 18))),
                           GestureDetector(
@@ -135,23 +135,13 @@ class BottomPanel extends StatelessWidget {
                             },
                             child: Container(
                                 decoration: BoxDecoration(
-                                    color: MediaQuery.of(context)
-                                                .platformBrightness ==
-                                            Brightness.dark
-                                        ? Colors.grey.shade800
-                                        : Colors.grey.shade300,
+                                    color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(12))),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 8, right: 8, top: 4, bottom: 4),
-                                  child: Text(appLocalizations.edit,
-                                      style: TextStyle(
-                                          color: MediaQuery.of(context)
-                                                      .platformBrightness ==
-                                                  Brightness.dark
-                                              ? Colors.white
-                                              : Colors.black)),
+                                  child: Text(appLocalizations.edit),
                                 )),
                           ),
                         ],

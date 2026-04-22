@@ -56,7 +56,8 @@ class MarkerSelectionFooter extends StatelessWidget {
                                 }
                               },
                               color: Colors.green,
-                              child: Text(appLocalizations.next)),
+                              child: Text(appLocalizations.next,
+                                  style: const TextStyle(color: Colors.white))),
                         )
                       ],
                     )

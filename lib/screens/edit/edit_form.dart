@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/points/points_cubit.dart';
 import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
+import '../../shared/utils.dart';
 
 class EditForm extends StatelessWidget {
   const EditForm({super.key});
@@ -55,8 +56,14 @@ class EditForm extends StatelessWidget {
                         .contains(state.defibrillator.id),
                     builder: (context, snap) {
                       if (snap.hasData) {
-                        return SettingsList(
-                          sections: buildSections(context, state, snap.data!),
+                        return DefaultTextStyle.merge(
+                          style: TextStyle(color: CupertinoColors.label.resolveFrom(context)),
+                          child: SettingsList(
+                            applicationType: ApplicationType.cupertino,
+                            lightTheme: const SettingsThemeData(),
+                            darkTheme: settingsListDarkTheme,
+                            sections: buildSections(context, state, snap.data!),
+                          ),
                         );
                       }
                       return const Center(child: CupertinoActivityIndicator());
@@ -150,10 +157,7 @@ class EditForm extends StatelessWidget {
                       .string,
                   style: TextStyle(
                       fontSize: 13,
-                      color: MediaQuery.of(context).platformBrightness ==
-                              Brightness.dark
-                          ? Colors.white
-                          : Colors.black))),
+                      color: CupertinoColors.secondaryLabel.resolveFrom(context)))),
           SettingsTile(
               leading: const Icon(CupertinoIcons.globe),
               title: Text(appLocalizations.latitude),
@@ -165,10 +169,7 @@ class EditForm extends StatelessWidget {
                       .string,
                   style: TextStyle(
                       fontSize: 13,
-                      color: MediaQuery.of(context).platformBrightness ==
-                              Brightness.dark
-                          ? Colors.white
-                          : Colors.black))),
+                      color: CupertinoColors.secondaryLabel.resolveFrom(context)))),
         ],
       ),
       if (state.defibrillator.id > 0)

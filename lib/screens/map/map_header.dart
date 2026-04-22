@@ -96,9 +96,9 @@ class MapHeader extends StatelessWidget {
                   builder: (context, state) {
                 if (state.connected) return const SizedBox();
                 return Text(appLocalizations.noNetwork,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 14,
-                        color: Colors.red,
+                        color: CupertinoColors.systemRed.resolveFrom(context),
                         fontWeight: FontWeight.bold));
               })
             ],
@@ -119,15 +119,12 @@ class MapHeader extends StatelessWidget {
                         context.read<EditCubit>().enter();
                       },
                       child: Card(
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.dark
-                              ? Colors.black
-                              : Colors.white,
+                          color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             child: Text(appLocalizations.add,
-                                style: TextStyle(fontWeight: FontWeight.w500)),
+                                style: TextStyle(fontWeight: FontWeight.w500, color: CupertinoColors.label.resolveFrom(context))),
                           )),
                     ),
                   ),
@@ -161,17 +158,11 @@ class MapHeader extends StatelessWidget {
                       );
                     },
                     child: Card(
-                      color: MediaQuery.of(context).platformBrightness ==
-                              Brightness.dark
-                          ? Colors.black
-                          : Colors.white,
+                      color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(CupertinoIcons.gear,
-                            color: MediaQuery.of(context).platformBrightness ==
-                                    Brightness.dark
-                                ? Colors.white
-                                : Colors.black),
+                            color: CupertinoColors.label.resolveFrom(context)),
                       ),
                     ),
                   ),
@@ -186,18 +177,11 @@ class MapHeader extends StatelessWidget {
                         launchUrl(Uri.parse('https://pomoc.aedmapa.pl/'));
                       },
                       child: Card(
-                        color: MediaQuery.of(context).platformBrightness ==
-                                Brightness.dark
-                            ? Colors.black
-                            : Colors.white,
+                        color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Icon(CupertinoIcons.question_circle,
-                              color:
-                                  MediaQuery.of(context).platformBrightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black),
+                              color: CupertinoColors.label.resolveFrom(context)),
                         ),
                       ),
                     ),
