@@ -24,7 +24,6 @@ platform :ios do
     )
 
     Dir.chdir("../..") do
-      sh("flutter", "clean")
       sh("flutter", "pub", "get")
       sh("flutter", "build", "ios", "--release", "--no-codesign")
     end
@@ -69,7 +68,6 @@ platform :ios do
     )
 
     Dir.chdir("../..") do
-      sh("flutter", "clean")
       sh("flutter", "pub", "get")
       sh("flutter", "build", "ios", "--release", "--no-codesign")
     end

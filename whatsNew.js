@@ -7,6 +7,15 @@ const client = new OpenAI();
 
 const languages = ['pl-PL', 'de-DE', 'en-US', 'es-ES', 'fr-FR', 'it-IT'];
 
+const iosDirectoryByLanguage = {
+    'pl-PL': 'pl',
+    'de-DE': 'de-DE',
+    'en-US': 'en-US',
+    'es-ES': 'es-ES',
+    'fr-FR': 'fr-FR',
+    'it-IT': 'it',
+};
+
 const template = languages.map(lang => 
   `<${lang}>\nTutaj wpisz lub wklej informacje o wersji w tym języku: ${lang}\n</${lang}>`
 ).join('\n');
@@ -35,7 +44,7 @@ async function main() {
         const regex = new RegExp(`<${lang}>([\\s\\S]*?)</${lang}>`);
         const match = output.match(regex);
         if (match) {
-            const langDir = path.join(metadataDir, lang);
+            const langDir = path.join(metadataDir, iosDirectoryByLanguage[lang]);
             fs.mkdirSync(langDir, { recursive: true });
             fs.writeFileSync(path.join(langDir, 'release_notes.txt'), match[1].trim());
             console.log(`✓ Wrote release notes for ${lang}`);

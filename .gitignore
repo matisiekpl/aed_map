@@ -183,3 +183,8 @@ public/
 .netlify
 
 ignore_*.*
+
+
+ios/Runner.ipa
+ios/Runner.app.dSYM.zip
+ios/fastlane/report.xml
