@@ -215,10 +215,10 @@ class _SettingsPageState extends State<SettingsPage>
                             SettingsTile.navigation(
                               leading: FaIcon(FontAwesomeIcons.instagram),
                               title: Text('Instagram'),
-                              trailing: const Text('@_matuesz_wozniak'),
+                              trailing: const Text('@_mateusz_wozniak'),
                               onPressed: (context) {
                                 launchUrl(Uri.parse(
-                                    'https://www.instagram.com/_matuesz_wozniak/'));
+                                    'https://www.instagram.com/_mateusz_wozniak/'));
                               },
                             ),
                             SettingsTile.navigation(
