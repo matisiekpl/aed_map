@@ -201,6 +201,27 @@ class AppLocalizationsIt extends AppLocalizations {
   String get daySunday => 'Domenica';
 
   @override
+  String get dayMondayShort => 'Lun';
+
+  @override
+  String get dayTuesdayShort => 'Mar';
+
+  @override
+  String get dayWednesdayShort => 'Mer';
+
+  @override
+  String get dayThursdayShort => 'Gio';
+
+  @override
+  String get dayFridayShort => 'Ven';
+
+  @override
+  String get daySaturdayShort => 'Sab';
+
+  @override
+  String get daySundayShort => 'Dom';
+
+  @override
   String get backToDaysList => 'Torna all\'elenco dei giorni';
 
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' show TimeOfDay;
 
+import '../generated/i18n/app_localizations.dart';
+
 enum OpeningHoursMode { none, alwaysOpen, workingHours, custom, advanced }
 
 const List<String> openingHoursDayCodes = [
@@ -11,6 +13,25 @@ const List<String> openingHoursDayCodes = [
   'Sa',
   'Su'
 ];
+
+String? formatOpeningHoursDisplay(
+    String? value, AppLocalizations appLocalizations) {
+  if (value == null) return null;
+  final shortNames = [
+    appLocalizations.dayMondayShort,
+    appLocalizations.dayTuesdayShort,
+    appLocalizations.dayWednesdayShort,
+    appLocalizations.dayThursdayShort,
+    appLocalizations.dayFridayShort,
+    appLocalizations.daySaturdayShort,
+    appLocalizations.daySundayShort,
+  ];
+  var output = value;
+  for (var i = 0; i < openingHoursDayCodes.length; i++) {
+    output = output.replaceAll(openingHoursDayCodes[i], shortNames[i]);
+  }
+  return output.split(';').map((part) => part.trim()).join('\n');
+}
 
 class TimeRange {
   final TimeOfDay start;
@@ -92,7 +113,7 @@ OpeningHoursModel parseOpeningHours(String? value) {
     }
     final dayPart = rule.substring(0, separatorMatch.start).trim();
     final remainder = rule.substring(separatorMatch.end).trim();
-    final dayIndices = _parseDayPart(dayPart);
+    final dayIndices = parseDayPart(dayPart);
     if (dayIndices == null) {
       return OpeningHoursModel(
           mode: OpeningHoursMode.advanced, advancedRaw: trimmed);
@@ -106,7 +127,7 @@ OpeningHoursModel parseOpeningHours(String? value) {
     }
     final ranges = <TimeRange>[];
     for (final timeToken in remainder.split(',')) {
-      final parsedRange = _parseTimeRange(timeToken);
+      final parsedRange = parseTimeRange(timeToken);
       if (parsedRange == null) {
         return OpeningHoursModel(
             mode: OpeningHoursMode.advanced, advancedRaw: trimmed);
@@ -127,7 +148,7 @@ String? buildOpeningHours(OpeningHoursModel model) {
   if (model.mode == OpeningHoursMode.none) return null;
   if (model.mode == OpeningHoursMode.alwaysOpen) return '24/7';
   if (model.mode == OpeningHoursMode.workingHours) {
-    return 'Mo-Fr ${_pad(model.workingStart.hour)}:${_pad(model.workingStart.minute)}-${_pad(model.workingEnd.hour)}:${_pad(model.workingEnd.minute)}';
+    return 'Mo-Fr ${padTwo(model.workingStart.hour)}:${padTwo(model.workingStart.minute)}-${padTwo(model.workingEnd.hour)}:${padTwo(model.workingEnd.minute)}';
   }
   if (model.mode == OpeningHoursMode.advanced) {
     final trimmed = model.advancedRaw.trim();
@@ -144,13 +165,13 @@ String? buildOpeningHours(OpeningHoursModel model) {
     var endIndex = dayIndex;
     while (endIndex + 1 < 7 &&
         !model.days[endIndex + 1].closed &&
-        _rangesEqual(model.days[endIndex + 1].ranges, currentDay.ranges)) {
+        rangesEqual(model.days[endIndex + 1].ranges, currentDay.ranges)) {
       endIndex++;
     }
     final dayPart = dayIndex == endIndex
         ? openingHoursDayCodes[dayIndex]
         : '${openingHoursDayCodes[dayIndex]}-${openingHoursDayCodes[endIndex]}';
-    final timePart = currentDay.ranges.map(_formatRangeOsm).join(',');
+    final timePart = currentDay.ranges.map(formatRangeOsm).join(',');
     parts.add('$dayPart $timePart');
     dayIndex = endIndex + 1;
   }
@@ -159,14 +180,14 @@ String? buildOpeningHours(OpeningHoursModel model) {
 }
 
 String formatTimeOfDay(TimeOfDay time) {
-  return '${_pad(time.hour)}:${_pad(time.minute)}';
+  return '${padTwo(time.hour)}:${padTwo(time.minute)}';
 }
 
 String formatTimeRange(TimeRange range) {
   return '${formatTimeOfDay(range.start)}–${formatTimeOfDay(range.end)}';
 }
 
-List<int>? _parseDayPart(String dayPart) {
+List<int>? parseDayPart(String dayPart) {
   final indices = <int>{};
   for (final token in dayPart.split(',')) {
     final normalized = token.trim();
@@ -174,8 +195,8 @@ List<int>? _parseDayPart(String dayPart) {
     if (normalized.contains('-')) {
       final rangeParts = normalized.split('-');
       if (rangeParts.length != 2) return null;
-      final startIndex = _dayCodeIndex(rangeParts[0].trim());
-      final endIndex = _dayCodeIndex(rangeParts[1].trim());
+      final startIndex = dayCodeIndex(rangeParts[0].trim());
+      final endIndex = dayCodeIndex(rangeParts[1].trim());
       if (startIndex == null || endIndex == null || startIndex > endIndex) {
         return null;
       }
@@ -183,7 +204,7 @@ List<int>? _parseDayPart(String dayPart) {
         indices.add(i);
       }
     } else {
-      final singleIndex = _dayCodeIndex(normalized);
+      final singleIndex = dayCodeIndex(normalized);
       if (singleIndex == null) return null;
       indices.add(singleIndex);
     }
@@ -192,12 +213,12 @@ List<int>? _parseDayPart(String dayPart) {
   return sorted;
 }
 
-int? _dayCodeIndex(String code) {
+int? dayCodeIndex(String code) {
   final index = openingHoursDayCodes.indexOf(code);
   return index >= 0 ? index : null;
 }
 
-TimeRange? _parseTimeRange(String token) {
+TimeRange? parseTimeRange(String token) {
   final match = RegExp(r'^(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})$')
       .firstMatch(token.trim());
   if (match == null) return null;
@@ -221,13 +242,13 @@ TimeRange? _parseTimeRange(String token) {
   );
 }
 
-String _formatRangeOsm(TimeRange range) {
-  return '${_pad(range.start.hour)}:${_pad(range.start.minute)}-${_pad(range.end.hour)}:${_pad(range.end.minute)}';
+String formatRangeOsm(TimeRange range) {
+  return '${padTwo(range.start.hour)}:${padTwo(range.start.minute)}-${padTwo(range.end.hour)}:${padTwo(range.end.minute)}';
 }
 
-String _pad(int value) => value.toString().padLeft(2, '0');
+String padTwo(int value) => value.toString().padLeft(2, '0');
 
-bool _rangesEqual(List<TimeRange> a, List<TimeRange> b) {
+bool rangesEqual(List<TimeRange> a, List<TimeRange> b) {
   if (a.length != b.length) return false;
   for (var i = 0; i < a.length; i++) {
     if (a[i].start != b[i].start || a[i].end != b[i].end) return false;

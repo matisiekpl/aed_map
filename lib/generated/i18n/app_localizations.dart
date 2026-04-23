@@ -472,6 +472,48 @@ abstract class AppLocalizations {
   /// **'Sunday'**
   String get daySunday;
 
+  /// No description provided for @dayMondayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get dayMondayShort;
+
+  /// No description provided for @dayTuesdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get dayTuesdayShort;
+
+  /// No description provided for @dayWednesdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get dayWednesdayShort;
+
+  /// No description provided for @dayThursdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get dayThursdayShort;
+
+  /// No description provided for @dayFridayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get dayFridayShort;
+
+  /// No description provided for @daySaturdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get daySaturdayShort;
+
+  /// No description provided for @daySundayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get daySundayShort;
+
   /// No description provided for @backToDaysList.
   ///
   /// In en, this message translates to:
