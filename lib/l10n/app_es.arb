@@ -110,6 +110,7 @@
   "pendingChangeTypeAdd": "Añadido",
   "pendingChangeTypeEdit": "Editado",
   "pendingChangeTypeDelete": "Eliminado",
+  "pendingChangesProcessingInfo": "Los cambios se están procesando y aparecerán en la aplicación en unas 3 horas.",
   "osmErrorUnauthorized": "Por favor, inicia sesión de nuevo en OpenStreetMap",
   "osmErrorNotFound": "Este DEA ya no existe en OpenStreetMap",
   "osmErrorConflict": "Este DEA ya fue modificado por otra persona. Por favor, actualiza e inténtalo de nuevo.",

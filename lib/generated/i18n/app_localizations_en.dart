@@ -279,6 +279,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pendingChangeTypeDelete => 'Deleted';
 
   @override
+  String get pendingChangesProcessingInfo =>
+      'Changes are being processed and will appear in the app within about 3 hours.';
+
+  @override
   String get osmErrorUnauthorized => 'Please sign in to OpenStreetMap again';
 
   @override

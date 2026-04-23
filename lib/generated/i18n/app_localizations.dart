@@ -604,6 +604,12 @@ abstract class AppLocalizations {
   /// **'Deleted'**
   String get pendingChangeTypeDelete;
 
+  /// No description provided for @pendingChangesProcessingInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes are being processed and will appear in the app within about 3 hours.'**
+  String get pendingChangesProcessingInfo;
+
   /// No description provided for @osmErrorUnauthorized.
   ///
   /// In en, this message translates to:

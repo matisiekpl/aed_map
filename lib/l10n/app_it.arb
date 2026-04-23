@@ -110,6 +110,7 @@
   "pendingChangeTypeAdd": "Aggiunto",
   "pendingChangeTypeEdit": "Modificato",
   "pendingChangeTypeDelete": "Eliminato",
+  "pendingChangesProcessingInfo": "Le modifiche sono in elaborazione e appariranno nell'app entro circa 3 ore.",
   "osmErrorUnauthorized": "Accedi nuovamente a OpenStreetMap",
   "osmErrorNotFound": "Questo DAE non esiste più su OpenStreetMap",
   "osmErrorConflict": "Questo DAE è già stato modificato da qualcun altro. Aggiorna e riprova.",

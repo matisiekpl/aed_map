@@ -121,6 +121,7 @@
   "pendingChangeTypeAdd": "Added",
   "pendingChangeTypeEdit": "Edited",
   "pendingChangeTypeDelete": "Deleted",
+  "pendingChangesProcessingInfo": "Changes are being processed and will appear in the app within about 3 hours.",
   "osmErrorUnauthorized": "Please sign in to OpenStreetMap again",
   "osmErrorNotFound": "This AED no longer exists on OpenStreetMap",
   "osmErrorConflict": "This AED was already changed by someone else. Please refresh and try again.",
