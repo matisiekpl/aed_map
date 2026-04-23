@@ -4,6 +4,13 @@ Dotenv.load(File.expand_path("../../.env", __dir__))
 default_platform(:android)
 
 platform :android do
+  before_all do
+    key_properties_path = File.expand_path("../key.properties", __dir__)
+    unless File.exist?(key_properties_path)
+      UI.user_error!("Missing android/key.properties — signing will not work. Configure it before running this lane.")
+    end
+  end
+
   desc "Push a new beta build to Google Play internal testing track"
   lane :beta do
     Dir.chdir("../..") do
