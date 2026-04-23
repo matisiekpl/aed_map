@@ -141,6 +141,68 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseAccess => 'Choose access';
 
   @override
+  String get editOpeningHours => 'Edit opening hours';
+
+  @override
+  String get openingHoursNotSet => 'None';
+
+  @override
+  String get openingHoursView => 'View';
+
+  @override
+  String get openingHoursAlwaysOpen => 'Always open (24/7)';
+
+  @override
+  String get openingHoursWorkingHours => 'During working hours';
+
+  @override
+  String get openingHoursCustomSchedule => 'Custom schedule';
+
+  @override
+  String get openingHoursAdvanced => 'Advanced (OSM format)';
+
+  @override
+  String get openingHoursAdvancedHint =>
+      'e.g. Mo-Fr 08:00-18:00; Sa 09:00-12:00';
+
+  @override
+  String get openingHoursClosed => 'Closed';
+
+  @override
+  String get openingHoursAddRange => 'Add time range';
+
+  @override
+  String get openingHoursClear => 'Clear';
+
+  @override
+  String get openingHoursInvalidFormat =>
+      'Couldn\'t parse existing value; switched to Advanced mode.';
+
+  @override
+  String get dayMonday => 'Monday';
+
+  @override
+  String get dayTuesday => 'Tuesday';
+
+  @override
+  String get dayWednesday => 'Wednesday';
+
+  @override
+  String get dayThursday => 'Thursday';
+
+  @override
+  String get dayFriday => 'Friday';
+
+  @override
+  String get daySaturday => 'Saturday';
+
+  @override
+  String get daySunday => 'Sunday';
+
+  @override
+  String get backToDaysList => 'Back to days list';
+
+  @override
   String get calculatingRoute => 'Calculating route...';
 
   @override

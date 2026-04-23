@@ -142,6 +142,68 @@ class AppLocalizationsEs extends AppLocalizations {
   String get chooseAccess => 'Elegir acceso';
 
   @override
+  String get editOpeningHours => 'Editar horario de apertura';
+
+  @override
+  String get openingHoursNotSet => 'Ninguno';
+
+  @override
+  String get openingHoursView => 'Ver';
+
+  @override
+  String get openingHoursAlwaysOpen => 'Siempre abierto (24/7)';
+
+  @override
+  String get openingHoursWorkingHours => 'Durante el horario laboral';
+
+  @override
+  String get openingHoursCustomSchedule => 'Horario personalizado';
+
+  @override
+  String get openingHoursAdvanced => 'Avanzado (formato OSM)';
+
+  @override
+  String get openingHoursAdvancedHint =>
+      'ej. Mo-Fr 08:00-18:00; Sa 09:00-12:00';
+
+  @override
+  String get openingHoursClosed => 'Cerrado';
+
+  @override
+  String get openingHoursAddRange => 'Añadir franja horaria';
+
+  @override
+  String get openingHoursClear => 'Borrar';
+
+  @override
+  String get openingHoursInvalidFormat =>
+      'No se pudo analizar el valor existente; se cambió al modo avanzado.';
+
+  @override
+  String get dayMonday => 'Lunes';
+
+  @override
+  String get dayTuesday => 'Martes';
+
+  @override
+  String get dayWednesday => 'Miércoles';
+
+  @override
+  String get dayThursday => 'Jueves';
+
+  @override
+  String get dayFriday => 'Viernes';
+
+  @override
+  String get daySaturday => 'Sábado';
+
+  @override
+  String get daySunday => 'Domingo';
+
+  @override
+  String get backToDaysList => 'Volver a la lista de días';
+
+  @override
   String get calculatingRoute => 'Calculando ruta...';
 
   @override
