@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/location/location_cubit.dart';
 import '../../bloc/location/location_state.dart';
 import '../../bloc/network_status/network_status_state.dart';
+import '../../bloc/edit/edit_state.dart';
 import '../../bloc/points/points_cubit.dart';
 import '../../bloc/points/points_state.dart';
 import '../../bloc/routing/routing_cubit.dart';
@@ -78,6 +79,25 @@ class BottomPanel extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BlocBuilder<EditCubit, EditState>(
+                          builder: (context, editState) {
+                        final isPending = editState.pendingChanges
+                            .any((change) => change.defibrillatorId == state.selected.id);
+                        if (!isPending) return const SizedBox();
+                        return Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.orange,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            appLocalizations.pendingAedBannerText,
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                          ),
+                        );
+                      }),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -89,8 +109,8 @@ class BottomPanel extends StatelessWidget {
                               },
                               child: Text('⚠️ ${appLocalizations.closestAED}',
                                   key: const Key('closestAed'),
-                                  style: const TextStyle(
-                                      color: Colors.orange,
+                                  style: TextStyle(
+                                      color: CupertinoColors.systemOrange.resolveFrom(context),
                                       fontStyle: FontStyle.italic,
                                       fontSize: 18)),
                             ),
@@ -102,8 +122,8 @@ class BottomPanel extends StatelessWidget {
                                 },
                                 child: Text(
                                     '⚠️ ${appLocalizations.closerAEDAvailable}',
-                                    style: const TextStyle(
-                                        color: Colors.orange,
+                                    style: TextStyle(
+                                        color: CupertinoColors.systemOrange.resolveFrom(context),
                                         fontStyle: FontStyle.italic,
                                         fontSize: 18))),
                           GestureDetector(
@@ -114,23 +134,13 @@ class BottomPanel extends StatelessWidget {
                             },
                             child: Container(
                                 decoration: BoxDecoration(
-                                    color: MediaQuery.of(context)
-                                                .platformBrightness ==
-                                            Brightness.dark
-                                        ? Colors.grey.shade800
-                                        : Colors.grey.shade300,
+                                    color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(12))),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 8, right: 8, top: 4, bottom: 4),
-                                  child: Text(appLocalizations.edit,
-                                      style: TextStyle(
-                                          color: MediaQuery.of(context)
-                                                      .platformBrightness ==
-                                                  Brightness.dark
-                                              ? Colors.white
-                                              : Colors.black)),
+                                  child: Text(appLocalizations.edit),
                                 )),
                           ),
                         ],

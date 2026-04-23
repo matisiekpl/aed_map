@@ -31,26 +31,23 @@ class _SettingsPageState extends State<SettingsPage>
   @override
   Widget build(BuildContext context) {
     var appLocalizations = AppLocalizations.of(context)!;
-    return Scaffold(
-        appBar: AppBar(
-            title: Text(appLocalizations.information),
-            backgroundColor: Colors.green),
-        body: DefaultTextStyle(
-          style: TextStyle(
-              color:
-                  MediaQuery.of(context).platformBrightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white),
-          child:
-              BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
+    return CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(appLocalizations.information),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
             return FutureBuilder(
                 future: PackageInfo.fromPlatform(),
                 builder: (context, packageInfo) {
-                  return SettingsList(
-                    lightTheme: MediaQuery.of(context).platformBrightness ==
-                            Brightness.light
-                        ? const SettingsThemeData()
-                        : settingsListDarkTheme,
+                  return DefaultTextStyle.merge(
+                    style: TextStyle(color: CupertinoColors.label.resolveFrom(context)),
+                    child: SettingsList(
+                    platform: DevicePlatform.iOS,
+                    applicationType: ApplicationType.cupertino,
+                    lightTheme: const SettingsThemeData(),
+                    darkTheme: settingsListDarkTheme,
                     sections: [
                       SettingsSection(
                         title: Text(appLocalizations.datasetHeading),
@@ -162,7 +159,7 @@ class _SettingsPageState extends State<SettingsPage>
                                       color: Colors.red),
                                   title: Text(appLocalizations.logout,
                                       style: TextStyle(
-                                          color: Colors.red,
+                                          color: CupertinoColors.systemRed.resolveFrom(context),
                                           fontWeight: FontWeight.bold)))
                             ]),
                       SettingsSection(
@@ -215,10 +212,10 @@ class _SettingsPageState extends State<SettingsPage>
                             SettingsTile.navigation(
                               leading: FaIcon(FontAwesomeIcons.instagram),
                               title: Text('Instagram'),
-                              trailing: const Text('@_matuesz_wozniak'),
+                              trailing: const Text('@_mateusz_wozniak'),
                               onPressed: (context) {
                                 launchUrl(Uri.parse(
-                                    'https://www.instagram.com/_matuesz_wozniak/'));
+                                    'https://www.instagram.com/_mateusz_wozniak/'));
                               },
                             ),
                             SettingsTile.navigation(
@@ -233,9 +230,11 @@ class _SettingsPageState extends State<SettingsPage>
                             ),
                           ])
                     ],
+                  ),
                   );
                 });
           }),
-        ));
+        ),
+      );
   }
 }

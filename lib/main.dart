@@ -10,8 +10,10 @@ import 'package:aed_map/bloc/points/points_cubit.dart';
 import 'package:aed_map/bloc/routing/routing_cubit.dart';
 import 'package:aed_map/repositories/feedback_repository.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
+import 'package:aed_map/repositories/pending_changes_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
 import 'package:aed_map/repositories/routing_repository.dart';
+import 'package:aed_map/repositories/user_created_defibrillator_repository.dart';
 import 'package:aed_map/screens/edit/edit_form.dart';
 import 'package:aed_map/screens/map/map_screen.dart';
 import 'package:aed_map/screens/onboarding/onboarding_screen.dart';
@@ -93,6 +95,9 @@ class _AppState extends State<App> {
   final PointsRepository pointsRepository = PointsRepository();
   final FeedbackRepository feedbackRepository = FeedbackRepository();
   final RoutingRepository routingRepository = RoutingRepository();
+  final PendingChangesRepository pendingChangesRepository = PendingChangesRepository();
+  final UserCreatedDefibrillatorRepository userCreatedDefibrillatorRepository =
+      UserCreatedDefibrillatorRepository();
 
   Widget home = Scaffold(
       body: Center(
@@ -107,7 +112,16 @@ class _AppState extends State<App> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    final editCubit = EditCubit(
+      pointsRepository: pointsRepository,
+      geolocationRepository: geolocationRepository,
+      pendingChangesRepository: pendingChangesRepository,
+      userCreatedDefibrillatorRepository: userCreatedDefibrillatorRepository,
+    );
+
     return CupertinoApp(
+      theme: const CupertinoThemeData(brightness: null),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: List.from(AppLocalizations.supportedLocales)
@@ -115,10 +129,12 @@ class _AppState extends State<App> {
             const Locale('en').languageCode.compareTo(a.languageCode)),
       home: MultiBlocProvider(
         providers: [
+          BlocProvider<EditCubit>.value(value: editCubit..loadPendingChanges()),
           BlocProvider<PointsCubit>(
             create: (BuildContext context) => PointsCubit(
                 pointsRepository: pointsRepository,
-                geolocationRepository: geolocationRepository)
+                geolocationRepository: geolocationRepository,
+                editCubit: editCubit)
               ..load(),
           ),
           BlocProvider<RoutingCubit>(
@@ -134,10 +150,6 @@ class _AppState extends State<App> {
           BlocProvider<PanelCubit>(
             create: (BuildContext context) => PanelCubit(),
           ),
-          BlocProvider<EditCubit>(
-              create: (BuildContext context) => EditCubit(
-                  pointsRepository: pointsRepository,
-                  geolocationRepository: geolocationRepository)),
           BlocProvider<NetworkStatusCubit>(
               create: (BuildContext context) => NetworkStatusCubit()),
           BlocProvider<FeedbackCubit>(

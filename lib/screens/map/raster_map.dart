@@ -1,6 +1,7 @@
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/bloc/routing/routing_cubit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -58,7 +59,8 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
               previous is PointsLoadSuccess &&
               ((current.defibrillators.length != previous.defibrillators.length) ||
                   (current.defibrillators.first.access != previous.defibrillators.first.access) ||
-                  (current.defibrillators.first.id != previous.defibrillators.first.id)),
+                  (current.defibrillators.first.id != previous.defibrillators.first.id) ||
+                  !setEquals(current.pendingIds, previous.pendingIds)),
           child: BlocListener<PointsCubit, PointsState>(
             listener: (BuildContext context, PointsState state) {
               if (state is PointsLoadSuccess) {

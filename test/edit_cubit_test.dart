@@ -3,8 +3,11 @@ import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
+import 'package:aed_map/repositories/pending_changes_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
+import 'package:aed_map/repositories/user_created_defibrillator_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -12,9 +15,12 @@ void main() {
     late EditCubit editCubit;
 
     setUp(() {
+      SharedPreferences.setMockInitialValues({});
       editCubit = EditCubit(
           pointsRepository: PointsRepository(),
-          geolocationRepository: GeolocationRepository());
+          geolocationRepository: GeolocationRepository(),
+          pendingChangesRepository: PendingChangesRepository(),
+          userCreatedDefibrillatorRepository: UserCreatedDefibrillatorRepository());
     });
 
     test('initial state is EditInitial', () {

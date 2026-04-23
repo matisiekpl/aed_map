@@ -253,4 +253,51 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get contactAuthorDescription =>
       'Si tienes preguntas o comentarios, no dudes en escribirme en cualquiera de estas plataformas.';
+
+  @override
+  String pendingChangesBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cambios pendientes',
+      one: '1 cambio pendiente',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pendingChangesTitle => 'Cambios pendientes';
+
+  @override
+  String get pendingAedBannerText =>
+      'Este DEA está siendo procesado por OpenStreetMap';
+
+  @override
+  String get pendingChangeTypeAdd => 'Añadido';
+
+  @override
+  String get pendingChangeTypeEdit => 'Editado';
+
+  @override
+  String get pendingChangeTypeDelete => 'Eliminado';
+
+  @override
+  String get pendingChangesProcessingInfo =>
+      'Los cambios se están procesando y aparecerán en la aplicación en unas 3 horas.';
+
+  @override
+  String get osmErrorUnauthorized =>
+      'Por favor, inicia sesión de nuevo en OpenStreetMap';
+
+  @override
+  String get osmErrorNotFound => 'Este DEA ya no existe en OpenStreetMap';
+
+  @override
+  String get osmErrorConflict =>
+      'Este DEA ya fue modificado por otra persona. Por favor, actualiza e inténtalo de nuevo.';
+
+  @override
+  String osmErrorGeneric(int code) {
+    return 'No se pudieron guardar los cambios (HTTP $code)';
+  }
 }

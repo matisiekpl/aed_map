@@ -106,5 +106,32 @@
   "delete": "Delete",
   "accountNumber": "Account number",
   "add": "Add",
-  "contactAuthorDescription": "If you've any questions or feedback don't hesitate to message me on any of these platforms."
+  "contactAuthorDescription": "If you've any questions or feedback don't hesitate to message me on any of these platforms.",
+  "pendingChangesBadge": "{count, plural, =1{1 pending change} other{{count} pending changes}}",
+  "@pendingChangesBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "pendingChangesTitle": "Pending changes",
+  "pendingAedBannerText": "This AED is being processed by OpenStreetMap",
+  "pendingChangeTypeAdd": "Added",
+  "pendingChangeTypeEdit": "Edited",
+  "pendingChangeTypeDelete": "Deleted",
+  "pendingChangesProcessingInfo": "Changes are being processed and will appear in the app within about 3 hours.",
+  "osmErrorUnauthorized": "Please sign in to OpenStreetMap again",
+  "osmErrorNotFound": "This AED no longer exists on OpenStreetMap",
+  "osmErrorConflict": "This AED was already changed by someone else. Please refresh and try again.",
+  "osmErrorGeneric": "Failed to save changes (HTTP {code})",
+  "@osmErrorGeneric": {
+    "placeholders": {
+      "code": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  }
 }

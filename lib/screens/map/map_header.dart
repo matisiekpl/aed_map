@@ -8,6 +8,7 @@ import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_state.dart';
 import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
+import 'package:aed_map/screens/pending_changes/pending_changes_page.dart';
 import 'package:aed_map/screens/settings/settings_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -55,14 +56,49 @@ class MapHeader extends StatelessWidget {
               }),
               const SizedBox(height: 2),
               Text('OpenStreetMap contributors', style: const TextStyle(fontSize: 12)),
+              const SizedBox(height: 6),
+              BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
+                if (editState.pendingChanges.isEmpty) return const SizedBox();
+                var appLocalizations = AppLocalizations.of(context)!;
+                return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    var editCubit = context.read<EditCubit>();
+                    var pointsCubit = context.read<PointsCubit>();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(value: editCubit),
+                            BlocProvider.value(value: pointsCubit),
+                          ],
+                          child: const PendingChangesPage(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Text(
+                      appLocalizations.pendingChangesBadge(editState.pendingChanges.length),
+                      style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                );
+              }),
               const SizedBox(height: 2),
               BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
                   builder: (context, state) {
                 if (state.connected) return const SizedBox();
                 return Text(appLocalizations.noNetwork,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 14,
-                        color: Colors.red,
+                        color: CupertinoColors.systemRed.resolveFrom(context),
                         fontWeight: FontWeight.bold));
               })
             ],
@@ -83,15 +119,12 @@ class MapHeader extends StatelessWidget {
                         context.read<EditCubit>().enter();
                       },
                       child: Card(
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.dark
-                              ? Colors.black
-                              : Colors.white,
+                          color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             child: Text(appLocalizations.add,
-                                style: TextStyle(fontWeight: FontWeight.w500)),
+                                style: TextStyle(fontWeight: FontWeight.w500, color: CupertinoColors.label.resolveFrom(context))),
                           )),
                     ),
                   ),
@@ -125,17 +158,11 @@ class MapHeader extends StatelessWidget {
                       );
                     },
                     child: Card(
-                      color: MediaQuery.of(context).platformBrightness ==
-                              Brightness.dark
-                          ? Colors.black
-                          : Colors.white,
+                      color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(CupertinoIcons.gear,
-                            color: MediaQuery.of(context).platformBrightness ==
-                                    Brightness.dark
-                                ? Colors.white
-                                : Colors.black),
+                            color: CupertinoColors.label.resolveFrom(context)),
                       ),
                     ),
                   ),
@@ -150,18 +177,11 @@ class MapHeader extends StatelessWidget {
                         launchUrl(Uri.parse('https://pomoc.aedmapa.pl/'));
                       },
                       child: Card(
-                        color: MediaQuery.of(context).platformBrightness ==
-                                Brightness.dark
-                            ? Colors.black
-                            : Colors.white,
+                        color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Icon(CupertinoIcons.question_circle,
-                              color:
-                                  MediaQuery.of(context).platformBrightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black),
+                              color: CupertinoColors.label.resolveFrom(context)),
                         ),
                       ),
                     ),

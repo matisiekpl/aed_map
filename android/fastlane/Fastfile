@@ -1,0 +1,48 @@
+require "dotenv"
+Dotenv.load(File.expand_path("../../.env", __dir__))
+
+default_platform(:android)
+
+platform :android do
+  desc "Push a new beta build to Google Play internal testing track"
+  lane :beta do
+    Dir.chdir("../..") do
+      sh("flutter", "pub", "get")
+      sh("flutter", "build", "appbundle", "--release")
+    end
+
+    aab_path = File.expand_path("../../build/app/outputs/bundle/release/app-release.aab", __dir__)
+
+    upload_to_play_store(
+      track: "internal",
+      aab: aab_path,
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_changelogs: false,
+      metadata_path: "./fastlane/metadata/android",
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Submit a new release build to Google Play production track"
+  lane :release do
+    Dir.chdir("../..") do
+      sh("flutter", "pub", "get")
+      sh("flutter", "build", "appbundle", "--release")
+    end
+
+    aab_path = File.expand_path("../../build/app/outputs/bundle/release/app-release.aab", __dir__)
+
+    upload_to_play_store(
+      track: "production",
+      aab: aab_path,
+      skip_upload_apk: true,
+      skip_upload_metadata: false,
+      skip_upload_changelogs: false,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: "completed"
+    )
+  end
+end

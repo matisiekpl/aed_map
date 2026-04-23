@@ -32,3 +32,4 @@ const phoneEvent = 'phone';
 const requestReviewEvent = 'review_requested';
 const deleteEvent = 'delete';
 const livechatEvent = 'livechat';
+const pendingChangesEvent = 'pending_changes';

@@ -20,7 +20,7 @@
   "noData": "Keine Daten",
   "navigate": "Navigieren",
   "chooseMapApp": "Wähle Kartenanwendung",
-  "about": "Datenquelle: openaedmap.org",
+  "about": "Über die Anwendung",
   "defibrillator": "Defibrillator",
   "runDistance": "~{minutes} Minute(n) Laufen ({meters}m)",
   "@runDistance": {
@@ -74,17 +74,14 @@
   "minutes": "Minuten",
   "seconds": "Sekunden",
   "meters": "Meter",
-  "heading": "AED-Karte",
   "datasetHeading": "Punktedatenbank",
   "datasetDescription": "Die AED-Punktedatenbank stammt aus dem Projekt openaedmap.org",
   "defibrillatorsInDataset": "Defibrillatoren in der Datenbank",
   "defibrillatorsWithin5km": "Defibrillatoren im Umkreis von 5 km",
   "defibrillatorsWithImages": "Punkte mit Bildern",
-  "about": "Über die Anwendung",
   "version": "Version",
   "website": "Projektwebsite",
   "author": "Autor",
-  "contact": "Kontakt",
   "understand": "Ich verstehe",
   "dataSource": "Datenquelle",
   "dataSourceDescription": "Die Daten über die Standorte von Defibrillatoren stammen von OpenStreetMap. Ihre Qualität kann variieren. Der Autor übernimmt keine Verantwortung für die Richtigkeit der Daten. Wir ermutigen Sie, die Datenbank auf openaedmap.org mitzugestalten",
@@ -106,5 +103,32 @@
   "delete": "Löschen",
   "accountNumber": "Kontonummer",
   "add": "Hinzufügen",
-  "contactAuthorDescription": "Bei Fragen oder Feedback zögere nicht, mich auf einer dieser Plattformen zu kontaktieren."
+  "contactAuthorDescription": "Bei Fragen oder Feedback zögere nicht, mich auf einer dieser Plattformen zu kontaktieren.",
+  "pendingChangesBadge": "{count, plural, =1{1 ausstehende Änderung} other{{count} ausstehende Änderungen}}",
+  "pendingChangesTitle": "Ausstehende Änderungen",
+  "pendingAedBannerText": "Dieser AED wird von OpenStreetMap verarbeitet",
+  "pendingChangeTypeAdd": "Hinzugefügt",
+  "pendingChangeTypeEdit": "Bearbeitet",
+  "pendingChangeTypeDelete": "Gelöscht",
+  "pendingChangesProcessingInfo": "Änderungen werden verarbeitet und erscheinen in der App innerhalb von etwa 3 Stunden.",
+  "osmErrorUnauthorized": "Bitte melde dich erneut bei OpenStreetMap an",
+  "osmErrorNotFound": "Dieser AED existiert nicht mehr auf OpenStreetMap",
+  "osmErrorConflict": "Dieser AED wurde bereits von jemand anderem geändert. Bitte aktualisieren und erneut versuchen.",
+  "osmErrorGeneric": "Änderungen konnten nicht gespeichert werden (HTTP {code})",
+  "@pendingChangesBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "@osmErrorGeneric": {
+    "placeholders": {
+      "code": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  }
 }

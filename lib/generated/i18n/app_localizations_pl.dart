@@ -251,4 +251,51 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get contactAuthorDescription =>
       'Jeśli masz pytania lub uwagi, śmiało napisz do mnie na dowolnej z tych platform.';
+
+  @override
+  String pendingChangesBadge(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count oczekujących zmian',
+      few: '$count oczekujące zmiany',
+      one: '1 oczekująca zmiana',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pendingChangesTitle => 'Oczekujące zmiany';
+
+  @override
+  String get pendingAedBannerText =>
+      'Ten AED jest przetwarzany przez OpenStreetMap';
+
+  @override
+  String get pendingChangeTypeAdd => 'Dodany';
+
+  @override
+  String get pendingChangeTypeEdit => 'Edytowany';
+
+  @override
+  String get pendingChangeTypeDelete => 'Usunięty';
+
+  @override
+  String get pendingChangesProcessingInfo =>
+      'Zmiany są przetwarzane i pojawią się w aplikacji do około 3 godzin.';
+
+  @override
+  String get osmErrorUnauthorized => 'Zaloguj się ponownie do OpenStreetMap';
+
+  @override
+  String get osmErrorNotFound => 'Ten AED nie istnieje już na OpenStreetMap';
+
+  @override
+  String get osmErrorConflict =>
+      'Ten AED został już zmieniony przez kogoś innego. Odśwież i spróbuj ponownie.';
+
+  @override
+  String osmErrorGeneric(int code) {
+    return 'Nie udało się zapisać zmian (HTTP $code)';
+  }
 }

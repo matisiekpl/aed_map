@@ -106,5 +106,32 @@
   "delete": "Usuń",
   "accountNumber": "Numer konta",
   "add": "Dodaj",
-  "contactAuthorDescription": "Jeśli masz pytania lub uwagi, śmiało napisz do mnie na dowolnej z tych platform."
+  "contactAuthorDescription": "Jeśli masz pytania lub uwagi, śmiało napisz do mnie na dowolnej z tych platform.",
+  "pendingChangesBadge": "{count, plural, =1{1 oczekująca zmiana} few{{count} oczekujące zmiany} other{{count} oczekujących zmian}}",
+  "@pendingChangesBadge": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "pendingChangesTitle": "Oczekujące zmiany",
+  "pendingAedBannerText": "Ten AED jest przetwarzany przez OpenStreetMap",
+  "pendingChangeTypeAdd": "Dodany",
+  "pendingChangeTypeEdit": "Edytowany",
+  "pendingChangeTypeDelete": "Usunięty",
+  "pendingChangesProcessingInfo": "Zmiany są przetwarzane i pojawią się w aplikacji do około 3 godzin.",
+  "osmErrorUnauthorized": "Zaloguj się ponownie do OpenStreetMap",
+  "osmErrorNotFound": "Ten AED nie istnieje już na OpenStreetMap",
+  "osmErrorConflict": "Ten AED został już zmieniony przez kogoś innego. Odśwież i spróbuj ponownie.",
+  "osmErrorGeneric": "Nie udało się zapisać zmian (HTTP {code})",
+  "@osmErrorGeneric": {
+    "placeholders": {
+      "code": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  }
 }

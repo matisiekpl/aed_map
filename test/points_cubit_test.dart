@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
 import 'package:aed_map/bloc/points/points_state.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
+import 'package:aed_map/repositories/pending_changes_repository.dart';
 import 'package:aed_map/repositories/points_repository.dart';
+import 'package:aed_map/repositories/user_created_defibrillator_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,9 +25,16 @@ void main() {
       await File('ignore_${PointsRepository.defibrillatorListKey}.geojson')
           .writeAsString(
               '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[21.0,52.0]},"properties":{"osm_id":1,"access":"yes"}}]}');
+      final geolocationRepository = GeolocationRepository();
+      final editCubit = EditCubit(
+          pointsRepository: PointsRepository(),
+          geolocationRepository: geolocationRepository,
+          pendingChangesRepository: PendingChangesRepository(),
+          userCreatedDefibrillatorRepository: UserCreatedDefibrillatorRepository());
       pointsCubit = PointsCubit(
           pointsRepository: PointsRepository(),
-          geolocationRepository: GeolocationRepository());
+          geolocationRepository: geolocationRepository,
+          editCubit: editCubit);
     });
 
     test('initial state is PointsLoadInProgress', () {

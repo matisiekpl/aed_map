@@ -47,22 +47,19 @@ class _MapScreenState extends State<MapScreen> {
 
   void showFirstEnterDialog() {
     var appLocalizations = AppLocalizations.of(context)!;
-    showDialog<void>(
+    showCupertinoDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          surfaceTintColor: Colors.green.shade400,
+        return CupertinoAlertDialog(
           title: Text(appLocalizations.dataSource),
           content: Text(appLocalizations.dataSourceDescription),
           actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: Text(appLocalizations.understand),
+            CupertinoDialogAction(
+              isDefaultAction: true,
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: Text(appLocalizations.understand),
             ),
           ],
         );

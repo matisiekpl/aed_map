@@ -1,0 +1,101 @@
+require "dotenv"
+Dotenv.load(File.expand_path("../../.env", __dir__))
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    setup_ci if ENV["CI"]
+
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_KEY_CONTENT"],
+      is_key_content_base64: true,
+      in_house: false
+    )
+
+    match(
+      type: "appstore",
+      readonly: is_ci,
+      app_identifier: "pl.enteam.aedMap",
+      api_key: api_key
+    )
+
+    Dir.chdir("../..") do
+      sh("flutter", "pub", "get")
+      sh("flutter", "build", "ios", "--release", "--no-codesign")
+    end
+
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "pl.enteam.aedMap" => "match AppStore pl.enteam.aedMap"
+        }
+      }
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      distribute_external: false,
+      skip_waiting_for_build_processing: false,
+      changelog: File.read("./metadata/en-US/release_notes.txt")
+    )
+  end
+
+  desc "Submit a new release build to the App Store"
+  lane :release do
+    setup_ci if ENV["CI"]
+
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_KEY_CONTENT"],
+      is_key_content_base64: true,
+      in_house: false
+    )
+
+    match(
+      type: "appstore",
+      readonly: is_ci,
+      app_identifier: "pl.enteam.aedMap",
+      api_key: api_key
+    )
+
+    Dir.chdir("../..") do
+      sh("flutter", "pub", "get")
+      sh("flutter", "build", "ios", "--release", "--no-codesign")
+    end
+
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "pl.enteam.aedMap" => "match AppStore pl.enteam.aedMap"
+        }
+      }
+    )
+
+    upload_to_app_store(
+      api_key: api_key,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      submit_for_review: true,
+      automatic_release: true,
+      skip_metadata: false,
+      skip_screenshots: true,
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false
+      }
+    )
+  end
+end

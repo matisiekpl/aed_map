@@ -114,14 +114,15 @@ class Defibrillator {
         }
 
         oldTags
-            .where((attr) => [
+            .where((attr) => ![
                   'phone',
                   'operator',
                   'opening_hours',
                   'indoor',
                   'emergency',
                   'access',
-                  'defibrillator:location'
+                  'defibrillator:location',
+                  'image',
                 ].contains(attr[0]))
             .forEach((attr) {
           builder.element('tag', attributes: {'k': attr[0], 'v': attr[1]});
@@ -157,6 +158,15 @@ class Defibrillator {
       access: access ?? this.access,
       image: image ?? this.image,
     );
+  }
+
+  static bool tagsEqual(Defibrillator a, Defibrillator b) {
+    return a.description == b.description &&
+        a.indoor == b.indoor &&
+        a.operator == b.operator &&
+        a.phone == b.phone &&
+        a.openingHours == b.openingHours &&
+        a.access == b.access;
   }
 
   Map<String, dynamic> getEventProperties() {
