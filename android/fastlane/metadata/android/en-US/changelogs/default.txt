@@ -1,1 +1,1 @@
-Opening hours editing has been added
+Added editing of opening hours

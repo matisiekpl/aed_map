@@ -186,6 +186,15 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudo analizar el valor existente; se cambió al modo avanzado.';
 
   @override
+  String get openingHoursInvalidOsmFormat => 'Formato OSM no válido.';
+
+  @override
+  String get openingHoursValidOsmFormat => 'Formato OSM válido.';
+
+  @override
+  String get openingHoursOsmDocumentation => 'Documentación del formato OSM';
+
+  @override
   String get dayMonday => 'Lunes';
 
   @override

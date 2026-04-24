@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.4"
+  antlr4:
+    dependency: transitive
+    description:
+      name: antlr4
+      sha256: "752b4a6e4ad97953652a2b2bbf5377f46c94b579d3372b50080c7e5858234a05"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.13.2"
   archive:
     dependency: transitive
     description:
@@ -1084,6 +1092,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  osm_opening_hours:
+    dependency: "direct main"
+    description:
+      name: osm_opening_hours
+      sha256: f3244417b017722a8653e821db9be243510cc68f210b901ca669d1ecf608a2d3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   package_config:
     dependency: transitive
     description:
@@ -1818,5 +1834,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.11.0 <4.0.0"
+  dart: ">=3.11.4 <4.0.0"
   flutter: ">=3.41.0"

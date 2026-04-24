@@ -185,6 +185,15 @@ class AppLocalizationsPl extends AppLocalizations {
       'Nie udało się odczytać istniejącej wartości; przełączono na tryb zaawansowany.';
 
   @override
+  String get openingHoursInvalidOsmFormat => 'Nieprawidłowy format OSM.';
+
+  @override
+  String get openingHoursValidOsmFormat => 'Prawidłowy format OSM.';
+
+  @override
+  String get openingHoursOsmDocumentation => 'Dokumentacja formatu OSM';
+
+  @override
   String get dayMonday => 'Poniedziałek';
 
   @override

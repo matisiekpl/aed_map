@@ -3,7 +3,9 @@ import 'package:aed_map/shared/opening_hours.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:osm_opening_hours/osm_opening_hours.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/i18n/app_localizations.dart';
 import '../../shared/utils.dart';
@@ -20,6 +22,7 @@ class OpeningHoursEditor extends StatefulWidget {
 class _OpeningHoursEditorState extends State<OpeningHoursEditor> {
   late OpeningHoursModel model;
   late TextEditingController advancedController;
+  bool advancedTagValid = true;
 
   @override
   void initState() {
@@ -30,6 +33,13 @@ class _OpeningHoursEditorState extends State<OpeningHoursEditor> {
           ? model.advancedRaw
           : (widget.initialValue ?? ''),
     );
+    advancedTagValid = isAdvancedValid(advancedController.text);
+  }
+
+  bool isAdvancedValid(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return true;
+    return OsmOpeningHours.check(trimmed);
   }
 
   @override
@@ -140,10 +150,35 @@ class _OpeningHoursEditorState extends State<OpeningHoursEditor> {
                 minLines: 1,
                 onChanged: (value) {
                   model.advancedRaw = value;
+                  setState(() {
+                    advancedTagValid = isAdvancedValid(value);
+                  });
                 },
                 decoration: InputDecoration.collapsed(
                   hintText: appLocalizations.openingHoursAdvancedHint,
                 ),
+              ),
+            ),
+            if (advancedTagValid && advancedController.text.trim().isNotEmpty)
+              SettingsTile(
+                leading: const Icon(CupertinoIcons.check_mark_circled_solid,
+                    color: CupertinoColors.activeGreen),
+                title: Text(
+                  appLocalizations.openingHoursValidOsmFormat,
+                  style: const TextStyle(color: CupertinoColors.activeGreen),
+                ),
+              ),
+            SettingsTile(
+              leading: const Icon(CupertinoIcons.book,
+                  color: CupertinoColors.activeBlue),
+              title: Text(
+                appLocalizations.openingHoursOsmDocumentation,
+                style: const TextStyle(color: CupertinoColors.activeBlue),
+              ),
+              onPressed: (_) => launchUrl(
+                Uri.parse(
+                    'https://wiki.openstreetmap.org/wiki/Key:opening_hours'),
+                mode: LaunchMode.externalApplication,
               ),
             ),
           ],
@@ -152,7 +187,10 @@ class _OpeningHoursEditorState extends State<OpeningHoursEditor> {
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 16, right: 16),
           child: CupertinoButton.filled(
-            onPressed: () => saveAndPop(context),
+            onPressed: (model.mode == OpeningHoursMode.advanced &&
+                    !advancedTagValid)
+                ? null
+                : () => saveAndPop(context),
             child: Text(appLocalizations.save),
           ),
         ),

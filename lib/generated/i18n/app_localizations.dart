@@ -442,6 +442,24 @@ abstract class AppLocalizations {
   /// **'Couldn\'t parse existing value; switched to Advanced mode.'**
   String get openingHoursInvalidFormat;
 
+  /// No description provided for @openingHoursInvalidOsmFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid OSM format.'**
+  String get openingHoursInvalidOsmFormat;
+
+  /// No description provided for @openingHoursValidOsmFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid OSM format.'**
+  String get openingHoursValidOsmFormat;
+
+  /// No description provided for @openingHoursOsmDocumentation.
+  ///
+  /// In en, this message translates to:
+  /// **'OSM format documentation'**
+  String get openingHoursOsmDocumentation;
+
   /// No description provided for @dayMonday.
   ///
   /// In en, this message translates to:

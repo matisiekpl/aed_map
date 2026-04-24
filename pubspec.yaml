@@ -4,7 +4,7 @@ description: App showing available AEDs
 publish_to: "none"
 
 # Remember to run: node whatsNew.js
-version: 1.0.75+75
+version: 1.0.76+76
 
 environment:
   sdk: ^3.5.3
@@ -58,6 +58,7 @@ dependencies:
   firebase_remote_config: ^6.4.0
   flutter_web_auth_2: ^5.0.2
   font_awesome_flutter: ^11.0.0
+  osm_opening_hours: ^1.0.2
 
 dev_dependencies:
   integration_test:

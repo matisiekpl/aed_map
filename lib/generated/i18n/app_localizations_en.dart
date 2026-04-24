@@ -185,6 +185,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t parse existing value; switched to Advanced mode.';
 
   @override
+  String get openingHoursInvalidOsmFormat => 'Invalid OSM format.';
+
+  @override
+  String get openingHoursValidOsmFormat => 'Valid OSM format.';
+
+  @override
+  String get openingHoursOsmDocumentation => 'OSM format documentation';
+
+  @override
   String get dayMonday => 'Monday';
 
   @override
