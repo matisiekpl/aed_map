@@ -14,6 +14,7 @@ import '../../bloc/points/points_cubit.dart';
 import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
 import '../../shared/utils.dart';
+import 'opening_hours_editor.dart';
 
 class EditForm extends StatelessWidget {
   const EditForm({super.key});
@@ -142,6 +143,14 @@ class EditForm extends StatelessWidget {
                   hintText: appLocalizations.enterPhone),
             ),
           ),
+          SettingsTile.navigation(
+            leading: const Icon(CupertinoIcons.clock),
+            title: Text(appLocalizations.openingHours),
+            trailing: Text(formatOpeningHoursValue(
+                state.defibrillator.openingHours, appLocalizations)),
+            onPressed: (tileContext) => openOpeningHoursEditor(
+                tileContext, state.defibrillator.openingHours),
+          ),
         ],
       ),
       SettingsSection(
@@ -254,5 +263,26 @@ class EditForm extends StatelessWidget {
           return CupertinoActionSheet(
               title: Text(appLocalizations.chooseAccess), actions: actions);
         });
+  }
+
+  String formatOpeningHoursValue(
+      String? value, AppLocalizations appLocalizations) {
+    if (value == null || value.trim().isEmpty) {
+      return appLocalizations.openingHoursNotSet;
+    }
+    return appLocalizations.openingHoursView;
+  }
+
+  Future<void> openOpeningHoursEditor(
+      BuildContext context, String? currentValue) async {
+    final editCubit = context.read<EditCubit>();
+    await Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (routeContext) => BlocProvider<EditCubit>.value(
+          value: editCubit,
+          child: OpeningHoursEditor(initialValue: currentValue),
+        ),
+      ),
+    );
   }
 }

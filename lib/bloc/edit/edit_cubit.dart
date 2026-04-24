@@ -127,7 +127,7 @@ class EditCubit extends Cubit<EditState> {
     var s = state;
     if (s is EditInProgress) {
       s.defibrillator.openingHours = value;
-      emit(s.copyWith(defibrillator: s.defibrillator));
+      emit(s.copyWith(defibrillator: s.defibrillator.copyWith()));
     }
   }
 

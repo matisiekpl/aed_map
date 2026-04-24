@@ -147,6 +147,89 @@ class AppLocalizationsPl extends AppLocalizations {
   String get chooseAccess => 'Wybierz dostępność';
 
   @override
+  String get editOpeningHours => 'Edytuj godziny otwarcia';
+
+  @override
+  String get openingHoursNotSet => 'Brak';
+
+  @override
+  String get openingHoursView => 'Zobacz';
+
+  @override
+  String get openingHoursAlwaysOpen => 'Całodobowo (24/7)';
+
+  @override
+  String get openingHoursWorkingHours => 'W godzinach pracy';
+
+  @override
+  String get openingHoursCustomSchedule => 'Niestandardowy harmonogram';
+
+  @override
+  String get openingHoursAdvanced => 'Zaawansowane (format OSM)';
+
+  @override
+  String get openingHoursAdvancedHint =>
+      'np. Mo-Fr 08:00-18:00; Sa 09:00-12:00';
+
+  @override
+  String get openingHoursClosed => 'Zamknięte';
+
+  @override
+  String get openingHoursAddRange => 'Dodaj zakres godzin';
+
+  @override
+  String get openingHoursClear => 'Wyczyść';
+
+  @override
+  String get openingHoursInvalidFormat =>
+      'Nie udało się odczytać istniejącej wartości; przełączono na tryb zaawansowany.';
+
+  @override
+  String get dayMonday => 'Poniedziałek';
+
+  @override
+  String get dayTuesday => 'Wtorek';
+
+  @override
+  String get dayWednesday => 'Środa';
+
+  @override
+  String get dayThursday => 'Czwartek';
+
+  @override
+  String get dayFriday => 'Piątek';
+
+  @override
+  String get daySaturday => 'Sobota';
+
+  @override
+  String get daySunday => 'Niedziela';
+
+  @override
+  String get dayMondayShort => 'Pon';
+
+  @override
+  String get dayTuesdayShort => 'Wt';
+
+  @override
+  String get dayWednesdayShort => 'Śr';
+
+  @override
+  String get dayThursdayShort => 'Czw';
+
+  @override
+  String get dayFridayShort => 'Pt';
+
+  @override
+  String get daySaturdayShort => 'Sob';
+
+  @override
+  String get daySundayShort => 'Niedz';
+
+  @override
+  String get backToDaysList => 'Wróć do listy dni';
+
+  @override
   String get calculatingRoute => 'Liczenie trasy...';
 
   @override
