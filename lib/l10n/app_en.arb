@@ -45,6 +45,7 @@
     }
   },
   "noNetwork": "No network connection!",
+  "noLocationPermission": "Location access denied!",
   "checkNetwork": "Check network connection",
   "retry": "Retry",
   "yes": "yes",

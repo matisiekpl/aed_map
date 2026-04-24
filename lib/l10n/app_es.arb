@@ -45,6 +45,7 @@
     }
   },
   "noNetwork": "¡Sin conexión de red!",
+  "noLocationPermission": "¡Acceso a la ubicación denegado!",
   "checkNetwork": "Verificar conexión de red",
   "retry": "Reintentar",
   "yes": "sí",

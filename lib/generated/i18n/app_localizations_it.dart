@@ -69,6 +69,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get noNetwork => 'Connessione di rete assente!';
 
   @override
+  String get noLocationPermission => 'Accesso alla posizione negato!';
+
+  @override
   String get checkNetwork => 'Verifica la connessione di rete';
 
   @override

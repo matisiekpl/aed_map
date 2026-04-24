@@ -47,7 +47,7 @@ class EditCubit extends Cubit<EditState> {
     }
     emit(state.copyWith(
         enabled: true,
-        cursor: await geolocationRepository.locate(),
+        cursor: (await geolocationRepository.locate()).location,
         user: await pointsRepository.getUser()));
   }
 

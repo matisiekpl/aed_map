@@ -45,6 +45,7 @@
     }
   },
   "noNetwork": "Connessione di rete assente!",
+  "noLocationPermission": "Accesso alla posizione negato!",
   "checkNetwork": "Verifica la connessione di rete",
   "retry": "Riprova",
   "yes": "sì",

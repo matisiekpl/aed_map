@@ -42,7 +42,7 @@ class PointsCubit extends Cubit<PointsState> {
   }
 
   Future<void> load() async {
-    var position = await geolocationRepository.locate();
+    var position = (await geolocationRepository.locate()).location;
     var defibrillators = await pointsRepository
         .loadDefibrillators(LatLng(position.latitude, position.longitude));
     await editCubit.reconcilePendingChanges(defibrillators);
@@ -64,7 +64,7 @@ class PointsCubit extends Cubit<PointsState> {
       emit(s.copyWith(refreshing: true));
     }
     await pointsRepository.updateDefibrillators();
-    var position = await geolocationRepository.locate();
+    var position = (await geolocationRepository.locate()).location;
     var defibrillators = await pointsRepository
         .loadDefibrillators(LatLng(position.latitude, position.longitude));
     await editCubit.reconcilePendingChanges(defibrillators);

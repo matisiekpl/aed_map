@@ -45,6 +45,7 @@
     }
   },
   "noNetwork": "Pas de connexion réseau !",
+  "noLocationPermission": "Accès à la localisation refusé !",
   "checkNetwork": "Vérifier la connexion réseau",
   "retry": "Réessayer",
   "yes": "oui",

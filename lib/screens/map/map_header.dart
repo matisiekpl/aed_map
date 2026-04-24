@@ -4,6 +4,7 @@ import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
 import 'package:aed_map/bloc/location/location_cubit.dart';
+import 'package:aed_map/bloc/location/location_state.dart';
 import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/network_status/network_status_state.dart';
 import 'package:aed_map/constants.dart';
@@ -96,6 +97,17 @@ class MapHeader extends StatelessWidget {
                   builder: (context, state) {
                 if (state.connected) return const SizedBox();
                 return Text(appLocalizations.noNetwork,
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: CupertinoColors.systemRed.resolveFrom(context),
+                        fontWeight: FontWeight.bold));
+              }),
+              BlocBuilder<LocationCubit, LocationState>(
+                  builder: (context, state) {
+                if (state is! LocationDetermined || !state.permissionDenied) {
+                  return const SizedBox();
+                }
+                return Text(appLocalizations.noLocationPermission,
                     style: TextStyle(
                         fontSize: 14,
                         color: CupertinoColors.systemRed.resolveFrom(context),

@@ -69,6 +69,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noNetwork => 'Brak połączenia sieciowego!';
 
   @override
+  String get noLocationPermission => 'Brak dostępu do lokalizacji!';
+
+  @override
   String get checkNetwork => 'Sprawdź połączenie sieciowe';
 
   @override

@@ -45,6 +45,7 @@
     }
   },
   "noNetwork": "Keine Netzwerkverbindung!",
+  "noLocationPermission": "Kein Zugriff auf Standort!",
   "checkNetwork": "Netzwerkverbindung überprüfen",
   "retry": "Erneut versuchen",
   "yes": "ja",
