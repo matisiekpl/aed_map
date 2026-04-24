@@ -45,6 +45,8 @@
     }
   },
   "noNetwork": "Brak połączenia sieciowego!",
+  "noLocationPermission": "Nie udzielono dostępu do lokalizacji",
+  "openSettings": "Otwórz ustawienia",
   "checkNetwork": "Sprawdź połączenie sieciowe",
   "retry": "Ponów",
   "yes": "tak",

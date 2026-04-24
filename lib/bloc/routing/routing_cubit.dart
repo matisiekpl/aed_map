@@ -23,7 +23,7 @@ class RoutingCubit extends Cubit<RoutingState> {
     HapticFeedback.lightImpact();
     emit(RoutingCalculatingInProgress());
     var trip = await routingRepository.navigate(
-        await geolocationRepository.locate(), defibrillator);
+        (await geolocationRepository.locate()).location, defibrillator);
     if (trip != null) {
       HapticFeedback.heavyImpact();
       emit(RoutingSuccess(trip: trip));

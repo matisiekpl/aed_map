@@ -45,6 +45,8 @@
     }
   },
   "noNetwork": "No network connection!",
+  "noLocationPermission": "Location access not granted",
+  "openSettings": "Open settings",
   "checkNetwork": "Check network connection",
   "retry": "Retry",
   "yes": "yes",

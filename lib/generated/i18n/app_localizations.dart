@@ -214,6 +214,18 @@ abstract class AppLocalizations {
   /// **'No network connection!'**
   String get noNetwork;
 
+  /// No description provided for @noLocationPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Location access not granted'**
+  String get noLocationPermission;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get openSettings;
+
   /// No description provided for @checkNetwork.
   ///
   /// In en, this message translates to:

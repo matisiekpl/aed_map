@@ -69,6 +69,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noNetwork => 'No network connection!';
 
   @override
+  String get noLocationPermission => 'Location access not granted';
+
+  @override
+  String get openSettings => 'Open settings';
+
+  @override
   String get checkNetwork => 'Check network connection';
 
   @override

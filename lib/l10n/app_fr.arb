@@ -45,6 +45,8 @@
     }
   },
   "noNetwork": "Pas de connexion réseau !",
+  "noLocationPermission": "Accès à la localisation non accordé",
+  "openSettings": "Ouvrir les paramètres",
   "checkNetwork": "Vérifier la connexion réseau",
   "retry": "Réessayer",
   "yes": "oui",

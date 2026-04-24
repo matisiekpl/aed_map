@@ -69,6 +69,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noNetwork => 'Brak połączenia sieciowego!';
 
   @override
+  String get noLocationPermission => 'Nie udzielono dostępu do lokalizacji';
+
+  @override
+  String get openSettings => 'Otwórz ustawienia';
+
+  @override
   String get checkNetwork => 'Sprawdź połączenie sieciowe';
 
   @override

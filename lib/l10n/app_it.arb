@@ -45,6 +45,8 @@
     }
   },
   "noNetwork": "Connessione di rete assente!",
+  "noLocationPermission": "Accesso alla posizione non concesso",
+  "openSettings": "Apri impostazioni",
   "checkNetwork": "Verifica la connessione di rete",
   "retry": "Riprova",
   "yes": "sì",
