@@ -358,6 +358,168 @@ abstract class AppLocalizations {
   /// **'Choose access'**
   String get chooseAccess;
 
+  /// No description provided for @editOpeningHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit opening hours'**
+  String get editOpeningHours;
+
+  /// No description provided for @openingHoursNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get openingHoursNotSet;
+
+  /// No description provided for @openingHoursView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get openingHoursView;
+
+  /// No description provided for @openingHoursAlwaysOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Always open (24/7)'**
+  String get openingHoursAlwaysOpen;
+
+  /// No description provided for @openingHoursWorkingHours.
+  ///
+  /// In en, this message translates to:
+  /// **'During working hours'**
+  String get openingHoursWorkingHours;
+
+  /// No description provided for @openingHoursCustomSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom schedule'**
+  String get openingHoursCustomSchedule;
+
+  /// No description provided for @openingHoursAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced (OSM format)'**
+  String get openingHoursAdvanced;
+
+  /// No description provided for @openingHoursAdvancedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Mo-Fr 08:00-18:00; Sa 09:00-12:00'**
+  String get openingHoursAdvancedHint;
+
+  /// No description provided for @openingHoursClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get openingHoursClosed;
+
+  /// No description provided for @openingHoursAddRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Add time range'**
+  String get openingHoursAddRange;
+
+  /// No description provided for @openingHoursClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get openingHoursClear;
+
+  /// No description provided for @openingHoursInvalidFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t parse existing value; switched to Advanced mode.'**
+  String get openingHoursInvalidFormat;
+
+  /// No description provided for @dayMonday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get dayMonday;
+
+  /// No description provided for @dayTuesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuesday'**
+  String get dayTuesday;
+
+  /// No description provided for @dayWednesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Wednesday'**
+  String get dayWednesday;
+
+  /// No description provided for @dayThursday.
+  ///
+  /// In en, this message translates to:
+  /// **'Thursday'**
+  String get dayThursday;
+
+  /// No description provided for @dayFriday.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday'**
+  String get dayFriday;
+
+  /// No description provided for @daySaturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get daySaturday;
+
+  /// No description provided for @daySunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get daySunday;
+
+  /// No description provided for @dayMondayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get dayMondayShort;
+
+  /// No description provided for @dayTuesdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get dayTuesdayShort;
+
+  /// No description provided for @dayWednesdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get dayWednesdayShort;
+
+  /// No description provided for @dayThursdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get dayThursdayShort;
+
+  /// No description provided for @dayFridayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get dayFridayShort;
+
+  /// No description provided for @daySaturdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get daySaturdayShort;
+
+  /// No description provided for @daySundayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get daySundayShort;
+
+  /// No description provided for @backToDaysList.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to days list'**
+  String get backToDaysList;
+
   /// No description provided for @calculatingRoute.
   ///
   /// In en, this message translates to:

@@ -142,6 +142,89 @@ class AppLocalizationsIt extends AppLocalizations {
   String get chooseAccess => 'Scegli l\'accesso';
 
   @override
+  String get editOpeningHours => 'Modifica orario di apertura';
+
+  @override
+  String get openingHoursNotSet => 'Nessuno';
+
+  @override
+  String get openingHoursView => 'Vedi';
+
+  @override
+  String get openingHoursAlwaysOpen => 'Sempre aperto (24/7)';
+
+  @override
+  String get openingHoursWorkingHours => 'Durante l\'orario di lavoro';
+
+  @override
+  String get openingHoursCustomSchedule => 'Orario personalizzato';
+
+  @override
+  String get openingHoursAdvanced => 'Avanzato (formato OSM)';
+
+  @override
+  String get openingHoursAdvancedHint =>
+      'es. Mo-Fr 08:00-18:00; Sa 09:00-12:00';
+
+  @override
+  String get openingHoursClosed => 'Chiuso';
+
+  @override
+  String get openingHoursAddRange => 'Aggiungi intervallo orario';
+
+  @override
+  String get openingHoursClear => 'Cancella';
+
+  @override
+  String get openingHoursInvalidFormat =>
+      'Impossibile analizzare il valore esistente; passato alla modalità avanzata.';
+
+  @override
+  String get dayMonday => 'Lunedì';
+
+  @override
+  String get dayTuesday => 'Martedì';
+
+  @override
+  String get dayWednesday => 'Mercoledì';
+
+  @override
+  String get dayThursday => 'Giovedì';
+
+  @override
+  String get dayFriday => 'Venerdì';
+
+  @override
+  String get daySaturday => 'Sabato';
+
+  @override
+  String get daySunday => 'Domenica';
+
+  @override
+  String get dayMondayShort => 'Lun';
+
+  @override
+  String get dayTuesdayShort => 'Mar';
+
+  @override
+  String get dayWednesdayShort => 'Mer';
+
+  @override
+  String get dayThursdayShort => 'Gio';
+
+  @override
+  String get dayFridayShort => 'Ven';
+
+  @override
+  String get daySaturdayShort => 'Sab';
+
+  @override
+  String get daySundayShort => 'Dom';
+
+  @override
+  String get backToDaysList => 'Torna all\'elenco dei giorni';
+
+  @override
   String get calculatingRoute => 'Calcolo del percorso in corso...';
 
   @override
