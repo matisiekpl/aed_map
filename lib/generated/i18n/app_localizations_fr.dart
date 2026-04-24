@@ -69,7 +69,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noNetwork => 'Pas de connexion réseau !';
 
   @override
-  String get noLocationPermission => 'Accès à la localisation refusé !';
+  String get noLocationPermission => 'Accès à la localisation non accordé';
+
+  @override
+  String get openSettings => 'Ouvrir les paramètres';
 
   @override
   String get checkNetwork => 'Vérifier la connexion réseau';

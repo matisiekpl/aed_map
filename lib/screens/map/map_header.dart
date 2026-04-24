@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
 import 'package:aed_map/bloc/location/location_cubit.dart';
@@ -107,11 +108,36 @@ class MapHeader extends StatelessWidget {
                 if (state is! LocationDetermined || !state.permissionDenied) {
                   return const SizedBox();
                 }
-                return Text(appLocalizations.noLocationPermission,
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: CupertinoColors.systemRed.resolveFrom(context),
-                        fontWeight: FontWeight.bold));
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(appLocalizations.noLocationPermission,
+                        style: TextStyle(
+                            fontSize: 14,
+                            color:
+                                CupertinoColors.systemRed.resolveFrom(context),
+                            fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 4),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => Geolocator.openAppSettings(),
+                      child: Card(
+                        color: CupertinoColors.secondarySystemBackground
+                            .resolveFrom(context),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          child: Text(appLocalizations.openSettings,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: CupertinoColors.label
+                                      .resolveFrom(context))),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
               })
             ],
           ),

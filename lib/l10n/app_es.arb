@@ -45,7 +45,8 @@
     }
   },
   "noNetwork": "¡Sin conexión de red!",
-  "noLocationPermission": "¡Acceso a la ubicación denegado!",
+  "noLocationPermission": "Acceso a la ubicación no concedido",
+  "openSettings": "Abrir ajustes",
   "checkNetwork": "Verificar conexión de red",
   "retry": "Reintentar",
   "yes": "sí",

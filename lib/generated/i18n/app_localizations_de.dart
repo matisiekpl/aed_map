@@ -69,7 +69,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noNetwork => 'Keine Netzwerkverbindung!';
 
   @override
-  String get noLocationPermission => 'Kein Zugriff auf Standort!';
+  String get noLocationPermission => 'Standortzugriff nicht erteilt';
+
+  @override
+  String get openSettings => 'Einstellungen öffnen';
 
   @override
   String get checkNetwork => 'Netzwerkverbindung überprüfen';

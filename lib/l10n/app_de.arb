@@ -45,7 +45,8 @@
     }
   },
   "noNetwork": "Keine Netzwerkverbindung!",
-  "noLocationPermission": "Kein Zugriff auf Standort!",
+  "noLocationPermission": "Standortzugriff nicht erteilt",
+  "openSettings": "Einstellungen öffnen",
   "checkNetwork": "Netzwerkverbindung überprüfen",
   "retry": "Erneut versuchen",
   "yes": "ja",
