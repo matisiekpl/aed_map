@@ -1,1 +1,1 @@
-Se añadió la edición de horas de apertura
+Se añadió soporte para subir fotos.

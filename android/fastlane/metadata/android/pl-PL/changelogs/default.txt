@@ -1,1 +1,1 @@
-Dodano edycję godzin otwarcia
+Dodano obsługę przesyłania zdjęć.

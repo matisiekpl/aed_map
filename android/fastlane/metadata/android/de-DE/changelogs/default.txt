@@ -1,1 +1,1 @@
-Öffnungszeitenbearbeitung hinzugefügt
+Unterstützung für das Hochladen von Fotos hinzugefügt.
