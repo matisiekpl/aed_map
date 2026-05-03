@@ -22,6 +22,7 @@ import '../../bloc/routing/routing_cubit.dart';
 import '../../bloc/routing/routing_state.dart';
 import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
+import '../../screens/photo/photo_source_bottom_sheet.dart';
 import '../../shared/utils.dart';
 
 class BottomPanel extends StatelessWidget {
@@ -32,7 +33,43 @@ class BottomPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appLocalizations = AppLocalizations.of(context)!;
-    return BlocListener<PointsCubit, PointsState>(
+    return BlocListener<EditCubit, EditState>(
+      listenWhen: (previous, current) =>
+          previous.photoStatus != current.photoStatus &&
+          (current.photoStatus == PhotoStatus.reportSuccess ||
+              current.photoStatus == PhotoStatus.reportFailure),
+      listener: (context, state) {
+        if (state.photoStatus == PhotoStatus.reportSuccess) {
+          context.read<EditCubit>().resetPhotoStatus();
+          showCupertinoDialog(
+            context: context,
+            builder: (dialogContext) => CupertinoAlertDialog(
+              content: Text(appLocalizations.photoReported),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        } else if (state.photoStatus == PhotoStatus.reportFailure) {
+          context.read<EditCubit>().resetPhotoStatus();
+          showCupertinoDialog(
+            context: context,
+            builder: (dialogContext) => CupertinoAlertDialog(
+              content: Text(appLocalizations.photoUploadFailed),
+              actions: [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+      child: BlocListener<PointsCubit, PointsState>(
       listener: (context, state) {
         if (state is PointsLoadSuccess) {
           context.read<PanelCubit>().open();
@@ -363,18 +400,65 @@ class BottomPanel extends StatelessWidget {
                             }
                             return Container();
                           })),
+                      if ((state.selected.image ?? '').isEmpty) ...[
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          width: double.infinity,
+                          child: CupertinoButton(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            color: CupertinoColors.secondarySystemBackground
+                                .resolveFrom(context),
+                            onPressed: () => showPhotoSourceSheet(
+                                context, state.selected),
+                            child: Text(
+                              appLocalizations.addPhoto,
+                              style: TextStyle(
+                                color: CupertinoColors.label.resolveFrom(context),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 12),
                       if ((state.selected.image ?? '').isNotEmpty)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: CachedNetworkImage(
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            imageUrl: state.selected.image ?? '',
-                            placeholder: (context, url) => Container(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                imageUrl: state.selected.image ?? '',
+                                placeholder: (context, url) => Container(),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                            ),
+                            if (state.selected.photoId != null)
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: GestureDetector(
+                                  onTap: () => showReportPhotoDialog(
+                                      context,
+                                      appLocalizations,
+                                      state.selected,
+                                      state.selected.photoId!),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.4),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding: const EdgeInsets.all(6),
+                                    child: const Icon(
+                                      Icons.flag_outlined,
+                                      color: Colors.white70,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                     ],
                   ),
@@ -386,6 +470,7 @@ class BottomPanel extends StatelessWidget {
         }
         return Container();
       }),
+    ),
     );
   }
 
@@ -394,4 +479,32 @@ class BottomPanel extends StatelessWidget {
     context.read<PointsCubit>().select(defibrillator);
     context.read<PanelCubit>().show();
   }
+}
+
+Future<void> showReportPhotoDialog(
+    BuildContext context,
+    AppLocalizations appLocalizations,
+    Defibrillator defibrillator,
+    String photoId) async {
+  await showCupertinoDialog(
+    context: context,
+    builder: (dialogContext) => CupertinoAlertDialog(
+      title: Text(appLocalizations.reportPhoto),
+      content: Text(appLocalizations.reportPhotoConfirm),
+      actions: [
+        CupertinoDialogAction(
+          isDestructiveAction: true,
+          onPressed: () {
+            Navigator.of(dialogContext).pop();
+            context.read<EditCubit>().reportPhoto(defibrillator, photoId);
+          },
+          child: Text(appLocalizations.reportPhoto),
+        ),
+        CupertinoDialogAction(
+          onPressed: () => Navigator.of(dialogContext).pop(),
+          child: Text(appLocalizations.cancel),
+        ),
+      ],
+    ),
+  );
 }

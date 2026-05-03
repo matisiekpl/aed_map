@@ -33,6 +33,7 @@ class PendingChange {
         'phone': snapshot.phone,
         'openingHours': snapshot.openingHours,
         'access': snapshot.access,
+        'image': snapshot.image,
       },
     };
   }
@@ -52,6 +53,7 @@ class PendingChange {
         phone: snapshotJson['phone'] as String?,
         openingHours: snapshotJson['openingHours'] as String?,
         access: snapshotJson['access'] as String?,
+        image: snapshotJson['image'] as String?,
       ),
     );
   }

@@ -401,4 +401,49 @@ class AppLocalizationsFr extends AppLocalizations {
   String osmErrorGeneric(int code) {
     return 'Échec de la sauvegarde des modifications (HTTP $code)';
   }
+
+  @override
+  String get addPhoto => 'Ajouter une photo';
+
+  @override
+  String get changePhoto => 'Changer la photo';
+
+  @override
+  String get photo => 'Photo';
+
+  @override
+  String get chooseFromGallery => 'Choisir dans la galerie';
+
+  @override
+  String get takePhoto => 'Prendre une photo';
+
+  @override
+  String get photoLicenseInfo =>
+      'Toutes les photos AED sont hébergées par OpenStreetMap Polska et sont sous licence Creative Commons Zero (CC0 v1.0). En téléchargeant une photo, vous acceptez les conditions de cette licence.\n\nEn bref, cela signifie que les photos peuvent être utilisées par n\'importe qui à n\'importe quelle fin. L\'attribution n\'est pas requise.';
+
+  @override
+  String get photoLicenseLink => 'Creative Commons Zero (CC0 v1.0)';
+
+  @override
+  String get nsfwBlockedTitle => 'Photo rejetée';
+
+  @override
+  String get nsfwBlockedMessage =>
+      'Cette photo ne peut pas être ajoutée car elle a été détectée comme inappropriée.';
+
+  @override
+  String get reportPhoto => 'Signaler la photo';
+
+  @override
+  String get reportPhotoConfirm =>
+      'Êtes-vous sûr de vouloir signaler cette photo comme inappropriée ?';
+
+  @override
+  String get photoReported => 'La photo a été signalée';
+
+  @override
+  String get photoUploaded => 'Photo enregistrée avec succès';
+
+  @override
+  String get photoUploadFailed => 'Échec du téléchargement de la photo';
 }

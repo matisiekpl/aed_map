@@ -26,6 +26,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:nsfw_detector_flutter/nsfw_detector_flutter.dart';
 import 'package:plausible_analytics/plausible_analytics.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,6 +54,7 @@ void main() async {
   });
   remoteConfig.fetchAndActivate();
   mixpanel = await Mixpanel.init(mixpanelToken, trackAutomaticEvents: true);
+  await NsfwDetector.initialize(threshold: 0.7);
   await SentryFlutter.init(
     (options) {
       options.dsn =
@@ -169,7 +171,9 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<EditCubit, EditState>(
         listenWhen: (previous, current) =>
-            previous is EditReady && current is EditInProgress,
+            previous is EditReady &&
+            current is EditInProgress &&
+            current.photoStatus == PhotoStatus.idle,
         listener: (BuildContext context, state) async {
           if (state is EditInProgress) {
             var editCubit = context.read<EditCubit>();

@@ -743,6 +743,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  heif_converter:
+    dependency: "direct main"
+    description:
+      name: heif_converter
+      sha256: "5e48e4bb5fc5d94bb01492d7e120279eb8836e3cacc7b89d6aa7ba3103f6143a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   hooks:
     dependency: transitive
     description:
@@ -1084,6 +1092,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  nsfw_detector_flutter:
+    dependency: "direct main"
+    description:
+      name: nsfw_detector_flutter
+      sha256: "15b467b6b920ca9375177138e21c06cccfcf513fa3a4b3eeb1b8a4721e07f4b3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   octo_image:
     dependency: transitive
     description:
@@ -1284,6 +1300,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      sha256: ea0b925899e64ecdfbf9c7becb60d5b50e706ade44a85b2363be2a22d88117d2
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.2"
   rbush:
     dependency: transitive
     description:
@@ -1577,6 +1601,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.16"
+  tflite_flutter:
+    dependency: transitive
+    description:
+      name: tflite_flutter
+      sha256: "0bba9040d8decda0960d7abf8eabf32243bf092bc7d0084e8e19681866b0bdbe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.1"
   typed_data:
     dependency: transitive
     description:

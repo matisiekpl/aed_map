@@ -33,3 +33,5 @@ const requestReviewEvent = 'review_requested';
 const deleteEvent = 'delete';
 const livechatEvent = 'livechat';
 const pendingChangesEvent = 'pending_changes';
+const photoUploadEvent = 'photo_upload';
+const photoReportEvent = 'photo_report';

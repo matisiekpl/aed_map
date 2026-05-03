@@ -398,4 +398,49 @@ class AppLocalizationsDe extends AppLocalizations {
   String osmErrorGeneric(int code) {
     return 'Änderungen konnten nicht gespeichert werden (HTTP $code)';
   }
+
+  @override
+  String get addPhoto => 'Foto hinzufügen';
+
+  @override
+  String get changePhoto => 'Foto ändern';
+
+  @override
+  String get photo => 'Foto';
+
+  @override
+  String get chooseFromGallery => 'Aus Galerie wählen';
+
+  @override
+  String get takePhoto => 'Foto aufnehmen';
+
+  @override
+  String get photoLicenseInfo =>
+      'Alle AED-Fotos werden von OpenStreetMap Polska gehostet und stehen unter der Creative Commons Zero (CC0 v1.0)-Lizenz. Durch das Hochladen eines Fotos stimmen Sie den Bedingungen dieser Lizenz zu.\n\nKurz gesagt bedeutet dies, dass die Fotos von jedermann für jeden Zweck verwendet werden dürfen. Eine Namensnennung ist nicht erforderlich.';
+
+  @override
+  String get photoLicenseLink => 'Creative Commons Zero (CC0 v1.0)';
+
+  @override
+  String get nsfwBlockedTitle => 'Foto abgelehnt';
+
+  @override
+  String get nsfwBlockedMessage =>
+      'Dieses Foto kann nicht hinzugefügt werden, da es als unangemessen erkannt wurde.';
+
+  @override
+  String get reportPhoto => 'Foto melden';
+
+  @override
+  String get reportPhotoConfirm =>
+      'Möchten Sie dieses Foto wirklich als unangemessen melden?';
+
+  @override
+  String get photoReported => 'Foto wurde gemeldet';
+
+  @override
+  String get photoUploaded => 'Foto erfolgreich gespeichert';
+
+  @override
+  String get photoUploadFailed => 'Foto konnte nicht hochgeladen werden';
 }

@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:nsfw_detector_flutter/nsfw_detector_flutter.dart';
 
 class EditCubit extends Cubit<EditState> {
   EditCubit({
@@ -242,6 +243,81 @@ class EditCubit extends Cubit<EditState> {
       default:
         return 'osmErrorGeneric:${exception.statusCode}:${exception.body}';
     }
+  }
+
+  Future<bool> isPhotoUnsafe(File file) async {
+    try {
+      var result = await NsfwDetector.instance.detectNSFWFromFile(file);
+      return result?.isNsfw ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> submitPhoto(Defibrillator defibrillator, File file) async {
+    emit(state.copyWith(photoStatus: PhotoStatus.uploading));
+    try {
+      var authenticated = await pointsRepository.authenticate();
+      if (!authenticated) {
+        emit(state.copyWith(
+            photoStatus: PhotoStatus.uploadFailure,
+            photoErrorMessage: 'Authentication failed'));
+        return;
+      }
+      await pointsRepository.uploadPhoto(
+          nodeId: defibrillator.id, file: file);
+      final freshNode = await pointsRepository.getNode(defibrillator.id);
+      final updated = defibrillator.copyWith(image: freshNode?.image);
+      emit(EditInProgress(
+        enabled: false,
+        cursor: state.cursor,
+        defibrillator: updated,
+        pendingChanges: state.pendingChanges,
+        photoStatus: PhotoStatus.uploading,
+      ));
+      final saved = await save();
+      if (saved == null) {
+        emit(state.copyWith(
+            photoStatus: PhotoStatus.uploadFailure,
+            photoErrorMessage: state.errorMessage));
+        return;
+      }
+      analytics.event(name: photoUploadEvent);
+      if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+        mixpanel.track(photoUploadEvent,
+            properties: saved.getEventProperties());
+      }
+      emit(state.copyWith(
+          photoStatus: PhotoStatus.uploadSuccess,
+          photoUpdatedDefibrillator: saved));
+    } catch (error) {
+      emit(state.copyWith(
+          photoStatus: PhotoStatus.uploadFailure,
+          photoErrorMessage: error.toString()));
+    }
+  }
+
+  Future<void> reportPhoto(Defibrillator defibrillator, String photoId) async {
+    emit(state.copyWith(photoStatus: PhotoStatus.reporting));
+    try {
+      await pointsRepository.reportPhoto(photoId);
+      analytics.event(name: photoReportEvent);
+      if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+        mixpanel.track(photoReportEvent, properties: {
+          ...defibrillator.getEventProperties(),
+          'aed_photo_id': photoId,
+        });
+      }
+      emit(state.copyWith(photoStatus: PhotoStatus.reportSuccess));
+    } catch (error) {
+      emit(state.copyWith(
+          photoStatus: PhotoStatus.reportFailure,
+          photoErrorMessage: error.toString()));
+    }
+  }
+
+  void resetPhotoStatus() {
+    emit(state.copyWith(photoStatus: PhotoStatus.idle));
   }
 
   void maybeRequestReview() {

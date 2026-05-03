@@ -162,5 +162,19 @@
         "example": "500"
       }
     }
-  }
+  },
+  "addPhoto": "Añadir foto",
+  "changePhoto": "Cambiar foto",
+  "photo": "Foto",
+  "chooseFromGallery": "Elegir de la galería",
+  "takePhoto": "Tomar foto",
+  "photoLicenseInfo": "Todas las fotos AED están alojadas por OpenStreetMap Polska y tienen licencia Creative Commons Zero (CC0 v1.0). Al subir una foto, aceptas los términos de esta licencia.\n\nEn resumen, esto significa que las fotos pueden ser utilizadas por cualquiera para cualquier fin. No se requiere atribución.",
+  "photoLicenseLink": "Creative Commons Zero (CC0 v1.0)",
+  "nsfwBlockedTitle": "Foto rechazada",
+  "nsfwBlockedMessage": "Esta foto no puede añadirse porque fue detectada como inapropiada.",
+  "reportPhoto": "Reportar foto",
+  "reportPhotoConfirm": "¿Estás seguro de que deseas reportar esta foto como inapropiada?",
+  "photoReported": "La foto ha sido reportada",
+  "photoUploaded": "Foto guardada correctamente",
+  "photoUploadFailed": "No se pudo subir la foto"
 }

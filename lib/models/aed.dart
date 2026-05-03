@@ -28,6 +28,22 @@ class Defibrillator {
       this.image = '',
       this.access = 'yes'});
 
+  String? get photoId {
+    final url = image;
+    if (url == null || url.isEmpty) return null;
+    try {
+      final segments = Uri.parse(url).pathSegments;
+      if (segments.isEmpty) return null;
+      final filename = segments.last;
+      if (filename.isEmpty) return null;
+      final dot = filename.lastIndexOf('.');
+      if (dot <= 0) return filename;
+      return filename.substring(0, dot);
+    } catch (_) {
+      return null;
+    }
+  }
+
   String? getAccessComment(AppLocalizations appLocalizations) {
     return translateAccessComment(access, appLocalizations);
   }
@@ -166,7 +182,8 @@ class Defibrillator {
         a.operator == b.operator &&
         a.phone == b.phone &&
         a.openingHours == b.openingHours &&
-        a.access == b.access;
+        a.access == b.access &&
+        a.image == b.image;
   }
 
   Map<String, dynamic> getEventProperties() {

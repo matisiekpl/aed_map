@@ -14,6 +14,7 @@ import '../../bloc/points/points_cubit.dart';
 import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
 import '../../shared/utils.dart';
+import '../photo/photo_source_bottom_sheet.dart';
 import 'opening_hours_editor.dart';
 
 class EditForm extends StatelessWidget {
@@ -153,6 +154,18 @@ class EditForm extends StatelessWidget {
           ),
         ],
       ),
+      if ((state.defibrillator.image ?? '').isNotEmpty)
+        SettingsSection(
+          title: Text(appLocalizations.photo),
+          tiles: [
+            SettingsTile.navigation(
+              leading: const Icon(CupertinoIcons.camera),
+              title: Text(appLocalizations.changePhoto),
+              onPressed: (tileContext) =>
+                  showPhotoSourceSheet(tileContext, state.defibrillator),
+            ),
+          ],
+        ),
       SettingsSection(
         title: Text(appLocalizations.location),
         tiles: [

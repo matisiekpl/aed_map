@@ -162,5 +162,19 @@
         "example": "500"
       }
     }
-  }
+  },
+  "addPhoto": "Foto hinzufügen",
+  "changePhoto": "Foto ändern",
+  "photo": "Foto",
+  "chooseFromGallery": "Aus Galerie wählen",
+  "takePhoto": "Foto aufnehmen",
+  "photoLicenseInfo": "Alle AED-Fotos werden von OpenStreetMap Polska gehostet und stehen unter der Creative Commons Zero (CC0 v1.0)-Lizenz. Durch das Hochladen eines Fotos stimmen Sie den Bedingungen dieser Lizenz zu.\n\nKurz gesagt bedeutet dies, dass die Fotos von jedermann für jeden Zweck verwendet werden dürfen. Eine Namensnennung ist nicht erforderlich.",
+  "photoLicenseLink": "Creative Commons Zero (CC0 v1.0)",
+  "nsfwBlockedTitle": "Foto abgelehnt",
+  "nsfwBlockedMessage": "Dieses Foto kann nicht hinzugefügt werden, da es als unangemessen erkannt wurde.",
+  "reportPhoto": "Foto melden",
+  "reportPhotoConfirm": "Möchten Sie dieses Foto wirklich als unangemessen melden?",
+  "photoReported": "Foto wurde gemeldet",
+  "photoUploaded": "Foto erfolgreich gespeichert",
+  "photoUploadFailed": "Foto konnte nicht hochgeladen werden"
 }

@@ -825,6 +825,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save changes (HTTP {code})'**
   String osmErrorGeneric(int code);
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photo'**
+  String get addPhoto;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get changePhoto;
+
+  /// No description provided for @photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get photo;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get takePhoto;
+
+  /// No description provided for @photoLicenseInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'All AED photos are hosted by OpenStreetMap Polska and licensed under Creative Commons Zero (CC0 v1.0). By uploading a photo you agree to the terms of this license.\n\nIn short, this means the photos may be used by anyone for any purpose. Attribution is not required.'**
+  String get photoLicenseInfo;
+
+  /// No description provided for @photoLicenseLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Creative Commons Zero (CC0 v1.0)'**
+  String get photoLicenseLink;
+
+  /// No description provided for @nsfwBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo rejected'**
+  String get nsfwBlockedTitle;
+
+  /// No description provided for @nsfwBlockedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This photo cannot be added because it was detected as inappropriate.'**
+  String get nsfwBlockedMessage;
+
+  /// No description provided for @reportPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Report photo'**
+  String get reportPhoto;
+
+  /// No description provided for @reportPhotoConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to report this photo as inappropriate?'**
+  String get reportPhotoConfirm;
+
+  /// No description provided for @photoReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo has been reported'**
+  String get photoReported;
+
+  /// No description provided for @photoUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo saved successfully'**
+  String get photoUploaded;
+
+  /// No description provided for @photoUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to upload photo'**
+  String get photoUploadFailed;
 }
 
 class _AppLocalizationsDelegate

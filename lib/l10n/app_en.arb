@@ -165,5 +165,19 @@
         "example": "500"
       }
     }
-  }
+  },
+  "addPhoto": "Add photo",
+  "changePhoto": "Change photo",
+  "photo": "Photo",
+  "chooseFromGallery": "Choose from gallery",
+  "takePhoto": "Take photo",
+  "photoLicenseInfo": "All AED photos are hosted by OpenStreetMap Polska and licensed under Creative Commons Zero (CC0 v1.0). By uploading a photo you agree to the terms of this license.\n\nIn short, this means the photos may be used by anyone for any purpose. Attribution is not required.",
+  "photoLicenseLink": "Creative Commons Zero (CC0 v1.0)",
+  "nsfwBlockedTitle": "Photo rejected",
+  "nsfwBlockedMessage": "This photo cannot be added because it was detected as inappropriate.",
+  "reportPhoto": "Report photo",
+  "reportPhotoConfirm": "Are you sure you want to report this photo as inappropriate?",
+  "photoReported": "Photo has been reported",
+  "photoUploaded": "Photo saved successfully",
+  "photoUploadFailed": "Failed to upload photo"
 }
