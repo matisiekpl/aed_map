@@ -164,7 +164,7 @@
     }
   },
   "addPhoto": "Ajouter une photo",
-  "changePhoto": "Changer la photo",
+  "changePhoto": "Définir la photo",
   "photo": "Photo",
   "chooseFromGallery": "Choisir dans la galerie",
   "takePhoto": "Prendre une photo",
