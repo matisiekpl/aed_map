@@ -23,7 +23,8 @@ class PointsRepository {
   static const String defibrillatorListKey = 'aed_list_json_2';
   static const String defibrillatorListUpdateTimestamp = 'aed_update';
 
-  static const devMode = kDebugMode;
+  // static const devMode = kDebugMode;
+  static const devMode = false;
 
   Future<File> get cacheFile async {
     if (Platform.environment.containsKey('FLUTTER_TEST')) {
@@ -304,6 +305,7 @@ class PointsRepository {
     ));
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
+    print('Photo upload response [${response.statusCode}]: ${response.body}');
     if (response.statusCode != 200) {
       throw OsmApiException(response.statusCode, response.body);
     }
@@ -319,6 +321,20 @@ class PointsRepository {
     if (response.statusCode != 200) {
       throw OsmApiException(response.statusCode, response.body);
     }
+  }
+
+  Future<String?> getBackendImageUrl(int nodeId) async {
+    try {
+      var response = await http.get(
+          Uri.parse('https://back.openaedmap.org/api/v1/node/$nodeId'));
+      var payload = json.decode(response.body);
+      if ((payload['elements'] as List<dynamic>).isNotEmpty) {
+        var element = payload['elements'][0] as Map<String, dynamic>;
+        var tags = element['tags'] as Map<String, dynamic>?;
+        return tags?['image'] as String?;
+      }
+    } catch (_) {}
+    return null;
   }
 
   Future<Defibrillator?> getNode(int id) async {

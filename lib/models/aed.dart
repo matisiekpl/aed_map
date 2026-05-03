@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:aed_map/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
@@ -16,6 +18,7 @@ class Defibrillator {
   String? openingHours;
   String? access;
   String? image;
+  Uint8List? photoBytes;
 
   Defibrillator(
       {required this.location,
@@ -26,7 +29,9 @@ class Defibrillator {
       this.phone,
       this.openingHours,
       this.image = '',
-      this.access = 'yes'});
+      this.access = 'yes',
+      List<int>? photoBytes})
+      : photoBytes = photoBytes != null ? Uint8List.fromList(photoBytes) : null;
 
   String? get photoId {
     final url = image;
@@ -160,6 +165,7 @@ class Defibrillator {
     String? openingHours,
     String? access,
     String? image,
+    Uint8List? photoBytes,
     Map? colors,
     Map? filenames,
   }) {
@@ -173,6 +179,7 @@ class Defibrillator {
       openingHours: openingHours ?? this.openingHours,
       access: access ?? this.access,
       image: image ?? this.image,
+      photoBytes: photoBytes ?? this.photoBytes,
     );
   }
 

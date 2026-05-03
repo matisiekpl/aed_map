@@ -34,6 +34,9 @@ class PendingChange {
         'openingHours': snapshot.openingHours,
         'access': snapshot.access,
         'image': snapshot.image,
+        'photoBytes': snapshot.photoBytes != null
+            ? base64Encode(snapshot.photoBytes!)
+            : null,
       },
     };
   }
@@ -54,6 +57,9 @@ class PendingChange {
         openingHours: snapshotJson['openingHours'] as String?,
         access: snapshotJson['access'] as String?,
         image: snapshotJson['image'] as String?,
+        photoBytes: snapshotJson['photoBytes'] != null
+            ? base64Decode(snapshotJson['photoBytes'] as String)
+            : null,
       ),
     );
   }

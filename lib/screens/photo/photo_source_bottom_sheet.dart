@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
+import 'package:aed_map/bloc/points/points_cubit.dart';
 import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/screens/photo/photo_confirmation_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -80,10 +81,14 @@ Future<void> pickAndProceed(BuildContext context, Defibrillator defibrillator,
     return;
   }
 
+  var pointsCubit = context.read<PointsCubit>();
   await Navigator.of(context).push(
     CupertinoPageRoute(
-      builder: (pageContext) => BlocProvider<EditCubit>.value(
-        value: editCubit,
+      builder: (pageContext) => MultiBlocProvider(
+        providers: [
+          BlocProvider<EditCubit>.value(value: editCubit),
+          BlocProvider<PointsCubit>.value(value: pointsCubit),
+        ],
         child: PhotoConfirmationPage(
           defibrillator: defibrillator,
           file: file,

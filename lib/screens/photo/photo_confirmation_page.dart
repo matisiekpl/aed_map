@@ -29,8 +29,8 @@ class PhotoConfirmationPage extends StatelessWidget {
         if (state.photoStatus == PhotoStatus.uploadSuccess &&
             state.photoUpdatedDefibrillator != null) {
           context.read<PointsCubit>().update(state.photoUpdatedDefibrillator!);
-          Navigator.of(context).pop();
           context.read<EditCubit>().resetPhotoStatus();
+          Navigator.of(context).popUntil((route) => route.isFirst);
         } else if (state.photoStatus == PhotoStatus.uploadFailure) {
           var message = state.photoErrorMessage ?? '';
           context.read<EditCubit>().resetPhotoStatus();
@@ -59,6 +59,7 @@ class PhotoConfirmationPage extends StatelessWidget {
           middle: Text(appLocalizations.addPhoto),
         ),
         child: SafeArea(
+          bottom: false,
           child: BlocBuilder<EditCubit, EditState>(
             buildWhen: (previous, current) =>
                 previous.photoStatus != current.photoStatus,

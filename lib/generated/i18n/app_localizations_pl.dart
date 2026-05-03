@@ -401,7 +401,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get addPhoto => 'Dodaj zdjęcie';
 
   @override
-  String get changePhoto => 'Zmień zdjęcie';
+  String get changePhoto => 'Ustaw zdjęcie';
 
   @override
   String get photo => 'Zdjęcie';

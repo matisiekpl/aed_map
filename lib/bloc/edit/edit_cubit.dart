@@ -264,32 +264,32 @@ class EditCubit extends Cubit<EditState> {
             photoErrorMessage: 'Authentication failed'));
         return;
       }
+      final photoBytes = await file.readAsBytes();
       await pointsRepository.uploadPhoto(
           nodeId: defibrillator.id, file: file);
-      final freshNode = await pointsRepository.getNode(defibrillator.id);
-      final updated = defibrillator.copyWith(image: freshNode?.image);
-      emit(EditInProgress(
-        enabled: false,
-        cursor: state.cursor,
-        defibrillator: updated,
-        pendingChanges: state.pendingChanges,
-        photoStatus: PhotoStatus.uploading,
+      final imageUrl =
+          await pointsRepository.getBackendImageUrl(defibrillator.id);
+      final updated = defibrillator.copyWith(
+          image: (imageUrl != null && imageUrl.isNotEmpty)
+              ? imageUrl
+              : defibrillator.image,
+          photoBytes: photoBytes);
+      await pendingChangesRepository.register(PendingChange(
+        type: PendingChangeType.edit,
+        defibrillatorId: updated.id,
+        snapshot: updated.copyWith(),
+        createdAt: DateTime.now(),
       ));
-      final saved = await save();
-      if (saved == null) {
-        emit(state.copyWith(
-            photoStatus: PhotoStatus.uploadFailure,
-            photoErrorMessage: state.errorMessage));
-        return;
-      }
+      final updatedPendingChanges = await pendingChangesRepository.fetch();
       analytics.event(name: photoUploadEvent);
       if (!Platform.environment.containsKey('FLUTTER_TEST')) {
         mixpanel.track(photoUploadEvent,
-            properties: saved.getEventProperties());
+            properties: updated.getEventProperties());
       }
       emit(state.copyWith(
+          pendingChanges: updatedPendingChanges,
           photoStatus: PhotoStatus.uploadSuccess,
-          photoUpdatedDefibrillator: saved));
+          photoUpdatedDefibrillator: updated));
     } catch (error) {
       emit(state.copyWith(
           photoStatus: PhotoStatus.uploadFailure,

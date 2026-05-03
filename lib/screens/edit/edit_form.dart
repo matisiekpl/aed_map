@@ -154,18 +154,17 @@ class EditForm extends StatelessWidget {
           ),
         ],
       ),
-      if ((state.defibrillator.image ?? '').isNotEmpty)
-        SettingsSection(
-          title: Text(appLocalizations.photo),
-          tiles: [
-            SettingsTile.navigation(
-              leading: const Icon(CupertinoIcons.camera),
-              title: Text(appLocalizations.changePhoto),
-              onPressed: (tileContext) =>
-                  showPhotoSourceSheet(tileContext, state.defibrillator),
-            ),
-          ],
-        ),
+      SettingsSection(
+        title: Text(appLocalizations.photo),
+        tiles: [
+          SettingsTile.navigation(
+            leading: const Icon(CupertinoIcons.camera),
+            title: Text(appLocalizations.changePhoto),
+            onPressed: (tileContext) =>
+                showPhotoSourceSheet(tileContext, state.defibrillator),
+          ),
+        ],
+      ),
       SettingsSection(
         title: Text(appLocalizations.location),
         tiles: [

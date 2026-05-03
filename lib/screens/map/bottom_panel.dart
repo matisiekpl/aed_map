@@ -400,7 +400,8 @@ class BottomPanel extends StatelessWidget {
                             }
                             return Container();
                           })),
-                      if ((state.selected.image ?? '').isEmpty) ...[
+                      if (state.selected.photoBytes == null &&
+                          (state.selected.image ?? '').isEmpty) ...[
                         const SizedBox(height: 8),
                         SizedBox(
                           width: double.infinity,
@@ -419,20 +420,27 @@ class BottomPanel extends StatelessWidget {
                           ),
                         ),
                       ],
-                      const SizedBox(height: 12),
-                      if ((state.selected.image ?? '').isNotEmpty)
+                      if (state.selected.photoBytes != null ||
+                          (state.selected.image ?? '').isNotEmpty) ...[
+                        const SizedBox(height: 12),
                         Stack(
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: CachedNetworkImage(
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                imageUrl: state.selected.image ?? '',
-                                placeholder: (context, url) => Container(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                              ),
+                              child: state.selected.photoBytes != null
+                                  ? Image.memory(
+                                      state.selected.photoBytes!,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : CachedNetworkImage(
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                      imageUrl: state.selected.image ?? '',
+                                      placeholder: (context, url) => Container(),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    ),
                             ),
                             if (state.selected.photoId != null)
                               Positioned(
@@ -460,6 +468,7 @@ class BottomPanel extends StatelessWidget {
                               ),
                           ],
                         ),
+                      ],
                     ],
                   ),
                 ),
