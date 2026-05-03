@@ -406,7 +406,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addPhoto => 'Ajouter une photo';
 
   @override
-  String get changePhoto => 'Changer la photo';
+  String get changePhoto => 'Définir la photo';
 
   @override
   String get photo => 'Photo';

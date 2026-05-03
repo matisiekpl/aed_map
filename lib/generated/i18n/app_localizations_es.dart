@@ -403,7 +403,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get addPhoto => 'Añadir foto';
 
   @override
-  String get changePhoto => 'Cambiar foto';
+  String get changePhoto => 'Establecer foto';
 
   @override
   String get photo => 'Foto';

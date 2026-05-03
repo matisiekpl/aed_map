@@ -8,6 +8,7 @@ import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/screens/photo/photo_confirmation_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:heif_converter/heif_converter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -60,7 +61,13 @@ Future<void> pickAndProceed(BuildContext context, Defibrillator defibrillator,
       path = converted;
     }
   }
-  var file = File(path);
+  final compressed = await FlutterImageCompress.compressAndGetFile(
+    path,
+    '${path}_compressed.jpg',
+    quality: 75,
+    format: CompressFormat.jpeg,
+  );
+  var file = compressed != null ? File(compressed.path) : File(path);
   var editCubit = context.read<EditCubit>();
   var unsafe = await editCubit.isPhotoUnsafe(file);
 

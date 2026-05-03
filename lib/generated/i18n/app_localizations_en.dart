@@ -399,7 +399,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addPhoto => 'Add photo';
 
   @override
-  String get changePhoto => 'Change photo';
+  String get changePhoto => 'Set photo';
 
   @override
   String get photo => 'Photo';

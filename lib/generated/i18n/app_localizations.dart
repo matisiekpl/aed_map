@@ -835,7 +835,7 @@ abstract class AppLocalizations {
   /// No description provided for @changePhoto.
   ///
   /// In en, this message translates to:
-  /// **'Change photo'**
+  /// **'Set photo'**
   String get changePhoto;
 
   /// No description provided for @photo.
