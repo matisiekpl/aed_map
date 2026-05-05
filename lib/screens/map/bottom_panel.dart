@@ -454,7 +454,7 @@ class BottomPanel extends StatelessWidget {
                                       state.selected.photoId!),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.4),
+                                      color: Colors.black.withValues(alpha: 0.4),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     padding: const EdgeInsets.all(6),
