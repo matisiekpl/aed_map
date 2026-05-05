@@ -109,12 +109,14 @@ class EditInProgress extends EditState {
     this.indoor = 'no',
     this.access = 'public',
     this.description = '',
+    this.originalImage = '',
   });
 
   final Defibrillator defibrillator;
   final String indoor;
   final String access;
   final String description;
+  final String? originalImage;
 
   @override
   List<Object?> get props => [
@@ -125,6 +127,7 @@ class EditInProgress extends EditState {
         defibrillator.indoor,
         defibrillator,
         description,
+        originalImage,
         pendingChanges,
         errorMessage,
         photoStatus,
@@ -140,6 +143,7 @@ class EditInProgress extends EditState {
     String? indoor,
     String? access,
     String? description,
+    String? originalImage,
     User? user,
     List<PendingChange>? pendingChanges,
     String? errorMessage,
@@ -154,6 +158,7 @@ class EditInProgress extends EditState {
       indoor: indoor ?? this.indoor,
       access: access ?? this.access,
       description: description ?? this.description,
+      originalImage: originalImage ?? this.originalImage,
       user: user ?? this.user,
       pendingChanges: pendingChanges ?? this.pendingChanges,
       errorMessage: errorMessage,

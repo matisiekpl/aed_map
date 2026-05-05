@@ -838,6 +838,30 @@ abstract class AppLocalizations {
   /// **'Set photo'**
   String get changePhoto;
 
+  /// No description provided for @removePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get removePhoto;
+
+  /// No description provided for @photoWillBeRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo will be removed'**
+  String get photoWillBeRemoved;
+
+  /// No description provided for @photoWillBeRemovedAfterSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo will be removed after saving'**
+  String get photoWillBeRemovedAfterSave;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
   /// No description provided for @photo.
   ///
   /// In en, this message translates to:

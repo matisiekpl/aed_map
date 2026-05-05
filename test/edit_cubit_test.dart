@@ -146,5 +146,36 @@ void main() {
       expect((editCubit.state as EditInProgress).defibrillator.access, 'test_access');
       expect((editCubit.state as EditInProgress).access, 'test_access');
     });
+
+    test('removePhoto', () async {
+      await editCubit.enter();
+      await editCubit.edit(Defibrillator(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: 'no',
+          access: 'yes',
+          image: 'https://example.com/photo.jpg'));
+      editCubit.removePhoto();
+      expect(editCubit.state, isA<EditInProgress>());
+      expect((editCubit.state as EditInProgress).defibrillator.image, '');
+      expect((editCubit.state as EditInProgress).pendingChanges, isEmpty);
+    });
+
+    test('restorePhoto', () async {
+      await editCubit.enter();
+      await editCubit.edit(Defibrillator(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: 'no',
+          access: 'yes',
+          image: 'https://example.com/photo.jpg'));
+      editCubit.removePhoto();
+      editCubit.restorePhoto();
+      expect(editCubit.state, isA<EditInProgress>());
+      expect((editCubit.state as EditInProgress).defibrillator.image,
+          'https://example.com/photo.jpg');
+    });
   });
 }

@@ -80,6 +80,7 @@ class EditCubit extends Cubit<EditState> {
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
         description: defibrillator.description ?? '',
+        originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
 
@@ -97,6 +98,7 @@ class EditCubit extends Cubit<EditState> {
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
         description: defibrillator.description ?? '',
+        originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
 
@@ -146,6 +148,22 @@ class EditCubit extends Cubit<EditState> {
     if (s is EditInProgress) {
       s.defibrillator.access = value;
       emit(s.copyWith(defibrillator: s.defibrillator, access: value));
+    }
+  }
+
+  void removePhoto() {
+    var s = state;
+    if (s is EditInProgress) {
+      emit(s.copyWith(defibrillator: s.defibrillator.copyWith(image: '')));
+    }
+  }
+
+  void restorePhoto() {
+    var s = state;
+    if (s is EditInProgress) {
+      emit(s.copyWith(
+          defibrillator:
+              s.defibrillator.copyWith(image: s.originalImage ?? '')));
     }
   }
 
