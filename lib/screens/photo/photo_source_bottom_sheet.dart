@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
+import 'package:aed_map/constants.dart';
+import 'package:aed_map/main.dart';
 import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/screens/photo/photo_confirmation_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +18,7 @@ import '../../generated/i18n/app_localizations.dart';
 
 Future<void> showPhotoSourceSheet(
     BuildContext context, Defibrillator defibrillator) async {
+  mixpanel.track(photoSelectorOpenedEvent);
   var appLocalizations = AppLocalizations.of(context)!;
   await showCupertinoModalPopup(
     context: context,
@@ -52,6 +55,9 @@ Future<void> pickAndProceed(BuildContext context, Defibrillator defibrillator,
   var appLocalizations = AppLocalizations.of(context)!;
   var picked = await ImagePicker().pickImage(source: source);
   if (picked == null) return;
+  mixpanel.track(photoSelectedEvent, properties: {
+    'source': source == ImageSource.gallery ? 'gallery' : 'camera',
+  });
 
   var path = picked.path;
   final lower = path.toLowerCase();
@@ -72,6 +78,7 @@ Future<void> pickAndProceed(BuildContext context, Defibrillator defibrillator,
   var unsafe = await editCubit.isPhotoUnsafe(file);
 
   if (unsafe) {
+    mixpanel.track(photoNsfwBlockedEvent);
     await showCupertinoDialog(
       context: context,
       builder: (dialogContext) => CupertinoAlertDialog(
@@ -88,6 +95,7 @@ Future<void> pickAndProceed(BuildContext context, Defibrillator defibrillator,
     return;
   }
 
+  mixpanel.track(photoConfirmationEvent);
   var pointsCubit = context.read<PointsCubit>();
   await Navigator.of(context).push(
     CupertinoPageRoute(

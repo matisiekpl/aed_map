@@ -204,7 +204,8 @@ class Defibrillator {
       'aed_phone': phone,
       'aed_distance': distance,
       'aed_opening_hours': openingHours,
-      'aed_access': access
+      'aed_access': access,
+      'aed_image': image
     };
   }
 }
