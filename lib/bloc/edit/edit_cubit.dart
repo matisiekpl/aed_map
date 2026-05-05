@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:nsfw_detector_flutter/nsfw_detector_flutter.dart';
 
 class EditCubit extends Cubit<EditState> {
   EditCubit({
@@ -79,6 +80,7 @@ class EditCubit extends Cubit<EditState> {
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
         description: defibrillator.description ?? '',
+        originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
 
@@ -96,6 +98,7 @@ class EditCubit extends Cubit<EditState> {
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
         description: defibrillator.description ?? '',
+        originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
 
@@ -145,6 +148,22 @@ class EditCubit extends Cubit<EditState> {
     if (s is EditInProgress) {
       s.defibrillator.access = value;
       emit(s.copyWith(defibrillator: s.defibrillator, access: value));
+    }
+  }
+
+  void removePhoto() {
+    var s = state;
+    if (s is EditInProgress) {
+      emit(s.copyWith(defibrillator: s.defibrillator.copyWith(image: '')));
+    }
+  }
+
+  void restorePhoto() {
+    var s = state;
+    if (s is EditInProgress) {
+      emit(s.copyWith(
+          defibrillator:
+              s.defibrillator.copyWith(image: s.originalImage ?? '')));
     }
   }
 
@@ -242,6 +261,81 @@ class EditCubit extends Cubit<EditState> {
       default:
         return 'osmErrorGeneric:${exception.statusCode}:${exception.body}';
     }
+  }
+
+  Future<bool> isPhotoUnsafe(File file) async {
+    try {
+      var result = await NsfwDetector.instance.detectNSFWFromFile(file);
+      return result?.isNsfw ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> submitPhoto(Defibrillator defibrillator, File file) async {
+    emit(state.copyWith(photoStatus: PhotoStatus.uploading));
+    try {
+      var authenticated = await pointsRepository.authenticate();
+      if (!authenticated) {
+        emit(state.copyWith(
+            photoStatus: PhotoStatus.uploadFailure,
+            photoErrorMessage: 'Authentication failed'));
+        return;
+      }
+      final photoBytes = await file.readAsBytes();
+      await pointsRepository.uploadPhoto(
+          nodeId: defibrillator.id, file: file);
+      final imageUrl =
+          await pointsRepository.getBackendImageUrl(defibrillator.id);
+      final updated = defibrillator.copyWith(
+          image: (imageUrl != null && imageUrl.isNotEmpty)
+              ? imageUrl
+              : defibrillator.image,
+          photoBytes: photoBytes);
+      await pendingChangesRepository.register(PendingChange(
+        type: PendingChangeType.edit,
+        defibrillatorId: updated.id,
+        snapshot: updated.copyWith(),
+        createdAt: DateTime.now(),
+      ));
+      final updatedPendingChanges = await pendingChangesRepository.fetch();
+      analytics.event(name: photoUploadEvent);
+      if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+        mixpanel.track(photoUploadEvent,
+            properties: updated.getEventProperties());
+      }
+      emit(state.copyWith(
+          pendingChanges: updatedPendingChanges,
+          photoStatus: PhotoStatus.uploadSuccess,
+          photoUpdatedDefibrillator: updated));
+    } catch (error) {
+      emit(state.copyWith(
+          photoStatus: PhotoStatus.uploadFailure,
+          photoErrorMessage: error.toString()));
+    }
+  }
+
+  Future<void> reportPhoto(Defibrillator defibrillator, String photoId) async {
+    emit(state.copyWith(photoStatus: PhotoStatus.reporting));
+    try {
+      await pointsRepository.reportPhoto(photoId);
+      analytics.event(name: photoReportEvent);
+      if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+        mixpanel.track(photoReportEvent, properties: {
+          ...defibrillator.getEventProperties(),
+          'aed_photo_id': photoId,
+        });
+      }
+      emit(state.copyWith(photoStatus: PhotoStatus.reportSuccess));
+    } catch (error) {
+      emit(state.copyWith(
+          photoStatus: PhotoStatus.reportFailure,
+          photoErrorMessage: error.toString()));
+    }
+  }
+
+  void resetPhotoStatus() {
+    emit(state.copyWith(photoStatus: PhotoStatus.idle));
   }
 
   void maybeRequestReview() {

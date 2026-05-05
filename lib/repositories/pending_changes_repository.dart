@@ -26,13 +26,19 @@ class PendingChangesRepository {
     final freshIds = freshDataset.map((defibrillator) => defibrillator.id).toSet();
     final freshById = {for (final defibrillator in freshDataset) defibrillator.id: defibrillator};
 
+    final now = DateTime.now();
     changes.removeWhere((change) {
+      if (now.difference(change.createdAt).inHours >= 24) return true;
       switch (change.type) {
         case PendingChangeType.add:
           return freshIds.contains(change.defibrillatorId);
         case PendingChangeType.edit:
           final freshDefibrillator = freshById[change.defibrillatorId];
           if (freshDefibrillator == null) return false;
+          if (change.snapshot.photoBytes != null) {
+            final freshImage = freshDefibrillator.image;
+            return freshImage != null && freshImage.isNotEmpty;
+          }
           return Defibrillator.tagsEqual(change.snapshot, freshDefibrillator);
         case PendingChangeType.delete:
           return !freshIds.contains(change.defibrillatorId);

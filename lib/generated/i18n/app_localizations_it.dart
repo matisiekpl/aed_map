@@ -397,4 +397,62 @@ class AppLocalizationsIt extends AppLocalizations {
   String osmErrorGeneric(int code) {
     return 'Impossibile salvare le modifiche (HTTP $code)';
   }
+
+  @override
+  String get addPhoto => 'Aggiungi foto';
+
+  @override
+  String get changePhoto => 'Imposta foto';
+
+  @override
+  String get removePhoto => 'Rimuovi foto';
+
+  @override
+  String get photoWillBeRemoved => 'La foto verrà rimossa';
+
+  @override
+  String get photoWillBeRemovedAfterSave =>
+      'La foto verrà rimossa dopo il salvataggio';
+
+  @override
+  String get undo => 'Annulla';
+
+  @override
+  String get photo => 'Foto';
+
+  @override
+  String get chooseFromGallery => 'Scegli dalla galleria';
+
+  @override
+  String get takePhoto => 'Scatta una foto';
+
+  @override
+  String get photoLicenseInfo =>
+      'Tutte le foto AED sono ospitate da OpenStreetMap Polska e sono concesse in licenza Creative Commons Zero (CC0 v1.0). Caricando una foto, accetti i termini di questa licenza.\n\nIn breve, ciò significa che le foto possono essere utilizzate da chiunque per qualsiasi scopo. L\'attribuzione non è richiesta.';
+
+  @override
+  String get photoLicenseLink => 'Creative Commons Zero (CC0 v1.0)';
+
+  @override
+  String get nsfwBlockedTitle => 'Foto rifiutata';
+
+  @override
+  String get nsfwBlockedMessage =>
+      'Questa foto non può essere aggiunta perché è stata rilevata come inappropriata.';
+
+  @override
+  String get reportPhoto => 'Segnala foto';
+
+  @override
+  String get reportPhotoConfirm =>
+      'Sei sicuro di voler segnalare questa foto come inappropriata?';
+
+  @override
+  String get photoReported => 'La foto è stata segnalata';
+
+  @override
+  String get photoUploaded => 'Foto salvata con successo';
+
+  @override
+  String get photoUploadFailed => 'Impossibile caricare la foto';
 }

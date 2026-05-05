@@ -14,6 +14,7 @@ import '../../bloc/points/points_cubit.dart';
 import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
 import '../../shared/utils.dart';
+import '../photo/photo_source_bottom_sheet.dart';
 import 'opening_hours_editor.dart';
 
 class EditForm extends StatelessWidget {
@@ -98,6 +99,11 @@ class EditForm extends StatelessWidget {
   List<AbstractSettingsSection> buildSections(
       BuildContext context, EditInProgress state, bool isUserCreated) {
     var appLocalizations = AppLocalizations.of(context)!;
+    final hasPhoto = (state.defibrillator.image ?? '').isNotEmpty;
+    final hadPhoto = (state.originalImage ?? '').isNotEmpty;
+    final photoMarkedForRemoval = hadPhoto && !hasPhoto;
+    final destructiveColor = CupertinoColors.systemRed.resolveFrom(context);
+    final undoColor = CupertinoColors.systemOrange.resolveFrom(context);
     return [
       SettingsSection(
         title: Text(appLocalizations.information),
@@ -151,6 +157,51 @@ class EditForm extends StatelessWidget {
             onPressed: (tileContext) => openOpeningHoursEditor(
                 tileContext, state.defibrillator.openingHours),
           ),
+        ],
+      ),
+      SettingsSection(
+        title: Text(appLocalizations.photo),
+        tiles: [
+          SettingsTile.navigation(
+            leading: Icon(
+              photoMarkedForRemoval
+                  ? CupertinoIcons.info_circle
+                  : CupertinoIcons.camera,
+              color: photoMarkedForRemoval ? destructiveColor : null,
+            ),
+            title: Text(
+              photoMarkedForRemoval
+                  ? appLocalizations.photoWillBeRemoved
+                  : appLocalizations.changePhoto,
+              style: photoMarkedForRemoval
+                  ? TextStyle(color: destructiveColor)
+                  : null,
+            ),
+            onPressed: photoMarkedForRemoval
+                ? null
+                : (tileContext) =>
+                    showPhotoSourceSheet(tileContext, state.defibrillator),
+          ),
+          if (hasPhoto)
+            SettingsTile.navigation(
+              leading: Icon(CupertinoIcons.trash, color: destructiveColor),
+              title: Text(
+                appLocalizations.removePhoto,
+                style: TextStyle(color: destructiveColor),
+              ),
+              onPressed: (_) => context.read<EditCubit>().removePhoto(),
+            ),
+          if (photoMarkedForRemoval)
+            SettingsTile.navigation(
+              leading:
+                  Icon(CupertinoIcons.arrow_counterclockwise, color: undoColor),
+              title: Text(
+                appLocalizations.undo,
+                style: TextStyle(color: undoColor),
+              ),
+              description: Text(appLocalizations.photoWillBeRemovedAfterSave),
+              onPressed: (_) => context.read<EditCubit>().restorePhoto(),
+            ),
         ],
       ),
       SettingsSection(

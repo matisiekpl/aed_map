@@ -127,8 +127,6 @@ class PointsCubit extends Cubit<PointsState> {
       emit((state as PointsLoadSuccess)
           .copyWith(selected: defibrillator, hash: generateRandomString(32)));
     }
-
-    loadImage();
   }
 
   void update(Defibrillator defibrillator) {
@@ -197,12 +195,4 @@ class PointsCubit extends Cubit<PointsState> {
         .toList();
   }
 
-  Future<void> loadImage() async {
-    var state = this.state;
-    if (state is PointsLoadSuccess) {
-      var url = await pointsRepository.getImage(state.selected);
-      var defibrillator = state.selected.copyWith(image: url);
-      emit(state.copyWith(selected: defibrillator, hash: generateRandomString(32)));
-    }
-  }
 }

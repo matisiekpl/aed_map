@@ -1,1 +1,1 @@
-Added editing of opening hours
+Added support for uploading photos.

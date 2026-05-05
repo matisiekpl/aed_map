@@ -14,6 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:xml/xml.dart';
 
 import '../models/user.dart';
@@ -98,7 +99,8 @@ class PointsRepository {
           operator: row['properties']['operator'],
           phone: row['properties']['phone'],
           openingHours: row['properties']['opening_hours'],
-          access: row['properties']['access']));
+          access: row['properties']['access'],
+          image: row['properties']['image']));
     });
     print('Loaded ${defibrillators.length} defibrillators!');
     defibrillators = defibrillators.map((defibrillator) {
@@ -279,18 +281,59 @@ class PointsRepository {
     return defibrillator;
   }
 
-  Future<String?> getImage(Defibrillator defibrillator) async {
-    try {
-      var response = await http.get(Uri.parse(
-          'https://back.openaedmap.org/api/v1/node/${defibrillator.id}'));
-      var result = jsonDecode(response.body);
-      if (result['elements'][0]['@photo_url'].toString().length > 10) {
-        return 'https://back.openaedmap.org${result['elements'][0]['@photo_url']}';
-      }
-      return null;
-    } catch (err) {
-      return null;
+  Future<void> uploadPhoto(
+      {required int nodeId, required File file}) async {
+    if (token == null) {
+      throw Exception('Not authenticated');
     }
+    var uri = Uri.parse('https://back.openaedmap.org/api/v1/photos/upload');
+    var request = http.MultipartRequest('POST', uri);
+    request.fields['node_id'] = nodeId.toString();
+    request.fields['file_license'] = 'CC0';
+    request.fields['oauth2_credentials'] = json.encode({
+      'access_token': token,
+      'token_type': 'Bearer',
+      'scope': 'read_prefs',
+    });
+    final bytes = await file.readAsBytes();
+    request.files.add(http.MultipartFile.fromBytes(
+      'file',
+      bytes,
+      filename: 'photo.jpg',
+      contentType: MediaType('application', 'octet-stream'),
+    ));
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+    print('Photo upload response [${response.statusCode}]: ${response.body}');
+    if (response.statusCode != 200) {
+      throw OsmApiException(response.statusCode, response.body);
+    }
+  }
+
+  Future<void> reportPhoto(String photoId) async {
+    var response = await http.post(
+        Uri.parse('https://back.openaedmap.org/api/v1/photos/report'),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: 'id=${Uri.encodeComponent(photoId)}');
+    if (response.statusCode != 200) {
+      throw OsmApiException(response.statusCode, response.body);
+    }
+  }
+
+  Future<String?> getBackendImageUrl(int nodeId) async {
+    try {
+      var response = await http.get(
+          Uri.parse('https://back.openaedmap.org/api/v1/node/$nodeId'));
+      var payload = json.decode(response.body);
+      if ((payload['elements'] as List<dynamic>).isNotEmpty) {
+        var element = payload['elements'][0] as Map<String, dynamic>;
+        var tags = element['tags'] as Map<String, dynamic>?;
+        return tags?['image'] as String?;
+      }
+    } catch (_) {}
+    return null;
   }
 
   Future<Defibrillator?> getNode(int id) async {
@@ -310,6 +353,7 @@ class PointsRepository {
           openingHours: tags['opening_hours'],
           operator: tags['operator'],
           phone: tags['phone'],
+          image: tags['image'],
         );
       }
     } catch (_) {}

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:aed_map/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
@@ -16,6 +18,7 @@ class Defibrillator {
   String? openingHours;
   String? access;
   String? image;
+  Uint8List? photoBytes;
 
   Defibrillator(
       {required this.location,
@@ -26,7 +29,25 @@ class Defibrillator {
       this.phone,
       this.openingHours,
       this.image = '',
-      this.access = 'yes'});
+      this.access = 'yes',
+      List<int>? photoBytes})
+      : photoBytes = photoBytes != null ? Uint8List.fromList(photoBytes) : null;
+
+  String? get photoId {
+    final url = image;
+    if (url == null || url.isEmpty) return null;
+    try {
+      final segments = Uri.parse(url).pathSegments;
+      if (segments.isEmpty) return null;
+      final filename = segments.last;
+      if (filename.isEmpty) return null;
+      final dot = filename.lastIndexOf('.');
+      if (dot <= 0) return filename;
+      return filename.substring(0, dot);
+    } catch (_) {
+      return null;
+    }
+  }
 
   String? getAccessComment(AppLocalizations appLocalizations) {
     return translateAccessComment(access, appLocalizations);
@@ -144,6 +165,7 @@ class Defibrillator {
     String? openingHours,
     String? access,
     String? image,
+    Uint8List? photoBytes,
     Map? colors,
     Map? filenames,
   }) {
@@ -157,6 +179,7 @@ class Defibrillator {
       openingHours: openingHours ?? this.openingHours,
       access: access ?? this.access,
       image: image ?? this.image,
+      photoBytes: photoBytes ?? this.photoBytes,
     );
   }
 
@@ -166,7 +189,8 @@ class Defibrillator {
         a.operator == b.operator &&
         a.phone == b.phone &&
         a.openingHours == b.openingHours &&
-        a.access == b.access;
+        a.access == b.access &&
+        a.image == b.image;
   }
 
   Map<String, dynamic> getEventProperties() {
@@ -180,7 +204,8 @@ class Defibrillator {
       'aed_phone': phone,
       'aed_distance': distance,
       'aed_opening_hours': openingHours,
-      'aed_access': access
+      'aed_access': access,
+      'aed_image': image
     };
   }
 }

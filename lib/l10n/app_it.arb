@@ -162,5 +162,23 @@
         "example": "500"
       }
     }
-  }
+  },
+  "addPhoto": "Aggiungi foto",
+  "changePhoto": "Imposta foto",
+  "removePhoto": "Rimuovi foto",
+  "photoWillBeRemoved": "La foto verrà rimossa",
+  "photoWillBeRemovedAfterSave": "La foto verrà rimossa dopo il salvataggio",
+  "undo": "Annulla",
+  "photo": "Foto",
+  "chooseFromGallery": "Scegli dalla galleria",
+  "takePhoto": "Scatta una foto",
+  "photoLicenseInfo": "Tutte le foto AED sono ospitate da OpenStreetMap Polska e sono concesse in licenza Creative Commons Zero (CC0 v1.0). Caricando una foto, accetti i termini di questa licenza.\n\nIn breve, ciò significa che le foto possono essere utilizzate da chiunque per qualsiasi scopo. L'attribuzione non è richiesta.",
+  "photoLicenseLink": "Creative Commons Zero (CC0 v1.0)",
+  "nsfwBlockedTitle": "Foto rifiutata",
+  "nsfwBlockedMessage": "Questa foto non può essere aggiunta perché è stata rilevata come inappropriata.",
+  "reportPhoto": "Segnala foto",
+  "reportPhotoConfirm": "Sei sicuro di voler segnalare questa foto come inappropriata?",
+  "photoReported": "La foto è stata segnalata",
+  "photoUploaded": "Foto salvata con successo",
+  "photoUploadFailed": "Impossibile caricare la foto"
 }

@@ -165,5 +165,23 @@
         "example": "500"
       }
     }
-  }
+  },
+  "addPhoto": "Dodaj zdjęcie",
+  "changePhoto": "Ustaw zdjęcie",
+  "removePhoto": "Usuń zdjęcie",
+  "photoWillBeRemoved": "Zdjęcie zostanie usunięte",
+  "photoWillBeRemovedAfterSave": "Zdjęcie zostanie usunięte po zapisaniu",
+  "undo": "Cofnij",
+  "photo": "Zdjęcie",
+  "chooseFromGallery": "Wybierz z galerii",
+  "takePhoto": "Zrób zdjęcie",
+  "photoLicenseInfo": "Wszystkie zdjęcia AED są hostowane przez OpenStreetMap Polska i są na licencji Creative Commons Zero (CC0 v1.0). Wysyłając zdjęcie zgadzasz się na warunki tej licencji.\n\nW skrócie oznacza to, że zdjęcia mogą być potem wykorzystane przez kogokolwiek w dowolnym celu. Nie jest konieczne wskazanie autora.",
+  "photoLicenseLink": "Creative Commons Zero (CC0 v1.0)",
+  "nsfwBlockedTitle": "Zdjęcie odrzucone",
+  "nsfwBlockedMessage": "To zdjęcie nie może być dodane, ponieważ zostało uznane za nieodpowiednie.",
+  "reportPhoto": "Zgłoś zdjęcie",
+  "reportPhotoConfirm": "Czy na pewno chcesz zgłosić to zdjęcie jako nieodpowiednie?",
+  "photoReported": "Zdjęcie zostało zgłoszone",
+  "photoUploaded": "Zdjęcie zostało zapisane",
+  "photoUploadFailed": "Nie udało się przesłać zdjęcia"
 }

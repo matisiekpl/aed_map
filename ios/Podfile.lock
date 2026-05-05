@@ -61,6 +61,11 @@ PODS:
   - Flutter (1.0.0)
   - flutter_compass (0.0.1):
     - Flutter
+  - flutter_image_compress_common (1.0.0):
+    - Flutter
+    - Mantle
+    - SDWebImage
+    - SDWebImageWebPCoder
   - flutter_keyboard_visibility_temp_fork (0.0.1):
     - Flutter
   - flutter_web_auth_2 (5.0.0):
@@ -122,6 +127,8 @@ PODS:
   - GoogleUtilities/UserDefaults (8.1.0):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
+  - heif_converter (1.0.2):
+    - Flutter
   - image_picker_ios (0.0.1):
     - Flutter
   - in_app_review (2.0.0):
@@ -131,6 +138,21 @@ PODS:
   - json-enum (1.2.3)
   - jsonlogic (1.2.4):
     - json-enum (~> 1.2.3)
+  - libwebp (1.5.0):
+    - libwebp/demux (= 1.5.0)
+    - libwebp/mux (= 1.5.0)
+    - libwebp/sharpyuv (= 1.5.0)
+    - libwebp/webp (= 1.5.0)
+  - libwebp/demux (1.5.0):
+    - libwebp/webp
+  - libwebp/mux (1.5.0):
+    - libwebp/demux
+  - libwebp/sharpyuv (1.5.0)
+  - libwebp/webp (1.5.0):
+    - libwebp/sharpyuv
+  - Mantle (2.2.0):
+    - Mantle/extobjc (= 2.2.0)
+  - Mantle/extobjc (2.2.0)
   - maps_launcher (0.0.1):
     - Flutter
   - Mixpanel-swift (6.2.0):
@@ -152,6 +174,12 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.4.0)
+  - SDWebImage (5.21.7):
+    - SDWebImage/Core (= 5.21.7)
+  - SDWebImage/Core (5.21.7)
+  - SDWebImageWebPCoder (0.15.0):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.17)
   - Sentry/HybridSDK (8.58.1)
   - sentry_flutter (9.17.0):
     - Flutter
@@ -163,6 +191,28 @@ PODS:
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
+  - TensorFlowLiteC (2.12.0):
+    - TensorFlowLiteC/Core (= 2.12.0)
+  - TensorFlowLiteC/Core (2.12.0)
+  - TensorFlowLiteC/CoreML (2.12.0):
+    - TensorFlowLiteC/Core
+  - TensorFlowLiteC/Metal (2.12.0):
+    - TensorFlowLiteC/Core
+  - TensorFlowLiteSwift (2.12.0):
+    - TensorFlowLiteSwift/Core (= 2.12.0)
+  - TensorFlowLiteSwift/Core (2.12.0):
+    - TensorFlowLiteC (= 2.12.0)
+  - TensorFlowLiteSwift/CoreML (2.12.0):
+    - TensorFlowLiteC/CoreML (= 2.12.0)
+    - TensorFlowLiteSwift/Core (= 2.12.0)
+  - TensorFlowLiteSwift/Metal (2.12.0):
+    - TensorFlowLiteC/Metal (= 2.12.0)
+    - TensorFlowLiteSwift/Core (= 2.12.0)
+  - tflite_flutter (0.0.1):
+    - Flutter
+    - TensorFlowLiteSwift (= 2.12.0)
+    - TensorFlowLiteSwift/CoreML (= 2.12.0)
+    - TensorFlowLiteSwift/Metal (= 2.12.0)
   - url_launcher_ios (0.0.1):
     - Flutter
 
@@ -173,9 +223,11 @@ DEPENDENCIES:
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - Flutter (from `Flutter`)
   - flutter_compass (from `.symlinks/plugins/flutter_compass/ios`)
+  - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
   - flutter_keyboard_visibility_temp_fork (from `.symlinks/plugins/flutter_keyboard_visibility_temp_fork/ios`)
   - flutter_web_auth_2 (from `.symlinks/plugins/flutter_web_auth_2/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/darwin`)
+  - heif_converter (from `.symlinks/plugins/heif_converter/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
@@ -186,6 +238,7 @@ DEPENDENCIES:
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
+  - tflite_flutter (from `.symlinks/plugins/tflite_flutter/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
@@ -204,10 +257,16 @@ SPEC REPOS:
     - GoogleUtilities
     - json-enum
     - jsonlogic
+    - libwebp
+    - Mantle
     - Mixpanel-swift
     - nanopb
     - PromisesObjC
+    - SDWebImage
+    - SDWebImageWebPCoder
     - Sentry
+    - TensorFlowLiteC
+    - TensorFlowLiteSwift
 
 EXTERNAL SOURCES:
   connectivity_plus:
@@ -222,12 +281,16 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_compass:
     :path: ".symlinks/plugins/flutter_compass/ios"
+  flutter_image_compress_common:
+    :path: ".symlinks/plugins/flutter_image_compress_common/ios"
   flutter_keyboard_visibility_temp_fork:
     :path: ".symlinks/plugins/flutter_keyboard_visibility_temp_fork/ios"
   flutter_web_auth_2:
     :path: ".symlinks/plugins/flutter_web_auth_2/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/darwin"
+  heif_converter:
+    :path: ".symlinks/plugins/heif_converter/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   in_app_review:
@@ -248,6 +311,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite_darwin:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
+  tflite_flutter:
+    :path: ".symlinks/plugins/tflite_flutter/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
@@ -267,17 +332,21 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: bccaff90721d14bafc14be34f28b77fdd7c91dc9
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_compass: b236ab69b61545cce89fd58527f401a7587d5cc1
+  flutter_image_compress_common: 1697a328fd72bfb335507c6bca1a65fa5ad87df1
   flutter_keyboard_visibility_temp_fork: 95b2d534bacf6ac62e7fcbe5c2a9e2c2a17ce06f
   flutter_web_auth_2: 646fc9df97a01c59e5eea99b237da2c6360f8439
   geolocator_apple: ab36aa0e8b7d7a2d7639b3b4e48308394e8cef5e
   GoogleAdsOnDeviceConversion: 02fc8fe599acd867e328321effb0d9b2d023a38a
   GoogleAppMeasurement: 3b4687de50ab25ee2d4d541849f10ca8df862a12
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
+  heif_converter: 5087f3c01bcc9c38b24084cd3700cc6064274672
   image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
   in_app_review: 7dd1ea365263f834b8464673f9df72c80c17c937
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
   json-enum: 57ad746d2f0d7852796e9aa50267bd84a778222e
   jsonlogic: 006f892470384401b8ca5b5d8d4cdadb3a0d5c9b
+  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
+  Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   maps_launcher: edf829809ba9e894d70e569bab11c16352dedb45
   Mixpanel-swift: 9b4d920ceaf40f6145ca9fd84d4acca49df44a5e
   mixpanel_flutter: d61b2d8480daea10afe0c8ec438d88bbe978b713
@@ -285,10 +354,15 @@ SPEC CHECKSUMS:
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
+  SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   Sentry: 958d9619ceccf6abb8c4736003fa336dac1a80a7
   sentry_flutter: b4ad2ac16ea7ad64fd5254c049a5fd5d06510283
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
+  TensorFlowLiteC: 20785a69299185a379ba9852b6625f00afd7984a
+  TensorFlowLiteSwift: 3a4928286e9e35bdd3e17970f48e53c80d25e793
+  tflite_flutter: 64b192e11352fe36943ab6656e1d49207f1a5595
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
 
 PODFILE CHECKSUM: d636971c0395b4869ef5655cb3deda6ce66668db

@@ -4,15 +4,37 @@ import 'package:aed_map/models/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
 
+enum PhotoStatus {
+  idle,
+  uploading,
+  uploadSuccess,
+  uploadFailure,
+  reporting,
+  reportSuccess,
+  reportFailure,
+}
+
 abstract class EditState extends Equatable {
   final bool enabled;
   final LatLng cursor;
   final User? user;
   final List<PendingChange> pendingChanges;
   final String? errorMessage;
+  final PhotoStatus photoStatus;
+  final String? photoErrorMessage;
+  final Defibrillator? photoUpdatedDefibrillator;
 
   @override
-  List<Object?> get props => [enabled, cursor, user, pendingChanges, errorMessage];
+  List<Object?> get props => [
+        enabled,
+        cursor,
+        user,
+        pendingChanges,
+        errorMessage,
+        photoStatus,
+        photoErrorMessage,
+        photoUpdatedDefibrillator,
+      ];
 
   const EditState({
     required this.enabled,
@@ -20,6 +42,9 @@ abstract class EditState extends Equatable {
     required this.user,
     required this.pendingChanges,
     this.errorMessage,
+    this.photoStatus = PhotoStatus.idle,
+    this.photoErrorMessage,
+    this.photoUpdatedDefibrillator,
   });
 
   EditState copyWith({
@@ -28,6 +53,9 @@ abstract class EditState extends Equatable {
     User? user,
     List<PendingChange>? pendingChanges,
     String? errorMessage,
+    PhotoStatus? photoStatus,
+    String? photoErrorMessage,
+    Defibrillator? photoUpdatedDefibrillator,
   });
 }
 
@@ -38,6 +66,9 @@ class EditReady extends EditState {
     super.user,
     super.pendingChanges = const [],
     super.errorMessage,
+    super.photoStatus,
+    super.photoErrorMessage,
+    super.photoUpdatedDefibrillator,
   });
 
   @override
@@ -47,6 +78,9 @@ class EditReady extends EditState {
     User? user,
     List<PendingChange>? pendingChanges,
     String? errorMessage,
+    PhotoStatus? photoStatus,
+    String? photoErrorMessage,
+    Defibrillator? photoUpdatedDefibrillator,
   }) {
     return EditReady(
       enabled: enabled ?? this.enabled,
@@ -54,6 +88,9 @@ class EditReady extends EditState {
       user: user ?? this.user,
       pendingChanges: pendingChanges ?? this.pendingChanges,
       errorMessage: errorMessage,
+      photoStatus: photoStatus ?? this.photoStatus,
+      photoErrorMessage: photoErrorMessage,
+      photoUpdatedDefibrillator: photoUpdatedDefibrillator,
     );
   }
 }
@@ -66,15 +103,20 @@ class EditInProgress extends EditState {
     super.user,
     super.pendingChanges = const [],
     super.errorMessage,
+    super.photoStatus,
+    super.photoErrorMessage,
+    super.photoUpdatedDefibrillator,
     this.indoor = 'no',
     this.access = 'public',
     this.description = '',
+    this.originalImage = '',
   });
 
   final Defibrillator defibrillator;
   final String indoor;
   final String access;
   final String description;
+  final String? originalImage;
 
   @override
   List<Object?> get props => [
@@ -85,8 +127,12 @@ class EditInProgress extends EditState {
         defibrillator.indoor,
         defibrillator,
         description,
+        originalImage,
         pendingChanges,
         errorMessage,
+        photoStatus,
+        photoErrorMessage,
+        photoUpdatedDefibrillator,
       ];
 
   @override
@@ -97,9 +143,13 @@ class EditInProgress extends EditState {
     String? indoor,
     String? access,
     String? description,
+    String? originalImage,
     User? user,
     List<PendingChange>? pendingChanges,
     String? errorMessage,
+    PhotoStatus? photoStatus,
+    String? photoErrorMessage,
+    Defibrillator? photoUpdatedDefibrillator,
   }) {
     return EditInProgress(
       defibrillator: defibrillator ?? this.defibrillator,
@@ -108,9 +158,13 @@ class EditInProgress extends EditState {
       indoor: indoor ?? this.indoor,
       access: access ?? this.access,
       description: description ?? this.description,
+      originalImage: originalImage ?? this.originalImage,
       user: user ?? this.user,
       pendingChanges: pendingChanges ?? this.pendingChanges,
       errorMessage: errorMessage,
+      photoStatus: photoStatus ?? this.photoStatus,
+      photoErrorMessage: photoErrorMessage,
+      photoUpdatedDefibrillator: photoUpdatedDefibrillator,
     );
   }
 }
