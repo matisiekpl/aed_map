@@ -1,1 +1,1 @@
-Se añadió soporte para subir fotos.
+Se ha optimizado el motor de visualización de mapas.

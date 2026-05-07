@@ -1,1 +1,1 @@
-Dodano obsługę przesyłania zdjęć.
+Zoptymalizowano silnik wizualizacji mapy

@@ -1,1 +1,1 @@
-Unterstützung für das Hochladen von Fotos hinzugefügt.
+Die Kartenvisualisierungs-Engine wurde optimiert.
