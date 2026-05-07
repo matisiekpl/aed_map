@@ -38,15 +38,8 @@ class PointsRepository {
     try {
       var response = await http.get(
           Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'));
-      final filePath = (await cacheFile).path;
-      final written = await compute(
-        writeDefibrillatorsInIsolate,
-        WriteDefibrillatorsArgs(
-          filePath: filePath,
-          bodyBytes: response.bodyBytes,
-        ),
-      );
-      if (written) {
+      if (utf8.decode(response.bodyBytes).isNotEmpty) {
+        await (await cacheFile).writeAsString(utf8.decode(response.bodyBytes));
         await prefs.setString(
             defibrillatorListUpdateTimestamp, DateTime.now().toIso8601String());
       }
@@ -83,8 +76,7 @@ class PointsRepository {
     updateDefibrillators();
     final filePath = (await cacheFile).path;
     print('Using file $filePath');
-    final (nearbyDefibrillators, defibrillatorsCount) = await compute(
-      parseDefibrillatorsInIsolate,
+    final (nearbyDefibrillators, defibrillatorsCount) = parseDefibrillators(
       ParseDefibrillatorsArgs(
         filePath: filePath,
         currentLocation: currentLocation,
@@ -405,27 +397,7 @@ class ParseDefibrillatorsArgs {
   });
 }
 
-class WriteDefibrillatorsArgs {
-  final String filePath;
-  final Uint8List bodyBytes;
-
-  WriteDefibrillatorsArgs({
-    required this.filePath,
-    required this.bodyBytes,
-  });
-}
-
-bool writeDefibrillatorsInIsolate(WriteDefibrillatorsArgs args) {
-  final decoded = utf8.decode(args.bodyBytes);
-  if (decoded.isEmpty) {
-    return false;
-  }
-  File(args.filePath).writeAsStringSync(decoded);
-  return true;
-}
-
-(List<Defibrillator>, int) parseDefibrillatorsInIsolate(
-    ParseDefibrillatorsArgs args) {
+(List<Defibrillator>, int) parseDefibrillators(ParseDefibrillatorsArgs args) {
   final contents = File(args.filePath).readAsStringSync();
   var idLabel = 'osm_id';
   if (contents.contains('@osm_id')) {
