@@ -49,7 +49,8 @@ class PointsRepository {
   }
 
   Future<void> loadLocalDefibrillators() async {
-    String data = await rootBundle.loadString("assets/world.geojson");
+    String data =
+        await rootBundle.loadString("assets/world.geojson", cache: false);
     data = data.replaceAll("@osm_id", "osm_id");
     await (await cacheFile).writeAsString(data);
   }
@@ -61,7 +62,8 @@ class PointsRepository {
     return DateTime.parse(value);
   }
 
-  Future<List<Defibrillator>> loadDefibrillators(LatLng currentLocation) async {
+  Future<(List<Defibrillator>, int)> loadDefibrillators(
+      LatLng currentLocation) async {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       await mixpanel.registerSuperProperties({
         "\$latitude": currentLocation.latitude,
@@ -110,7 +112,11 @@ class PointsRepository {
       return defibrillator;
     }).toList();
     defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
-    return defibrillators.toList();
+    final defibrillatorsCount = defibrillators.length;
+    return (
+      defibrillators.take(visiblePointsCount).toList(),
+      defibrillatorsCount
+    );
   }
 
   String? token;
@@ -254,14 +260,8 @@ class PointsRepository {
     var oldTags = document.findAllElements('tag');
     var oldTagsPairs = oldTags.map((tag) {
       return [
-        tag.attributes
-            .where((attr) => attr.name.toString() == 'k')
-            .first
-            .value,
-        tag.attributes
-            .where((attr) => attr.name.toString() == 'v')
-            .first
-            .value
+        tag.attributes.where((attr) => attr.name.toString() == 'k').first.value,
+        tag.attributes.where((attr) => attr.name.toString() == 'v').first.value
       ];
     }).toList();
     var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
@@ -269,10 +269,7 @@ class PointsRepository {
     var putResponse = await http.put(
         Uri.parse(
             'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
-        headers: {
-          'Content-Type': 'text/xml',
-          'Authorization': 'Bearer $token'
-        },
+        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
         body: xml);
     if (putResponse.statusCode != 200) {
       throw OsmApiException(putResponse.statusCode, putResponse.body);
@@ -281,8 +278,7 @@ class PointsRepository {
     return defibrillator;
   }
 
-  Future<void> uploadPhoto(
-      {required int nodeId, required File file}) async {
+  Future<void> uploadPhoto({required int nodeId, required File file}) async {
     if (token == null) {
       throw Exception('Not authenticated');
     }
@@ -324,8 +320,8 @@ class PointsRepository {
 
   Future<String?> getBackendImageUrl(int nodeId) async {
     try {
-      var response = await http.get(
-          Uri.parse('https://back.openaedmap.org/api/v1/node/$nodeId'));
+      var response = await http
+          .get(Uri.parse('https://back.openaedmap.org/api/v1/node/$nodeId'));
       var payload = json.decode(response.body);
       if ((payload['elements'] as List<dynamic>).isNotEmpty) {
         var element = payload['elements'][0] as Map<String, dynamic>;
@@ -410,10 +406,7 @@ class PointsRepository {
 
     var response = await http.delete(
         Uri.parse('https://api.openstreetmap.org/api/0.6/node/$nodeId'),
-        headers: {
-          'Content-Type': 'text/xml',
-          'Authorization': 'Bearer $token'
-        },
+        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
         body: deleteDocument.toXmlString());
 
     if (response.statusCode != 200) {

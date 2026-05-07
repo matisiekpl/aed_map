@@ -4,7 +4,7 @@ description: App showing available AEDs
 publish_to: "none"
 
 # Remember to run: node whatsNew.js
-version: 1.0.77+77
+version: 1.0.78+78
 
 environment:
   sdk: ^3.5.3

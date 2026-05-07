@@ -11,6 +11,7 @@ class PointsLoadInProgress extends PointsState {}
 
 class PointsLoadSuccess extends PointsState {
   final List<Defibrillator> defibrillators;
+  final int defibrillatorsCount;
   final Defibrillator selected;
   final List<Marker> markers;
   final String hash;
@@ -19,11 +20,20 @@ class PointsLoadSuccess extends PointsState {
   final Set<int> pendingIds;
 
   @override
-  List<Object?> get props =>
-      [defibrillators, selected, markers, hash, lastUpdateTime, refreshing, pendingIds];
+  List<Object?> get props => [
+        defibrillators,
+        defibrillatorsCount,
+        selected,
+        markers,
+        hash,
+        lastUpdateTime,
+        refreshing,
+        pendingIds
+      ];
 
   PointsLoadSuccess({
     required this.defibrillators,
+    required this.defibrillatorsCount,
     required this.selected,
     required this.markers,
     required this.hash,
@@ -34,6 +44,7 @@ class PointsLoadSuccess extends PointsState {
 
   PointsLoadSuccess copyWith({
     List<Defibrillator>? defibrillators,
+    int? defibrillatorsCount,
     Defibrillator? selected,
     List<Marker>? markers,
     String? hash,
@@ -43,6 +54,7 @@ class PointsLoadSuccess extends PointsState {
   }) {
     return PointsLoadSuccess(
       defibrillators: defibrillators ?? this.defibrillators,
+      defibrillatorsCount: defibrillatorsCount ?? this.defibrillatorsCount,
       selected: selected ?? this.selected,
       markers: markers ?? this.markers,
       hash: hash ?? this.hash,

@@ -7,6 +7,8 @@ final madrid = LatLng(40.416775, -3.703790);
 final paris = LatLng(48.864716, 2.349014);
 final rome = LatLng(41.902782, 12.496366);
 
+const visiblePointsCount = 500;
+
 const valhalla = 'https://sa.tt.com.pl/valhalla2Move/raw_route.php';
 const plausible = 'https://analytics.mateuszwozniak.com';
 const osmNodePrefix = 'https://www.openstreetmap.org/node/';

@@ -60,7 +60,7 @@ class _SettingsPageState extends State<SettingsPage>
                                 builder: (context, state) {
                               if (state is PointsLoadSuccess) {
                                 return Text(
-                                    state.defibrillators.length.toString());
+                                    state.defibrillatorsCount.toString());
                               }
                               return const Text('-');
                             }),
