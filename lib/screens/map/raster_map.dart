@@ -79,6 +79,9 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                           builder: (context, state) {
                         if (state is LocationDetermined) {
                           return BlocBuilder<PointsCubit, PointsState>(
+                              buildWhen: (previous, current) =>
+                                  previous is! PointsLoadSuccess &&
+                                  current is PointsLoadSuccess,
                               builder: (context, state) {
                             if (state is PointsLoadSuccess) {
                               return FlutterMap(
@@ -177,12 +180,20 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                     controller: markersController,
                                     minimumClusterSize: 3,
                                     onMarkerTap: (Marker marker) {
-                                      var defibrillator = state.defibrillators[int.parse(marker.key
-                                          .toString()
-                                          .replaceAll('[<\'', '')
-                                          .replaceAll('\'>]', ''))];
+                                      var pointsState =
+                                          context.read<PointsCubit>().state;
+                                      if (pointsState is! PointsLoadSuccess) {
+                                        return;
+                                      }
+                                      var defibrillator = pointsState
+                                          .defibrillators[int.parse(marker.key
+                                              .toString()
+                                              .replaceAll('[<\'', '')
+                                              .replaceAll('\'>]', ''))];
                                       context.read<RoutingCubit>().cancel();
-                                      context.read<PointsCubit>().select(defibrillator);
+                                      context
+                                          .read<PointsCubit>()
+                                          .select(defibrillator);
                                     },
                                     clusterWidgetSize: const Size(40, 40),
                                     calculateAggregatedClusterData: true,
