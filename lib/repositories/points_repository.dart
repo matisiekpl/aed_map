@@ -5,6 +5,7 @@ import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
 import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/models/osm_api_exception.dart';
+import 'package:aed_map/repositories/points_repository_isolates.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
@@ -38,8 +39,15 @@ class PointsRepository {
     try {
       var response = await http.get(
           Uri.parse('https://openaedmap.org/api/v1/countries/WORLD.geojson'));
-      if (utf8.decode(response.bodyBytes).isNotEmpty) {
-        await (await cacheFile).writeAsString(utf8.decode(response.bodyBytes));
+      final filePath = (await cacheFile).path;
+      final written = await compute(
+        writeDefibrillatorsInIsolate,
+        WriteDefibrillatorsArgs(
+          filePath: filePath,
+          bodyBytes: response.bodyBytes,
+        ),
+      );
+      if (written) {
         await prefs.setString(
             defibrillatorListUpdateTimestamp, DateTime.now().toIso8601String());
       }
@@ -70,47 +78,21 @@ class PointsRepository {
       mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
       mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
     }
-    List<Defibrillator> defibrillators = [];
     if (!(await (await cacheFile).exists())) {
       await loadLocalDefibrillators();
     }
     updateDefibrillators();
-    print('Using file ${(await cacheFile).path}');
-    var contents = await (await cacheFile).readAsString();
-    var idLabel = 'osm_id';
-    if (contents.contains('@osm_id')) {
-      idLabel = '@osm_id';
-    }
-
-    var jsonList = jsonDecode(contents)['features'];
-    jsonList.forEach((row) {
-      var id = row['properties'][idLabel];
-      var descriptions = Map.from(row['properties'])
-          .entries
-          .where((a) => a.key.startsWith('defibrillator:location'))
-          .toList();
-      descriptions.sort((a, b) => b.key.length - a.key.length);
-      defibrillators.add(Defibrillator(
-          location: LatLng(row['geometry']['coordinates'][1],
-              row['geometry']['coordinates'][0]),
-          id: id,
-          description: descriptions.firstOrNull?.value,
-          indoor: row['properties']['indoor'],
-          operator: row['properties']['operator'],
-          phone: row['properties']['phone'],
-          openingHours: row['properties']['opening_hours'],
-          access: row['properties']['access'],
-          image: row['properties']['image']));
-    });
+    final filePath = (await cacheFile).path;
+    print('Using file $filePath');
+    final defibrillators = await compute(
+      parseDefibrillatorsInIsolate,
+      ParseDefibrillatorsArgs(
+        filePath: filePath,
+        currentLocation: currentLocation,
+      ),
+    );
     print('Loaded ${defibrillators.length} defibrillators!');
-    defibrillators = defibrillators.map((defibrillator) {
-      const Distance distance = Distance(calculator: Haversine());
-      defibrillator.distance =
-          distance(currentLocation, defibrillator.location).ceil();
-      return defibrillator;
-    }).toList();
-    defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
-    return defibrillators.toList();
+    return defibrillators;
   }
 
   String? token;
@@ -254,14 +236,8 @@ class PointsRepository {
     var oldTags = document.findAllElements('tag');
     var oldTagsPairs = oldTags.map((tag) {
       return [
-        tag.attributes
-            .where((attr) => attr.name.toString() == 'k')
-            .first
-            .value,
-        tag.attributes
-            .where((attr) => attr.name.toString() == 'v')
-            .first
-            .value
+        tag.attributes.where((attr) => attr.name.toString() == 'k').first.value,
+        tag.attributes.where((attr) => attr.name.toString() == 'v').first.value
       ];
     }).toList();
     var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
@@ -269,10 +245,7 @@ class PointsRepository {
     var putResponse = await http.put(
         Uri.parse(
             'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
-        headers: {
-          'Content-Type': 'text/xml',
-          'Authorization': 'Bearer $token'
-        },
+        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
         body: xml);
     if (putResponse.statusCode != 200) {
       throw OsmApiException(putResponse.statusCode, putResponse.body);
@@ -281,8 +254,7 @@ class PointsRepository {
     return defibrillator;
   }
 
-  Future<void> uploadPhoto(
-      {required int nodeId, required File file}) async {
+  Future<void> uploadPhoto({required int nodeId, required File file}) async {
     if (token == null) {
       throw Exception('Not authenticated');
     }
@@ -324,8 +296,8 @@ class PointsRepository {
 
   Future<String?> getBackendImageUrl(int nodeId) async {
     try {
-      var response = await http.get(
-          Uri.parse('https://back.openaedmap.org/api/v1/node/$nodeId'));
+      var response = await http
+          .get(Uri.parse('https://back.openaedmap.org/api/v1/node/$nodeId'));
       var payload = json.decode(response.body);
       if ((payload['elements'] as List<dynamic>).isNotEmpty) {
         var element = payload['elements'][0] as Map<String, dynamic>;
@@ -410,10 +382,7 @@ class PointsRepository {
 
     var response = await http.delete(
         Uri.parse('https://api.openstreetmap.org/api/0.6/node/$nodeId'),
-        headers: {
-          'Content-Type': 'text/xml',
-          'Authorization': 'Bearer $token'
-        },
+        headers: {'Content-Type': 'text/xml', 'Authorization': 'Bearer $token'},
         body: deleteDocument.toXmlString());
 
     if (response.statusCode != 200) {
@@ -425,4 +394,70 @@ class PointsRepository {
     await updateDefibrillators();
     return true;
   }
+}
+
+class ParseDefibrillatorsArgs {
+  final String filePath;
+  final LatLng currentLocation;
+
+  ParseDefibrillatorsArgs({
+    required this.filePath,
+    required this.currentLocation,
+  });
+}
+
+class WriteDefibrillatorsArgs {
+  final String filePath;
+  final Uint8List bodyBytes;
+
+  WriteDefibrillatorsArgs({
+    required this.filePath,
+    required this.bodyBytes,
+  });
+}
+
+bool writeDefibrillatorsInIsolate(WriteDefibrillatorsArgs args) {
+  final decoded = utf8.decode(args.bodyBytes);
+  if (decoded.isEmpty) {
+    return false;
+  }
+  File(args.filePath).writeAsStringSync(decoded);
+  return true;
+}
+
+List<Defibrillator> parseDefibrillatorsInIsolate(ParseDefibrillatorsArgs args) {
+  final contents = File(args.filePath).readAsStringSync();
+  var idLabel = 'osm_id';
+  if (contents.contains('@osm_id')) {
+    idLabel = '@osm_id';
+  }
+  final jsonList = jsonDecode(contents)['features'] as List<dynamic>;
+  final defibrillators = <Defibrillator>[];
+  const Distance distance = Distance(calculator: Haversine());
+  for (final row in jsonList) {
+    final properties = Map<String, dynamic>.from(row['properties'] as Map);
+    final id = properties[idLabel];
+    final descriptions = properties.entries
+        .where((entry) => entry.key.startsWith('defibrillator:location'))
+        .toList();
+    descriptions.sort((a, b) => b.key.length - a.key.length);
+    final coordinates = row['geometry']['coordinates'] as List<dynamic>;
+    final location = LatLng(coordinates[1], coordinates[0]);
+    final defibrillator = Defibrillator(
+      location: location,
+      id: id,
+      description: descriptions.firstOrNull?.value,
+      indoor: properties['indoor'],
+      operator: properties['operator'],
+      phone: properties['phone'],
+      openingHours: properties['opening_hours'],
+      access: properties['access'],
+      image: properties['image'],
+    );
+    defibrillator.distance =
+        distance(args.currentLocation, defibrillator.location).ceil();
+    defibrillators.add(defibrillator);
+  }
+  defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
+  return defibrillators;
 }
