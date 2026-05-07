@@ -1,1 +1,1 @@
-Die Kartenvisualisierungs-Engine wurde optimiert.
+Das Problem mit dem langsamen Laden der Karte wurde behoben.

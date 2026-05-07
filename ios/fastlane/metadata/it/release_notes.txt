@@ -1,1 +1,1 @@
-Il motore di visualizzazione delle mappe è stato ottimizzato.
+Risolto il problema con il caricamento lento della mappa.

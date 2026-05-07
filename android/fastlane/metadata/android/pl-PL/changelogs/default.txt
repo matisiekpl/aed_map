@@ -1,1 +1,1 @@
-Zoptymalizowano silnik wizualizacji mapy
+Naprawiono problem ze spowolnionym ładowaniem mapy.

@@ -1,1 +1,1 @@
-Le moteur de visualisation des cartes a été optimisé.
+Le problème de chargement lent de la carte a été résolu.

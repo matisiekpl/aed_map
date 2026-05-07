@@ -1,1 +1,1 @@
-Se ha optimizado el motor de visualización de mapas.
+Se ha solucionado el problema de carga lenta del mapa.
