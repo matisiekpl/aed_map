@@ -5,7 +5,6 @@ import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
 import 'package:aed_map/models/aed.dart';
 import 'package:aed_map/models/osm_api_exception.dart';
-import 'package:aed_map/repositories/points_repository_isolates.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
