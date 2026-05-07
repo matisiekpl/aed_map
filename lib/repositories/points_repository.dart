@@ -49,7 +49,8 @@ class PointsRepository {
   }
 
   Future<void> loadLocalDefibrillators() async {
-    String data = await rootBundle.loadString("assets/world.geojson");
+    String data =
+        await rootBundle.loadString("assets/world.geojson", cache: false);
     data = data.replaceAll("@osm_id", "osm_id");
     await (await cacheFile).writeAsString(data);
   }
@@ -61,7 +62,8 @@ class PointsRepository {
     return DateTime.parse(value);
   }
 
-  Future<(List<Defibrillator>,int)> loadDefibrillators(LatLng currentLocation) async {
+  Future<(List<Defibrillator>, int)> loadDefibrillators(
+      LatLng currentLocation) async {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       await mixpanel.registerSuperProperties({
         "\$latitude": currentLocation.latitude,
@@ -70,20 +72,51 @@ class PointsRepository {
       mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
       mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
     }
+    List<Defibrillator> defibrillators = [];
     if (!(await (await cacheFile).exists())) {
       await loadLocalDefibrillators();
     }
     updateDefibrillators();
-    final filePath = (await cacheFile).path;
-    print('Using file $filePath');
-    final (nearbyDefibrillators, defibrillatorsCount) = parseDefibrillators(
-      ParseDefibrillatorsArgs(
-        filePath: filePath,
-        currentLocation: currentLocation,
-      ),
+    print('Using file ${(await cacheFile).path}');
+    var contents = await (await cacheFile).readAsString();
+    var idLabel = 'osm_id';
+    if (contents.contains('@osm_id')) {
+      idLabel = '@osm_id';
+    }
+
+    var jsonList = jsonDecode(contents)['features'];
+    jsonList.forEach((row) {
+      var id = row['properties'][idLabel];
+      var descriptions = Map.from(row['properties'])
+          .entries
+          .where((a) => a.key.startsWith('defibrillator:location'))
+          .toList();
+      descriptions.sort((a, b) => b.key.length - a.key.length);
+      defibrillators.add(Defibrillator(
+          location: LatLng(row['geometry']['coordinates'][1],
+              row['geometry']['coordinates'][0]),
+          id: id,
+          description: descriptions.firstOrNull?.value,
+          indoor: row['properties']['indoor'],
+          operator: row['properties']['operator'],
+          phone: row['properties']['phone'],
+          openingHours: row['properties']['opening_hours'],
+          access: row['properties']['access'],
+          image: row['properties']['image']));
+    });
+    print('Loaded ${defibrillators.length} defibrillators!');
+    defibrillators = defibrillators.map((defibrillator) {
+      const Distance distance = Distance(calculator: Haversine());
+      defibrillator.distance =
+          distance(currentLocation, defibrillator.location).ceil();
+      return defibrillator;
+    }).toList();
+    defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
+    final defibrillatorsCount = defibrillators.length;
+    return (
+      defibrillators.take(visiblePointsCount).toList(),
+      defibrillatorsCount
     );
-    print('Loaded $defibrillatorsCount defibrillators!');
-    return (nearbyDefibrillators, defibrillatorsCount);
   }
 
   String? token;
@@ -385,54 +418,4 @@ class PointsRepository {
     await updateDefibrillators();
     return true;
   }
-}
-
-class ParseDefibrillatorsArgs {
-  final String filePath;
-  final LatLng currentLocation;
-
-  ParseDefibrillatorsArgs({
-    required this.filePath,
-    required this.currentLocation,
-  });
-}
-
-(List<Defibrillator>, int) parseDefibrillators(ParseDefibrillatorsArgs args) {
-  final contents = File(args.filePath).readAsStringSync();
-  var idLabel = 'osm_id';
-  if (contents.contains('@osm_id')) {
-    idLabel = '@osm_id';
-  }
-  final jsonList = jsonDecode(contents)['features'] as List<dynamic>;
-  final defibrillators = <Defibrillator>[];
-  const Distance distance = Distance(calculator: Haversine());
-  for (final row in jsonList) {
-    final properties = Map<String, dynamic>.from(row['properties'] as Map);
-    final id = properties[idLabel];
-    final descriptions = properties.entries
-        .where((entry) => entry.key.startsWith('defibrillator:location'))
-        .toList();
-    descriptions.sort((a, b) => b.key.length - a.key.length);
-    final coordinates = row['geometry']['coordinates'] as List<dynamic>;
-    final location = LatLng(coordinates[1], coordinates[0]);
-    final defibrillator = Defibrillator(
-      location: location,
-      id: id,
-      description: descriptions.firstOrNull?.value,
-      indoor: properties['indoor'],
-      operator: properties['operator'],
-      phone: properties['phone'],
-      openingHours: properties['opening_hours'],
-      access: properties['access'],
-      image: properties['image'],
-    );
-    defibrillator.distance =
-        distance(args.currentLocation, defibrillator.location).ceil();
-    defibrillators.add(defibrillator);
-  }
-  defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
-  return (
-    defibrillators.take(visiblePointsCount).toList(),
-    defibrillators.length
-  );
 }
