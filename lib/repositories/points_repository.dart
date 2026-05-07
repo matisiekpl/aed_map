@@ -68,7 +68,7 @@ class PointsRepository {
     return DateTime.parse(value);
   }
 
-  Future<List<Defibrillator>> loadDefibrillators(LatLng currentLocation) async {
+  Future<(List<Defibrillator>,int)> loadDefibrillators(LatLng currentLocation) async {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       await mixpanel.registerSuperProperties({
         "\$latitude": currentLocation.latitude,
@@ -83,15 +83,15 @@ class PointsRepository {
     updateDefibrillators();
     final filePath = (await cacheFile).path;
     print('Using file $filePath');
-    final defibrillators = await compute(
+    final (nearbyDefibrillators, defibrillatorsCount) = await compute(
       parseDefibrillatorsInIsolate,
       ParseDefibrillatorsArgs(
         filePath: filePath,
         currentLocation: currentLocation,
       ),
     );
-    print('Loaded ${defibrillators.length} defibrillators!');
-    return defibrillators;
+    print('Loaded $defibrillatorsCount defibrillators!');
+    return (nearbyDefibrillators, defibrillatorsCount);
   }
 
   String? token;
@@ -424,7 +424,8 @@ bool writeDefibrillatorsInIsolate(WriteDefibrillatorsArgs args) {
   return true;
 }
 
-List<Defibrillator> parseDefibrillatorsInIsolate(ParseDefibrillatorsArgs args) {
+(List<Defibrillator>, int) parseDefibrillatorsInIsolate(
+    ParseDefibrillatorsArgs args) {
   final contents = File(args.filePath).readAsStringSync();
   var idLabel = 'osm_id';
   if (contents.contains('@osm_id')) {
@@ -458,5 +459,8 @@ List<Defibrillator> parseDefibrillatorsInIsolate(ParseDefibrillatorsArgs args) {
     defibrillators.add(defibrillator);
   }
   defibrillators.sort((a, b) => a.distance!.compareTo(b.distance!));
-  return defibrillators;
+  return (
+    defibrillators.take(visiblePointsCount).toList(),
+    defibrillators.length
+  );
 }

@@ -49,7 +49,7 @@ class MapHeader extends StatelessWidget {
               BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
                 if (state is PointsLoadSuccess) {
                   return Text(
-                      appLocalizations.subheading(state.defibrillators.length),
+                      appLocalizations.subheading(state.defibrillatorsCount),
                       style: const TextStyle(fontSize: 14));
                 } else {
                   return Text(appLocalizations.subheading(0),
@@ -57,7 +57,8 @@ class MapHeader extends StatelessWidget {
                 }
               }),
               const SizedBox(height: 2),
-              Text('OpenStreetMap contributors', style: const TextStyle(fontSize: 12)),
+              Text('OpenStreetMap contributors',
+                  style: const TextStyle(fontSize: 12)),
               const SizedBox(height: 6),
               BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
                 if (editState.pendingChanges.isEmpty) return const SizedBox();
@@ -85,10 +86,15 @@ class MapHeader extends StatelessWidget {
                       color: Colors.orange,
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Text(
-                      appLocalizations.pendingChangesBadge(editState.pendingChanges.length),
-                      style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600),
+                      appLocalizations
+                          .pendingChangesBadge(editState.pendingChanges.length),
+                      style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 );
@@ -157,12 +163,16 @@ class MapHeader extends StatelessWidget {
                         context.read<EditCubit>().enter();
                       },
                       child: Card(
-                          color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
+                          color: CupertinoColors.secondarySystemBackground
+                              .resolveFrom(context),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             child: Text(appLocalizations.add,
-                                style: TextStyle(fontWeight: FontWeight.w500, color: CupertinoColors.label.resolveFrom(context))),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: CupertinoColors.label
+                                        .resolveFrom(context))),
                           )),
                     ),
                   ),
@@ -196,7 +206,8 @@ class MapHeader extends StatelessWidget {
                       );
                     },
                     child: Card(
-                      color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
+                      color: CupertinoColors.secondarySystemBackground
+                          .resolveFrom(context),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(CupertinoIcons.gear,
@@ -215,11 +226,13 @@ class MapHeader extends StatelessWidget {
                         launchUrl(Uri.parse('https://pomoc.aedmapa.pl/'));
                       },
                       child: Card(
-                        color: CupertinoColors.secondarySystemBackground.resolveFrom(context),
+                        color: CupertinoColors.secondarySystemBackground
+                            .resolveFrom(context),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Icon(CupertinoIcons.question_circle,
-                              color: CupertinoColors.label.resolveFrom(context)),
+                              color:
+                                  CupertinoColors.label.resolveFrom(context)),
                         ),
                       ),
                     ),

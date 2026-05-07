@@ -25,8 +25,9 @@ class PointsCubit extends Cubit<PointsState> {
     required this.geolocationRepository,
     required this.editCubit,
   }) : super(PointsLoadInProgress()) {
-    _editSubscription = editCubit.stream.distinct(
-        (previous, current) => previous.pendingChanges == current.pendingChanges)
+    _editSubscription = editCubit.stream
+        .distinct((previous, current) =>
+            previous.pendingChanges == current.pendingChanges)
         .listen((editState) => applyPendingChanges(editState.pendingChanges));
   }
 
@@ -43,13 +44,15 @@ class PointsCubit extends Cubit<PointsState> {
 
   Future<void> load() async {
     var position = (await geolocationRepository.locate()).location;
-    var defibrillators = await pointsRepository
+    final (nearbyDefibrillators, defibrillatorsCount) = await pointsRepository
         .loadDefibrillators(LatLng(position.latitude, position.longitude));
-    await editCubit.reconcilePendingChanges(defibrillators);
+    await editCubit.reconcilePendingChanges(nearbyDefibrillators);
     final pendingChanges = editCubit.state.pendingChanges;
-    final (mergedDefibrillators, pendingIds) = mergeWithPendingChanges(defibrillators, pendingChanges);
+    final (mergedDefibrillators, pendingIds) =
+        mergeWithPendingChanges(nearbyDefibrillators, pendingChanges);
     emit(PointsLoadSuccess(
         defibrillators: mergedDefibrillators,
+        defibrillatorsCount: defibrillatorsCount,
         selected: mergedDefibrillators.first,
         markers: buildMarkers(mergedDefibrillators, pendingIds),
         lastUpdateTime: await pointsRepository.getLastUpdateTime(),
@@ -65,13 +68,15 @@ class PointsCubit extends Cubit<PointsState> {
     }
     await pointsRepository.updateDefibrillators();
     var position = (await geolocationRepository.locate()).location;
-    var defibrillators = await pointsRepository
+    final (nearbyDefibrillators, defibrillatorsCount) = await pointsRepository
         .loadDefibrillators(LatLng(position.latitude, position.longitude));
-    await editCubit.reconcilePendingChanges(defibrillators);
+    await editCubit.reconcilePendingChanges(nearbyDefibrillators);
     final pendingChanges = editCubit.state.pendingChanges;
-    final (mergedDefibrillators, pendingIds) = mergeWithPendingChanges(defibrillators, pendingChanges);
+    final (mergedDefibrillators, pendingIds) =
+        mergeWithPendingChanges(nearbyDefibrillators, pendingChanges);
     emit(PointsLoadSuccess(
         defibrillators: mergedDefibrillators,
+        defibrillatorsCount: defibrillatorsCount,
         selected: mergedDefibrillators.first,
         markers: buildMarkers(mergedDefibrillators, pendingIds),
         lastUpdateTime: await pointsRepository.getLastUpdateTime(),
@@ -84,10 +89,11 @@ class PointsCubit extends Cubit<PointsState> {
     var s = state;
     if (s is! PointsLoadSuccess) return;
     final baseDefibrillators = s.defibrillators
-        .where((defibrillator) => !pendingChanges.any(
-            (change) => change.defibrillatorId == defibrillator.id))
+        .where((defibrillator) => !pendingChanges
+            .any((change) => change.defibrillatorId == defibrillator.id))
         .toList();
-    final (mergedDefibrillators, pendingIds) = mergeWithPendingChanges(baseDefibrillators, pendingChanges);
+    final (mergedDefibrillators, pendingIds) =
+        mergeWithPendingChanges(baseDefibrillators, pendingChanges);
     emit(s.copyWith(
         defibrillators: mergedDefibrillators,
         markers: buildMarkers(mergedDefibrillators, pendingIds),
@@ -110,7 +116,8 @@ class PointsCubit extends Cubit<PointsState> {
     for (final change in pendingChanges) {
       if (change.type == PendingChangeType.delete) continue;
       pendingIds.add(change.defibrillatorId);
-      merged.removeWhere((defibrillator) => defibrillator.id == change.defibrillatorId);
+      merged.removeWhere(
+          (defibrillator) => defibrillator.id == change.defibrillatorId);
       merged.insert(0, change.snapshot);
     }
 
@@ -118,8 +125,8 @@ class PointsCubit extends Cubit<PointsState> {
   }
 
   void select(Defibrillator defibrillator) {
-    FirebaseAnalytics.instance
-        .logSelectContent(contentType: 'aed', itemId: defibrillator.id.toString());
+    FirebaseAnalytics.instance.logSelectContent(
+        contentType: 'aed', itemId: defibrillator.id.toString());
     HapticFeedback.mediumImpact();
     analytics.event(name: selectEvent);
     mixpanel.track(selectEvent, properties: defibrillator.getEventProperties());
@@ -134,7 +141,8 @@ class PointsCubit extends Cubit<PointsState> {
       final currentState = state as PointsLoadSuccess;
       if (defibrillator.id == 0) {
         var newDefibrillators =
-            List<Defibrillator>.from(currentState.defibrillators)..insert(0, defibrillator);
+            List<Defibrillator>.from(currentState.defibrillators)
+              ..insert(0, defibrillator);
         emit(currentState.copyWith(
             defibrillators: newDefibrillators,
             markers: buildMarkers(newDefibrillators, currentState.pendingIds),
@@ -147,17 +155,19 @@ class PointsCubit extends Cubit<PointsState> {
         emit(currentState.copyWith(
             selected: defibrillator,
             defibrillators: updatedDefibrillators,
-            markers: buildMarkers(updatedDefibrillators, currentState.pendingIds)));
+            markers:
+                buildMarkers(updatedDefibrillators, currentState.pendingIds)));
       }
     }
   }
 
-  List<Marker> buildMarkers(List<Defibrillator> defibrillators, Set<int> pendingIds) {
+  List<Marker> buildMarkers(
+      List<Defibrillator> defibrillators, Set<int> pendingIds) {
     var brightness = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .platformBrightness;
     return defibrillators
-        .take(500)
+        .take(visiblePointsCount)
         .map((defibrillator) {
           final isPending = pendingIds.contains(defibrillator.id);
           final svgAsset = 'assets/${defibrillator.getIconFilename()}';
@@ -169,7 +179,9 @@ class PointsCubit extends Cubit<PointsState> {
                     options: RoundedRectDottedBorderOptions(
                       radius: const Radius.circular(8),
                       dashPattern: const [4, 3],
-                      color: brightness == Brightness.light ? Colors.black : Colors.white,
+                      color: brightness == Brightness.light
+                          ? Colors.black
+                          : Colors.white,
                       strokeWidth: 2,
                     ),
                     child: ClipRRect(
@@ -194,5 +206,4 @@ class PointsCubit extends Cubit<PointsState> {
         .cast<Marker>()
         .toList();
   }
-
 }
