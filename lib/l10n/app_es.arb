@@ -181,4 +181,10 @@
   "photoReported": "La foto ha sido reportada",
   "photoUploaded": "Foto guardada correctamente",
   "photoUploadFailed": "No se pudo subir la foto"
+,
+  "personalization": "Personalización",
+  "theme": "Tema",
+  "themeSystem": "Sistema",
+  "themeLight": "Claro",
+  "themeDark": "Oscuro"
 }

@@ -452,4 +452,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Failed to upload photo';
+
+  @override
+  String get personalization => 'Personalization';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
 }

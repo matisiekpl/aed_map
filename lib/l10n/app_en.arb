@@ -184,4 +184,10 @@
   "photoReported": "Photo has been reported",
   "photoUploaded": "Photo saved successfully",
   "photoUploadFailed": "Failed to upload photo"
+,
+  "personalization": "Personalization",
+  "theme": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark"
 }

@@ -181,4 +181,10 @@
   "photoReported": "La photo a été signalée",
   "photoUploaded": "Photo enregistrée avec succès",
   "photoUploadFailed": "Échec du téléchargement de la photo"
+,
+  "personalization": "Personnalisation",
+  "theme": "Thème",
+  "themeSystem": "Système",
+  "themeLight": "Clair",
+  "themeDark": "Sombre"
 }
