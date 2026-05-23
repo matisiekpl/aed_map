@@ -106,7 +106,7 @@ class _MapScreenState extends State<MapScreen> {
                   panelBuilder: (ScrollController sc) => Container(
                       decoration: BoxDecoration(borderRadius: radius),
                       child: BottomPanel(scrollController: sc)),
-                  body: const RasterMap()),
+                  body: RasterMap(floatingPanelPosition: _floatingPanelPosition)),
               const MapHeader(),
               FloatingPanel(floatingPanelPosition: _floatingPanelPosition),
               const MarkerSelectionFooter()
