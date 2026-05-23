@@ -86,15 +86,31 @@ class _PendingChangesPageState extends State<PendingChangesPage> {
         const Icon(CupertinoIcons.trash_circle, color: Colors.red),
     };
 
-    final description = change.snapshot.description ?? '';
+    final locationDescription = change.snapshot.locationDescription ?? '';
+    final level = change.snapshot.level;
+    final indoor = change.snapshot.indoor;
+    final operator = change.snapshot.operator;
+    final openingHours = change.snapshot.openingHours;
+    final phone = change.snapshot.phone;
+    final description = change.snapshot.description;
+    
+    List<String> details = [];
+    if (locationDescription.isNotEmpty) details.add(locationDescription);
+    if (indoor != null && indoor == 'yes') details.add(appLocalizations.insideBuilding);
+    if (level != null && level.isNotEmpty) details.add('${appLocalizations.level}: $level');
+    if (operator != null && operator.isNotEmpty) details.add('${appLocalizations.operator}: $operator');
+    if (openingHours != null && openingHours.isNotEmpty) details.add('${appLocalizations.openingHours}: $openingHours');
+    if (phone != null && phone.isNotEmpty) details.add('${appLocalizations.contact}: $phone');
+    if (description != null && description.isNotEmpty) details.add('${appLocalizations.information}: $description');
+
+    final subtitleText = details.join(' • ');
 
     return SettingsTile(
       leading: icon,
-      title:
-          Text('$typeLabel${description.isNotEmpty ? ': $description' : ''}'),
-      description: last
-          ? Text(appLocalizations.pendingChangesProcessingInfo)
-          : null,
+      title: Text(typeLabel),
+      description: Text(subtitleText.isNotEmpty 
+          ? (last ? '$subtitleText\n${appLocalizations.pendingChangesProcessingInfo}' : subtitleText)
+          : (last ? appLocalizations.pendingChangesProcessingInfo : '')),
       onPressed: (context) {
         final pointsCubit = context.read<PointsCubit>();
         final state = pointsCubit.state;

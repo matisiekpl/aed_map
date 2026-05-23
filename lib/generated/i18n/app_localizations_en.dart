@@ -452,4 +452,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Failed to upload photo';
+
+  @override
+  String get level => 'Floor (Level)';
+
+  @override
+  String get enterLevel => 'Enter floor';
+
+  @override
+  String get enterNote => 'Enter note / description';
+
+  @override
+  String get showMore => 'Show more';
+
+  @override
+  String get showLess => 'Show less';
 }

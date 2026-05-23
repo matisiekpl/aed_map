@@ -14,7 +14,7 @@ void main() {
     });
 
     test("should correctly fetch complete node", () async {
-      var defibrillator = await pointsRepository.getNode(11197705644);
+      var defibrillator = await pointsRepository.getNode(11197705644, 'en');
       expect(defibrillator, isNotNull);
       expect(defibrillator?.id, 11197705644);
       expect(defibrillator?.access, 'yes');
@@ -28,13 +28,13 @@ void main() {
     });
 
     test("should correctly fetch sparse node", ()async{
-      var defibrillator = await pointsRepository.getNode(11883717971);
+      var defibrillator = await pointsRepository.getNode(11883717971, 'en');
       expect(defibrillator, isNotNull);
       expect(defibrillator?.id, 11883717971);
     });
 
     test("should return null if node not found", ()async{
-      var defibrillator = await pointsRepository.getNode(-1);
+      var defibrillator = await pointsRepository.getNode(-1, 'en');
       expect(defibrillator, isNull);
     });
   });

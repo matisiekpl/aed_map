@@ -10,12 +10,14 @@ class PendingChange {
   final int defibrillatorId;
   final Defibrillator snapshot;
   final DateTime createdAt;
+  final String? languageCode;
 
   PendingChange({
     required this.type,
     required this.defibrillatorId,
     required this.snapshot,
     required this.createdAt,
+    this.languageCode,
   });
 
   Map<String, dynamic> toJson() {
@@ -23,12 +25,15 @@ class PendingChange {
       'type': type.name,
       'defibrillatorId': defibrillatorId,
       'createdAt': createdAt.toIso8601String(),
+      'languageCode': languageCode,
       'snapshot': {
         'id': snapshot.id,
         'lat': snapshot.location.latitude,
         'lon': snapshot.location.longitude,
-        'description': snapshot.description,
+        'locationDescription': snapshot.locationDescription,
         'indoor': snapshot.indoor,
+        'level': snapshot.level,
+        'description': snapshot.description,
         'operator': snapshot.operator,
         'phone': snapshot.phone,
         'openingHours': snapshot.openingHours,
@@ -47,11 +52,14 @@ class PendingChange {
       type: PendingChangeType.values.firstWhere((e) => e.name == json['type']),
       defibrillatorId: json['defibrillatorId'] as int,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      languageCode: json['languageCode'] as String?,
       snapshot: Defibrillator(
         id: snapshotJson['id'] as int,
         location: LatLng(snapshotJson['lat'] as double, snapshotJson['lon'] as double),
-        description: snapshotJson['description'] as String?,
+        locationDescription: snapshotJson['locationDescription'] as String?,
         indoor: snapshotJson['indoor'] as String?,
+        level: snapshotJson['level'] as String?,
+        description: snapshotJson['description'] as String?,
         operator: snapshotJson['operator'] as String?,
         phone: snapshotJson['phone'] as String?,
         openingHours: snapshotJson['openingHours'] as String?,

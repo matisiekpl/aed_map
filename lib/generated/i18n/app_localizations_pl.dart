@@ -454,4 +454,19 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Nie udało się przesłać zdjęcia';
+
+  @override
+  String get level => 'Piętro';
+
+  @override
+  String get enterLevel => 'Podaj piętro';
+
+  @override
+  String get enterNote => 'Dodaj notatkę';
+
+  @override
+  String get showMore => 'Pokaż więcej';
+
+  @override
+  String get showLess => 'Pokaż mniej';
 }

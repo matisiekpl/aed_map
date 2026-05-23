@@ -14,7 +14,7 @@ void main() {
         image: '',
       );
 
-      final xml = defibrillator.toXml(1, 2, oldTags: [
+      final xml = defibrillator.toXml(1, 2, 'pl', oldTags: [
         ['image', 'https://example.com/photo.jpg'],
       ]).toString();
 

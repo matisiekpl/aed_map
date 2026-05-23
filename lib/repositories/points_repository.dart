@@ -87,16 +87,16 @@ class PointsRepository {
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
       var id = row['properties'][idLabel];
-      var descriptions = Map.from(row['properties'])
-          .entries
-          .where((a) => a.key.startsWith('defibrillator:location'))
-          .toList();
-      descriptions.sort((a, b) => b.key.length - a.key.length);
+      var lang = Platform.localeName.split('_')[0];
+      var locationDescription = row['properties']['defibrillator:location:$lang'] ?? row['properties']['defibrillator:location'];
+      var description = row['properties']['description:$lang'] ?? row['properties']['description'] ?? row['properties']['note'];
       defibrillators.add(Defibrillator(
           location: LatLng(row['geometry']['coordinates'][1],
               row['geometry']['coordinates'][0]),
           id: id,
-          description: descriptions.firstOrNull?.value,
+          locationDescription: locationDescription,
+          description: description,
+          level: row['properties']['level'],
           indoor: row['properties']['indoor'],
           operator: row['properties']['operator'],
           phone: row['properties']['phone'],
@@ -212,7 +212,7 @@ class PointsRepository {
     return int.parse(response.body.toString());
   }
 
-  Future<Defibrillator> insertDefibrillator(Defibrillator defibrillator) async {
+  Future<Defibrillator> insertDefibrillator(Defibrillator defibrillator, String lang) async {
     if (!devMode) {
       var changesetId = await getChangesetId();
       var response = await http.put(
@@ -221,7 +221,7 @@ class PointsRepository {
             'Content-Type': 'text/xml',
             'Authorization': 'Bearer $token'
           },
-          body: defibrillator.toXml(changesetId, 1));
+          body: defibrillator.toXml(changesetId, 1, lang));
       if (response.statusCode != 200) {
         throw OsmApiException(response.statusCode, response.body);
       }
@@ -234,7 +234,7 @@ class PointsRepository {
     return defibrillator;
   }
 
-  Future<Defibrillator> updateDefibrillator(Defibrillator defibrillator) async {
+  Future<Defibrillator> updateDefibrillator(Defibrillator defibrillator, String lang) async {
     if (devMode) {
       return defibrillator;
     }
@@ -264,7 +264,7 @@ class PointsRepository {
         tag.attributes.where((attr) => attr.name.toString() == 'v').first.value
       ];
     }).toList();
-    var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
+    var xml = defibrillator.toXml(changesetId, int.parse(oldVersion), lang,
         oldTags: oldTagsPairs);
     var putResponse = await http.put(
         Uri.parse(
@@ -332,7 +332,7 @@ class PointsRepository {
     return null;
   }
 
-  Future<Defibrillator?> getNode(int id) async {
+  Future<Defibrillator?> getNode(int id, String lang) async {
     try {
       var response = await http.get(
           Uri.parse('https://api.openstreetmap.org/api/0.6/node/$id.json'));
@@ -344,8 +344,13 @@ class PointsRepository {
           location: LatLng(element['lat'], element['lon']),
           id: id,
           access: tags['access'],
-          description: tags['defibrillator:location'],
+          locationDescription: tags['defibrillator:location:$lang'] ??
+              tags['defibrillator:location'],
+          description: tags['description:$lang'] ??
+              tags['description'] ??
+              tags['note'],
           indoor: tags['indoor'],
+          level: tags['level'],
           openingHours: tags['opening_hours'],
           operator: tags['operator'],
           phone: tags['phone'],

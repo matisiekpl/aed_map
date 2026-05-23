@@ -181,4 +181,10 @@
   "photoReported": "La foto è stata segnalata",
   "photoUploaded": "Foto salvata con successo",
   "photoUploadFailed": "Impossibile caricare la foto"
+,
+  "level": "Piano",
+  "enterLevel": "Inserisci piano",
+  "enterNote": "Aggiungi nota",
+  "showMore": "Mostra di più",
+  "showLess": "Mostra di meno"
 }

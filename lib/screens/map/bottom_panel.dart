@@ -250,7 +250,7 @@ class BottomPanel extends StatelessWidget {
                       const SizedBox(height: 8),
                       CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
-                          value: state.selected.description.purge() ??
+                          value: state.selected.locationDescription.purge() ??
                               appLocalizations.noData,
                           builder: (context, v) {
                             return Column(
@@ -310,12 +310,16 @@ class BottomPanel extends StatelessWidget {
                           duration: const Duration(milliseconds: 200),
                           value: state.selected.getIndoorText(appLocalizations),
                           builder: (context, v) {
+                            String indoorText = v;
+                            if (state.selected.level != null && state.selected.level!.isNotEmpty) {
+                              indoorText += ' (${appLocalizations.level.toLowerCase()}: ${state.selected.level})';
+                            }
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text('${appLocalizations.insideBuilding}: ',
                                     style: const TextStyle(fontSize: 16)),
-                                Text(v,
+                                Text(indoorText,
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
@@ -350,6 +354,15 @@ class BottomPanel extends StatelessWidget {
                               ),
                             );
                           }),
+                      if (state.selected.description != null && state.selected.description!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        _ExpandableNote(
+                          text: state.selected.description!,
+                          title: appLocalizations.information,
+                          showMoreText: appLocalizations.showMore,
+                          showLessText: appLocalizations.showLess,
+                        ),
+                      ],
                       const SizedBox(height: 10),
                       SizedBox(
                           width: double.infinity,
@@ -517,3 +530,64 @@ Future<void> showReportPhotoDialog(
     ),
   );
 }
+
+class _ExpandableNote extends StatefulWidget {
+  final String text;
+  final String title;
+  final String showMoreText;
+  final String showLessText;
+
+  const _ExpandableNote({
+    required this.text,
+    required this.title,
+    required this.showMoreText,
+    required this.showLessText,
+  });
+
+  @override
+  State<_ExpandableNote> createState() => _ExpandableNoteState();
+}
+
+class _ExpandableNoteState extends State<_ExpandableNote> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(widget.title, style: const TextStyle(fontSize: 16)),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            setState(() {
+              _expanded = !_expanded;
+            });
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (_expanded)
+                Text(
+                  widget.text,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Text(
+                  _expanded ? widget.showLessText : widget.showMoreText,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: CupertinoColors.activeBlue.resolveFrom(context),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 4),
+      ],
+    );
+  }
+}
+

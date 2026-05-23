@@ -9,26 +9,30 @@ import '../generated/i18n/app_localizations.dart';
 
 class Defibrillator {
   LatLng location;
-  String? description;
+  String? locationDescription;
   int id;
   String? indoor;
+  String? level;
   String? operator;
   String? phone;
   int? distance = 0;
   String? openingHours;
   String? access;
   String? image;
+  String? description;
   Uint8List? photoBytes;
 
   Defibrillator(
       {required this.location,
       required this.id,
-      this.description,
+      this.locationDescription,
       this.indoor,
+      this.level,
       this.operator,
       this.phone,
       this.openingHours,
       this.image = '',
+      this.description,
       this.access = 'yes',
       List<int>? photoBytes})
       : photoBytes = photoBytes != null ? Uint8List.fromList(photoBytes) : null;
@@ -89,9 +93,19 @@ class Defibrillator {
     return filenames[access];
   }
 
-  dynamic toXml(int changesetId, int version,
+  dynamic toXml(int changesetId, int version, String systemLang,
       {List<List<String>> oldTags = const []}) {
     final builder = XmlBuilder();
+
+
+    final isEnglish = systemLang == 'en';
+    final hasGenericLocation =
+        oldTags.any((t) => t[0] == 'defibrillator:location');
+    final hasGenericDescription =
+        oldTags.any((t) => t[0] == 'description');
+    final writeGenericLocation = isEnglish || !hasGenericLocation;
+    final writeGenericDescription = isEnglish || !hasGenericDescription;
+
     builder.processing('xml', 'version="1.0"');
     builder.element('osm', attributes: {'version': '0.6'}, nest: () {
       builder.element('node', nest: () {
@@ -109,11 +123,17 @@ class Defibrillator {
           builder.element('tag',
               attributes: {'k': 'access', 'v': access.toString()});
         }
-        if (description != null && description.toString().isNotEmpty) {
+        if (locationDescription != null && locationDescription.toString().isNotEmpty) {
           builder.element('tag', attributes: {
-            'k': 'defibrillator:location',
-            'v': description.toString()
+            'k': 'defibrillator:location:$systemLang',
+            'v': locationDescription.toString()
           });
+          if (writeGenericLocation) {
+            builder.element('tag', attributes: {
+              'k': 'defibrillator:location',
+              'v': locationDescription.toString()
+            });
+          }
         }
         builder.element('tag',
             attributes: {'k': 'emergency', 'v': 'defibrillator'});
@@ -122,6 +142,10 @@ class Defibrillator {
         }
         builder
             .element('tag', attributes: {'k': 'indoor', 'v': indoor ?? 'no'});
+        if (level != null && level.toString().isNotEmpty) {
+          builder.element('tag',
+              attributes: {'k': 'level', 'v': level ?? ''});
+        }
         if (openingHours != null && openingHours.toString().isNotEmpty) {
           builder.element('tag',
               attributes: {'k': 'opening_hours', 'v': openingHours ?? ''});
@@ -133,18 +157,30 @@ class Defibrillator {
         if (phone != null && phone.toString().isNotEmpty) {
           builder.element('tag', attributes: {'k': 'phone', 'v': phone ?? ''});
         }
+        if (description != null && description.toString().isNotEmpty) {
+          builder.element('tag', attributes: {
+            'k': 'description:$systemLang',
+            'v': description ?? ''
+          });
+          if (writeGenericDescription) {
+            builder.element('tag', attributes: {
+              'k': 'description',
+              'v': description ?? ''
+            });
+          }
+        }
 
+
+        final exclusions = {
+          'phone', 'operator', 'opening_hours', 'indoor', 'level',
+          'emergency', 'access', 'image',
+          'defibrillator:location:$systemLang',
+          'description:$systemLang',
+          if (writeGenericLocation) 'defibrillator:location',
+          if (writeGenericDescription) 'description',
+        };
         oldTags
-            .where((attr) => ![
-                  'phone',
-                  'operator',
-                  'opening_hours',
-                  'indoor',
-                  'emergency',
-                  'access',
-                  'defibrillator:location',
-                  'image',
-                ].contains(attr[0]))
+            .where((attr) => !exclusions.contains(attr[0]))
             .forEach((attr) {
           builder.element('tag', attributes: {'k': attr[0], 'v': attr[1]});
         });
@@ -156,40 +192,43 @@ class Defibrillator {
 
   Defibrillator copyWith({
     LatLng? location,
-    String? description,
+    String? locationDescription,
     int? id,
     String? indoor,
+    String? level,
     String? operator,
     String? phone,
-    int? distance,
     String? openingHours,
     String? access,
     String? image,
-    Uint8List? photoBytes,
-    Map? colors,
-    Map? filenames,
+    String? description,
+    List<int>? photoBytes,
   }) {
     return Defibrillator(
       location: location ?? this.location,
-      description: description ?? this.description,
       id: id ?? this.id,
+      locationDescription: locationDescription ?? this.locationDescription,
       indoor: indoor ?? this.indoor,
+      level: level ?? this.level,
       operator: operator ?? this.operator,
       phone: phone ?? this.phone,
       openingHours: openingHours ?? this.openingHours,
       access: access ?? this.access,
       image: image ?? this.image,
+      description: description ?? this.description,
       photoBytes: photoBytes ?? this.photoBytes,
     );
   }
 
   static bool tagsEqual(Defibrillator a, Defibrillator b) {
-    return a.description == b.description &&
+    return a.locationDescription == b.locationDescription &&
         a.indoor == b.indoor &&
+        a.level == b.level &&
         a.operator == b.operator &&
         a.phone == b.phone &&
         a.openingHours == b.openingHours &&
         a.access == b.access &&
+        a.description == b.description &&
         a.image == b.image;
   }
 
@@ -200,6 +239,7 @@ class Defibrillator {
       'aed_latitude': location.latitude,
       'aed_longitude': location.longitude,
       'aed_indoor': indoor,
+      'aed_level': level,
       'aed_operator': operator,
       'aed_phone': phone,
       'aed_distance': distance,

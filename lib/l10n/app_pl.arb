@@ -184,4 +184,10 @@
   "photoReported": "Zdjęcie zostało zgłoszone",
   "photoUploaded": "Zdjęcie zostało zapisane",
   "photoUploadFailed": "Nie udało się przesłać zdjęcia"
+,
+  "level": "Piętro",
+  "enterLevel": "Podaj piętro",
+  "enterNote": "Dodaj notatkę",
+  "showMore": "Pokaż więcej",
+  "showLess": "Pokaż mniej"
 }

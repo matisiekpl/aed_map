@@ -455,4 +455,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Impossibile caricare la foto';
+
+  @override
+  String get level => 'Piano';
+
+  @override
+  String get enterLevel => 'Inserisci piano';
+
+  @override
+  String get enterNote => 'Aggiungi nota';
+
+  @override
+  String get showMore => 'Mostra di più';
+
+  @override
+  String get showLess => 'Mostra di meno';
 }

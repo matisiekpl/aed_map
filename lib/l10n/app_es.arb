@@ -181,4 +181,10 @@
   "photoReported": "La foto ha sido reportada",
   "photoUploaded": "Foto guardada correctamente",
   "photoUploadFailed": "No se pudo subir la foto"
+,
+  "level": "Planta",
+  "enterLevel": "Introducir planta",
+  "enterNote": "Añadir nota",
+  "showMore": "Mostrar más",
+  "showLess": "Mostrar menos"
 }

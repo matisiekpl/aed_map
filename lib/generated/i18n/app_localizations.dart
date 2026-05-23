@@ -933,6 +933,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to upload photo'**
   String get photoUploadFailed;
+
+  /// No description provided for @level.
+  ///
+  /// In en, this message translates to:
+  /// **'Floor (Level)'**
+  String get level;
+
+  /// No description provided for @enterLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter floor'**
+  String get enterLevel;
+
+  /// No description provided for @enterNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter note / description'**
+  String get enterNote;
+
+  /// No description provided for @showMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Show more'**
+  String get showMore;
+
+  /// No description provided for @showLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get showLess;
 }
 
 class _AppLocalizationsDelegate
