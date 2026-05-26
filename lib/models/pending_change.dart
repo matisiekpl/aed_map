@@ -30,10 +30,10 @@ class PendingChange {
         'id': snapshot.id,
         'lat': snapshot.location.latitude,
         'lon': snapshot.location.longitude,
-        'locationDescription': snapshot.locationDescription,
+        'locationDescriptions': snapshot.locationDescriptions,
         'indoor': snapshot.indoor,
         'level': snapshot.level,
-        'description': snapshot.description,
+        'descriptions': snapshot.descriptions,
         'operator': snapshot.operator,
         'phone': snapshot.phone,
         'openingHours': snapshot.openingHours,
@@ -56,10 +56,14 @@ class PendingChange {
       snapshot: Defibrillator(
         id: snapshotJson['id'] as int,
         location: LatLng(snapshotJson['lat'] as double, snapshotJson['lon'] as double),
-        locationDescription: snapshotJson['locationDescription'] as String?,
+        locationDescriptions: snapshotJson.containsKey('locationDescriptions')
+            ? (snapshotJson['locationDescriptions'] as Map<String, dynamic>).cast<String, String>()
+            : (snapshotJson['locationDescription'] != null ? {'': snapshotJson['locationDescription'] as String} : {}),
         indoor: snapshotJson['indoor'] as String?,
         level: snapshotJson['level'] as String?,
-        description: snapshotJson['description'] as String?,
+        descriptions: snapshotJson.containsKey('descriptions')
+            ? (snapshotJson['descriptions'] as Map<String, dynamic>).cast<String, String>()
+            : (snapshotJson['description'] != null ? {'': snapshotJson['description'] as String} : {}),
         operator: snapshotJson['operator'] as String?,
         phone: snapshotJson['phone'] as String?,
         openingHours: snapshotJson['openingHours'] as String?,

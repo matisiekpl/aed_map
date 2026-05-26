@@ -1,6 +1,6 @@
-import 'dart:typed_data';
 
 import 'package:aed_map/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:xml/xml.dart';
@@ -9,7 +9,7 @@ import '../generated/i18n/app_localizations.dart';
 
 class Defibrillator {
   LatLng location;
-  String? locationDescription;
+  Map<String, String> locationDescriptions;
   int id;
   String? indoor;
   String? level;
@@ -19,20 +19,20 @@ class Defibrillator {
   String? openingHours;
   String? access;
   String? image;
-  String? description;
+  Map<String, String> descriptions;
   Uint8List? photoBytes;
 
   Defibrillator(
       {required this.location,
       required this.id,
-      this.locationDescription,
+      this.locationDescriptions = const {},
       this.indoor,
       this.level,
       this.operator,
       this.phone,
       this.openingHours,
       this.image = '',
-      this.description,
+      this.descriptions = const {},
       this.access = 'yes',
       List<int>? photoBytes})
       : photoBytes = photoBytes != null ? Uint8List.fromList(photoBytes) : null;
@@ -99,10 +99,10 @@ class Defibrillator {
 
 
     final isEnglish = systemLang == 'en';
-    final hasGenericLocation =
-        oldTags.any((t) => t[0] == 'defibrillator:location');
-    final hasGenericDescription =
-        oldTags.any((t) => t[0] == 'description');
+    final hasGenericLocation = oldTags.any((t) => t[0] == 'defibrillator:location');
+    final hasGenericDescription = oldTags.any((t) => t[0] == 'description');
+    
+
     final writeGenericLocation = isEnglish || !hasGenericLocation;
     final writeGenericDescription = isEnglish || !hasGenericDescription;
 
@@ -120,62 +120,73 @@ class Defibrillator {
         builder.attribute('lon', location.longitude);
 
         if (access != null && access.toString().isNotEmpty) {
-          builder.element('tag',
-              attributes: {'k': 'access', 'v': access.toString()});
+          builder.element('tag', attributes: {'k': 'access', 'v': access.toString()});
         }
-        if (locationDescription != null && locationDescription.toString().isNotEmpty) {
-          builder.element('tag', attributes: {
-            'k': 'defibrillator:location:$systemLang',
-            'v': locationDescription.toString()
-          });
-          if (writeGenericLocation) {
+        
+        locationDescriptions.forEach((lang, text) {
+          if (lang.isNotEmpty && text.isNotEmpty) {
+            builder.element('tag', attributes: {
+              'k': 'defibrillator:location:$lang',
+              'v': text
+            });
+          }
+        });
+
+        if (writeGenericLocation) {
+          final text = locationDescriptions[systemLang] ?? locationDescriptions.values.firstOrNull;
+          if (text != null && text.isNotEmpty) {
             builder.element('tag', attributes: {
               'k': 'defibrillator:location',
-              'v': locationDescription.toString()
+              'v': text
             });
           }
         }
-        builder.element('tag',
-            attributes: {'k': 'emergency', 'v': 'defibrillator'});
+
+        builder.element('tag', attributes: {'k': 'emergency', 'v': 'defibrillator'});
         if (image != null && image.toString().isNotEmpty) {
           builder.element('tag', attributes: {'k': 'image', 'v': image ?? ''});
         }
-        builder
-            .element('tag', attributes: {'k': 'indoor', 'v': indoor ?? 'no'});
+        builder.element('tag', attributes: {'k': 'indoor', 'v': indoor ?? 'no'});
         if (level != null && level.toString().isNotEmpty) {
-          builder.element('tag',
-              attributes: {'k': 'level', 'v': level ?? ''});
+          builder.element('tag', attributes: {'k': 'level', 'v': level ?? ''});
         }
         if (openingHours != null && openingHours.toString().isNotEmpty) {
-          builder.element('tag',
-              attributes: {'k': 'opening_hours', 'v': openingHours ?? ''});
+          builder.element('tag', attributes: {'k': 'opening_hours', 'v': openingHours ?? ''});
         }
         if (operator != null && operator.toString().isNotEmpty) {
-          builder.element('tag',
-              attributes: {'k': 'operator', 'v': operator ?? ''});
+          builder.element('tag', attributes: {'k': 'operator', 'v': operator ?? ''});
         }
         if (phone != null && phone.toString().isNotEmpty) {
           builder.element('tag', attributes: {'k': 'phone', 'v': phone ?? ''});
         }
-        if (description != null && description.toString().isNotEmpty) {
-          builder.element('tag', attributes: {
-            'k': 'description:$systemLang',
-            'v': description ?? ''
-          });
-          if (writeGenericDescription) {
+
+        descriptions.forEach((lang, text) {
+          if (lang.isNotEmpty && text.isNotEmpty) {
+            builder.element('tag', attributes: {
+              'k': 'description:$lang',
+              'v': text
+            });
+          }
+        });
+
+        if (writeGenericDescription) {
+          final text = descriptions[systemLang] ?? descriptions.values.firstOrNull;
+          if (text != null && text.isNotEmpty) {
             builder.element('tag', attributes: {
               'k': 'description',
-              'v': description ?? ''
+              'v': text
             });
           }
         }
 
+        final locationDescriptionKeys = locationDescriptions.keys.map((l) => 'defibrillator:location:$l').toSet();
+        final descriptionKeys = descriptions.keys.map((l) => 'description:$l').toSet();
 
         final exclusions = {
           'phone', 'operator', 'opening_hours', 'indoor', 'level',
           'emergency', 'access', 'image',
-          'defibrillator:location:$systemLang',
-          'description:$systemLang',
+          ...locationDescriptionKeys,
+          ...descriptionKeys,
           if (writeGenericLocation) 'defibrillator:location',
           if (writeGenericDescription) 'description',
         };
@@ -192,7 +203,7 @@ class Defibrillator {
 
   Defibrillator copyWith({
     LatLng? location,
-    String? locationDescription,
+    Map<String, String>? locationDescriptions,
     int? id,
     String? indoor,
     String? level,
@@ -201,13 +212,13 @@ class Defibrillator {
     String? openingHours,
     String? access,
     String? image,
-    String? description,
+    Map<String, String>? descriptions,
     List<int>? photoBytes,
   }) {
     return Defibrillator(
       location: location ?? this.location,
       id: id ?? this.id,
-      locationDescription: locationDescription ?? this.locationDescription,
+      locationDescriptions: locationDescriptions ?? this.locationDescriptions,
       indoor: indoor ?? this.indoor,
       level: level ?? this.level,
       operator: operator ?? this.operator,
@@ -215,20 +226,20 @@ class Defibrillator {
       openingHours: openingHours ?? this.openingHours,
       access: access ?? this.access,
       image: image ?? this.image,
-      description: description ?? this.description,
+      descriptions: descriptions ?? this.descriptions,
       photoBytes: photoBytes ?? this.photoBytes,
     );
   }
 
   static bool tagsEqual(Defibrillator a, Defibrillator b) {
-    return a.locationDescription == b.locationDescription &&
+    return mapEquals(a.locationDescriptions, b.locationDescriptions) &&
         a.indoor == b.indoor &&
         a.level == b.level &&
         a.operator == b.operator &&
         a.phone == b.phone &&
         a.openingHours == b.openingHours &&
         a.access == b.access &&
-        a.description == b.description &&
+        mapEquals(a.descriptions, b.descriptions) &&
         a.image == b.image;
   }
 
@@ -247,6 +258,34 @@ class Defibrillator {
       'aed_access': access,
       'aed_image': image
     };
+  }
+
+  Defibrillator normalizeForPendingChange(String systemLang) {
+    var normalized = copyWith(
+      locationDescriptions: Map<String, String>.from(locationDescriptions),
+      descriptions: Map<String, String>.from(descriptions)
+    );
+    final hasEnglishLocation = normalized.locationDescriptions.containsKey('en');
+    final writeGenericLocation = systemLang == 'en' || !hasEnglishLocation;
+    
+    if (writeGenericLocation) {
+      final text = normalized.locationDescriptions[systemLang] ?? normalized.locationDescriptions.values.firstOrNull;
+      if (text != null && text.isNotEmpty) {
+        normalized.locationDescriptions[''] = text;
+      }
+    }
+    
+    final hasEnglishDescription = normalized.descriptions.containsKey('en');
+    final writeGenericDescription = systemLang == 'en' || !hasEnglishDescription;
+
+    if (writeGenericDescription) {
+      final text = normalized.descriptions[systemLang] ?? normalized.descriptions.values.firstOrNull;
+      if (text != null && text.isNotEmpty) {
+        normalized.descriptions[''] = text;
+      }
+    }
+    
+    return normalized;
   }
 }
 

@@ -73,6 +73,7 @@ class EditCubit extends Cubit<EditState> {
     }
     Defibrillator defibrillator = Defibrillator(
         location: LatLng(state.cursor.latitude, state.cursor.longitude), id: 0);
+    var lang = Platform.localeName.split('_')[0];
     emit(EditInProgress(
         enabled: false,
         cursor: state.cursor,
@@ -80,7 +81,7 @@ class EditCubit extends Cubit<EditState> {
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
         level: defibrillator.level ?? '',
-        description: defibrillator.locationDescription ?? '',
+        description: defibrillator.locationDescriptions[lang] ?? defibrillator.locationDescriptions[''] ?? '',
         originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
@@ -92,6 +93,7 @@ class EditCubit extends Cubit<EditState> {
     }
     if (!await pointsRepository.authenticate()) return;
     defibrillator = defibrillator.copyWith();
+    var lang = Platform.localeName.split('_')[0];
     emit(EditInProgress(
         enabled: false,
         cursor: state.cursor,
@@ -99,27 +101,31 @@ class EditCubit extends Cubit<EditState> {
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
         level: defibrillator.level ?? '',
-        description: defibrillator.locationDescription ?? '',
+        description: defibrillator.locationDescriptions[lang] ?? defibrillator.locationDescriptions[''] ?? '',
         originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
 
   void editLocationDescription(String value) {
     if (state is EditInProgress) {
-      emit((state as EditInProgress).copyWith(
+      var lang = Platform.localeName.split('_')[0];
+      var s = state as EditInProgress;
+      var newMap = Map<String, String>.from(s.defibrillator.locationDescriptions);
+      newMap[lang] = value;
+      emit(s.copyWith(
           description: value,
-          defibrillator: (state as EditInProgress)
-              .defibrillator
-              .copyWith(locationDescription: value)));
+          defibrillator: s.defibrillator.copyWith(locationDescriptions: newMap)));
     }
   }
 
   void editDescription(String value) {
     if (state is EditInProgress) {
-      emit((state as EditInProgress).copyWith(
-          defibrillator: (state as EditInProgress)
-              .defibrillator
-              .copyWith(description: value)));
+      var lang = Platform.localeName.split('_')[0];
+      var s = state as EditInProgress;
+      var newMap = Map<String, String>.from(s.defibrillator.descriptions);
+      newMap[lang] = value;
+      emit(s.copyWith(
+          defibrillator: s.defibrillator.copyWith(descriptions: newMap)));
     }
   }
 

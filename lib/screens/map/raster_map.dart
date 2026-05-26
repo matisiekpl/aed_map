@@ -185,11 +185,10 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                       if (pointsState is! PointsLoadSuccess) {
                                         return;
                                       }
+                                      var idStr = marker.key.toString().replaceAll('[<\'', '').replaceAll('\'>]', '');
                                       var defibrillator = pointsState
-                                          .defibrillators[int.parse(marker.key
-                                              .toString()
-                                              .replaceAll('[<\'', '')
-                                              .replaceAll('\'>]', ''))];
+                                          .defibrillators
+                                          .firstWhere((d) => d.id == int.parse(idStr));
                                       context.read<RoutingCubit>().cancel();
                                       context
                                           .read<PointsCubit>()

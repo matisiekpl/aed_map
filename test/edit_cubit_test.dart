@@ -64,7 +64,7 @@ void main() {
       await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
-          description: 'test_description',
+          locationDescriptions: {'pl': 'test_description'}, descriptions: {'pl': 'test_description'},
           indoor: 'no',
           access: 'yes',
           operator: 'test_operator',
@@ -73,8 +73,8 @@ void main() {
       expect(editCubit.state, isA<EditInProgress>());
       expect((editCubit.state as EditInProgress).defibrillator, isA<Defibrillator>());
       expect((editCubit.state as EditInProgress).defibrillator.id, 7);
-      expect((editCubit.state as EditInProgress).defibrillator.description,
-          'test_description');
+      expect((editCubit.state as EditInProgress).defibrillator.descriptions.containsValue('test_description'),
+          true);
       expect((editCubit.state as EditInProgress).indoor, 'no');
       expect((editCubit.state as EditInProgress).access, 'yes');
       expect((editCubit.state as EditInProgress).defibrillator.operator, 'test_operator');
@@ -86,17 +86,15 @@ void main() {
       await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
-          description: 'test_description',
+          locationDescriptions: {'pl': 'test_description'}, descriptions: {'pl': 'test_description'},
           indoor: 'no',
           access: 'yes',
           operator: 'test_operator',
           phone: 'test_phone'));
       editCubit.editDescription('test_description2');
       expect(editCubit.state, isA<EditInProgress>());
-      expect((editCubit.state as EditInProgress).defibrillator.description,
-          'test_description2');
-      expect(
-          (editCubit.state as EditInProgress).description, 'test_description2');
+      expect((editCubit.state as EditInProgress).defibrillator.descriptions.containsValue('test_description2'),
+          true);
     });
 
     test('editIndoor', () async {
@@ -104,7 +102,7 @@ void main() {
       await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
-          description: 'test_description',
+          locationDescriptions: {'pl': 'test_description'}, descriptions: {'pl': 'test_description'},
           indoor: 'yes',
           access: 'yes',
           operator: 'test_operator',
@@ -120,7 +118,7 @@ void main() {
       await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
-          description: 'test_description',
+          locationDescriptions: {'pl': 'test_description'}, descriptions: {'pl': 'test_description'},
           indoor: 'no',
           access: 'yes',
           operator: 'test_operator',
@@ -136,7 +134,7 @@ void main() {
       await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
-          description: 'test_description',
+          locationDescriptions: {'pl': 'test_description'}, descriptions: {'pl': 'test_description'},
           indoor: 'no',
           access: 'yes',
           operator: 'test_operator',
@@ -152,7 +150,7 @@ void main() {
       await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
-          description: 'test_description',
+          locationDescriptions: {'pl': 'test_description'}, descriptions: {'pl': 'test_description'},
           indoor: 'no',
           access: 'yes',
           image: 'https://example.com/photo.jpg'));
@@ -167,7 +165,7 @@ void main() {
       await editCubit.edit(Defibrillator(
           id: 7,
           location: warsaw,
-          description: 'test_description',
+          locationDescriptions: {'pl': 'test_description'}, descriptions: {'pl': 'test_description'},
           indoor: 'no',
           access: 'yes',
           image: 'https://example.com/photo.jpg'));

@@ -86,13 +86,14 @@ class _PendingChangesPageState extends State<PendingChangesPage> {
         const Icon(CupertinoIcons.trash_circle, color: Colors.red),
     };
 
-    final locationDescription = change.snapshot.locationDescription ?? '';
+    var lang = Localizations.localeOf(context).languageCode;
+    final locationDescription = change.snapshot.locationDescriptions[lang] ?? change.snapshot.locationDescriptions[''] ?? '';
     final level = change.snapshot.level;
     final indoor = change.snapshot.indoor;
     final operator = change.snapshot.operator;
     final openingHours = change.snapshot.openingHours;
     final phone = change.snapshot.phone;
-    final description = change.snapshot.description;
+    final description = change.snapshot.descriptions[lang] ?? change.snapshot.descriptions[''];
     
     List<String> details = [];
     if (locationDescription.isNotEmpty) details.add(locationDescription);

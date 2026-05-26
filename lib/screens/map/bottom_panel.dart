@@ -22,6 +22,7 @@ import '../../bloc/routing/routing_cubit.dart';
 import '../../bloc/routing/routing_state.dart';
 import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
+import '../../screens/map/expandable_note.dart';
 import '../../screens/photo/photo_source_bottom_sheet.dart';
 import '../../shared/utils.dart';
 
@@ -33,6 +34,7 @@ class BottomPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appLocalizations = AppLocalizations.of(context)!;
+    
     return BlocListener<EditCubit, EditState>(
       listenWhen: (previous, current) =>
           previous.photoStatus != current.photoStatus &&
@@ -80,6 +82,10 @@ class BottomPanel extends StatelessWidget {
           return Container();
         }
         if (state is PointsLoadSuccess) {
+          var lang = Localizations.localeOf(context).languageCode;
+          var locDesc = state.selected.locationDescriptions[lang] ?? state.selected.locationDescriptions[''];
+          var desc = state.selected.descriptions[lang] ?? state.selected.descriptions[''];
+
           return Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
@@ -250,7 +256,7 @@ class BottomPanel extends StatelessWidget {
                       const SizedBox(height: 8),
                       CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
-                          value: state.selected.locationDescription.purge() ??
+                          value: locDesc.purge() ??
                               appLocalizations.noData,
                           builder: (context, v) {
                             return Column(
@@ -310,22 +316,32 @@ class BottomPanel extends StatelessWidget {
                           duration: const Duration(milliseconds: 200),
                           value: state.selected.getIndoorText(appLocalizations),
                           builder: (context, v) {
-                            String indoorText = v;
-                            if (state.selected.level != null && state.selected.level!.isNotEmpty) {
-                              indoorText += ' (${appLocalizations.level.toLowerCase()}: ${state.selected.level})';
-                            }
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text('${appLocalizations.insideBuilding}: ',
                                     style: const TextStyle(fontSize: 16)),
-                                Text(indoorText,
+                                Text(v,
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
                               ],
                             );
                           }),
+                      if (state.selected.level != null && state.selected.level!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text('${appLocalizations.level}: ',
+                                style: const TextStyle(fontSize: 16)),
+                            Text(state.selected.level!,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ],
                       const SizedBox(height: 4),
                       CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
@@ -354,10 +370,10 @@ class BottomPanel extends StatelessWidget {
                               ),
                             );
                           }),
-                      if (state.selected.description != null && state.selected.description!.isNotEmpty) ...[
+                      if (desc != null && desc.isNotEmpty) ...[
                         const SizedBox(height: 4),
-                        _ExpandableNote(
-                          text: state.selected.description!,
+                        ExpandableNote(
+                          text: desc,
                           title: appLocalizations.information,
                           showMoreText: appLocalizations.showMore,
                           showLessText: appLocalizations.showLess,
@@ -529,65 +545,5 @@ Future<void> showReportPhotoDialog(
       ],
     ),
   );
-}
-
-class _ExpandableNote extends StatefulWidget {
-  final String text;
-  final String title;
-  final String showMoreText;
-  final String showLessText;
-
-  const _ExpandableNote({
-    required this.text,
-    required this.title,
-    required this.showMoreText,
-    required this.showLessText,
-  });
-
-  @override
-  State<_ExpandableNote> createState() => _ExpandableNoteState();
-}
-
-class _ExpandableNoteState extends State<_ExpandableNote> {
-  bool _expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(widget.title, style: const TextStyle(fontSize: 16)),
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            setState(() {
-              _expanded = !_expanded;
-            });
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (_expanded)
-                Text(
-                  widget.text,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Text(
-                  _expanded ? widget.showLessText : widget.showMoreText,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: CupertinoColors.activeBlue.resolveFrom(context),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-      ],
-    );
-  }
 }
 

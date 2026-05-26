@@ -8,7 +8,7 @@ void main() {
       final defibrillator = Defibrillator(
         id: 7,
         location: warsaw,
-        description: 'test_description',
+        descriptions: {'pl': 'test_description'},
         indoor: 'no',
         access: 'yes',
         image: '',

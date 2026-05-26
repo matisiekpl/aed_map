@@ -111,7 +111,7 @@ class EditForm extends StatelessWidget {
           SettingsTile(
             leading: const Icon(CupertinoIcons.placemark),
             title: TextFormField(
-              initialValue: state.defibrillator.locationDescription,
+              initialValue: state.defibrillator.locationDescriptions[Localizations.localeOf(context).languageCode] ?? state.defibrillator.locationDescriptions[''],
               onChanged: context.read<EditCubit>().editLocationDescription,
               decoration: InputDecoration.collapsed(
                   hintText: appLocalizations.enterDescription),
@@ -120,7 +120,7 @@ class EditForm extends StatelessWidget {
           SettingsTile(
             leading: const Icon(CupertinoIcons.pencil_ellipsis_rectangle),
             title: TextFormField(
-              initialValue: state.defibrillator.description,
+              initialValue: state.defibrillator.descriptions[Localizations.localeOf(context).languageCode] ?? state.defibrillator.descriptions[''],
               onChanged: context.read<EditCubit>().editDescription,
               decoration: InputDecoration.collapsed(
                   hintText: appLocalizations.enterNote),
