@@ -49,7 +49,7 @@ class PointsCubit extends Cubit<PointsState> {
     await editCubit.reconcilePendingChanges(nearbyDefibrillators);
     final pendingChanges = editCubit.state.pendingChanges;
     final (mergedDefibrillators, pendingIds) =
-        mergeWithPendingChanges(nearbyDefibrillators, pendingChanges);
+        mergeWithPendingChanges(nearbyDefibrillators, pendingChanges, position);
     emit(PointsLoadSuccess(
         defibrillators: mergedDefibrillators,
         defibrillatorsCount: defibrillatorsCount,
@@ -73,7 +73,7 @@ class PointsCubit extends Cubit<PointsState> {
     await editCubit.reconcilePendingChanges(nearbyDefibrillators);
     final pendingChanges = editCubit.state.pendingChanges;
     final (mergedDefibrillators, pendingIds) =
-        mergeWithPendingChanges(nearbyDefibrillators, pendingChanges);
+        mergeWithPendingChanges(nearbyDefibrillators, pendingChanges, position);
     emit(PointsLoadSuccess(
         defibrillators: mergedDefibrillators,
         defibrillatorsCount: defibrillatorsCount,
@@ -85,15 +85,16 @@ class PointsCubit extends Cubit<PointsState> {
         hash: generateRandomString(32)));
   }
 
-  void applyPendingChanges(List<PendingChange> pendingChanges) {
+  Future<void> applyPendingChanges(List<PendingChange> pendingChanges) async {
     var s = state;
     if (s is! PointsLoadSuccess) return;
+    var position = (await geolocationRepository.locate()).location;
     final baseDefibrillators = s.defibrillators
         .where((defibrillator) => !pendingChanges
             .any((change) => change.defibrillatorId == defibrillator.id))
         .toList();
     final (mergedDefibrillators, pendingIds) =
-        mergeWithPendingChanges(baseDefibrillators, pendingChanges);
+        mergeWithPendingChanges(baseDefibrillators, pendingChanges, position);
     emit(s.copyWith(
         defibrillators: mergedDefibrillators,
         markers: buildMarkers(mergedDefibrillators, pendingIds),
@@ -102,7 +103,7 @@ class PointsCubit extends Cubit<PointsState> {
   }
 
   (List<Defibrillator>, Set<int>) mergeWithPendingChanges(
-      List<Defibrillator> defibrillators, List<PendingChange> pendingChanges) {
+      List<Defibrillator> defibrillators, List<PendingChange> pendingChanges, LatLng position) {
     final deleteIds = pendingChanges
         .where((change) => change.type == PendingChangeType.delete)
         .map((change) => change.defibrillatorId)
@@ -118,8 +119,13 @@ class PointsCubit extends Cubit<PointsState> {
       pendingIds.add(change.defibrillatorId);
       merged.removeWhere(
           (defibrillator) => defibrillator.id == change.defibrillatorId);
-      merged.insert(0, change.snapshot);
+      final snapshot = change.snapshot;
+      const Distance distanceCalculator = Distance(calculator: Haversine());
+      snapshot.distance = distanceCalculator(position, snapshot.location).ceil();
+      merged.add(snapshot);
     }
+    
+    merged.sort((a, b) => (a.distance ?? 999999999).compareTo(b.distance ?? 999999999));
 
     return (merged, pendingIds);
   }
@@ -136,13 +142,18 @@ class PointsCubit extends Cubit<PointsState> {
     }
   }
 
-  void update(Defibrillator defibrillator) {
+  Future<void> update(Defibrillator defibrillator) async {
     if (state is PointsLoadSuccess) {
       final currentState = state as PointsLoadSuccess;
+      var position = (await geolocationRepository.locate()).location;
+      const Distance distanceCalculator = Distance(calculator: Haversine());
+      defibrillator.distance = distanceCalculator(position, defibrillator.location).ceil();
+
       if (defibrillator.id == 0) {
         var newDefibrillators =
             List<Defibrillator>.from(currentState.defibrillators)
-              ..insert(0, defibrillator);
+              ..add(defibrillator);
+        newDefibrillators.sort((a, b) => (a.distance ?? 999999999).compareTo(b.distance ?? 999999999));
         emit(currentState.copyWith(
             defibrillators: newDefibrillators,
             markers: buildMarkers(newDefibrillators, currentState.pendingIds),
@@ -151,7 +162,8 @@ class PointsCubit extends Cubit<PointsState> {
         var updatedDefibrillators =
             List<Defibrillator>.from(currentState.defibrillators)
               ..removeWhere((existing) => existing.id == defibrillator.id)
-              ..insert(0, defibrillator);
+              ..add(defibrillator);
+        updatedDefibrillators.sort((a, b) => (a.distance ?? 999999999).compareTo(b.distance ?? 999999999));
         emit(currentState.copyWith(
             selected: defibrillator,
             defibrillators: updatedDefibrillators,
