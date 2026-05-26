@@ -233,10 +233,7 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                           child: GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
-                              var locState = context.read<LocationCubit>().state;
-                              if (locState is LocationDetermined) {
-                                _animatedMapMove(locState.center, 18);
-                              }
+                              context.read<LocationCubit>().locate();
                             },
                             child: Card(
                               color: CupertinoColors.secondarySystemBackground
