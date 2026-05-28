@@ -1,1 +1,1 @@
-Se ha solucionado el problema de carga lenta del mapa.
+Se mejoró el rendimiento del renderizado del mapa.

@@ -1,1 +1,1 @@
-Naprawiono problem ze spowolnionym ładowaniem mapy.
+Usprawniono wydajność renderowania mapy

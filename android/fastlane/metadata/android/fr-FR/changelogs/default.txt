@@ -1,1 +1,1 @@
-Le problème de chargement lent de la carte a été résolu.
+Amélioration de la performance de rendu de la carte.

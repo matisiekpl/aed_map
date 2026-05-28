@@ -54,6 +54,7 @@ void main() async {
   });
   remoteConfig.fetchAndActivate();
   mixpanel = await Mixpanel.init(mixpanelToken, trackAutomaticEvents: true);
+  mixpanel.setServerURL('https://api-eu.mixpanel.com');
   await NsfwDetector.initialize(threshold: 0.7);
   await SentryFlutter.init(
     (options) {
@@ -61,8 +62,8 @@ void main() async {
           'https://492fa94bb5e0bdf492c5a8b8a108d84e@o337011.ingest.sentry.io/4506661810274304';
       options.tracesSampleRate = 1.0;
       options.attachScreenshot = true;
-      options.replay.sessionSampleRate = 1.0;
-      options.replay.onErrorSampleRate = 1.0;
+      options.replay.sessionSampleRate = 0.0;
+      options.replay.onErrorSampleRate = 0.0;
     },
     appRunner: () => runApp(
         SentryWidget(child: BetterFeedback(child: Phoenix(child: App())))),

@@ -1,1 +1,1 @@
-Risolto il problema con il caricamento lento della mappa.
+Migliorata la performance del rendering della mappa.

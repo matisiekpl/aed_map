@@ -1,1 +1,1 @@
-Fixed the issue with slow map loading.
+Improved map rendering performance.

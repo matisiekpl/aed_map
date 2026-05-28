@@ -1,1 +1,1 @@
-Das Problem mit dem langsamen Laden der Karte wurde behoben.
+Die Renderleistung der Karte wurde optimiert.
