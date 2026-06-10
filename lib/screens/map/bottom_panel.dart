@@ -387,6 +387,7 @@ class BottomPanel extends StatelessWidget {
                                     builder: (context, networkState) {
                                   return Semantics(
                                       button: true,
+                                      enabled: networkState.connected,
                                       label: appLocalizations.navigate,
                                       child: CupertinoButton.filled(
                                       key: const Key('navigate'),
