@@ -32,7 +32,7 @@ class RoutingCubit extends Cubit<RoutingState> {
     }
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
       FirebaseAnalytics.instance.logSearch(searchTerm: defibrillator.id.toString());
-      mixpanel.track(navigateEvent, properties: defibrillator.getEventProperties());
+      mixpanel?.track(navigateEvent, properties: defibrillator.getEventProperties());
     }
   }
 

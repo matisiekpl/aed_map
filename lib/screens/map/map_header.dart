@@ -184,7 +184,7 @@ class MapHeader extends StatelessWidget {
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      mixpanel.track(aboutEvent);
+                      mixpanel?.track(aboutEvent);
                       var pointsCubit = context.read<PointsCubit>();
                       var locationCubit = context.read<LocationCubit>();
                       var feedbackCubit = context.read<FeedbackCubit>();
@@ -220,7 +220,7 @@ class MapHeader extends StatelessWidget {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () async {
-                        mixpanel.track(livechatEvent);
+                        mixpanel?.track(livechatEvent);
                         FirebaseAnalytics.instance
                             .logEvent(name: livechatEvent);
                         launchUrl(Uri.parse('https://pomoc.aedmapa.pl/'));

@@ -129,7 +129,7 @@ class PointsCubit extends Cubit<PointsState> {
         contentType: 'aed', itemId: defibrillator.id.toString());
     HapticFeedback.mediumImpact();
     analytics.event(name: selectEvent);
-    mixpanel.track(selectEvent, properties: defibrillator.getEventProperties());
+    mixpanel?.track(selectEvent, properties: defibrillator.getEventProperties());
     if (state is PointsLoadSuccess) {
       emit((state as PointsLoadSuccess)
           .copyWith(selected: defibrillator, hash: generateRandomString(32)));

@@ -332,7 +332,7 @@ class BottomPanel extends StatelessWidget {
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
                                 if (state.selected.phone.purge() != null) {
-                                  mixpanel.track(phoneEvent);
+                                  mixpanel?.track(phoneEvent);
                                   launchUrl(Uri.parse(
                                       'tel:${state.selected.phone.toString().replaceAll(' ', '')}'));
                                 }

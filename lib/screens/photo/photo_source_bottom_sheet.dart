@@ -18,7 +18,7 @@ import '../../generated/i18n/app_localizations.dart';
 
 Future<void> showPhotoSourceSheet(
     BuildContext context, Defibrillator defibrillator) async {
-  mixpanel.track(photoSelectorOpenedEvent,
+  mixpanel?.track(photoSelectorOpenedEvent,
       properties: defibrillator.getEventProperties());
   var appLocalizations = AppLocalizations.of(context)!;
   await showCupertinoModalPopup(
@@ -56,7 +56,7 @@ Future<void> pickAndProceed(BuildContext context, Defibrillator defibrillator,
   var appLocalizations = AppLocalizations.of(context)!;
   var picked = await ImagePicker().pickImage(source: source);
   if (picked == null) return;
-  mixpanel.track(photoSelectedEvent, properties: {
+  mixpanel?.track(photoSelectedEvent, properties: {
     ...defibrillator.getEventProperties(),
     'source': source == ImageSource.gallery ? 'gallery' : 'camera',
   });
@@ -80,7 +80,7 @@ Future<void> pickAndProceed(BuildContext context, Defibrillator defibrillator,
   var unsafe = await editCubit.isPhotoUnsafe(file);
 
   if (unsafe) {
-    mixpanel.track(photoNsfwBlockedEvent,
+    mixpanel?.track(photoNsfwBlockedEvent,
         properties: defibrillator.getEventProperties());
     await showCupertinoDialog(
       context: context,
@@ -98,7 +98,7 @@ Future<void> pickAndProceed(BuildContext context, Defibrillator defibrillator,
     return;
   }
 
-  mixpanel.track(photoConfirmationEvent,
+  mixpanel?.track(photoConfirmationEvent,
       properties: defibrillator.getEventProperties());
   var pointsCubit = context.read<PointsCubit>();
   await Navigator.of(context).push(

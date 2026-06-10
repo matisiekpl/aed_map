@@ -17,7 +17,7 @@ const iosUserAgent =
 const androidUserAgent =
     'Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Mobile Safari/537.36';
 
-const mixpanelToken = '7aa0fecdfd096ba41039b52c5a16ec47';
+const mixpanelToken = String.fromEnvironment('MIXPANEL_TOKEN');
 
 const enterEditModeEvent = 'enter_edit_mode';
 const addEvent = 'add';
