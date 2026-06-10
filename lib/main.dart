@@ -66,8 +66,6 @@ void main() async {
         options.dsn = sentryDsn;
         options.tracesSampleRate = 1.0;
         options.attachScreenshot = true;
-        options.replay.sessionSampleRate = 0.0;
-        options.replay.onErrorSampleRate = 0.0;
       },
       appRunner: () => runApp(SentryWidget(child: app)),
     );
