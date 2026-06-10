@@ -9,7 +9,7 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
-  String get heading => 'Informacje';
+  String get heading => 'Mapa AED';
 
   @override
   String subheading(int count) {

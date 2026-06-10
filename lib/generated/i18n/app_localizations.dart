@@ -109,7 +109,7 @@ abstract class AppLocalizations {
   /// No description provided for @heading.
   ///
   /// In en, this message translates to:
-  /// **'Information'**
+  /// **'AED Map'**
   String get heading;
 
   /// No description provided for @subheading.

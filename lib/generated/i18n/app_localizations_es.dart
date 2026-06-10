@@ -9,7 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get heading => 'Información';
+  String get heading => 'Mapa de DEA';
 
   @override
   String subheading(int count) {

@@ -9,7 +9,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get heading => 'Informations';
+  String get heading => 'Carte des DAE';
 
   @override
   String subheading(int count) {
