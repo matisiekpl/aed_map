@@ -1,5 +1,5 @@
 {
-  "heading": "AED Map",
+  "heading": "Information",
   "subheading": "{count} AEDs available",
   "@subheading": {
     "placeholders": {
@@ -20,7 +20,7 @@
   "noData": "No data",
   "navigate": "Navigate",
   "chooseMapApp": "Choose maps application",
-  "about": "Data source: openaedmap.org",
+  "about": "About the application",
   "defibrillator": "Defibrillator",
   "runDistance": "~{minutes} minute(s) of running ({meters}m)",
   "@runDistance": {
@@ -106,17 +106,14 @@
   "minutes": "minutes",
   "seconds": "seconds",
   "meters": "meters",
-  "heading": "Information",
   "datasetHeading": "Points Database",
   "datasetDescription": "The AED points database comes from the openaedmap.org project.",
   "defibrillatorsInDataset": "Defibrillators in the database",
   "defibrillatorsWithin5km": "Defibrillators within 5km radius",
   "defibrillatorsWithImages": "Points with images",
-  "about": "About the application",
   "version": "Version",
   "website": "Project website",
   "author": "Author",
-  "contact": "Contact",
   "understand": "I understand",
   "dataSource": "Data source",
   "dataSourceDescription": "The data about the location of defibrillators comes from OpenStreetMap. Their quality may vary. The author is not responsible for the correctness of the data. We encourage you to co-create the database on openaedmap.org",
