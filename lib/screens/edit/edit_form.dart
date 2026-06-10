@@ -111,10 +111,19 @@ class EditForm extends StatelessWidget {
           SettingsTile(
             leading: const Icon(CupertinoIcons.placemark),
             title: TextFormField(
-              initialValue: state.defibrillator.description,
-              onChanged: context.read<EditCubit>().editDescription,
+              initialValue: state.defibrillator.locationDescriptions[Localizations.localeOf(context).languageCode] ?? state.defibrillator.locationDescriptions[''],
+              onChanged: context.read<EditCubit>().editLocationDescription,
               decoration: InputDecoration.collapsed(
                   hintText: appLocalizations.enterDescription),
+            ),
+          ),
+          SettingsTile(
+            leading: const Icon(CupertinoIcons.pencil_ellipsis_rectangle),
+            title: TextFormField(
+              initialValue: state.defibrillator.descriptions[Localizations.localeOf(context).languageCode] ?? state.defibrillator.descriptions[''],
+              onChanged: context.read<EditCubit>().editDescription,
+              decoration: InputDecoration.collapsed(
+                  hintText: appLocalizations.enterNote),
             ),
           ),
           SettingsTile.navigation(
@@ -130,6 +139,15 @@ class EditForm extends StatelessWidget {
             initialValue: state.defibrillator.indoor == 'yes',
             leading: const Icon(CupertinoIcons.home),
             title: Text(appLocalizations.insideBuilding),
+          ),
+          SettingsTile(
+            leading: const Icon(CupertinoIcons.building_2_fill),
+            title: TextFormField(
+              initialValue: state.defibrillator.level,
+              onChanged: context.read<EditCubit>().editLevel,
+              decoration: InputDecoration.collapsed(
+                  hintText: appLocalizations.enterLevel),
+            ),
           ),
           SettingsTile(
             leading: const Icon(CupertinoIcons.person_2),

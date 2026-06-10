@@ -8,13 +8,13 @@ void main() {
       final defibrillator = Defibrillator(
         id: 7,
         location: warsaw,
-        description: 'test_description',
+        descriptions: {'pl': 'test_description'},
         indoor: 'no',
         access: 'yes',
         image: '',
       );
 
-      final xml = defibrillator.toXml(1, 2, oldTags: [
+      final xml = defibrillator.toXml(1, 2, 'pl', oldTags: [
         ['image', 'https://example.com/photo.jpg'],
       ]).toString();
 

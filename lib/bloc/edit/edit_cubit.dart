@@ -73,13 +73,15 @@ class EditCubit extends Cubit<EditState> {
     }
     Defibrillator defibrillator = Defibrillator(
         location: LatLng(state.cursor.latitude, state.cursor.longitude), id: 0);
+    var lang = Platform.localeName.split('_')[0];
     emit(EditInProgress(
         enabled: false,
         cursor: state.cursor,
         defibrillator: defibrillator,
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
-        description: defibrillator.description ?? '',
+        level: defibrillator.level ?? '',
+        description: defibrillator.locationDescriptions[lang] ?? defibrillator.locationDescriptions[''] ?? '',
         originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
@@ -91,22 +93,39 @@ class EditCubit extends Cubit<EditState> {
     }
     if (!await pointsRepository.authenticate()) return;
     defibrillator = defibrillator.copyWith();
+    var lang = Platform.localeName.split('_')[0];
     emit(EditInProgress(
         enabled: false,
         cursor: state.cursor,
         defibrillator: defibrillator,
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
-        description: defibrillator.description ?? '',
+        level: defibrillator.level ?? '',
+        description: defibrillator.locationDescriptions[lang] ?? defibrillator.locationDescriptions[''] ?? '',
         originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
 
+  void editLocationDescription(String value) {
+    if (state is EditInProgress) {
+      var lang = Platform.localeName.split('_')[0];
+      var s = state as EditInProgress;
+      var newMap = Map<String, String>.from(s.defibrillator.locationDescriptions);
+      newMap[lang] = value;
+      emit(s.copyWith(
+          description: value,
+          defibrillator: s.defibrillator.copyWith(locationDescriptions: newMap)));
+    }
+  }
+
   void editDescription(String value) {
-    var s = state;
-    if (s is EditInProgress) {
-      s.defibrillator.description = value;
-      emit(s.copyWith(defibrillator: s.defibrillator, description: value));
+    if (state is EditInProgress) {
+      var lang = Platform.localeName.split('_')[0];
+      var s = state as EditInProgress;
+      var newMap = Map<String, String>.from(s.defibrillator.descriptions);
+      newMap[lang] = value;
+      emit(s.copyWith(
+          defibrillator: s.defibrillator.copyWith(descriptions: newMap)));
     }
   }
 
@@ -143,6 +162,14 @@ class EditCubit extends Cubit<EditState> {
     }
   }
 
+  void editLevel(String value) {
+    var s = state;
+    if (s is EditInProgress) {
+      s.defibrillator.level = value;
+      emit(s.copyWith(defibrillator: s.defibrillator, level: value));
+    }
+  }
+
   void editAccess(String value) {
     var s = state;
     if (s is EditInProgress) {
@@ -173,14 +200,16 @@ class EditCubit extends Cubit<EditState> {
     if (s is EditInProgress) {
       try {
         if (s.defibrillator.id == 0) {
+          var lang = Platform.localeName.split('_')[0];
           var saved =
-              await pointsRepository.insertDefibrillator(s.defibrillator);
+              await pointsRepository.insertDefibrillator(s.defibrillator, lang);
           await userCreatedDefibrillatorRepository.add(saved.id);
           await pendingChangesRepository.register(PendingChange(
             type: PendingChangeType.add,
             defibrillatorId: saved.id,
             snapshot: saved.copyWith(),
             createdAt: DateTime.now(),
+            languageCode: lang,
           ));
           analytics.event(name: saveInsertEvent);
           if (!Platform.environment.containsKey('FLUTTER_TEST')) {
@@ -195,13 +224,15 @@ class EditCubit extends Cubit<EditState> {
           maybeRequestReview();
           return saved;
         } else {
+          var lang = Platform.localeName.split('_')[0];
           var saved =
-              await pointsRepository.updateDefibrillator(s.defibrillator);
+              await pointsRepository.updateDefibrillator(s.defibrillator, lang);
           await pendingChangesRepository.register(PendingChange(
             type: PendingChangeType.edit,
             defibrillatorId: saved.id,
             snapshot: saved.copyWith(),
             createdAt: DateTime.now(),
+            languageCode: lang,
           ));
           analytics.event(name: saveUpdateEvent);
           if (!Platform.environment.containsKey('FLUTTER_TEST')) {

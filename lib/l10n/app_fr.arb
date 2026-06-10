@@ -181,4 +181,10 @@
   "photoReported": "La photo a été signalée",
   "photoUploaded": "Photo enregistrée avec succès",
   "photoUploadFailed": "Échec du téléchargement de la photo"
+,
+  "level": "Étage",
+  "enterLevel": "Entrer l'étage",
+  "enterNote": "Ajouter une note",
+  "showMore": "Afficher plus",
+  "showLess": "Afficher moins"
 }

@@ -181,4 +181,10 @@
   "photoReported": "Foto wurde gemeldet",
   "photoUploaded": "Foto erfolgreich gespeichert",
   "photoUploadFailed": "Foto konnte nicht hochgeladen werden"
+,
+  "level": "Etage",
+  "enterLevel": "Etage eingeben",
+  "enterNote": "Notiz hinzufügen",
+  "showMore": "Mehr anzeigen",
+  "showLess": "Weniger anzeigen"
 }

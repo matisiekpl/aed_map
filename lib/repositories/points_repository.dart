@@ -87,16 +87,37 @@ class PointsRepository {
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
       var id = row['properties'][idLabel];
-      var descriptions = Map.from(row['properties'])
-          .entries
-          .where((a) => a.key.startsWith('defibrillator:location'))
-          .toList();
-      descriptions.sort((a, b) => b.key.length - a.key.length);
+      Map<String, String> locationDescriptions = {};
+      Map<String, String> descriptions = {};
+      
+      (row['properties'] as Map<String, dynamic>).forEach((key, value) {
+        if (value == null || value.toString().isEmpty) return;
+        if (key == 'defibrillator:location') {
+          locationDescriptions[''] = value.toString();
+        } else if (key.startsWith('defibrillator:location:')) {
+          var langParts = key.split(':');
+          if (langParts.length == 3) {
+            locationDescriptions[langParts.last] = value.toString();
+          }
+        } else if (key == 'description' || key == 'note') {
+          // If both description and note exist, description will overwrite note or vice versa.
+          // Usually we prefer description.
+          descriptions[''] = value.toString();
+        } else if (key.startsWith('description:')) {
+          var langParts = key.split(':');
+          if (langParts.length == 2) {
+            descriptions[langParts.last] = value.toString();
+          }
+        }
+      });
+
       defibrillators.add(Defibrillator(
           location: LatLng(row['geometry']['coordinates'][1],
               row['geometry']['coordinates'][0]),
           id: id,
-          description: descriptions.firstOrNull?.value,
+          locationDescriptions: locationDescriptions,
+          descriptions: descriptions,
+          level: row['properties']['level'],
           indoor: row['properties']['indoor'],
           operator: row['properties']['operator'],
           phone: row['properties']['phone'],
@@ -212,7 +233,7 @@ class PointsRepository {
     return int.parse(response.body.toString());
   }
 
-  Future<Defibrillator> insertDefibrillator(Defibrillator defibrillator) async {
+  Future<Defibrillator> insertDefibrillator(Defibrillator defibrillator, String lang) async {
     if (!devMode) {
       var changesetId = await getChangesetId();
       var response = await http.put(
@@ -221,7 +242,7 @@ class PointsRepository {
             'Content-Type': 'text/xml',
             'Authorization': 'Bearer $token'
           },
-          body: defibrillator.toXml(changesetId, 1));
+          body: defibrillator.toXml(changesetId, 1, lang));
       if (response.statusCode != 200) {
         throw OsmApiException(response.statusCode, response.body);
       }
@@ -231,10 +252,10 @@ class PointsRepository {
       defibrillator.id = 9999;
     }
     updateDefibrillators();
-    return defibrillator;
+    return defibrillator.normalizeForPendingChange(lang);
   }
 
-  Future<Defibrillator> updateDefibrillator(Defibrillator defibrillator) async {
+  Future<Defibrillator> updateDefibrillator(Defibrillator defibrillator, String lang) async {
     if (devMode) {
       return defibrillator;
     }
@@ -264,7 +285,7 @@ class PointsRepository {
         tag.attributes.where((attr) => attr.name.toString() == 'v').first.value
       ];
     }).toList();
-    var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
+    var xml = defibrillator.toXml(changesetId, int.parse(oldVersion), lang,
         oldTags: oldTagsPairs);
     var putResponse = await http.put(
         Uri.parse(
@@ -275,7 +296,7 @@ class PointsRepository {
       throw OsmApiException(putResponse.statusCode, putResponse.body);
     }
     updateDefibrillators();
-    return defibrillator;
+    return defibrillator.normalizeForPendingChange(lang);
   }
 
   Future<void> uploadPhoto({required int nodeId, required File file}) async {
@@ -327,30 +348,6 @@ class PointsRepository {
         var element = payload['elements'][0] as Map<String, dynamic>;
         var tags = element['tags'] as Map<String, dynamic>?;
         return tags?['image'] as String?;
-      }
-    } catch (_) {}
-    return null;
-  }
-
-  Future<Defibrillator?> getNode(int id) async {
-    try {
-      var response = await http.get(
-          Uri.parse('https://api.openstreetmap.org/api/0.6/node/$id.json'));
-      var payload = json.decode(response.body);
-      if ((payload['elements'] as List<dynamic>).isNotEmpty) {
-        var element = payload['elements'][0] as Map<String, dynamic>;
-        var tags = element['tags'] as Map<String, dynamic>;
-        return Defibrillator(
-          location: LatLng(element['lat'], element['lon']),
-          id: id,
-          access: tags['access'],
-          description: tags['defibrillator:location'],
-          indoor: tags['indoor'],
-          openingHours: tags['opening_hours'],
-          operator: tags['operator'],
-          phone: tags['phone'],
-          image: tags['image'],
-        );
       }
     } catch (_) {}
     return null;

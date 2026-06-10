@@ -455,4 +455,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'No se pudo subir la foto';
+
+  @override
+  String get level => 'Planta';
+
+  @override
+  String get enterLevel => 'Introducir planta';
+
+  @override
+  String get enterNote => 'Añadir nota';
+
+  @override
+  String get showMore => 'Mostrar más';
+
+  @override
+  String get showLess => 'Mostrar menos';
 }

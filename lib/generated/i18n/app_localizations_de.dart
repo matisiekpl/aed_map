@@ -456,4 +456,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Foto konnte nicht hochgeladen werden';
+
+  @override
+  String get level => 'Etage';
+
+  @override
+  String get enterLevel => 'Etage eingeben';
+
+  @override
+  String get enterNote => 'Notiz hinzufügen';
+
+  @override
+  String get showMore => 'Mehr anzeigen';
+
+  @override
+  String get showLess => 'Weniger anzeigen';
 }

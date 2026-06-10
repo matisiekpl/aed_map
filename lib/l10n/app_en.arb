@@ -181,4 +181,10 @@
   "photoReported": "Photo has been reported",
   "photoUploaded": "Photo saved successfully",
   "photoUploadFailed": "Failed to upload photo"
+,
+  "level": "Floor (Level)",
+  "enterLevel": "Enter floor",
+  "enterNote": "Enter note / description",
+  "showMore": "Show more",
+  "showLess": "Show less"
 }

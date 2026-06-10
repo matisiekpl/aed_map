@@ -107,6 +107,7 @@ class EditInProgress extends EditState {
     super.photoErrorMessage,
     super.photoUpdatedDefibrillator,
     this.indoor = 'no',
+    this.level = '',
     this.access = 'public',
     this.description = '',
     this.originalImage = '',
@@ -114,6 +115,7 @@ class EditInProgress extends EditState {
 
   final Defibrillator defibrillator;
   final String indoor;
+  final String level;
   final String access;
   final String description;
   final String? originalImage;
@@ -123,8 +125,10 @@ class EditInProgress extends EditState {
         enabled,
         cursor,
         indoor,
+        level,
         access,
         defibrillator.indoor,
+        defibrillator.level,
         defibrillator,
         description,
         originalImage,
@@ -141,6 +145,7 @@ class EditInProgress extends EditState {
     bool? enabled,
     LatLng? cursor,
     String? indoor,
+    String? level,
     String? access,
     String? description,
     String? originalImage,
@@ -156,6 +161,7 @@ class EditInProgress extends EditState {
       enabled: enabled ?? this.enabled,
       cursor: cursor ?? this.cursor,
       indoor: indoor ?? this.indoor,
+      level: level ?? this.level,
       access: access ?? this.access,
       description: description ?? this.description,
       originalImage: originalImage ?? this.originalImage,

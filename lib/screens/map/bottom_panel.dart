@@ -22,6 +22,7 @@ import '../../bloc/routing/routing_cubit.dart';
 import '../../bloc/routing/routing_state.dart';
 import '../../generated/i18n/app_localizations.dart';
 import '../../models/aed.dart';
+import '../../screens/map/expandable_note.dart';
 import '../../screens/photo/photo_source_bottom_sheet.dart';
 import '../../shared/utils.dart';
 
@@ -33,6 +34,7 @@ class BottomPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appLocalizations = AppLocalizations.of(context)!;
+    
     return BlocListener<EditCubit, EditState>(
       listenWhen: (previous, current) =>
           previous.photoStatus != current.photoStatus &&
@@ -80,6 +82,10 @@ class BottomPanel extends StatelessWidget {
           return Container();
         }
         if (state is PointsLoadSuccess) {
+          var lang = Localizations.localeOf(context).languageCode;
+          var locDesc = state.selected.locationDescriptions[lang] ?? state.selected.locationDescriptions[''];
+          var desc = state.selected.descriptions[lang] ?? state.selected.descriptions[''];
+
           return Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
@@ -250,7 +256,7 @@ class BottomPanel extends StatelessWidget {
                       const SizedBox(height: 8),
                       CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
-                          value: state.selected.description.purge() ??
+                          value: locDesc.purge() ??
                               appLocalizations.noData,
                           builder: (context, v) {
                             return Column(
@@ -322,6 +328,20 @@ class BottomPanel extends StatelessWidget {
                               ],
                             );
                           }),
+                      if (state.selected.level != null && state.selected.level!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text('${appLocalizations.level}: ',
+                                style: const TextStyle(fontSize: 16)),
+                            Text(state.selected.level!,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ],
                       const SizedBox(height: 4),
                       CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
@@ -350,6 +370,15 @@ class BottomPanel extends StatelessWidget {
                               ),
                             );
                           }),
+                      if (desc != null && desc.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        ExpandableNote(
+                          text: desc,
+                          title: appLocalizations.information,
+                          showMoreText: appLocalizations.showMore,
+                          showLessText: appLocalizations.showLess,
+                        ),
+                      ],
                       const SizedBox(height: 10),
                       SizedBox(
                           width: double.infinity,
@@ -517,3 +546,4 @@ Future<void> showReportPhotoDialog(
     ),
   );
 }
+

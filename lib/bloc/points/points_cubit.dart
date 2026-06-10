@@ -173,7 +173,7 @@ class PointsCubit extends Cubit<PointsState> {
           final svgAsset = 'assets/${defibrillator.getIconFilename()}';
           return Marker(
             point: defibrillator.location,
-            key: Key(defibrillators.indexOf(defibrillator).toString()),
+            key: Key(defibrillator.id.toString()),
             child: isPending
                 ? DottedBorder(
                     options: RoundedRectDottedBorderOptions(
