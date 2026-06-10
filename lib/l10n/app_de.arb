@@ -180,5 +180,8 @@
   "reportPhotoConfirm": "Möchten Sie dieses Foto wirklich als unangemessen melden?",
   "photoReported": "Foto wurde gemeldet",
   "photoUploaded": "Foto erfolgreich gespeichert",
-  "photoUploadFailed": "Foto konnte nicht hochgeladen werden"
+  "photoUploadFailed": "Foto konnte nicht hochgeladen werden",
+  "callContact": "Kontakt anrufen",
+  "centerOnLocation": "Auf meinen Standort zentrieren",
+  "settings": "Einstellungen"
 }

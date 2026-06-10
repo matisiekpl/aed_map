@@ -452,4 +452,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Failed to upload photo';
+
+  @override
+  String get callContact => 'Call contact';
+
+  @override
+  String get centerOnLocation => 'Centre on my location';
+
+  @override
+  String get settings => 'Settings';
 }

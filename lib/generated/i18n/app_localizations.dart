@@ -933,6 +933,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to upload photo'**
   String get photoUploadFailed;
+
+  /// No description provided for @callContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Call contact'**
+  String get callContact;
+
+  /// No description provided for @centerOnLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Centre on my location'**
+  String get centerOnLocation;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
 }
 
 class _AppLocalizationsDelegate

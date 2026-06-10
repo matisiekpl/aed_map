@@ -180,5 +180,8 @@
   "reportPhotoConfirm": "Êtes-vous sûr de vouloir signaler cette photo comme inappropriée ?",
   "photoReported": "La photo a été signalée",
   "photoUploaded": "Photo enregistrée avec succès",
-  "photoUploadFailed": "Échec du téléchargement de la photo"
+  "photoUploadFailed": "Échec du téléchargement de la photo",
+  "callContact": "Appeler le contact",
+  "centerOnLocation": "Centrer sur ma position",
+  "settings": "Paramètres"
 }

@@ -63,7 +63,11 @@ class MapHeader extends StatelessWidget {
               BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
                 if (editState.pendingChanges.isEmpty) return const SizedBox();
                 var appLocalizations = AppLocalizations.of(context)!;
-                return GestureDetector(
+                return Semantics(
+                  button: true,
+                  label: appLocalizations
+                      .pendingChangesBadge(editState.pendingChanges.length),
+                  child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
                     var editCubit = context.read<EditCubit>();
@@ -97,6 +101,7 @@ class MapHeader extends StatelessWidget {
                           fontWeight: FontWeight.w600),
                     ),
                   ),
+                ),
                 );
               }),
               const SizedBox(height: 2),
@@ -157,7 +162,10 @@ class MapHeader extends StatelessWidget {
                         context.read<PanelCubit>().hide();
                       }
                     },
-                    child: GestureDetector(
+                    child: Semantics(
+                      button: true,
+                      label: appLocalizations.add,
+                      child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () async {
                         context.read<EditCubit>().enter();
@@ -175,13 +183,17 @@ class MapHeader extends StatelessWidget {
                                         .resolveFrom(context))),
                           )),
                     ),
+                    ),
                   ),
                 ],
               ),
               const SizedBox(width: 8),
               Column(
                 children: [
-                  GestureDetector(
+                  Semantics(
+                    button: true,
+                    label: appLocalizations.settings,
+                    child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       mixpanel?.track(aboutEvent);
@@ -214,6 +226,7 @@ class MapHeader extends StatelessWidget {
                             color: CupertinoColors.label.resolveFrom(context)),
                       ),
                     ),
+                  ),
                   ),
                   if (livechatEnabled) const SizedBox(height: 8),
                   if (livechatEnabled)
