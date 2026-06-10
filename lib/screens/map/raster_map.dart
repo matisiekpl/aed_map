@@ -3,6 +3,7 @@ import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/bloc/routing/routing_cubit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
@@ -20,7 +21,9 @@ import '../../shared/cached_network_tile_provider.dart';
 import '../../shared/utils.dart';
 
 class RasterMap extends StatefulWidget {
-  const RasterMap({super.key});
+  const RasterMap({super.key, required this.floatingPanelPosition});
+
+  final double floatingPanelPosition;
 
   @override
   State<RasterMap> createState() => _RasterMapState();
@@ -222,6 +225,31 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                         }
                         return Container();
                       }),
+                      Positioned(
+                        right: 16,
+                        bottom: 116 + (widget.floatingPanelPosition * 340),
+                        child: SafeArea(
+                          maintainBottomViewPadding: true,
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              context.read<LocationCubit>().locate();
+                            },
+                            child: Card(
+                              color: CupertinoColors.secondarySystemBackground
+                                  .resolveFrom(context),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  CupertinoIcons.location,
+                                  color:
+                                      CupertinoColors.label.resolveFrom(context),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   )),
                 ],
@@ -237,6 +265,15 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
     if (!isMapInitialized) {
       return;
     }
+
+    final distance = const Distance().as(
+        LengthUnit.Kilometer, mapController.camera.center, destLocation);
+
+    if (distance > 50) {
+      mapController.move(destLocation, destZoom);
+      return;
+    }
+
     final latTween = Tween<double>(
         begin: mapController.camera.center.latitude,
         end: destLocation.latitude);

@@ -9,7 +9,7 @@ class LocationCubit extends Cubit<LocationState> {
   final GeolocationRepository geolocationRepository;
 
   Future<void> locate() async {
-    if (state is LocationReady) {
+    if (state is! LocationDetermining) {
       emit(LocationDetermining());
       var result = await geolocationRepository.locate();
       emit(LocationDetermined(
