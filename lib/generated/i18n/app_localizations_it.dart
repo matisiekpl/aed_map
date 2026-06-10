@@ -455,4 +455,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Impossibile caricare la foto';
+
+  @override
+  String get callContact => 'Chiama il contatto';
+
+  @override
+  String get centerOnLocation => 'Centra sulla mia posizione';
+
+  @override
+  String get settings => 'Impostazioni';
 }

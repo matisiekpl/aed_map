@@ -180,5 +180,8 @@
   "reportPhotoConfirm": "¿Estás seguro de que deseas reportar esta foto como inapropiada?",
   "photoReported": "La foto ha sido reportada",
   "photoUploaded": "Foto guardada correctamente",
-  "photoUploadFailed": "No se pudo subir la foto"
+  "photoUploadFailed": "No se pudo subir la foto",
+  "callContact": "Llamar al contacto",
+  "centerOnLocation": "Centrar en mi ubicación",
+  "settings": "Ajustes"
 }

@@ -454,4 +454,13 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Nie udało się przesłać zdjęcia';
+
+  @override
+  String get callContact => 'Zadzwoń do kontaktu';
+
+  @override
+  String get centerOnLocation => 'Wyśrodkuj na mojej lokalizacji';
+
+  @override
+  String get settings => 'Ustawienia';
 }

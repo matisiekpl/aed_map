@@ -30,7 +30,10 @@ class FloatingPanel extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
+                    Semantics(
+                      button: true,
+                      label: appLocalizations.centerOnLocation,
+                      child: GestureDetector(
                       onTap: () async {
                         context.read<LocationCubit>().center();
                       },
@@ -53,7 +56,10 @@ class FloatingPanel extends StatelessWidget {
                                   height: 32,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15.0),
-                                    child: CupertinoButton(
+                                    child: Semantics(
+                                      button: true,
+                                      label: appLocalizations.stop,
+                                      child: CupertinoButton(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 4, horizontal: 6),
                                         color: Colors.red,
@@ -66,12 +72,13 @@ class FloatingPanel extends StatelessWidget {
                                           // mapController.rotate(0);
                                           // panel.open();
                                           context.read<PanelCubit>().open();
-                                        }),
+                                        })),
                                   ),
                                 )
                               ],
                             ),
                           )),
+                    ),
                     ),
                   ],
                 ),

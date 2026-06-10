@@ -180,5 +180,8 @@
   "reportPhotoConfirm": "Czy na pewno chcesz zgłosić to zdjęcie jako nieodpowiednie?",
   "photoReported": "Zdjęcie zostało zgłoszone",
   "photoUploaded": "Zdjęcie zostało zapisane",
-  "photoUploadFailed": "Nie udało się przesłać zdjęcia"
+  "photoUploadFailed": "Nie udało się przesłać zdjęcia",
+  "callContact": "Zadzwoń do kontaktu",
+  "centerOnLocation": "Wyśrodkuj na mojej lokalizacji",
+  "settings": "Ustawienia"
 }

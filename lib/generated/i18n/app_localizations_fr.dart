@@ -459,4 +459,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Échec du téléchargement de la photo';
+
+  @override
+  String get callContact => 'Appeler le contact';
+
+  @override
+  String get centerOnLocation => 'Centrer sur ma position';
+
+  @override
+  String get settings => 'Paramètres';
 }

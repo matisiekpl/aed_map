@@ -328,7 +328,10 @@ class BottomPanel extends StatelessWidget {
                           value: state.selected.phone.purge() ??
                               appLocalizations.noData,
                           builder: (context, v) {
-                            return GestureDetector(
+                            return Semantics(
+                              button: true,
+                              label: appLocalizations.callContact,
+                              child: GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
                                 if (state.selected.phone.purge() != null) {
@@ -348,6 +351,7 @@ class BottomPanel extends StatelessWidget {
                                           fontWeight: FontWeight.bold)),
                                 ],
                               ),
+                            ),
                             );
                           }),
                       const SizedBox(height: 10),
@@ -381,7 +385,10 @@ class BottomPanel extends StatelessWidget {
                                 return BlocBuilder<NetworkStatusCubit,
                                         NetworkStatusState>(
                                     builder: (context, networkState) {
-                                  return CupertinoButton.filled(
+                                  return Semantics(
+                                      button: true,
+                                      label: appLocalizations.navigate,
+                                      child: CupertinoButton.filled(
                                       key: const Key('navigate'),
                                       onPressed: networkState.connected
                                           ? () async {
@@ -394,7 +401,7 @@ class BottomPanel extends StatelessWidget {
                                           : null,
                                       child: Text(networkState.connected
                                           ? appLocalizations.navigate
-                                          : appLocalizations.noNetwork));
+                                          : appLocalizations.noNetwork)));
                                 });
                               });
                             }
@@ -405,7 +412,10 @@ class BottomPanel extends StatelessWidget {
                         const SizedBox(height: 8),
                         SizedBox(
                           width: double.infinity,
-                          child: CupertinoButton(
+                          child: Semantics(
+                            button: true,
+                            label: appLocalizations.addPhoto,
+                            child: CupertinoButton(
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             color: CupertinoColors.secondarySystemBackground
                                 .resolveFrom(context),
@@ -417,6 +427,7 @@ class BottomPanel extends StatelessWidget {
                                 color: CupertinoColors.label.resolveFrom(context),
                               ),
                             ),
+                          ),
                           ),
                         ),
                       ],
@@ -446,7 +457,10 @@ class BottomPanel extends StatelessWidget {
                               Positioned(
                                 top: 8,
                                 right: 8,
-                                child: GestureDetector(
+                                child: Semantics(
+                                  button: true,
+                                  label: appLocalizations.reportPhoto,
+                                  child: GestureDetector(
                                   onTap: () => showReportPhotoDialog(
                                       context,
                                       appLocalizations,
@@ -464,6 +478,7 @@ class BottomPanel extends StatelessWidget {
                                       size: 18,
                                     ),
                                   ),
+                                ),
                                 ),
                               ),
                           ],
