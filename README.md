@@ -32,6 +32,9 @@
   <a href="https://codecov.io/gh/matisiekpl/aed_map">
     <img src="https://codecov.io/gh/matisiekpl/aed_map/branch/main/graph/badge.svg" alt="Coverage">
   </a>
+  <a href="https://play.google.com/store/apps/details?id=pl.enteam.aed_map">
+    <img src="https://PlayBadges.pavi2410.me/badge/downloads?id=pl.enteam.aed_map" alt="Downloads">
+  </a>
 </p>
 
 ## Features
