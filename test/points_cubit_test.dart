@@ -49,7 +49,7 @@ void main() {
     test('update', () async {
       await pointsCubit.load();
       var defibrillator = (pointsCubit.state as PointsLoadSuccess).defibrillators.first;
-      pointsCubit.update(defibrillator);
+      await pointsCubit.update(defibrillator);
       expect((pointsCubit.state as PointsLoadSuccess).selected, defibrillator);
     });
 
