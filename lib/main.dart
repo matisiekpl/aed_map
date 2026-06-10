@@ -8,6 +8,7 @@ import 'package:aed_map/bloc/network_status/network_status_cubit.dart';
 import 'package:aed_map/bloc/panel/panel_cubit.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
 import 'package:aed_map/bloc/routing/routing_cubit.dart';
+import 'package:aed_map/bloc/theme/theme_cubit.dart';
 import 'package:aed_map/repositories/feedback_repository.dart';
 import 'package:aed_map/repositories/geolocation_repository.dart';
 import 'package:aed_map/repositories/pending_changes_repository.dart';
@@ -123,43 +124,71 @@ class _AppState extends State<App> {
       userCreatedDefibrillatorRepository: userCreatedDefibrillatorRepository,
     );
 
-    return CupertinoApp(
-      theme: const CupertinoThemeData(brightness: null),
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: List.from(AppLocalizations.supportedLocales)
-        ..sort((a, b) =>
-            const Locale('en').languageCode.compareTo(a.languageCode)),
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<EditCubit>.value(value: editCubit..loadPendingChanges()),
-          BlocProvider<PointsCubit>(
-            create: (BuildContext context) => PointsCubit(
-                pointsRepository: pointsRepository,
-                geolocationRepository: geolocationRepository,
-                editCubit: editCubit)
-              ..load(),
-          ),
-          BlocProvider<RoutingCubit>(
-            create: (BuildContext context) => RoutingCubit(
-                geolocationRepository: geolocationRepository,
-                routingRepository: routingRepository),
-          ),
-          BlocProvider<LocationCubit>(
-            create: (BuildContext context) =>
-                LocationCubit(geolocationRepository: geolocationRepository)
-                  ..locate(),
-          ),
-          BlocProvider<PanelCubit>(
-            create: (BuildContext context) => PanelCubit(),
-          ),
-          BlocProvider<NetworkStatusCubit>(
-              create: (BuildContext context) => NetworkStatusCubit()),
-          BlocProvider<FeedbackCubit>(
-              create: (BuildContext context) =>
-                  FeedbackCubit(feedbackRepository: feedbackRepository)),
-        ],
-        child: widget.skipOnboarding ? Home() : home,
+    return BlocProvider<ThemeCubit>(
+      create: (context) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          final Brightness? appBrightness = themeMode == ThemeMode.dark
+              ? Brightness.dark
+              : themeMode == ThemeMode.light
+                  ? Brightness.light
+                  : null;
+
+          return CupertinoApp(
+            theme: CupertinoThemeData(brightness: appBrightness),
+            builder: (context, child) {
+              final Brightness forcedBrightness = themeMode == ThemeMode.dark
+                  ? Brightness.dark
+                  : themeMode == ThemeMode.light
+                      ? Brightness.light
+                      : MediaQuery.of(context).platformBrightness;
+
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  platformBrightness: forcedBrightness,
+                ),
+                child: child!,
+              );
+            },
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: List.from(AppLocalizations.supportedLocales)
+              ..sort((a, b) =>
+                  const Locale('en').languageCode.compareTo(a.languageCode)),
+            home: MultiBlocProvider(
+              providers: [
+                BlocProvider<EditCubit>.value(value: editCubit..loadPendingChanges()),
+                BlocProvider<PointsCubit>(
+                  create: (BuildContext context) => PointsCubit(
+                      pointsRepository: pointsRepository,
+                      geolocationRepository: geolocationRepository,
+                      themeCubit: context.read<ThemeCubit>(),
+                      editCubit: editCubit)
+                    ..load(),
+                ),
+                BlocProvider<RoutingCubit>(
+                  create: (BuildContext context) => RoutingCubit(
+                      geolocationRepository: geolocationRepository,
+                      routingRepository: routingRepository),
+                ),
+                BlocProvider<LocationCubit>(
+                  create: (BuildContext context) =>
+                      LocationCubit(geolocationRepository: geolocationRepository)
+                        ..locate(),
+                ),
+                BlocProvider<PanelCubit>(
+                  create: (BuildContext context) => PanelCubit(),
+                ),
+                BlocProvider<NetworkStatusCubit>(
+                    create: (BuildContext context) => NetworkStatusCubit()),
+                BlocProvider<FeedbackCubit>(
+                    create: (BuildContext context) =>
+                        FeedbackCubit(feedbackRepository: feedbackRepository)),
+              ],
+              child: widget.skipOnboarding ? Home() : home,
+            ),
+          );
+        },
       ),
     );
   }

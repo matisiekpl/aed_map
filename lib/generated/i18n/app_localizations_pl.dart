@@ -454,4 +454,19 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Nie udało się przesłać zdjęcia';
+
+  @override
+  String get personalization => 'Personalizacja';
+
+  @override
+  String get theme => 'Motyw';
+
+  @override
+  String get themeSystem => 'Systemowy';
+
+  @override
+  String get themeLight => 'Jasny';
+
+  @override
+  String get themeDark => 'Ciemny';
 }

@@ -4,6 +4,7 @@ import 'package:aed_map/bloc/feedback/feedback_cubit.dart';
 import 'package:aed_map/bloc/location/location_cubit.dart';
 import 'package:aed_map/bloc/location/location_state.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
+import 'package:aed_map/bloc/theme/theme_cubit.dart';
 import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,30 @@ class _SettingsPageState extends State<SettingsPage>
                     lightTheme: const SettingsThemeData(),
                     darkTheme: settingsListDarkTheme,
                     sections: [
+                      SettingsSection(
+                        title: Text(appLocalizations.personalization),
+                        tiles: [
+                          SettingsTile.navigation(
+                            leading: const Icon(CupertinoIcons.moon),
+                            title: Text(appLocalizations.theme),
+                            value: BlocBuilder<ThemeCubit, ThemeMode>(
+                              builder: (context, themeMode) {
+                                switch (themeMode) {
+                                  case ThemeMode.light:
+                                    return Text(appLocalizations.themeLight);
+                                  case ThemeMode.dark:
+                                    return Text(appLocalizations.themeDark);
+                                  case ThemeMode.system:
+                                    return Text(appLocalizations.themeSystem);
+                                }
+                              },
+                            ),
+                            onPressed: (context) {
+                              _showThemePicker(context, appLocalizations);
+                            },
+                          )
+                        ],
+                      ),
                       SettingsSection(
                         title: Text(appLocalizations.datasetHeading),
                         tiles: <SettingsTile>[
@@ -236,5 +261,44 @@ class _SettingsPageState extends State<SettingsPage>
           }),
         ),
       );
+}
+
+  void _showThemePicker(BuildContext context, AppLocalizations appLocalizations) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext dialogContext) => CupertinoActionSheet(
+        title: Text(appLocalizations.theme),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            onPressed: () {
+              context.read<ThemeCubit>().setThemeMode(ThemeMode.system);
+              Navigator.pop(dialogContext);
+            },
+            child: Text(appLocalizations.themeSystem),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              context.read<ThemeCubit>().setThemeMode(ThemeMode.light);
+              Navigator.pop(dialogContext);
+            },
+            child: Text(appLocalizations.themeLight),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              context.read<ThemeCubit>().setThemeMode(ThemeMode.dark);
+              Navigator.pop(dialogContext);
+            },
+            child: Text(appLocalizations.themeDark),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Navigator.pop(dialogContext);
+          },
+          child: Text(appLocalizations.cancel),
+        ),
+      ),
+    );
   }
 }

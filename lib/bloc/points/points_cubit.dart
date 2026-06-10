@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:aed_map/bloc/theme/theme_cubit.dart';
+
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
 import 'package:aed_map/bloc/points/points_state.dart';
@@ -24,21 +26,33 @@ class PointsCubit extends Cubit<PointsState> {
     required this.pointsRepository,
     required this.geolocationRepository,
     required this.editCubit,
+    required this.themeCubit,
   }) : super(PointsLoadInProgress()) {
+    _themeSubscription = themeCubit.stream.listen((themeMode) {
+      if (_prevThemeMode != themeMode) {
+        _prevThemeMode = themeMode;
+        rebuildMarkers();
+      }
+    });
     _editSubscription = editCubit.stream
         .distinct((previous, current) =>
             previous.pendingChanges == current.pendingChanges)
         .listen((editState) => applyPendingChanges(editState.pendingChanges));
   }
 
+  ThemeMode _prevThemeMode = ThemeMode.system;
+
   final PointsRepository pointsRepository;
   final GeolocationRepository geolocationRepository;
   final EditCubit editCubit;
+  final ThemeCubit themeCubit;
   late final StreamSubscription<EditState> _editSubscription;
+  late final StreamSubscription<ThemeMode> _themeSubscription;
 
   @override
   Future<void> close() {
     _editSubscription.cancel();
+    _themeSubscription.cancel();
     return super.close();
   }
 
@@ -161,11 +175,24 @@ class PointsCubit extends Cubit<PointsState> {
     }
   }
 
+  void rebuildMarkers() {
+    if (state is PointsLoadSuccess) {
+      final s = state as PointsLoadSuccess;
+      emit(s.copyWith(
+          markers: buildMarkers(s.defibrillators, s.pendingIds)));
+    }
+  }
+
   List<Marker> buildMarkers(
       List<Defibrillator> defibrillators, Set<int> pendingIds) {
-    var brightness = MediaQueryData.fromView(
+    var systemBrightness = MediaQueryData.fromView(
             WidgetsBinding.instance.platformDispatcher.views.single)
         .platformBrightness;
+    var brightness = themeCubit.state == ThemeMode.light
+        ? Brightness.light
+        : themeCubit.state == ThemeMode.dark
+            ? Brightness.dark
+            : systemBrightness;
     return defibrillators
         .take(visiblePointsCount)
         .map((defibrillator) {
@@ -173,7 +200,7 @@ class PointsCubit extends Cubit<PointsState> {
           final svgAsset = 'assets/${defibrillator.getIconFilename()}';
           return Marker(
             point: defibrillator.location,
-            key: Key(defibrillators.indexOf(defibrillator).toString()),
+            key: Key('${defibrillators.indexOf(defibrillator)}_$brightness'),
             child: isPending
                 ? DottedBorder(
                     options: RoundedRectDottedBorderOptions(

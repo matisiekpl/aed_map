@@ -60,7 +60,8 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
               ((current.defibrillators.length != previous.defibrillators.length) ||
                   (current.defibrillators.first.access != previous.defibrillators.first.access) ||
                   (current.defibrillators.first.id != previous.defibrillators.first.id) ||
-                  !setEquals(current.pendingIds, previous.pendingIds)),
+                  !setEquals(current.pendingIds, previous.pendingIds) ||
+                  current.markers != previous.markers),
           child: BlocListener<PointsCubit, PointsState>(
             listener: (BuildContext context, PointsState state) {
               if (state is PointsLoadSuccess) {
@@ -189,7 +190,9 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                           .defibrillators[int.parse(marker.key
                                               .toString()
                                               .replaceAll('[<\'', '')
-                                              .replaceAll('\'>]', ''))];
+                                              .replaceAll('\'>]', '')
+                                              .split('_')
+                                              .first)];
                                       context.read<RoutingCubit>().cancel();
                                       context
                                           .read<PointsCubit>()

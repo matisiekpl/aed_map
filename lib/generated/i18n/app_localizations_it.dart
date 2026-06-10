@@ -455,4 +455,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get photoUploadFailed => 'Impossibile caricare la foto';
+
+  @override
+  String get personalization => 'Personalizzazione';
+
+  @override
+  String get theme => 'Tema';
+
+  @override
+  String get themeSystem => 'Sistema';
+
+  @override
+  String get themeLight => 'Chiaro';
+
+  @override
+  String get themeDark => 'Scuro';
 }

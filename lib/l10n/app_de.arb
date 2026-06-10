@@ -181,4 +181,10 @@
   "photoReported": "Foto wurde gemeldet",
   "photoUploaded": "Foto erfolgreich gespeichert",
   "photoUploadFailed": "Foto konnte nicht hochgeladen werden"
+,
+  "personalization": "Personalisierung",
+  "theme": "Design",
+  "themeSystem": "System",
+  "themeLight": "Hell",
+  "themeDark": "Dunkel"
 }

@@ -1,3 +1,4 @@
+import "package:aed_map/bloc/theme/theme_cubit.dart";
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/points/points_cubit.dart';
 import 'package:aed_map/bloc/points/points_state.dart';
@@ -34,6 +35,7 @@ void main() {
       pointsCubit = PointsCubit(
           pointsRepository: PointsRepository(),
           geolocationRepository: geolocationRepository,
+          themeCubit: ThemeCubit(),
           editCubit: editCubit);
     });
 

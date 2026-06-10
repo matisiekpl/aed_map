@@ -181,4 +181,10 @@
   "photoReported": "Zdjęcie zostało zgłoszone",
   "photoUploaded": "Zdjęcie zostało zapisane",
   "photoUploadFailed": "Nie udało się przesłać zdjęcia"
+,
+  "personalization": "Personalizacja",
+  "theme": "Motyw",
+  "themeSystem": "Systemowy",
+  "themeLight": "Jasny",
+  "themeDark": "Ciemny"
 }
