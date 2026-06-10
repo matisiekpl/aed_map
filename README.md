@@ -1,7 +1,4 @@
 
-
-[🇵🇱 Wersja polska / Polish version](README_PL.md)
-
 <h1 align="center">
   <br>
   <a href="http://aedmapa.pl/" target="_blank"><img src="assets/icon.png" alt="AED Map" width="200"></a>
@@ -10,7 +7,7 @@
 </h1>
 <h3  align="center">
 	
-<a href="https://aedmapa.pl">aedmapa.pl</a>
+<a href="https://aedmapa.pl">aedmapa.pl</a> • <a href="README_PL.md">🇵🇱 Wersja polska</a>
 </h3>
 
 <h4 align="center">A map of automated external defibrillators (AED) for Android and iOS</h4>
