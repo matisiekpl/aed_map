@@ -84,6 +84,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefs) {
+      if (!mounted) return;
       setState(() {
         if (!prefs.containsKey('onboarded')) {
           home = OnboardingScreen();
