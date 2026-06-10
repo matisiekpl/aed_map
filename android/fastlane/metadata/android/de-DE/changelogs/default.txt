@@ -1,1 +1,1 @@
-Die Renderleistung der Karte wurde optimiert.
+Die Renderleistung der Karte wurde verbessert.

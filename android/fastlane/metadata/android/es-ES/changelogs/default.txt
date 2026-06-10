@@ -1,1 +1,1 @@
-Se mejoró el rendimiento del renderizado del mapa.
+Se ha mejorado el rendimiento de renderizado del mapa.

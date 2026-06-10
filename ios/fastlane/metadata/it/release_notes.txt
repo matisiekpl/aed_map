@@ -1,1 +1,1 @@
-Migliorata la performance del rendering della mappa.
+Migliorata la resa delle prestazioni della mappa.

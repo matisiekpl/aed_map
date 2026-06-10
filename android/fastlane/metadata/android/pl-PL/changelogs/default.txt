@@ -1,1 +1,1 @@
-Usprawniono wydajność renderowania mapy
+Ulepszono wydajność renderowania mapy

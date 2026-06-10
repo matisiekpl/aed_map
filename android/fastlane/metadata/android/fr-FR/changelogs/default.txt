@@ -1,1 +1,1 @@
-Amélioration de la performance de rendu de la carte.
+Les performances de rendu de la carte ont été améliorées.
