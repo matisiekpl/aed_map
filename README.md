@@ -27,6 +27,15 @@
 <img src="assets/screenshot.png" alt="Mapa AED" width="60%">
 </p>
 
+<p align="center">
+  <a href="https://github.com/matisiekpl/aed_map/actions/workflows/flutter.yml">
+    <img src="https://github.com/matisiekpl/aed_map/actions/workflows/flutter.yml/badge.svg" alt="CI">
+  </a>
+  <a href="https://codecov.io/gh/matisiekpl/aed_map">
+    <img src="https://codecov.io/gh/matisiekpl/aed_map/branch/main/graph/badge.svg" alt="Coverage">
+  </a>
+</p>
+
 ## Funkcjonalności
 
 * Wyświetlanie defibrylatorów na mapie Polski
