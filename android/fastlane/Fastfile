@@ -15,7 +15,9 @@ platform :android do
   lane :beta do
     Dir.chdir("../..") do
       sh("flutter", "pub", "get")
-      sh("flutter", "build", "appbundle", "--release")
+      sh("flutter", "build", "appbundle", "--release",
+         "--dart-define=SENTRY_DSN=#{ENV['SENTRY_DSN']}",
+         "--dart-define=MIXPANEL_TOKEN=#{ENV['MIXPANEL_TOKEN']}")
     end
 
     aab_path = File.expand_path("../../build/app/outputs/bundle/release/app-release.aab", __dir__)
@@ -36,7 +38,9 @@ platform :android do
   lane :release do
     Dir.chdir("../..") do
       sh("flutter", "pub", "get")
-      sh("flutter", "build", "appbundle", "--release")
+      sh("flutter", "build", "appbundle", "--release",
+         "--dart-define=SENTRY_DSN=#{ENV['SENTRY_DSN']}",
+         "--dart-define=MIXPANEL_TOKEN=#{ENV['MIXPANEL_TOKEN']}")
     end
 
     aab_path = File.expand_path("../../build/app/outputs/bundle/release/app-release.aab", __dir__)
