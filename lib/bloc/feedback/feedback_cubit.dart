@@ -16,7 +16,7 @@ class FeedbackCubit extends Cubit<FeedbackState> {
   Future<void> send(UserFeedback feedback) async {
     analytics.event(name: feedbackEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      mixpanel.track(feedbackEvent);
+      mixpanel?.track(feedbackEvent);
     }
     emit(const FeedbackSending());
     await feedbackRepository.sendFeedback(feedback);

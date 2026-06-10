@@ -65,12 +65,12 @@ class PointsRepository {
   Future<(List<Defibrillator>, int)> loadDefibrillators(
       LatLng currentLocation) async {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      await mixpanel.registerSuperProperties({
+      await mixpanel?.registerSuperProperties({
         "\$latitude": currentLocation.latitude,
         "\$longitude": currentLocation.longitude
       });
-      mixpanel.getPeople().set('\$latitude', currentLocation.latitude);
-      mixpanel.getPeople().set('\$longitude', currentLocation.longitude);
+      mixpanel?.getPeople().set('\$latitude', currentLocation.latitude);
+      mixpanel?.getPeople().set('\$longitude', currentLocation.longitude);
     }
     List<Defibrillator> defibrillators = [];
     if (!(await (await cacheFile).exists())) {
@@ -123,7 +123,7 @@ class PointsRepository {
 
   Future<bool> authenticate() async {
     if (token != null || devMode) return true;
-    mixpanel.track(loginEvent);
+    mixpanel?.track(loginEvent);
     var clientId = 'fMwHrWOkZCboGJR1umv202RX2aBLBFgMt8SLqg1iktA';
     var clientSecret = 'zhfFUhRW5KnjsQnGbZR0gnZObfvuxn-F-_HOxLNd72A';
     try {
@@ -140,7 +140,7 @@ class PointsRepository {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'});
       token = json.decode(response.body)['access_token'];
       print('Got OAuth2 token: $token');
-      mixpanel.track(authenticatedEvent);
+      mixpanel?.track(authenticatedEvent);
       await getUser();
       return token != null;
     } on Exception catch (_) {
@@ -162,11 +162,11 @@ class PointsRepository {
         user = user.copyWith(avatar: payload['img']['href']);
       }
       if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-        mixpanel.identify(user.id.toString());
-        mixpanel.getPeople().set('\$user_id', user.id);
-        mixpanel.getPeople().set('\$name', user.name);
-        mixpanel.getPeople().set('\$avatar', user.avatar);
-        await mixpanel.flush();
+        mixpanel?.identify(user.id.toString());
+        mixpanel?.getPeople().set('\$user_id', user.id);
+        mixpanel?.getPeople().set('\$name', user.name);
+        mixpanel?.getPeople().set('\$avatar', user.avatar);
+        await mixpanel?.flush();
         Sentry.configureScope((scope) => scope.setUser(SentryUser(
               id: user.id.toString(),
               username: user.name,
@@ -180,7 +180,7 @@ class PointsRepository {
 
   Future<void> logout() async {
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      await mixpanel.reset();
+      await mixpanel?.reset();
     }
     token = null;
   }

@@ -25,7 +25,7 @@ class _PendingChangesPageState extends State<PendingChangesPage> {
   @override
   void initState() {
     super.initState();
-    mixpanel.track(pendingChangesEvent);
+    mixpanel?.track(pendingChangesEvent);
   }
 
   @override

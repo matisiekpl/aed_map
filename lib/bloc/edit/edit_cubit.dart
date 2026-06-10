@@ -44,7 +44,7 @@ class EditCubit extends Cubit<EditState> {
   Future<void> enter() async {
     analytics.event(name: enterEditModeEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      mixpanel.track(enterEditModeEvent);
+      mixpanel?.track(enterEditModeEvent);
     }
     emit(state.copyWith(
         enabled: true,
@@ -69,7 +69,7 @@ class EditCubit extends Cubit<EditState> {
   Future<void> add() async {
     analytics.event(name: addEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      mixpanel.track(addEvent);
+      mixpanel?.track(addEvent);
     }
     Defibrillator defibrillator = Defibrillator(
         location: LatLng(state.cursor.latitude, state.cursor.longitude), id: 0);
@@ -87,7 +87,7 @@ class EditCubit extends Cubit<EditState> {
   Future<void> edit(Defibrillator defibrillator) async {
     analytics.event(name: editEvent);
     if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      mixpanel.track(editEvent);
+      mixpanel?.track(editEvent);
     }
     if (!await pointsRepository.authenticate()) return;
     defibrillator = defibrillator.copyWith();
@@ -184,7 +184,7 @@ class EditCubit extends Cubit<EditState> {
           ));
           analytics.event(name: saveInsertEvent);
           if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-            mixpanel.track(saveInsertEvent,
+            mixpanel?.track(saveInsertEvent,
                 properties: saved.getEventProperties());
           }
           final updatedPendingChanges = await pendingChangesRepository.fetch();
@@ -205,7 +205,7 @@ class EditCubit extends Cubit<EditState> {
           ));
           analytics.event(name: saveUpdateEvent);
           if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-            mixpanel.track(saveUpdateEvent,
+            mixpanel?.track(saveUpdateEvent,
                 properties: saved.getEventProperties());
           }
           final updatedPendingChanges = await pendingChangesRepository.fetch();
@@ -240,7 +240,7 @@ class EditCubit extends Cubit<EditState> {
           cursor: state.cursor,
           pendingChanges: updatedPendingChanges));
       if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-        mixpanel.track(deleteEvent,
+        mixpanel?.track(deleteEvent,
             properties: defibrillator.getEventProperties());
       }
     } on OsmApiException catch (exception) {
@@ -301,7 +301,7 @@ class EditCubit extends Cubit<EditState> {
       final updatedPendingChanges = await pendingChangesRepository.fetch();
       analytics.event(name: photoUploadEvent);
       if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-        mixpanel.track(photoUploadEvent,
+        mixpanel?.track(photoUploadEvent,
             properties: updated.getEventProperties());
       }
       emit(state.copyWith(
@@ -321,7 +321,7 @@ class EditCubit extends Cubit<EditState> {
       await pointsRepository.reportPhoto(photoId);
       analytics.event(name: photoReportEvent);
       if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-        mixpanel.track(photoReportEvent, properties: {
+        mixpanel?.track(photoReportEvent, properties: {
           ...defibrillator.getEventProperties(),
           'aed_photo_id': photoId,
         });
@@ -348,7 +348,7 @@ class EditCubit extends Cubit<EditState> {
           await InAppReview.instance.requestReview();
         }
         if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-          mixpanel.track(requestReviewEvent,
+          mixpanel?.track(requestReviewEvent,
               properties: {'available': isAvailable});
         }
       }

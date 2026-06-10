@@ -38,7 +38,7 @@ import 'generated/i18n/app_localizations.dart';
 final analytics = Plausible(plausible, 'aedmapa.app',
     userAgent: Platform.isIOS ? iosUserAgent : androidUserAgent);
 
-late final Mixpanel mixpanel;
+Mixpanel? mixpanel;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,8 +53,10 @@ void main() async {
     "livechat": false,
   });
   remoteConfig.fetchAndActivate();
-  mixpanel = await Mixpanel.init(mixpanelToken, trackAutomaticEvents: true);
-  mixpanel.setServerURL('https://api-eu.mixpanel.com');
+  if (mixpanelToken.isNotEmpty) {
+    mixpanel = await Mixpanel.init(mixpanelToken, trackAutomaticEvents: true);
+    mixpanel!.setServerURL('https://api-eu.mixpanel.com');
+  }
   await NsfwDetector.initialize(threshold: 0.7);
   const sentryDsn = String.fromEnvironment('SENTRY_DSN');
   final Widget app = BetterFeedback(child: Phoenix(child: App()));
