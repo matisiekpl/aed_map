@@ -148,6 +148,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get chooseAccess => 'Scegli l\'accesso';
 
   @override
+  String get addTranslation => 'Aggiungi traduzione';
+
+  @override
+  String get chooseLanguage => 'Scegli la lingua';
+
+  @override
   String get editOpeningHours => 'Modifica orario di apertura';
 
   @override

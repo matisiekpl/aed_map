@@ -1,1 +1,1 @@
-Migliorata la resa delle prestazioni della mappa.
+La descrizione della posizione può essere salvata in più lingue.

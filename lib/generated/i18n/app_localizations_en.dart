@@ -147,6 +147,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseAccess => 'Choose access';
 
   @override
+  String get addTranslation => 'Add translation';
+
+  @override
+  String get chooseLanguage => 'Choose language';
+
+  @override
   String get editOpeningHours => 'Edit opening hours';
 
   @override

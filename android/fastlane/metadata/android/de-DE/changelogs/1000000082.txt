@@ -1,0 +1,1 @@
+Die Beschreibung des Standorts kann in mehreren Sprachen gespeichert werden.

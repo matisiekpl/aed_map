@@ -10,6 +10,7 @@ import '../generated/i18n/app_localizations.dart';
 class Defibrillator {
   LatLng location;
   String? description;
+  Map<String, String> descriptionTranslations;
   int id;
   String? indoor;
   String? operator;
@@ -24,6 +25,7 @@ class Defibrillator {
       {required this.location,
       required this.id,
       this.description,
+      this.descriptionTranslations = const {},
       this.indoor,
       this.operator,
       this.phone,
@@ -32,6 +34,28 @@ class Defibrillator {
       this.access = 'yes',
       List<int>? photoBytes})
       : photoBytes = photoBytes != null ? Uint8List.fromList(photoBytes) : null;
+
+  static Map<String, String> parseLocationTranslations(
+      Map<String, dynamic> tags) {
+    final translations = <String, String>{};
+    const prefix = 'defibrillator:location:';
+    tags.forEach((key, value) {
+      if (key.startsWith(prefix) && value != null) {
+        translations[key.substring(prefix.length)] = value.toString();
+      }
+    });
+    return translations;
+  }
+
+  String? localizedDescription(String languageCode) {
+    final translation = descriptionTranslations[languageCode];
+    if (translation != null && translation.isNotEmpty) return translation;
+    if (description != null && description!.isNotEmpty) return description;
+    for (final value in descriptionTranslations.values) {
+      if (value.isNotEmpty) return value;
+    }
+    return null;
+  }
 
   String? get photoId {
     final url = image;
@@ -90,7 +114,17 @@ class Defibrillator {
   }
 
   dynamic toXml(int changesetId, int version,
-      {List<List<String>> oldTags = const []}) {
+      {List<List<String>> oldTags = const [],
+      Set<String> removedTags = const {}}) {
+    final trimmedDescription = description?.trim() ?? '';
+    final trimmedOpeningHours = openingHours?.trim() ?? '';
+    final trimmedOperator = operator?.trim() ?? '';
+    final trimmedPhone = phone?.trim() ?? '';
+    final trimmedImage = image?.trim() ?? '';
+    final trimmedTranslations = {
+      for (final entry in descriptionTranslations.entries)
+        entry.key: entry.value.trim()
+    }..removeWhere((languageCode, value) => value.isEmpty);
     final builder = XmlBuilder();
     builder.processing('xml', 'version="1.0"');
     builder.element('osm', attributes: {'version': '0.6'}, nest: () {
@@ -109,42 +143,54 @@ class Defibrillator {
           builder.element('tag',
               attributes: {'k': 'access', 'v': access.toString()});
         }
-        if (description != null && description.toString().isNotEmpty) {
+        if (trimmedDescription.isNotEmpty) {
           builder.element('tag', attributes: {
             'k': 'defibrillator:location',
-            'v': description.toString()
+            'v': trimmedDescription
           });
         }
+        trimmedTranslations.forEach((languageCode, value) {
+          builder.element('tag', attributes: {
+            'k': 'defibrillator:location:$languageCode',
+            'v': value
+          });
+        });
         builder.element('tag',
             attributes: {'k': 'emergency', 'v': 'defibrillator'});
-        if (image != null && image.toString().isNotEmpty) {
-          builder.element('tag', attributes: {'k': 'image', 'v': image ?? ''});
+        if (trimmedImage.isNotEmpty) {
+          builder.element('tag', attributes: {'k': 'image', 'v': trimmedImage});
         }
         builder
             .element('tag', attributes: {'k': 'indoor', 'v': indoor ?? 'no'});
-        if (openingHours != null && openingHours.toString().isNotEmpty) {
+        if (trimmedOpeningHours.isNotEmpty) {
           builder.element('tag',
-              attributes: {'k': 'opening_hours', 'v': openingHours ?? ''});
+              attributes: {'k': 'opening_hours', 'v': trimmedOpeningHours});
         }
-        if (operator != null && operator.toString().isNotEmpty) {
+        if (trimmedOperator.isNotEmpty) {
           builder.element('tag',
-              attributes: {'k': 'operator', 'v': operator ?? ''});
+              attributes: {'k': 'operator', 'v': trimmedOperator});
         }
-        if (phone != null && phone.toString().isNotEmpty) {
-          builder.element('tag', attributes: {'k': 'phone', 'v': phone ?? ''});
+        if (trimmedPhone.isNotEmpty) {
+          builder.element('tag', attributes: {'k': 'phone', 'v': trimmedPhone});
         }
 
+        final writtenTags = {
+          'phone',
+          'operator',
+          'opening_hours',
+          'indoor',
+          'emergency',
+          'access',
+          'defibrillator:location',
+          ...trimmedTranslations.keys
+              .map((languageCode) => 'defibrillator:location:$languageCode'),
+          if (trimmedImage.isNotEmpty) 'image',
+        };
+
         oldTags
-            .where((attr) => ![
-                  'phone',
-                  'operator',
-                  'opening_hours',
-                  'indoor',
-                  'emergency',
-                  'access',
-                  'defibrillator:location',
-                  'image',
-                ].contains(attr[0]))
+            .where((attr) =>
+                !writtenTags.contains(attr[0]) &&
+                !removedTags.contains(attr[0]))
             .forEach((attr) {
           builder.element('tag', attributes: {'k': attr[0], 'v': attr[1]});
         });
@@ -157,6 +203,7 @@ class Defibrillator {
   Defibrillator copyWith({
     LatLng? location,
     String? description,
+    Map<String, String>? descriptionTranslations,
     int? id,
     String? indoor,
     String? operator,
@@ -172,6 +219,8 @@ class Defibrillator {
     return Defibrillator(
       location: location ?? this.location,
       description: description ?? this.description,
+      descriptionTranslations:
+          descriptionTranslations ?? this.descriptionTranslations,
       id: id ?? this.id,
       indoor: indoor ?? this.indoor,
       operator: operator ?? this.operator,
@@ -185,6 +234,9 @@ class Defibrillator {
 
   static bool tagsEqual(Defibrillator a, Defibrillator b) {
     return a.description == b.description &&
+        a.descriptionTranslations.length == b.descriptionTranslations.length &&
+        a.descriptionTranslations.entries.every(
+            (entry) => b.descriptionTranslations[entry.key] == entry.value) &&
         a.indoor == b.indoor &&
         a.operator == b.operator &&
         a.phone == b.phone &&

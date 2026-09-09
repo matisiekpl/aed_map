@@ -9,6 +9,15 @@ final rome = LatLng(41.902782, 12.496366);
 
 const visiblePointsCount = 500;
 
+const Map<String, String> languageNames = {
+  'de': 'Deutsch',
+  'en': 'English',
+  'es': 'Español',
+  'fr': 'Français',
+  'it': 'Italiano',
+  'pl': 'Polski',
+};
+
 const valhalla = 'https://sa.tt.com.pl/valhalla2Move/raw_route.php';
 const plausible = 'https://analytics.mateuszwozniak.com';
 const osmNodePrefix = 'https://www.openstreetmap.org/node/';

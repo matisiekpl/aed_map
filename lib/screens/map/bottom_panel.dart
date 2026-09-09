@@ -250,7 +250,11 @@ class BottomPanel extends StatelessWidget {
                       const SizedBox(height: 8),
                       CrossFade<String>(
                           duration: const Duration(milliseconds: 200),
-                          value: state.selected.description.purge() ??
+                          value: state.selected
+                                  .localizedDescription(
+                                      Localizations.localeOf(context)
+                                          .languageCode)
+                                  .purge() ??
                               appLocalizations.noData,
                           builder: (context, v) {
                             return Column(

@@ -1,1 +1,1 @@
-Les performances de rendu de la carte ont été améliorées.
+La description de l'emplacement peut être enregistrée en plusieurs langues.

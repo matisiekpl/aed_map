@@ -71,6 +71,8 @@
   "longitude": "Längengrad",
   "latitude": "Breitengrad",
   "chooseAccess": "Zugang wählen",
+  "addTranslation": "Übersetzung hinzufügen",
+  "chooseLanguage": "Sprache wählen",
   "editOpeningHours": "Öffnungszeiten bearbeiten",
   "openingHoursNotSet": "Keine",
   "openingHoursView": "Anzeigen",
