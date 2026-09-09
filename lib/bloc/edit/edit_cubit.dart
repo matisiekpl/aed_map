@@ -80,6 +80,10 @@ class EditCubit extends Cubit<EditState> {
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
         description: defibrillator.description ?? '',
+        descriptionTranslations:
+            Map<String, String>.from(defibrillator.descriptionTranslations),
+        originalTranslations:
+            Map<String, String>.from(defibrillator.descriptionTranslations),
         originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
@@ -98,6 +102,10 @@ class EditCubit extends Cubit<EditState> {
         access: defibrillator.access ?? 'yes',
         indoor: defibrillator.indoor ?? 'no',
         description: defibrillator.description ?? '',
+        descriptionTranslations:
+            Map<String, String>.from(defibrillator.descriptionTranslations),
+        originalTranslations:
+            Map<String, String>.from(defibrillator.descriptionTranslations),
         originalImage: defibrillator.image,
         pendingChanges: state.pendingChanges));
   }
@@ -108,6 +116,36 @@ class EditCubit extends Cubit<EditState> {
       s.defibrillator.description = value;
       emit(s.copyWith(defibrillator: s.defibrillator, description: value));
     }
+  }
+
+  void updateTranslations(
+      void Function(Map<String, String> translations) mutate) {
+    var s = state;
+    if (s is EditInProgress) {
+      final translations = Map<String, String>.from(s.descriptionTranslations);
+      mutate(translations);
+      emit(s.copyWith(
+          defibrillator:
+              s.defibrillator.copyWith(descriptionTranslations: translations),
+          descriptionTranslations: translations));
+    }
+  }
+
+  void editTranslation(String languageCode, String value) {
+    updateTranslations((translations) => translations[languageCode] = value);
+  }
+
+  void addTranslation(String languageCode) {
+    var s = state;
+    if (s is! EditInProgress ||
+        s.descriptionTranslations.containsKey(languageCode)) {
+      return;
+    }
+    updateTranslations((translations) => translations[languageCode] = '');
+  }
+
+  void removeTranslation(String languageCode) {
+    updateTranslations((translations) => translations.remove(languageCode));
   }
 
   void editOperator(String value) {
@@ -171,10 +209,28 @@ class EditCubit extends Cubit<EditState> {
     if (!await pointsRepository.authenticate()) return null;
     var s = state;
     if (s is EditInProgress) {
+      final translations = {
+        for (final entry in s.defibrillator.descriptionTranslations.entries)
+          entry.key: entry.value.trim()
+      }..removeWhere((languageCode, value) => value.isEmpty);
+      final defibrillator = s.defibrillator.copyWith(
+        descriptionTranslations: translations,
+        description: s.defibrillator.description?.trim(),
+        operator: s.defibrillator.operator?.trim(),
+        phone: s.defibrillator.phone?.trim(),
+        openingHours: s.defibrillator.openingHours?.trim(),
+      );
+      final removedTags = <String>{
+        if ((s.originalImage ?? '').isNotEmpty &&
+            (defibrillator.image ?? '').isEmpty)
+          'image',
+        for (final languageCode in s.originalTranslations.keys)
+          if (!translations.containsKey(languageCode))
+            'defibrillator:location:$languageCode',
+      };
       try {
-        if (s.defibrillator.id == 0) {
-          var saved =
-              await pointsRepository.insertDefibrillator(s.defibrillator);
+        if (defibrillator.id == 0) {
+          var saved = await pointsRepository.insertDefibrillator(defibrillator);
           await userCreatedDefibrillatorRepository.add(saved.id);
           await pendingChangesRepository.register(PendingChange(
             type: PendingChangeType.add,
@@ -195,8 +251,8 @@ class EditCubit extends Cubit<EditState> {
           maybeRequestReview();
           return saved;
         } else {
-          var saved =
-              await pointsRepository.updateDefibrillator(s.defibrillator);
+          var saved = await pointsRepository
+              .updateDefibrillator(defibrillator, removedTags: removedTags);
           await pendingChangesRepository.register(PendingChange(
             type: PendingChangeType.edit,
             defibrillatorId: saved.id,

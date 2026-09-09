@@ -147,6 +147,67 @@ void main() {
       expect((editCubit.state as EditInProgress).access, 'test_access');
     });
 
+    test('addTranslation', () async {
+      await editCubit.enter();
+      await editCubit.edit(Defibrillator(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: 'no',
+          access: 'yes'));
+      editCubit.addTranslation('en');
+      expect(editCubit.state, isA<EditInProgress>());
+      expect(
+          (editCubit.state as EditInProgress).descriptionTranslations['en'], '');
+      expect(
+          (editCubit.state as EditInProgress)
+              .defibrillator
+              .descriptionTranslations['en'],
+          '');
+    });
+
+    test('editTranslation', () async {
+      await editCubit.enter();
+      await editCubit.edit(Defibrillator(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          indoor: 'no',
+          access: 'yes'));
+      editCubit.addTranslation('en');
+      editCubit.editTranslation('en', 'On level 0');
+      expect((editCubit.state as EditInProgress).descriptionTranslations['en'],
+          'On level 0');
+      expect(
+          (editCubit.state as EditInProgress)
+              .defibrillator
+              .descriptionTranslations['en'],
+          'On level 0');
+    });
+
+    test('removeTranslation', () async {
+      await editCubit.enter();
+      await editCubit.edit(Defibrillator(
+          id: 7,
+          location: warsaw,
+          description: 'test_description',
+          descriptionTranslations: {'en': 'On level 0'},
+          indoor: 'no',
+          access: 'yes'));
+      editCubit.removeTranslation('en');
+      expect(
+          (editCubit.state as EditInProgress)
+              .descriptionTranslations
+              .containsKey('en'),
+          false);
+      expect(
+          (editCubit.state as EditInProgress)
+              .defibrillator
+              .descriptionTranslations
+              .containsKey('en'),
+          false);
+    });
+
     test('removePhoto', () async {
       await editCubit.enter();
       await editCubit.edit(Defibrillator(

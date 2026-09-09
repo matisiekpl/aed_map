@@ -148,6 +148,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get chooseAccess => 'Elegir acceso';
 
   @override
+  String get addTranslation => 'Añadir traducción';
+
+  @override
+  String get chooseLanguage => 'Elegir idioma';
+
+  @override
   String get editOpeningHours => 'Editar horario de apertura';
 
   @override

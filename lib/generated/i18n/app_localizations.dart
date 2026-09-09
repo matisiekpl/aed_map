@@ -370,6 +370,18 @@ abstract class AppLocalizations {
   /// **'Choose access'**
   String get chooseAccess;
 
+  /// No description provided for @addTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Add translation'**
+  String get addTranslation;
+
+  /// No description provided for @chooseLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose language'**
+  String get chooseLanguage;
+
   /// No description provided for @editOpeningHours.
   ///
   /// In en, this message translates to:

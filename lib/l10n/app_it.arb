@@ -71,6 +71,8 @@
   "longitude": "Longitudine",
   "latitude": "Latitudine",
   "chooseAccess": "Scegli l'accesso",
+  "addTranslation": "Aggiungi traduzione",
+  "chooseLanguage": "Scegli la lingua",
   "editOpeningHours": "Modifica orario di apertura",
   "openingHoursNotSet": "Nessuno",
   "openingHoursView": "Vedi",

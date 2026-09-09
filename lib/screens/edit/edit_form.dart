@@ -117,6 +117,7 @@ class EditForm extends StatelessWidget {
                   hintText: appLocalizations.enterDescription),
             ),
           ),
+          ...buildTranslationTiles(context, state, appLocalizations),
           SettingsTile.navigation(
             leading: const Icon(CupertinoIcons.arrow_clockwise_circle),
             title: Text(appLocalizations.access),
@@ -313,6 +314,85 @@ class EditForm extends StatelessWidget {
           ));
           return CupertinoActionSheet(
               title: Text(appLocalizations.chooseAccess), actions: actions);
+        });
+  }
+
+  List<AbstractSettingsTile> buildTranslationTiles(BuildContext context,
+      EditInProgress state, AppLocalizations appLocalizations) {
+    final editCubit = context.read<EditCubit>();
+    final languageCodes = state.descriptionTranslations.keys.toList()..sort();
+    final tiles = <AbstractSettingsTile>[];
+    for (final languageCode in languageCodes) {
+      tiles.add(SettingsTile(
+        leading: const Icon(CupertinoIcons.globe),
+        title: Row(
+          children: [
+            SizedBox(
+              width: 64,
+              child: Text(languageNames[languageCode] ?? languageCode),
+            ),
+            Expanded(
+              child: TextFormField(
+                key: ValueKey('translation_$languageCode'),
+                initialValue: state.descriptionTranslations[languageCode],
+                onChanged: (value) =>
+                    editCubit.editTranslation(languageCode, value),
+                decoration: InputDecoration.collapsed(
+                    hintText: appLocalizations.enterDescription),
+              ),
+            ),
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => editCubit.removeTranslation(languageCode),
+              child: const Icon(CupertinoIcons.trash,
+                  color: CupertinoColors.destructiveRed, size: 20),
+            ),
+          ],
+        ),
+      ));
+    }
+    final availableLanguages = AppLocalizations.supportedLocales
+        .map((locale) => locale.languageCode)
+        .where((code) => !state.descriptionTranslations.containsKey(code))
+        .toList();
+    if (availableLanguages.isNotEmpty) {
+      tiles.add(SettingsTile.navigation(
+        leading: const Icon(CupertinoIcons.add),
+        title: Text(appLocalizations.addTranslation),
+        onPressed: (_) {
+          selectTranslationLanguage(
+              context, appLocalizations, editCubit, availableLanguages);
+        },
+      ));
+    }
+    return tiles;
+  }
+
+  void selectTranslationLanguage(
+      BuildContext context,
+      AppLocalizations appLocalizations,
+      EditCubit editCubit,
+      List<String> availableLanguages) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) {
+          var actions = availableLanguages
+              .map((languageCode) => CupertinoActionSheetAction(
+                    onPressed: () {
+                      editCubit.addTranslation(languageCode);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(languageNames[languageCode] ?? languageCode),
+                  ))
+              .toList();
+          actions.add(CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(appLocalizations.cancel),
+          ));
+          return CupertinoActionSheet(
+              title: Text(appLocalizations.chooseLanguage), actions: actions);
         });
   }
 

@@ -87,16 +87,13 @@ class PointsRepository {
     var jsonList = jsonDecode(contents)['features'];
     jsonList.forEach((row) {
       var id = row['properties'][idLabel];
-      var descriptions = Map.from(row['properties'])
-          .entries
-          .where((a) => a.key.startsWith('defibrillator:location'))
-          .toList();
-      descriptions.sort((a, b) => b.key.length - a.key.length);
       defibrillators.add(Defibrillator(
           location: LatLng(row['geometry']['coordinates'][1],
               row['geometry']['coordinates'][0]),
           id: id,
-          description: descriptions.firstOrNull?.value,
+          description: row['properties']['defibrillator:location'],
+          descriptionTranslations: Defibrillator.parseLocationTranslations(
+              row['properties'] as Map<String, dynamic>),
           indoor: row['properties']['indoor'],
           operator: row['properties']['operator'],
           phone: row['properties']['phone'],
@@ -234,7 +231,8 @@ class PointsRepository {
     return defibrillator;
   }
 
-  Future<Defibrillator> updateDefibrillator(Defibrillator defibrillator) async {
+  Future<Defibrillator> updateDefibrillator(Defibrillator defibrillator,
+      {Set<String> removedTags = const {}}) async {
     if (devMode) {
       return defibrillator;
     }
@@ -265,7 +263,7 @@ class PointsRepository {
       ];
     }).toList();
     var xml = defibrillator.toXml(changesetId, int.parse(oldVersion),
-        oldTags: oldTagsPairs);
+        oldTags: oldTagsPairs, removedTags: removedTags);
     var putResponse = await http.put(
         Uri.parse(
             'https://api.openstreetmap.org/api/0.6/node/${defibrillator.id}'),
@@ -345,6 +343,7 @@ class PointsRepository {
           id: id,
           access: tags['access'],
           description: tags['defibrillator:location'],
+          descriptionTranslations: Defibrillator.parseLocationTranslations(tags),
           indoor: tags['indoor'],
           openingHours: tags['opening_hours'],
           operator: tags['operator'],

@@ -109,6 +109,8 @@ class EditInProgress extends EditState {
     this.indoor = 'no',
     this.access = 'public',
     this.description = '',
+    this.descriptionTranslations = const {},
+    this.originalTranslations = const {},
     this.originalImage = '',
   });
 
@@ -116,6 +118,8 @@ class EditInProgress extends EditState {
   final String indoor;
   final String access;
   final String description;
+  final Map<String, String> descriptionTranslations;
+  final Map<String, String> originalTranslations;
   final String? originalImage;
 
   @override
@@ -127,6 +131,8 @@ class EditInProgress extends EditState {
         defibrillator.indoor,
         defibrillator,
         description,
+        descriptionTranslations,
+        originalTranslations,
         originalImage,
         pendingChanges,
         errorMessage,
@@ -143,6 +149,8 @@ class EditInProgress extends EditState {
     String? indoor,
     String? access,
     String? description,
+    Map<String, String>? descriptionTranslations,
+    Map<String, String>? originalTranslations,
     String? originalImage,
     User? user,
     List<PendingChange>? pendingChanges,
@@ -158,6 +166,9 @@ class EditInProgress extends EditState {
       indoor: indoor ?? this.indoor,
       access: access ?? this.access,
       description: description ?? this.description,
+      descriptionTranslations:
+          descriptionTranslations ?? this.descriptionTranslations,
+      originalTranslations: originalTranslations ?? this.originalTranslations,
       originalImage: originalImage ?? this.originalImage,
       user: user ?? this.user,
       pendingChanges: pendingChanges ?? this.pendingChanges,
