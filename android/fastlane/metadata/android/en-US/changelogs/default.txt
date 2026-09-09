@@ -1,1 +1,1 @@
-Improved map rendering performance.
+The location description can be saved in several languages.

@@ -1,1 +1,1 @@
-Ulepszono wydajność renderowania mapy
+Opis lokalizacji można zapisać w kilku językach.

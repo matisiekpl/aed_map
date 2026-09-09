@@ -1,1 +1,1 @@
-Die Renderleistung der Karte wurde verbessert.
+Die Beschreibung des Standorts kann in mehreren Sprachen gespeichert werden.
