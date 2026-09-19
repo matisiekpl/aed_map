@@ -418,6 +418,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Photo will be removed after saving';
 
   @override
+  String get photoAvailableAfterProcessing =>
+      'For technical reasons, a photo can be added only after OpenStreetMap has processed this AED.';
+
+  @override
   String get undo => 'Undo';
 
   @override

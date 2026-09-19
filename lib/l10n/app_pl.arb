@@ -170,6 +170,7 @@
   "removePhoto": "Usuń zdjęcie",
   "photoWillBeRemoved": "Zdjęcie zostanie usunięte",
   "photoWillBeRemovedAfterSave": "Zdjęcie zostanie usunięte po zapisaniu",
+  "photoAvailableAfterProcessing": "Z przyczyn technicznych zdjęcie można dodać dopiero po przetworzeniu tego AED przez OpenStreetMap.",
   "undo": "Cofnij",
   "photo": "Zdjęcie",
   "chooseFromGallery": "Wybierz z galerii",

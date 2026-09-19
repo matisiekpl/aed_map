@@ -170,6 +170,7 @@
   "removePhoto": "Eliminar foto",
   "photoWillBeRemoved": "La foto se eliminará",
   "photoWillBeRemovedAfterSave": "La foto se eliminará al guardar",
+  "photoAvailableAfterProcessing": "Por motivos técnicos, la foto solo puede añadirse después de que OpenStreetMap procese este DEA.",
   "undo": "Deshacer",
   "photo": "Foto",
   "chooseFromGallery": "Elegir de la galería",

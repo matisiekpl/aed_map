@@ -163,26 +163,32 @@ class EditForm extends StatelessWidget {
       SettingsSection(
         title: Text(appLocalizations.photo),
         tiles: [
-          SettingsTile.navigation(
-            leading: Icon(
-              photoMarkedForRemoval
-                  ? CupertinoIcons.info_circle
-                  : CupertinoIcons.camera,
-              color: photoMarkedForRemoval ? destructiveColor : null,
+          if (state.defibrillator.id == 0)
+            SettingsTile(
+              leading: const Icon(CupertinoIcons.info_circle),
+              title: Text(appLocalizations.photoAvailableAfterProcessing),
+            )
+          else
+            SettingsTile.navigation(
+              leading: Icon(
+                photoMarkedForRemoval
+                    ? CupertinoIcons.info_circle
+                    : CupertinoIcons.camera,
+                color: photoMarkedForRemoval ? destructiveColor : null,
+              ),
+              title: Text(
+                photoMarkedForRemoval
+                    ? appLocalizations.photoWillBeRemoved
+                    : appLocalizations.changePhoto,
+                style: photoMarkedForRemoval
+                    ? TextStyle(color: destructiveColor)
+                    : null,
+              ),
+              onPressed: photoMarkedForRemoval
+                  ? null
+                  : (tileContext) =>
+                      showPhotoSourceSheet(tileContext, state.defibrillator),
             ),
-            title: Text(
-              photoMarkedForRemoval
-                  ? appLocalizations.photoWillBeRemoved
-                  : appLocalizations.changePhoto,
-              style: photoMarkedForRemoval
-                  ? TextStyle(color: destructiveColor)
-                  : null,
-            ),
-            onPressed: photoMarkedForRemoval
-                ? null
-                : (tileContext) =>
-                    showPhotoSourceSheet(tileContext, state.defibrillator),
-          ),
           if (hasPhoto)
             SettingsTile.navigation(
               leading: Icon(CupertinoIcons.trash, color: destructiveColor),

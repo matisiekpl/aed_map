@@ -170,6 +170,7 @@
   "removePhoto": "Supprimer la photo",
   "photoWillBeRemoved": "La photo sera supprimée",
   "photoWillBeRemovedAfterSave": "La photo sera supprimée après l'enregistrement",
+  "photoAvailableAfterProcessing": "Pour des raisons techniques, une photo ne peut être ajoutée qu'après le traitement de ce DAE par OpenStreetMap.",
   "undo": "Annuler",
   "photo": "Photo",
   "chooseFromGallery": "Choisir dans la galerie",

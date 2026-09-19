@@ -425,6 +425,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'La photo sera supprimée après l\'enregistrement';
 
   @override
+  String get photoAvailableAfterProcessing =>
+      'Pour des raisons techniques, une photo ne peut être ajoutée qu\'après le traitement de ce DAE par OpenStreetMap.';
+
+  @override
   String get undo => 'Annuler';
 
   @override

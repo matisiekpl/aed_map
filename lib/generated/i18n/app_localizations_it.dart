@@ -421,6 +421,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'La foto verrà rimossa dopo il salvataggio';
 
   @override
+  String get photoAvailableAfterProcessing =>
+      'Per motivi tecnici, la foto può essere aggiunta solo dopo che OpenStreetMap ha elaborato questo DAE.';
+
+  @override
   String get undo => 'Annulla';
 
   @override

@@ -421,6 +421,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get photoWillBeRemovedAfterSave => 'La foto se eliminará al guardar';
 
   @override
+  String get photoAvailableAfterProcessing =>
+      'Por motivos técnicos, la foto solo puede añadirse después de que OpenStreetMap procese este DEA.';
+
+  @override
   String get undo => 'Deshacer';
 
   @override

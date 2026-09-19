@@ -868,6 +868,12 @@ abstract class AppLocalizations {
   /// **'Photo will be removed after saving'**
   String get photoWillBeRemovedAfterSave;
 
+  /// No description provided for @photoAvailableAfterProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'For technical reasons, a photo can be added only after OpenStreetMap has processed this AED.'**
+  String get photoAvailableAfterProcessing;
+
   /// No description provided for @undo.
   ///
   /// In en, this message translates to:

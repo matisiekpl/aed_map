@@ -422,6 +422,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Foto wird nach dem Speichern entfernt';
 
   @override
+  String get photoAvailableAfterProcessing =>
+      'Aus technischen Gründen kann ein Foto erst hinzugefügt werden, nachdem OpenStreetMap diesen AED verarbeitet hat.';
+
+  @override
   String get undo => 'Rückgängig';
 
   @override

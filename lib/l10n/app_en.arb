@@ -170,6 +170,7 @@
   "removePhoto": "Remove photo",
   "photoWillBeRemoved": "Photo will be removed",
   "photoWillBeRemovedAfterSave": "Photo will be removed after saving",
+  "photoAvailableAfterProcessing": "For technical reasons, a photo can be added only after OpenStreetMap has processed this AED.",
   "undo": "Undo",
   "photo": "Photo",
   "chooseFromGallery": "Choose from gallery",

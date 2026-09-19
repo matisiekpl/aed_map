@@ -420,6 +420,10 @@ class AppLocalizationsPl extends AppLocalizations {
       'Zdjęcie zostanie usunięte po zapisaniu';
 
   @override
+  String get photoAvailableAfterProcessing =>
+      'Z przyczyn technicznych zdjęcie można dodać dopiero po przetworzeniu tego AED przez OpenStreetMap.';
+
+  @override
   String get undo => 'Cofnij';
 
   @override
