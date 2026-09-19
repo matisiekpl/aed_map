@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,12 +11,9 @@ import 'package:aed_map/constants.dart';
 import 'package:aed_map/main.dart';
 import 'package:aed_map/screens/pending_changes/pending_changes_page.dart';
 import 'package:aed_map/screens/settings/settings_page.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/panel/panel_cubit.dart';
 import '../../bloc/points/points_cubit.dart';
@@ -29,9 +25,6 @@ class MapHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var livechatEnabled = Platform.environment.containsKey('FLUTTER_TEST')
-        ? false
-        : FirebaseRemoteConfig.instance.getBool('livechat');
     var appLocalizations = AppLocalizations.of(context)!;
     return SafeArea(
         child: Padding(
@@ -228,27 +221,6 @@ class MapHeader extends StatelessWidget {
                     ),
                   ),
                   ),
-                  if (livechatEnabled) const SizedBox(height: 8),
-                  if (livechatEnabled)
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () async {
-                        mixpanel?.track(livechatEvent);
-                        FirebaseAnalytics.instance
-                            .logEvent(name: livechatEvent);
-                        launchUrl(Uri.parse('https://pomoc.aedmapa.pl/'));
-                      },
-                      child: Card(
-                        color: CupertinoColors.secondarySystemBackground
-                            .resolveFrom(context),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(CupertinoIcons.question_circle,
-                              color:
-                                  CupertinoColors.label.resolveFrom(context)),
-                        ),
-                      ),
-                    ),
                 ],
               ),
             ],
