@@ -1,1 +1,1 @@
-Die Beschreibung des Standorts kann in mehreren Sprachen gespeichert werden.
+Das Formular zur Hinzufügung von AED informiert, dass ein Foto erst nach der Verarbeitung des Punkts durch OpenStreetMap hinzugefügt werden kann.

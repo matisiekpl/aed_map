@@ -1,1 +1,1 @@
-La descripción de la ubicación se puede guardar en varios idiomas.
+El formulario de adición de AED informa que solo se puede añadir una foto después de que el punto haya sido procesado por OpenStreetMap.

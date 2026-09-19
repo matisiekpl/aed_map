@@ -1,1 +1,1 @@
-The location description can be saved in several languages.
+The AED addition form informs that a photo can only be added after the point has been processed by OpenStreetMap.

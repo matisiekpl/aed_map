@@ -1,1 +1,1 @@
-La descrizione della posizione può essere salvata in più lingue.
+Il modulo di aggiunta AED informa che una foto può essere aggiunta solo dopo che il punto è stato elaborato da OpenStreetMap.
