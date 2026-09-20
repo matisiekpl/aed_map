@@ -1,1 +1,1 @@
-Le formulaire d'ajout d'AED informe qu'une photo ne peut être ajoutée qu'après le traitement du point par OpenStreetMap.
+Corrections techniques.

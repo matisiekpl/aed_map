@@ -1,1 +1,1 @@
-Formularz dodawania AED informuje, że zdjęcie można dodać dopiero po przetworzeniu punktu przez OpenStreetMap.
+Poprawki techniczne.
