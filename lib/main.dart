@@ -58,7 +58,7 @@ void main() async {
     mixpanel!.setServerURL('https://api-eu.mixpanel.com');
   }
   await NsfwDetector.initialize(threshold: 0.7);
-  const sentryDsn = String.fromEnvironment('SENTRY_DSN');
+  const sentryDsn = 'https://492fa94bb5e0bdf492c5a8b8a108d84e@o337011.ingest.sentry.io/4506661810274304';
   final Widget app = BetterFeedback(child: Phoenix(child: App()));
   if (sentryDsn.isNotEmpty) {
     await SentryFlutter.init(
