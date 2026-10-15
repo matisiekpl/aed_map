@@ -138,6 +138,8 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
+.output
+.data
 dist
 
 # Gatsby files
@@ -178,7 +180,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-public/
+/public/
 # Local Netlify folder
 .netlify
 

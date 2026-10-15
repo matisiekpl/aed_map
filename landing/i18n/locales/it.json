@@ -1,0 +1,116 @@
+{
+  "site": {
+    "name": "Mappa dei DAE"
+  },
+  "seo": {
+    "home": {
+      "title": "Mappa dei DAE – defibrillatori nelle vicinanze",
+      "description": "App per iOS e Android con la mappa dei defibrillatori DAE da OpenStreetMap. Mostra il DAE più vicino, la distanza, il tempo a piedi e il percorso pedonale."
+    },
+    "privacy": {
+      "title": "Informativa sulla privacy – Mappa dei DAE",
+      "description": "Quali dati tratta l'app e il sito Mappa dei DAE, per quale finalità e a chi vengono comunicati."
+    },
+    "terms": {
+      "title": "Termini di utilizzo – Mappa dei DAE",
+      "description": "Regole per l'uso dell'app Mappa dei DAE e per l'aggiunta e la modifica dei defibrillatori."
+    }
+  },
+  "nav": {
+    "features": "Funzioni",
+    "faq": "Domande",
+    "download": "Scarica"
+  },
+  "hero": {
+    "title": "Mappa dei DAE",
+    "description": "Mappa dei defibrillatori DAE da OpenStreetMap su iOS e Android. L'app indica il defibrillatore più vicino, la distanza e il percorso a piedi per raggiungerlo.",
+    "statistics": "{count} defibrillatori in {countries} paesi",
+    "imageAlt": "Schermata dell'app Mappa dei DAE con la mappa dei defibrillatori"
+  },
+  "features": {
+    "title": "Funzioni",
+    "items": {
+      "nearest": {
+        "title": "DAE più vicino",
+        "description": "All'apertura dell'app la mappa si centra sulla posizione attuale e il pannello in basso mostra il defibrillatore più vicino con la distanza e il tempo a piedi."
+      },
+      "route": {
+        "title": "Percorso a piedi",
+        "description": "Il percorso verso il DAE selezionato viene disegnato sulla mappa nell'app. Lo stesso punto si apre anche in Mappe di Apple, Google Maps o in un'altra app di navigazione."
+      },
+      "details": {
+        "title": "Dettagli del punto",
+        "description": "La scheda del defibrillatore contiene la descrizione della posizione, le condizioni di accesso, gli orari di apertura, il gestore, il telefono di contatto e la foto, se qualcuno l'ha aggiunta."
+      },
+      "edit": {
+        "title": "Aggiunta e modifica",
+        "description": "Dopo l'accesso con un account OpenStreetMap si può aggiungere un nuovo DAE, spostare il segnaposto, correggere la descrizione e impostare gli orari di apertura. Le modifiche vengono salvate direttamente in OpenStreetMap."
+      },
+      "photos": {
+        "title": "Foto",
+        "description": "La foto del defibrillatore si scatta con la fotocamera o si sceglie dalla galleria. Viene pubblicata su OpenAEDMap con licenza CC0, e le foto inappropriate si possono segnalare."
+      },
+      "offline": {
+        "title": "Senza connessione",
+        "description": "Il database dei defibrillatori e le parti di mappa già visitate restano sul dispositivo, quindi l'elenco dei punti è disponibile anche senza internet."
+      }
+    }
+  },
+  "data": {
+    "title": "Dati da OpenStreetMap",
+    "headline": "{world} DAE sulla mappa, di cui {poland} in Polonia.",
+    "description": "Le posizioni dei defibrillatori provengono da OpenStreetMap e sono rese disponibili dal progetto OpenAEDMap. È un database aperto, aggiornato da volontari, istituzioni e dagli stessi utenti dell'app.",
+    "openAedMap": "OpenAEDMap"
+  },
+  "survival": {
+    "title": "La defibrillazione nei primi minuti aumenta la probabilità di sopravvivenza dal 5% al 70%",
+    "description": "In caso di arresto cardiaco improvviso conta il tempo necessario per raggiungere un defibrillatore. La mappa mostra dove si trova quello più vicino.",
+    "link": "Maggiori informazioni sui defibrillatori DAE"
+  },
+  "faq": {
+    "title": "Domande",
+    "items": {
+      "emergency": {
+        "question": "Cosa fare quando una persona perde conoscenza?",
+        "answer": "Prima di tutto bisogna chiamare il numero di emergenza 112 e iniziare la rianimazione cardiopolmonare. L'operatore guida attraverso i passi successivi. L'app mostra dove si trova il DAE più vicino, così che un'altra persona possa correre a prenderlo. Non sostituisce la chiamata di emergenza."
+      },
+      "source": {
+        "question": "Da dove provengono i dati sui defibrillatori?",
+        "answer": "Da OpenStreetMap, la mappa aperta del mondo creata dalla comunità. L'insieme dei defibrillatori è reso disponibile dal progetto OpenAEDMap."
+      },
+      "add": {
+        "question": "Come si aggiunge un defibrillatore mancante?",
+        "answer": "Nell'app c'è un pulsante per aggiungere un punto. Dopo l'accesso con un account OpenStreetMap si impostano il segnaposto, le condizioni di accesso, la descrizione e gli orari di apertura. L'account OpenStreetMap si crea gratuitamente su openstreetmap.org."
+      },
+      "abroad": {
+        "question": "L'app funziona fuori dalla Polonia?",
+        "answer": "Sì. L'app mostra i defibrillatori di tutto il mondo registrati in OpenStreetMap."
+      },
+      "offline": {
+        "question": "L'app funziona senza internet?",
+        "answer": "Il database dei defibrillatori è salvato sul dispositivo, quindi i punti e i loro dettagli sono disponibili senza connessione. Il calcolo del percorso e le nuove parti di mappa richiedono internet."
+      },
+      "update": {
+        "question": "Con quale frequenza vengono aggiornati i dati?",
+        "answer": "OpenAEDMap acquisisce le modifiche da OpenStreetMap in modo continuo. L'app scarica l'insieme aggiornato all'avvio, e nelle impostazioni è indicata la data dell'ultimo aggiornamento."
+      }
+    }
+  },
+  "download": {
+    "title": "Scarica Mappa dei DAE",
+    "description": "L'app è disponibile su App Store e Google Play.",
+    "appStore": "Scarica su App Store",
+    "googlePlay": "Disponibile su Google Play"
+  },
+  "footer": {
+    "createdBy": "Autore: {name}",
+    "partner": "Partner del progetto: Lekify.pl",
+    "privacy": "Informativa sulla privacy",
+    "terms": "Termini di utilizzo",
+    "sourceCode": "Codice sorgente",
+    "dataLicense": "Dati © collaboratori di OpenStreetMap, ODbL"
+  },
+  "legal": {
+    "updatedAt": "Ultimo aggiornamento: {date}"
+  }
+}

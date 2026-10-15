@@ -1,0 +1,116 @@
+{
+  "site": {
+    "name": "Mapa de DEA"
+  },
+  "seo": {
+    "home": {
+      "title": "Mapa de DEA – desfibriladores cercanos",
+      "description": "Aplicación para iOS y Android con un mapa de desfibriladores (DEA) de OpenStreetMap. Muestra el DEA más cercano, la distancia, el tiempo a pie y la ruta peatonal."
+    },
+    "privacy": {
+      "title": "Política de privacidad – Mapa de DEA",
+      "description": "Qué datos trata la aplicación y la web Mapa de DEA, con qué finalidad y a quién se comunican."
+    },
+    "terms": {
+      "title": "Condiciones de uso – Mapa de DEA",
+      "description": "Normas de uso de la aplicación Mapa de DEA y de la incorporación y edición de desfibriladores."
+    }
+  },
+  "nav": {
+    "features": "Funciones",
+    "faq": "Preguntas",
+    "download": "Descargar"
+  },
+  "hero": {
+    "title": "Mapa de DEA",
+    "description": "Mapa de desfibriladores externos automáticos (DEA) de OpenStreetMap para iOS y Android. La aplicación indica el desfibrilador más cercano, la distancia hasta él y la ruta a pie.",
+    "statistics": "{count} desfibriladores en {countries} países",
+    "imageAlt": "Pantalla de la aplicación Mapa de DEA con el mapa de desfibriladores"
+  },
+  "features": {
+    "title": "Funciones",
+    "items": {
+      "nearest": {
+        "title": "DEA más cercano",
+        "description": "Al abrir la aplicación, el mapa se centra en la ubicación del dispositivo y el panel inferior muestra el desfibrilador más cercano con la distancia y el tiempo a pie."
+      },
+      "route": {
+        "title": "Ruta a pie",
+        "description": "La ruta hasta el DEA seleccionado se dibuja en el mapa de la aplicación. El mismo punto también se abre en Mapas de Apple, Google Maps u otra aplicación de navegación."
+      },
+      "details": {
+        "title": "Detalles del punto",
+        "description": "La ficha del desfibrilador incluye la descripción de la ubicación, las condiciones de acceso, el horario, el operador, el teléfono de contacto y una foto, si alguien la ha añadido."
+      },
+      "edit": {
+        "title": "Añadir y editar",
+        "description": "Tras iniciar sesión con una cuenta de OpenStreetMap se puede añadir un DEA nuevo, mover el marcador, corregir la descripción y fijar el horario. Los cambios se guardan directamente en OpenStreetMap."
+      },
+      "photos": {
+        "title": "Fotos",
+        "description": "La foto del desfibrilador se hace con la cámara o se elige de la galería. Se publica en OpenAEDMap con licencia CC0, y las fotos inapropiadas se pueden denunciar."
+      },
+      "offline": {
+        "title": "Sin conexión",
+        "description": "La base de datos de desfibriladores y las zonas del mapa ya visitadas se guardan en el dispositivo, de modo que la lista de puntos también está disponible sin internet."
+      }
+    }
+  },
+  "data": {
+    "title": "Datos de OpenStreetMap",
+    "headline": "{world} DEA en el mapa, {poland} de ellos en Polonia.",
+    "description": "Las ubicaciones de los desfibriladores proceden de OpenStreetMap y las pone a disposición el proyecto OpenAEDMap. Es una base de datos abierta que completan voluntarios, instituciones y los propios usuarios de la aplicación.",
+    "openAedMap": "OpenAEDMap"
+  },
+  "survival": {
+    "title": "La desfibrilación en los primeros minutos aumenta la probabilidad de supervivencia del 5 % al 70 %",
+    "description": "En una parada cardiaca súbita cuenta el tiempo que se tarda en llegar a un desfibrilador. El mapa muestra dónde está el más cercano.",
+    "link": "Más información sobre los desfibriladores (DEA)"
+  },
+  "faq": {
+    "title": "Preguntas",
+    "items": {
+      "emergency": {
+        "question": "¿Qué hacer si alguien ha perdido el conocimiento?",
+        "answer": "Lo primero es llamar al número de emergencias 112 e iniciar la reanimación cardiopulmonar. El operador guía en los pasos siguientes. La aplicación muestra dónde está el DEA más cercano para que otra persona pueda ir a buscarlo. No sustituye a la llamada de emergencia."
+      },
+      "source": {
+        "question": "¿De dónde proceden los datos de los desfibriladores?",
+        "answer": "De OpenStreetMap, un mapa abierto del mundo creado por la comunidad. El conjunto de desfibriladores lo publica el proyecto OpenAEDMap."
+      },
+      "add": {
+        "question": "¿Cómo se añade un desfibrilador que falta?",
+        "answer": "La aplicación tiene un botón para añadir un punto. Tras iniciar sesión con una cuenta de OpenStreetMap se colocan el marcador, las condiciones de acceso, la descripción y el horario. La cuenta de OpenStreetMap se crea gratis en openstreetmap.org."
+      },
+      "abroad": {
+        "question": "¿Funciona la aplicación fuera de Polonia?",
+        "answer": "Sí. La aplicación muestra los desfibriladores de todo el mundo registrados en OpenStreetMap."
+      },
+      "offline": {
+        "question": "¿Funciona la aplicación sin internet?",
+        "answer": "La base de datos de desfibriladores se guarda en el dispositivo, por lo que los puntos y sus detalles están disponibles sin conexión. El cálculo de rutas y las zonas nuevas del mapa requieren internet."
+      },
+      "update": {
+        "question": "¿Con qué frecuencia se actualizan los datos?",
+        "answer": "OpenAEDMap recoge los cambios de OpenStreetMap de forma continua. La aplicación descarga el conjunto actualizado al iniciarse, y en los ajustes se ve la fecha de la última actualización."
+      }
+    }
+  },
+  "download": {
+    "title": "Descargar Mapa de DEA",
+    "description": "La aplicación está disponible en App Store y Google Play.",
+    "appStore": "Descárgala en App Store",
+    "googlePlay": "Disponible en Google Play"
+  },
+  "footer": {
+    "createdBy": "Autor: {name}",
+    "partner": "Socio del proyecto: Lekify.pl",
+    "privacy": "Política de privacidad",
+    "terms": "Condiciones de uso",
+    "sourceCode": "Código fuente",
+    "dataLicense": "Datos © colaboradores de OpenStreetMap, ODbL"
+  },
+  "legal": {
+    "updatedAt": "Última actualización: {date}"
+  }
+}

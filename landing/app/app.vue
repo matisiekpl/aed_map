@@ -1,0 +1,25 @@
+<script setup lang="ts">
+import {Config} from '~/config'
+
+const localeHead = useLocaleHead()
+
+useHead(() => ({
+  htmlAttrs: localeHead.value.htmlAttrs,
+  link: [
+    ...(localeHead.value.link || []),
+    {rel: 'icon', type: 'image/png', href: '/favicon.png'},
+    {rel: 'apple-touch-icon', href: '/apple-touch-icon.png'},
+  ],
+  meta: [
+    ...(localeHead.value.meta || []),
+    {name: 'apple-itunes-app', content: `app-id=${Config.appStoreId}`},
+    {name: 'theme-color', content: '#029140'},
+  ],
+}))
+</script>
+
+<template>
+  <NuxtLayout>
+    <NuxtPage/>
+  </NuxtLayout>
+</template>
