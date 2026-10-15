@@ -14,6 +14,10 @@
     "terms": {
       "title": "Conditions d'utilisation – Carte des DAE",
       "description": "Règles d'utilisation de l'application Carte des DAE ainsi que d'ajout et de modification de défibrillateurs."
+    },
+    "brand": {
+      "title": "Affiches – Carte des DAE",
+      "description": "Affiche avec code QR de l'application Carte des DAE, en A4 et A5 à imprimer."
     }
   },
   "nav": {
@@ -109,9 +113,38 @@
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation",
     "sourceCode": "Code source",
-    "dataLicense": "Données © contributeurs OpenStreetMap, ODbL"
+    "dataLicense": "Données © contributeurs OpenStreetMap, ODbL",
+    "posters": "Affiches"
   },
   "legal": {
     "updatedAt": "Dernière mise à jour : {date}"
+  },
+  "brand": {
+    "title": "Affiches",
+    "description": "L'affiche avec le code QR de l'application Carte des DAE peut être téléchargée et affichée dans un lieu public, par exemple une école, un cabinet médical, une mairie ou à côté d'un défibrillateur.",
+    "download": {
+      "a4": "Télécharger A4",
+      "a5": "Télécharger A5"
+    }
+  },
+  "posters": {
+    "headline": "Application avec une carte des défibrillateurs DAE",
+    "lead": "Carte des DAE vous aide à trouver le défibrillateur DAE le plus proche.",
+    "aed": {
+      "title": "Qu'est-ce qu'un défibrillateur DAE ?",
+      "description": "Un DAE est un défibrillateur qui, en cas d'arrêt cardiaque soudain, délivre un choc électrique et rétablit un rythme cardiaque normal. Il analyse lui-même le rythme et guide pas à pas par la voix."
+    },
+    "survival": {
+      "value": "5 % → 70 %",
+      "description": "Ainsi augmentent les chances de survie lorsque la défibrillation a lieu dans les premières minutes."
+    },
+    "steps": {
+      "title": "Quand quelqu'un ne respire pas",
+      "call": "Appelez le 112.",
+      "compressions": "Jusqu'à l'arrivée du DAE, pratiquez des compressions thoraciques.",
+      "aed": "Une fois le DAE allumé, suivez ses instructions vocales."
+    },
+    "download": "Scannez le code ou rendez-vous sur {domain} et téléchargez l'application sur Google Play ou l'App Store.",
+    "emergency": "L'application ne remplace pas un appel d'urgence."
   }
 }

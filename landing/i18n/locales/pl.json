@@ -14,6 +14,10 @@
     "terms": {
       "title": "Regulamin – Mapa AED",
       "description": "Zasady korzystania z aplikacji Mapa AED oraz dodawania i edycji defibrylatorów."
+    },
+    "brand": {
+      "title": "Plakaty – Mapa AED",
+      "description": "Plakat z kodem QR do aplikacji Mapa AED w formatach A4 i A5 do wydruku."
     }
   },
   "nav": {
@@ -109,9 +113,38 @@
     "privacy": "Polityka prywatności",
     "terms": "Regulamin",
     "sourceCode": "Kod źródłowy",
-    "dataLicense": "Dane © współtwórcy OpenStreetMap, ODbL"
+    "dataLicense": "Dane © współtwórcy OpenStreetMap, ODbL",
+    "posters": "Plakaty"
   },
   "legal": {
     "updatedAt": "Ostatnia aktualizacja: {date}"
+  },
+  "brand": {
+    "title": "Plakaty",
+    "description": "Plakat z kodem QR do aplikacji Mapa AED można pobrać i powiesić w miejscu publicznym, na przykład w szkole, przychodni, urzędzie albo obok defibrylatora.",
+    "download": {
+      "a4": "Pobierz A4",
+      "a5": "Pobierz A5"
+    }
+  },
+  "posters": {
+    "headline": "Aplikacja z mapą defibrylatorów AED",
+    "lead": "Mapa AED pomoże Ci znaleźć najbliższy defibrylator AED w okolicy.",
+    "aed": {
+      "title": "Co to jest defibrylator AED?",
+      "description": "AED to defibrylator, który przy nagłym zatrzymaniu krążenia podaje wstrząs elektryczny i przywraca prawidłowy rytm serca. Sam analizuje rytm i głosem prowadzi krok po kroku."
+    },
+    "survival": {
+      "value": "5% → 70%",
+      "description": "Tak rośnie szansa przeżycia, gdy defibrylacja nastąpi w pierwszych minutach."
+    },
+    "steps": {
+      "title": "Gdy ktoś nie oddycha",
+      "call": "Zadzwoń pod numer 112.",
+      "compressions": "Do czasu przyniesienia AED uciskaj klatkę piersiową.",
+      "aed": "Po włączeniu AED wykonuj polecenia, które urządzenie wydaje głosowo."
+    },
+    "download": "Zeskanuj kod lub wejdź na {domain} i pobierz aplikację z Google Play lub App Store.",
+    "emergency": "Aplikacja nie zastępuje telefonu alarmowego."
   }
 }

@@ -14,6 +14,10 @@
     "terms": {
       "title": "Termini di utilizzo – Mappa dei DAE",
       "description": "Regole per l'uso dell'app Mappa dei DAE e per l'aggiunta e la modifica dei defibrillatori."
+    },
+    "brand": {
+      "title": "Poster – Mappa dei DAE",
+      "description": "Poster con codice QR dell'app Mappa dei DAE in A4 e A5 da stampare."
     }
   },
   "nav": {
@@ -109,9 +113,38 @@
     "privacy": "Informativa sulla privacy",
     "terms": "Termini di utilizzo",
     "sourceCode": "Codice sorgente",
-    "dataLicense": "Dati © collaboratori di OpenStreetMap, ODbL"
+    "dataLicense": "Dati © collaboratori di OpenStreetMap, ODbL",
+    "posters": "Poster"
   },
   "legal": {
     "updatedAt": "Ultimo aggiornamento: {date}"
+  },
+  "brand": {
+    "title": "Poster",
+    "description": "Il poster con il codice QR dell'app Mappa dei DAE si può scaricare e appendere in un luogo pubblico, per esempio a scuola, in un ambulatorio, in un ufficio o accanto a un defibrillatore.",
+    "download": {
+      "a4": "Scarica A4",
+      "a5": "Scarica A5"
+    }
+  },
+  "posters": {
+    "headline": "App con una mappa dei defibrillatori DAE",
+    "lead": "Mappa dei DAE ti aiuta a trovare il defibrillatore DAE più vicino.",
+    "aed": {
+      "title": "Che cos'è un defibrillatore DAE?",
+      "description": "Un DAE è un defibrillatore che, in caso di arresto cardiaco improvviso, eroga una scarica elettrica e ripristina il ritmo cardiaco normale. Analizza il ritmo da solo e guida passo dopo passo con istruzioni vocali."
+    },
+    "survival": {
+      "value": "5% → 70%",
+      "description": "Così aumenta la probabilità di sopravvivenza quando la defibrillazione avviene nei primi minuti."
+    },
+    "steps": {
+      "title": "Se qualcuno non respira",
+      "call": "Chiama il 112.",
+      "compressions": "Fino all'arrivo del DAE, esegui le compressioni toraciche.",
+      "aed": "Una volta acceso il DAE, segui le sue istruzioni vocali."
+    },
+    "download": "Scansiona il codice o vai su {domain} e scarica l'app da Google Play o dall'App Store.",
+    "emergency": "L'app non sostituisce una chiamata di emergenza."
   }
 }

@@ -53,8 +53,16 @@ export default defineNuxtConfig({
       ],
     },
   },
+  robots: {
+    disallow: ['/qr', '/branding/print'],
+  },
   ogImage: {
     zeroRuntime: true,
+    defaults: {
+      extension: 'png',
+      width: 1200,
+      height: 630,
+    },
   },
   fonts: {
     families: [
@@ -78,7 +86,7 @@ export default defineNuxtConfig({
       routes: [
         '/sitemap.xml',
         '/robots.txt',
-        ...['', '/en', '/de', '/es', '/fr', '/it'].flatMap(prefix => [prefix || '/', `${prefix}/privacy`, `${prefix}/terms`]),
+        ...['', '/en', '/de', '/es', '/fr', '/it'].flatMap(prefix => [prefix || '/', `${prefix}/privacy`, `${prefix}/terms`, `${prefix}/branding`, `${prefix}/qr`]),
       ],
     },
   },

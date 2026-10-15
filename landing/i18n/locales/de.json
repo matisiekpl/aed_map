@@ -14,6 +14,10 @@
     "terms": {
       "title": "Nutzungsbedingungen – AED-Karte",
       "description": "Regeln für die Nutzung der App AED-Karte sowie für das Hinzufügen und Bearbeiten von Defibrillatoren."
+    },
+    "brand": {
+      "title": "Plakate – AED-Karte",
+      "description": "Ein Plakat mit QR-Code zur App AED-Karte in A4 und A5 zum Ausdrucken."
     }
   },
   "nav": {
@@ -109,9 +113,38 @@
     "privacy": "Datenschutzerklärung",
     "terms": "Nutzungsbedingungen",
     "sourceCode": "Quellcode",
-    "dataLicense": "Daten © OpenStreetMap-Mitwirkende, ODbL"
+    "dataLicense": "Daten © OpenStreetMap-Mitwirkende, ODbL",
+    "posters": "Plakate"
   },
   "legal": {
     "updatedAt": "Zuletzt aktualisiert: {date}"
+  },
+  "brand": {
+    "title": "Plakate",
+    "description": "Das Plakat mit QR-Code zur App AED-Karte lässt sich herunterladen und an einem öffentlichen Ort aufhängen, etwa in einer Schule, Praxis, Behörde oder neben einem Defibrillator.",
+    "download": {
+      "a4": "A4 herunterladen",
+      "a5": "A5 herunterladen"
+    }
+  },
+  "posters": {
+    "headline": "App mit einer Karte der AED-Defibrillatoren",
+    "lead": "Die AED-Karte hilft dir, den nächsten AED-Defibrillator in der Nähe zu finden.",
+    "aed": {
+      "title": "Was ist ein AED-Defibrillator?",
+      "description": "Ein AED ist ein Defibrillator, der bei plötzlichem Herzstillstand einen Elektroschock abgibt und den normalen Herzrhythmus wiederherstellt. Er analysiert den Rhythmus selbst und führt per Sprachansage Schritt für Schritt."
+    },
+    "survival": {
+      "value": "5 % → 70 %",
+      "description": "So steigt die Überlebenschance, wenn die Defibrillation in den ersten Minuten erfolgt."
+    },
+    "steps": {
+      "title": "Wenn jemand nicht atmet",
+      "call": "Wähle die 112.",
+      "compressions": "Führe bis zum Eintreffen des AED eine Herzdruckmassage durch.",
+      "aed": "Befolge nach dem Einschalten die Sprachanweisungen des AED."
+    },
+    "download": "Scanne den Code oder öffne {domain} und lade die App aus Google Play oder dem App Store.",
+    "emergency": "Die App ersetzt keinen Notruf."
   }
 }

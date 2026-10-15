@@ -1,4 +1,6 @@
 export const Config = {
+  siteUrl: 'https://aedmapa.pl',
+  domain: 'aedmapa.pl',
   appStoreUrl: 'https://apps.apple.com/app/mapa-aed-defibrylatory/id1638495701',
   appStoreId: '1638495701',
   googlePlayUrl: 'https://play.google.com/store/apps/details?id=pl.enteam.aed_map',

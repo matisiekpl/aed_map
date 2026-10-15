@@ -14,6 +14,10 @@
     "terms": {
       "title": "Condiciones de uso – Mapa de DEA",
       "description": "Normas de uso de la aplicación Mapa de DEA y de la incorporación y edición de desfibriladores."
+    },
+    "brand": {
+      "title": "Carteles – Mapa de DEA",
+      "description": "Cartel con código QR de la aplicación Mapa de DEA en A4 y A5 para imprimir."
     }
   },
   "nav": {
@@ -109,9 +113,38 @@
     "privacy": "Política de privacidad",
     "terms": "Condiciones de uso",
     "sourceCode": "Código fuente",
-    "dataLicense": "Datos © colaboradores de OpenStreetMap, ODbL"
+    "dataLicense": "Datos © colaboradores de OpenStreetMap, ODbL",
+    "posters": "Carteles"
   },
   "legal": {
     "updatedAt": "Última actualización: {date}"
+  },
+  "brand": {
+    "title": "Carteles",
+    "description": "El cartel con código QR de la aplicación Mapa de DEA se puede descargar y colgar en un lugar público, como un colegio, un centro de salud, una oficina o junto a un desfibrilador.",
+    "download": {
+      "a4": "Descargar A4",
+      "a5": "Descargar A5"
+    }
+  },
+  "posters": {
+    "headline": "Aplicación con un mapa de desfibriladores DEA",
+    "lead": "Mapa de DEA te ayuda a encontrar el desfibrilador DEA más cercano.",
+    "aed": {
+      "title": "¿Qué es un desfibrilador DEA?",
+      "description": "Un DEA es un desfibrilador que, en caso de parada cardíaca súbita, aplica una descarga eléctrica y restablece el ritmo cardíaco normal. Analiza el ritmo por sí solo y guía paso a paso con instrucciones de voz."
+    },
+    "survival": {
+      "value": "5 % → 70 %",
+      "description": "Así aumenta la probabilidad de supervivencia cuando la desfibrilación se realiza en los primeros minutos."
+    },
+    "steps": {
+      "title": "Si alguien no respira",
+      "call": "Llama al 112.",
+      "compressions": "Hasta que llegue el DEA, realiza compresiones torácicas.",
+      "aed": "Al encender el DEA, sigue sus instrucciones de voz."
+    },
+    "download": "Escanea el código o entra en {domain} y descarga la aplicación de Google Play o App Store.",
+    "emergency": "La aplicación no sustituye a una llamada de emergencia."
   }
 }

@@ -6,12 +6,12 @@ useSeoMeta({
   description: () => t('seo.home.description'),
   ogTitle: () => t('seo.home.title'),
   ogDescription: () => t('seo.home.description'),
-  twitterCard: 'summary_large_image',
 })
 
-defineOgImage('AedMap', {
-  title: t('hero.title'),
+defineOgImage('Default', {
+  title: t('seo.home.title'),
   description: t('seo.home.description'),
+  siteName: t('site.name'),
 })
 
 useSchemaOrg([

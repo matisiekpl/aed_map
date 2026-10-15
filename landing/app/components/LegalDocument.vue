@@ -13,12 +13,12 @@ useSeoMeta({
   description: () => t(`seo.${props.name}.description`),
   ogTitle: () => t(`seo.${props.name}.title`),
   ogDescription: () => t(`seo.${props.name}.description`),
-  twitterCard: 'summary_large_image',
 })
 
-defineOgImage('AedMap', {
+defineOgImage('Default', {
   title: page.value?.title ?? '',
   description: t(`seo.${props.name}.description`),
+  siteName: t('site.name'),
 })
 </script>
 

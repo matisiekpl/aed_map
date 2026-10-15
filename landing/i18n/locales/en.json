@@ -14,6 +14,10 @@
     "terms": {
       "title": "Terms of Use – AED Map",
       "description": "Rules for using the AED Map app and for adding and editing defibrillators."
+    },
+    "brand": {
+      "title": "Posters – AED Map",
+      "description": "A poster with a QR code for the AED Map app, in A4 and A5 for printing."
     }
   },
   "nav": {
@@ -109,9 +113,38 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Use",
     "sourceCode": "Source code",
-    "dataLicense": "Data © OpenStreetMap contributors, ODbL"
+    "dataLicense": "Data © OpenStreetMap contributors, ODbL",
+    "posters": "Posters"
   },
   "legal": {
     "updatedAt": "Last updated: {date}"
+  },
+  "brand": {
+    "title": "Posters",
+    "description": "The poster with a QR code for the AED Map app can be downloaded and hung in a public place, such as a school, clinic, office or next to a defibrillator.",
+    "download": {
+      "a4": "Download A4",
+      "a5": "Download A5"
+    }
+  },
+  "posters": {
+    "headline": "An app with a map of AED defibrillators",
+    "lead": "AED Map helps you find the nearest AED defibrillator in your area.",
+    "aed": {
+      "title": "What is an AED defibrillator?",
+      "description": "An AED is a defibrillator that delivers an electric shock during sudden cardiac arrest and restores a normal heart rhythm. It analyses the rhythm itself and guides you step by step by voice."
+    },
+    "survival": {
+      "value": "5% → 70%",
+      "description": "This is how the chance of survival rises when defibrillation happens within the first minutes."
+    },
+    "steps": {
+      "title": "When someone is not breathing",
+      "call": "Call 112.",
+      "compressions": "Until the AED arrives, keep doing chest compressions.",
+      "aed": "Once the AED is switched on, follow its voice instructions."
+    },
+    "download": "Scan the code or go to {domain} and download the app from Google Play or the App Store.",
+    "emergency": "The app does not replace an emergency call."
   }
 }

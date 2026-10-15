@@ -19,6 +19,7 @@ const localePath = useLocalePath()
       <div class="flex flex-col gap-2">
         <NuxtLink :to="localePath('/privacy')" class="text-muted-foreground hover:text-foreground">{{ $t('footer.privacy') }}</NuxtLink>
         <NuxtLink :to="localePath('/terms')" class="text-muted-foreground hover:text-foreground">{{ $t('footer.terms') }}</NuxtLink>
+        <NuxtLink :to="localePath('/branding')" class="text-muted-foreground hover:text-foreground">{{ $t('footer.posters') }}</NuxtLink>
         <a :href="Config.githubUrl" target="_blank" rel="noopener" class="text-muted-foreground hover:text-foreground" @click="useTrackEvent('sourcecode')">
           {{ $t('footer.sourceCode') }}
         </a>
