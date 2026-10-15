@@ -20,13 +20,14 @@ class ScreenshotExporter {
     final jobs = [
       for (final locale in Scenario.locales) ...[
         ...appStoreJobs(locale),
-        ...googlePlayJobs(locale),
+        if (locale.googlePlayCode != null) ...googlePlayJobs(locale),
         ...landingJobs(locale),
       ],
     ];
     clean(landingDirectory);
     for (final locale in Scenario.locales) {
       clean('$appStoreDirectory/${locale.appStoreCode}');
+      if (locale.googlePlayCode == null) continue;
       for (final folder in ['phoneScreenshots', 'sevenInchScreenshots', 'tenInchScreenshots']) {
         clean('$googlePlayDirectory/${locale.googlePlayCode}/images/$folder');
       }

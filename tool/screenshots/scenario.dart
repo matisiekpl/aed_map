@@ -2,14 +2,14 @@ class ScreenshotLocale {
   const ScreenshotLocale({
     required this.code,
     required this.appStoreCode,
-    required this.googlePlayCode,
+    this.googlePlayCode,
     required this.latitude,
     required this.longitude,
   });
 
   final String code;
   final String appStoreCode;
-  final String googlePlayCode;
+  final String? googlePlayCode;
   final double latitude;
   final double longitude;
 }
@@ -62,7 +62,7 @@ class Scenario {
     ScreenshotLocale(code: 'de', appStoreCode: 'de-DE', googlePlayCode: 'de-DE', latitude: 53.548188, longitude: 9.989826),
     ScreenshotLocale(code: 'es', appStoreCode: 'es-ES', googlePlayCode: 'es-ES', latitude: 41.379895, longitude: 2.186794),
     ScreenshotLocale(code: 'fr', appStoreCode: 'fr-FR', googlePlayCode: 'fr-FR', latitude: 48.840525, longitude: 2.362106),
-    ScreenshotLocale(code: 'it', appStoreCode: 'it', googlePlayCode: 'it-IT', latitude: 45.46546, longitude: 9.188605),
+    ScreenshotLocale(code: 'it', appStoreCode: 'it',latitude: 45.46546, longitude: 9.188605),
   ];
 
   static const buildDirectory = 'build/screenshots';
