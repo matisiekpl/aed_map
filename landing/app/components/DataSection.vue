@@ -2,14 +2,14 @@
 import {ArrowUpRight} from 'lucide-vue-next'
 import {Config} from '~/config'
 
-const {worldCount, polandCount} = useAedStatistics()
+const {worldCount, countryCount, featureCount} = useAedStatistics()
 </script>
 
 <template>
   <section class="bg-muted/50">
     <div class="mx-auto flex max-w-6xl flex-col gap-5 px-4 py-8 sm:gap-8 sm:py-20 md:py-28">
       <h2 class="max-w-4xl text-4xl font-extrabold tracking-tight text-balance tabular-nums md:text-6xl md:leading-[1.05]">
-        <template v-if="worldCount">{{ $t('data.headline', {world: $n(worldCount), poland: $n(polandCount)}) }}</template>
+        <template v-if="worldCount">{{ $t('data.headline', {world: $n(worldCount), local: $n(featureCount($t('data.countryCode'))), countries: countryCount}) }}</template>
         <template v-else>{{ $t('data.title') }}</template>
       </h2>
       <div class="flex max-w-2xl flex-col items-start gap-5 sm:gap-6">

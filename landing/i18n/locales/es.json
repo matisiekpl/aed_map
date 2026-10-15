@@ -63,9 +63,10 @@
   },
   "data": {
     "title": "Datos de OpenStreetMap",
-    "headline": "{world} DEA en el mapa, {poland} de ellos en Polonia.",
+    "headline": "{world} DEA en el mapa, {local} de ellos en España.",
     "description": "Las ubicaciones de los desfibriladores proceden de OpenStreetMap y las pone a disposición el proyecto OpenAEDMap. Es una base de datos abierta que completan voluntarios, instituciones y los propios usuarios de la aplicación.",
-    "openAedMap": "OpenAEDMap"
+    "openAedMap": "OpenAEDMap",
+    "countryCode": "ES"
   },
   "survival": {
     "title": "La desfibrilación en los primeros minutos aumenta la probabilidad de supervivencia del 5 % al 70 %",

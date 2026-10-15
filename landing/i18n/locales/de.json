@@ -63,9 +63,10 @@
   },
   "data": {
     "title": "Daten aus OpenStreetMap",
-    "headline": "{world} Defibrillatoren auf der Karte, davon {poland} in Polen.",
+    "headline": "{world} Defibrillatoren auf der Karte, davon {local} in Deutschland.",
     "description": "Die Standorte der Defibrillatoren stammen aus OpenStreetMap und werden vom Projekt OpenAEDMap bereitgestellt. Es handelt sich um eine offene Datenbank, die von Freiwilligen, Institutionen und den Nutzern der App selbst ergänzt wird.",
-    "openAedMap": "OpenAEDMap"
+    "openAedMap": "OpenAEDMap",
+    "countryCode": "DE"
   },
   "survival": {
     "title": "Eine Defibrillation in den ersten Minuten erhöht die Überlebenschance von 5 % auf 70 %",

@@ -63,9 +63,10 @@
   },
   "data": {
     "title": "Data from OpenStreetMap",
-    "headline": "{world} defibrillators on the map, {poland} of them in Poland.",
+    "headline": "{world} defibrillators on the map in {countries} countries.",
     "description": "Defibrillator locations come from OpenStreetMap and are provided by the OpenAEDMap project. It is an open database maintained by volunteers, institutions and the app's users.",
-    "openAedMap": "OpenAEDMap"
+    "openAedMap": "OpenAEDMap",
+    "countryCode": ""
   },
   "survival": {
     "title": "Defibrillation in the first minutes raises the chance of survival from 5% to 70%",

@@ -63,9 +63,10 @@
   },
   "data": {
     "title": "Dati da OpenStreetMap",
-    "headline": "{world} DAE sulla mappa, di cui {poland} in Polonia.",
+    "headline": "{world} DAE sulla mappa, di cui {local} in Italia.",
     "description": "Le posizioni dei defibrillatori provengono da OpenStreetMap e sono rese disponibili dal progetto OpenAEDMap. È un database aperto, aggiornato da volontari, istituzioni e dagli stessi utenti dell'app.",
-    "openAedMap": "OpenAEDMap"
+    "openAedMap": "OpenAEDMap",
+    "countryCode": "IT"
   },
   "survival": {
     "title": "La defibrillazione nei primi minuti aumenta la probabilità di sopravvivenza dal 5% al 70%",

@@ -63,9 +63,10 @@
   },
   "data": {
     "title": "Données OpenStreetMap",
-    "headline": "{world} DAE sur la carte, dont {poland} en Pologne.",
+    "headline": "{world} DAE sur la carte, dont {local} en France.",
     "description": "Les emplacements des défibrillateurs proviennent d'OpenStreetMap et sont mis à disposition par le projet OpenAEDMap. Cette base ouverte est complétée par des bénévoles, des institutions et les utilisateurs de l'application.",
-    "openAedMap": "OpenAEDMap"
+    "openAedMap": "OpenAEDMap",
+    "countryCode": "FR"
   },
   "survival": {
     "title": "Une défibrillation dans les premières minutes fait passer les chances de survie de 5 % à 70 %",

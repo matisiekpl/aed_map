@@ -63,9 +63,10 @@
   },
   "data": {
     "title": "Dane z OpenStreetMap",
-    "headline": "{world} defibrylatorów na mapie, w tym {poland} w Polsce.",
+    "headline": "{world} defibrylatorów na mapie, w tym {local} w Polsce.",
     "description": "Lokalizacje defibrylatorów pochodzą z OpenStreetMap i są udostępniane przez projekt OpenAEDMap. To otwarta baza, którą uzupełniają wolontariusze, instytucje i sami użytkownicy aplikacji.",
-    "openAedMap": "OpenAEDMap"
+    "openAedMap": "OpenAEDMap",
+    "countryCode": "PL"
   },
   "survival": {
     "title": "Defibrylacja w pierwszych minutach zwiększa szansę przeżycia z 5% do 70%",
