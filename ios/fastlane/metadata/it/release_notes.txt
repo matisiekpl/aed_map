@@ -1,1 +1,1 @@
-Correzioni tecniche.
+L'intestazione della schermata della mappa ora si vede per intero anche nelle traduzioni più lunghe.

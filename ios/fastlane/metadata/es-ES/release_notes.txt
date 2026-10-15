@@ -1,1 +1,1 @@
-Correcciones técnicas.
+El encabezado de la pantalla del mapa ahora cabe completo también en traducciones más largas.

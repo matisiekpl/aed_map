@@ -1,1 +1,1 @@
-Poprawki techniczne.
+Nagłówek na ekranie mapy mieści się w całości także w dłuższych tłumaczeniach.

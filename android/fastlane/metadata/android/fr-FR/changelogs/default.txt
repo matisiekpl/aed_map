@@ -1,1 +1,1 @@
-Corrections techniques.
+L'en-tête de l'écran de la carte s'affiche désormais en entier, même dans les traductions plus longues.
