@@ -16,7 +16,7 @@ const currentLocaleName = computed(() => locales.value.find(item => item.code ==
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-      <DropdownMenuItem v-for="item in locales" :key="item.code" as-child>
+      <DropdownMenuItem v-for="item in locales" :key="item.code" as-child class="cursor-pointer">
         <NuxtLink :to="switchLocalePath(item.code)" :hreflang="item.language">{{ item.name }}</NuxtLink>
       </DropdownMenuItem>
     </DropdownMenuContent>
