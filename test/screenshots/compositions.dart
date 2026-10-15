@@ -7,8 +7,6 @@ import '../../tool/screenshots/scenario.dart';
 class BrandColors {
   static const green = Color(0xFF029140);
   static const deepGreen = Color(0xFF014D23);
-  static const night = Color(0xFF0D1F15);
-  static const nightDeep = Color(0xFF050D09);
   static const bezel = Color(0xFF111111);
 }
 
@@ -41,9 +39,7 @@ class StoreScreenshot extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: dark
-                ? const [BrandColors.night, BrandColors.nightDeep]
-                : const [BrandColors.green, BrandColors.deepGreen],
+            colors: const [BrandColors.green, BrandColors.deepGreen],
           ),
         ),
         child: Column(
