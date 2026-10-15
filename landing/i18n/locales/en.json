@@ -1,0 +1,151 @@
+{
+  "site": {
+    "name": "AED Map"
+  },
+  "seo": {
+    "home": {
+      "title": "AED Map – defibrillators nearby",
+      "description": "An iOS and Android app with a map of AED defibrillators from OpenStreetMap. It shows the nearest AED, the distance, the walking time and a walking route."
+    },
+    "privacy": {
+      "title": "Privacy Policy – AED Map",
+      "description": "What data the AED Map app and website process, for what purpose and to whom it is transferred."
+    },
+    "terms": {
+      "title": "Terms of Use – AED Map",
+      "description": "Rules for using the AED Map app and for adding and editing defibrillators."
+    },
+    "brand": {
+      "title": "Posters – AED Map",
+      "description": "A poster with a QR code for the AED Map app, in A4 and A5 for printing."
+    }
+  },
+  "nav": {
+    "features": "Features",
+    "faq": "FAQ",
+    "download": "Download"
+  },
+  "hero": {
+    "title": "AED Map",
+    "description": "A map of AED defibrillators from OpenStreetMap on iOS and Android. The app shows the nearest defibrillator, the distance to it and the walking route.",
+    "statistics": "{count} defibrillators in {countries} countries",
+    "imageAlt": "AED Map app screen with a map of defibrillators",
+    "detailsImageAlt": "Defibrillator card with access, opening hours and a navigation button"
+  },
+  "features": {
+    "title": "Features",
+    "items": {
+      "nearest": {
+        "title": "Nearest AED",
+        "description": "When the app opens, the map centers on your location and the bottom panel shows the nearest defibrillator with the distance and walking time."
+      },
+      "route": {
+        "title": "Walking route",
+        "description": "The route to the selected AED is drawn on the map inside the app. The same point also opens in Apple Maps, Google Maps or another navigation app."
+      },
+      "details": {
+        "title": "Location details",
+        "description": "The defibrillator card shows a description of the location, access rules, opening hours, the operator, a contact phone number and a photo if someone has added one."
+      },
+      "edit": {
+        "title": "Adding and editing",
+        "description": "After signing in with an OpenStreetMap account, a user can add a new AED, move the pin, correct the description and set opening hours. Changes go directly to OpenStreetMap."
+      },
+      "photos": {
+        "title": "Photos",
+        "description": "A photo of the defibrillator is taken with the camera or picked from the gallery. It is uploaded to OpenAEDMap under the CC0 license, and inappropriate photos can be reported."
+      },
+      "offline": {
+        "title": "Offline",
+        "description": "The defibrillator database and previously viewed map areas stay on the device, so the list of locations is also available without an internet connection."
+      }
+    }
+  },
+  "data": {
+    "title": "Data from OpenStreetMap",
+    "headline": "{world} defibrillators on the map in {countries} countries.",
+    "description": "Defibrillator locations come from OpenStreetMap and are provided by the OpenAEDMap project. It is an open database maintained by volunteers, institutions and the app's users.",
+    "openAedMap": "OpenAEDMap",
+    "countryCode": ""
+  },
+  "survival": {
+    "title": "Defibrillation in the first minutes raises the chance of survival from 5% to 70%",
+    "description": "In sudden cardiac arrest, the time it takes to reach a defibrillator matters. The map shows where the nearest one is.",
+    "link": "More about AED defibrillators"
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": {
+      "emergency": {
+        "question": "What should I do when someone has lost consciousness?",
+        "answer": "First, call the emergency number (112 in Europe, 911 in the US) and start CPR. The dispatcher guides you through the next steps. The app shows where the nearest AED is so that a second person can run to get it. It does not replace an emergency call."
+      },
+      "source": {
+        "question": "Where does the defibrillator data come from?",
+        "answer": "From OpenStreetMap, an open map of the world built by its community. The defibrillator dataset is provided by the OpenAEDMap project."
+      },
+      "add": {
+        "question": "How do I add a missing defibrillator?",
+        "answer": "The app has a button for adding a location. After signing in with an OpenStreetMap account, the user places a pin and sets access rules, a description and opening hours. An OpenStreetMap account can be created for free at openstreetmap.org."
+      },
+      "abroad": {
+        "question": "Does the app work outside Poland?",
+        "answer": "Yes. The app shows defibrillators from all over the world that are recorded in OpenStreetMap."
+      },
+      "offline": {
+        "question": "Does the app work without internet?",
+        "answer": "The defibrillator database is stored on the device, so locations and their details are available offline. Route planning and new map areas require an internet connection."
+      },
+      "update": {
+        "question": "How often is the data updated?",
+        "answer": "OpenAEDMap pulls changes from OpenStreetMap continuously. The app downloads the current dataset at launch, and the date of the last update is shown in the settings."
+      }
+    }
+  },
+  "download": {
+    "title": "AED Map for iOS and Android",
+    "description": "The app is available on the App Store and Google Play.",
+    "appStore": "Download on the App Store",
+    "googlePlay": "Get it on Google Play"
+  },
+  "footer": {
+    "createdBy": "Created by {name}",
+    "partner": "Project partner: Lekify.pl",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "sourceCode": "Source code",
+    "dataLicense": "Data © OpenStreetMap contributors, ODbL",
+    "posters": "Posters"
+  },
+  "legal": {
+    "updatedAt": "Last updated: {date}"
+  },
+  "brand": {
+    "title": "Posters",
+    "description": "The poster with a QR code for the AED Map app can be downloaded and hung in a public place, such as a school, clinic, office or next to a defibrillator.",
+    "download": {
+      "a4": "Download A4",
+      "a5": "Download A5"
+    }
+  },
+  "posters": {
+    "headline": "An app with a map of AED defibrillators",
+    "lead": "AED Map helps you find the nearest AED defibrillator in your area.",
+    "aed": {
+      "title": "What is an AED defibrillator?",
+      "description": "An AED is a defibrillator that delivers an electric shock during sudden cardiac arrest and restores a normal heart rhythm. It analyses the rhythm itself and guides you step by step by voice."
+    },
+    "survival": {
+      "value": "5% → 70%",
+      "description": "This is how the chance of survival rises when defibrillation happens within the first minutes."
+    },
+    "steps": {
+      "title": "When someone is not breathing",
+      "call": "Call 112.",
+      "compressions": "Until the AED arrives, keep doing chest compressions.",
+      "aed": "Once the AED is switched on, follow its voice instructions."
+    },
+    "download": "Scan the code or go to {domain} and download the app from Google Play or the App Store.",
+    "emergency": "The app does not replace an emergency call."
+  }
+}

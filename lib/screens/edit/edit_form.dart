@@ -27,56 +27,59 @@ class EditForm extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: Text(appLocalizations.editDefibrillator),
       ),
-      child: Theme(
-          data: MediaQuery.of(context).platformBrightness == Brightness.dark
-              ? ThemeData.dark()
-              : ThemeData.light(),
-          child: BlocConsumer<EditCubit, EditState>(
-            listenWhen: (previous, current) => current.errorMessage != null,
-            listener: (context, state) {
-              final message = resolveErrorMessage(state.errorMessage!, appLocalizations);
-              showCupertinoDialog(
-                context: context,
-                builder: (dialogContext) => CupertinoAlertDialog(
-                  content: Text(message),
-                  actions: [
-                    CupertinoDialogAction(
-                      isDefaultAction: true,
-                      onPressed: () => Navigator.of(dialogContext).pop(),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
-              );
-            },
-            builder: (context, state) {
-              if (state is EditInProgress) {
-                return SafeArea(
-                  bottom: false,
-                  child: FutureBuilder<bool>(
-                    future: UserCreatedDefibrillatorRepository()
-                        .contains(state.defibrillator.id),
-                    builder: (context, snap) {
-                      if (snap.hasData) {
-                        return DefaultTextStyle.merge(
-                          style: TextStyle(color: CupertinoColors.label.resolveFrom(context)),
-                          child: SettingsList(
-                            platform: DevicePlatform.iOS,
-                            applicationType: ApplicationType.cupertino,
-                            lightTheme: const SettingsThemeData(),
-                            darkTheme: settingsListDarkTheme,
-                            sections: buildSections(context, state, snap.data!),
-                          ),
-                        );
-                      }
-                      return const Center(child: CupertinoActivityIndicator());
-                    },
+      child: Material(
+        type: MaterialType.transparency,
+        child: Theme(
+            data: MediaQuery.of(context).platformBrightness == Brightness.dark
+                ? ThemeData.dark()
+                : ThemeData.light(),
+            child: BlocConsumer<EditCubit, EditState>(
+              listenWhen: (previous, current) => current.errorMessage != null,
+              listener: (context, state) {
+                final message = resolveErrorMessage(state.errorMessage!, appLocalizations);
+                showCupertinoDialog(
+                  context: context,
+                  builder: (dialogContext) => CupertinoAlertDialog(
+                    content: Text(message),
+                    actions: [
+                      CupertinoDialogAction(
+                        isDefaultAction: true,
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        child: const Text('OK'),
+                      ),
+                    ],
                   ),
                 );
-              }
-              return Container();
-            },
-          )),
+              },
+              builder: (context, state) {
+                if (state is EditInProgress) {
+                  return SafeArea(
+                    bottom: false,
+                    child: FutureBuilder<bool>(
+                      future: UserCreatedDefibrillatorRepository()
+                          .contains(state.defibrillator.id),
+                      builder: (context, snap) {
+                        if (snap.hasData) {
+                          return DefaultTextStyle.merge(
+                            style: TextStyle(color: CupertinoColors.label.resolveFrom(context)),
+                            child: SettingsList(
+                              platform: DevicePlatform.iOS,
+                              applicationType: ApplicationType.cupertino,
+                              lightTheme: const SettingsThemeData(),
+                              darkTheme: settingsListDarkTheme,
+                              sections: buildSections(context, state, snap.data!),
+                            ),
+                          );
+                        }
+                        return const Center(child: CupertinoActivityIndicator());
+                      },
+                    ),
+                  );
+                }
+                return Container();
+              },
+            )),
+      ),
     );
   }
 

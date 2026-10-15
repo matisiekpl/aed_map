@@ -1,0 +1,151 @@
+{
+  "site": {
+    "name": "Mapa AED"
+  },
+  "seo": {
+    "home": {
+      "title": "Mapa AED – defibrylatory w pobliżu",
+      "description": "Aplikacja na iOS i Androida z mapą defibrylatorów AED z OpenStreetMap. Pokazuje najbliższy AED, odległość, czas dojścia i trasę pieszą."
+    },
+    "privacy": {
+      "title": "Polityka prywatności – Mapa AED",
+      "description": "Jakie dane przetwarza aplikacja i strona Mapa AED, w jakim celu i komu są przekazywane."
+    },
+    "terms": {
+      "title": "Regulamin – Mapa AED",
+      "description": "Zasady korzystania z aplikacji Mapa AED oraz dodawania i edycji defibrylatorów."
+    },
+    "brand": {
+      "title": "Plakaty – Mapa AED",
+      "description": "Plakat z kodem QR do aplikacji Mapa AED w formatach A4 i A5 do wydruku."
+    }
+  },
+  "nav": {
+    "features": "Funkcje",
+    "faq": "Pytania",
+    "download": "Pobierz"
+  },
+  "hero": {
+    "title": "Mapa AED",
+    "description": "Mapa defibrylatorów AED z OpenStreetMap na iOS i Androidzie. Aplikacja wskazuje najbliższy defibrylator, odległość do niego i trasę dojścia.",
+    "statistics": "{count} defibrylatorów w {countries} krajach",
+    "imageAlt": "Ekran aplikacji Mapa AED z mapą defibrylatorów",
+    "detailsImageAlt": "Karta defibrylatora z dostępem, godzinami otwarcia i przyciskiem nawigacji"
+  },
+  "features": {
+    "title": "Funkcje",
+    "items": {
+      "nearest": {
+        "title": "Najbliższy AED",
+        "description": "Po otwarciu aplikacji mapa ustawia się na Twojej lokalizacji, a panel na dole pokazuje najbliższy defibrylator z odległością i czasem dojścia."
+      },
+      "route": {
+        "title": "Trasa piesza",
+        "description": "Trasa do wybranego AED rysuje się na mapie w aplikacji. Ten sam punkt otwiera się też w Mapach Apple, Google Maps lub innej aplikacji nawigacyjnej."
+      },
+      "details": {
+        "title": "Szczegóły punktu",
+        "description": "Karta defibrylatora zawiera opis lokalizacji, zasady dostępu, godziny otwarcia, operatora, telefon kontaktowy i zdjęcie, jeśli ktoś je dodał."
+      },
+      "edit": {
+        "title": "Dodawanie i edycja",
+        "description": "Po zalogowaniu kontem OpenStreetMap można dodać nowy AED, przesunąć pinezkę, poprawić opis i ustawić godziny otwarcia. Zmiany trafiają bezpośrednio do OpenStreetMap."
+      },
+      "photos": {
+        "title": "Zdjęcia",
+        "description": "Zdjęcie defibrylatora robi się aparatem lub wybiera z galerii. Trafia do OpenAEDMap na licencji CC0, a niestosowne zdjęcia można zgłosić."
+      },
+      "offline": {
+        "title": "Bez połączenia",
+        "description": "Baza defibrylatorów i odwiedzone fragmenty mapy zostają na urządzeniu, więc lista punktów jest dostępna także bez internetu."
+      }
+    }
+  },
+  "data": {
+    "title": "Dane z OpenStreetMap",
+    "headline": "{world} defibrylatorów na mapie, w tym {local} w Polsce.",
+    "description": "Lokalizacje defibrylatorów pochodzą z OpenStreetMap i są udostępniane przez projekt OpenAEDMap. To otwarta baza, którą uzupełniają wolontariusze, instytucje i sami użytkownicy aplikacji.",
+    "openAedMap": "OpenAEDMap",
+    "countryCode": "PL"
+  },
+  "survival": {
+    "title": "Defibrylacja w pierwszych minutach zwiększa szansę przeżycia z 5% do 70%",
+    "description": "Przy nagłym zatrzymaniu krążenia liczy się czas dotarcia do defibrylatora. Mapa pokazuje, gdzie jest najbliższy.",
+    "link": "Więcej o defibrylatorach AED"
+  },
+  "faq": {
+    "title": "Pytania",
+    "items": {
+      "emergency": {
+        "question": "Co zrobić, gdy ktoś stracił przytomność?",
+        "answer": "W pierwszej kolejności należy zadzwonić pod numer alarmowy 112 i rozpocząć resuscytację. Dyspozytor prowadzi przez kolejne kroki. Aplikacja pokazuje, gdzie jest najbliższy AED, żeby druga osoba mogła po niego pobiec. Nie zastępuje zgłoszenia alarmowego."
+      },
+      "source": {
+        "question": "Skąd pochodzą dane o defibrylatorach?",
+        "answer": "Z OpenStreetMap, otwartej mapy świata tworzonej przez społeczność. Zbiór defibrylatorów udostępnia projekt OpenAEDMap."
+      },
+      "add": {
+        "question": "Jak dodać brakujący defibrylator?",
+        "answer": "W aplikacji jest przycisk dodawania punktu. Po zalogowaniu kontem OpenStreetMap ustawia się pinezkę, zasady dostępu, opis i godziny otwarcia. Konto OpenStreetMap zakłada się bezpłatnie na openstreetmap.org."
+      },
+      "abroad": {
+        "question": "Czy aplikacja działa poza Polską?",
+        "answer": "Tak. Aplikacja pokazuje defibrylatory z całego świata, które są zapisane w OpenStreetMap."
+      },
+      "offline": {
+        "question": "Czy aplikacja działa bez internetu?",
+        "answer": "Baza defibrylatorów jest zapisana na urządzeniu, więc punkty i ich szczegóły są dostępne bez połączenia. Wyznaczanie trasy i nowe fragmenty mapy wymagają internetu."
+      },
+      "update": {
+        "question": "Jak często dane są aktualizowane?",
+        "answer": "OpenAEDMap pobiera zmiany z OpenStreetMap na bieżąco. Aplikacja pobiera aktualny zbiór przy uruchomieniu, a w ustawieniach widać datę ostatniej aktualizacji."
+      }
+    }
+  },
+  "download": {
+    "title": "Pobierz Mapę AED",
+    "description": "Aplikacja jest dostępna w App Store i Google Play.",
+    "appStore": "Pobierz w App Store",
+    "googlePlay": "Pobierz w Google Play"
+  },
+  "footer": {
+    "createdBy": "Autor: {name}",
+    "partner": "Partner projektu: Lekify.pl",
+    "privacy": "Polityka prywatności",
+    "terms": "Regulamin",
+    "sourceCode": "Kod źródłowy",
+    "dataLicense": "Dane © współtwórcy OpenStreetMap, ODbL",
+    "posters": "Plakaty"
+  },
+  "legal": {
+    "updatedAt": "Ostatnia aktualizacja: {date}"
+  },
+  "brand": {
+    "title": "Plakaty",
+    "description": "Plakat z kodem QR do aplikacji Mapa AED można pobrać i powiesić w miejscu publicznym, na przykład w szkole, przychodni, urzędzie albo obok defibrylatora.",
+    "download": {
+      "a4": "Pobierz A4",
+      "a5": "Pobierz A5"
+    }
+  },
+  "posters": {
+    "headline": "Aplikacja z mapą defibrylatorów AED",
+    "lead": "Mapa AED pomoże Ci znaleźć najbliższy defibrylator AED w okolicy.",
+    "aed": {
+      "title": "Co to jest defibrylator AED?",
+      "description": "AED to defibrylator, który przy nagłym zatrzymaniu krążenia podaje wstrząs elektryczny i przywraca prawidłowy rytm serca. Sam analizuje rytm i głosem prowadzi krok po kroku."
+    },
+    "survival": {
+      "value": "5% → 70%",
+      "description": "Tak rośnie szansa przeżycia, gdy defibrylacja nastąpi w pierwszych minutach."
+    },
+    "steps": {
+      "title": "Gdy ktoś nie oddycha",
+      "call": "Zadzwoń pod numer 112.",
+      "compressions": "Do czasu przyniesienia AED uciskaj klatkę piersiową.",
+      "aed": "Po włączeniu AED wykonuj polecenia, które urządzenie wydaje głosowo."
+    },
+    "download": "Zeskanuj kod lub wejdź na {domain} i pobierz aplikację z Google Play lub App Store.",
+    "emergency": "Aplikacja nie zastępuje telefonu alarmowego."
+  }
+}

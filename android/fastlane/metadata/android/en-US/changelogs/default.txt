@@ -1,1 +1,1 @@
-Technical fixes.
+The map screen header now fits in full in longer translations.

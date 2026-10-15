@@ -1,0 +1,7 @@
+[build]
+  base = "landing"
+  command = "yarn generate"
+  publish = ".output/public"
+
+[build.environment]
+  NODE_VERSION = "24"

@@ -1,0 +1,151 @@
+{
+  "site": {
+    "name": "AED-Karte"
+  },
+  "seo": {
+    "home": {
+      "title": "AED-Karte – Defibrillatoren in der Nähe",
+      "description": "App für iOS und Android mit einer Karte der AED-Defibrillatoren aus OpenStreetMap. Sie zeigt den nächstgelegenen AED, die Entfernung, die Gehzeit und den Fußweg."
+    },
+    "privacy": {
+      "title": "Datenschutzerklärung – AED-Karte",
+      "description": "Welche Daten die App und die Website AED-Karte verarbeiten, zu welchem Zweck und an wen sie übermittelt werden."
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen – AED-Karte",
+      "description": "Regeln für die Nutzung der App AED-Karte sowie für das Hinzufügen und Bearbeiten von Defibrillatoren."
+    },
+    "brand": {
+      "title": "Plakate – AED-Karte",
+      "description": "Ein Plakat mit QR-Code zur App AED-Karte in A4 und A5 zum Ausdrucken."
+    }
+  },
+  "nav": {
+    "features": "Funktionen",
+    "faq": "Fragen",
+    "download": "Download"
+  },
+  "hero": {
+    "title": "AED-Karte",
+    "description": "Karte der AED-Defibrillatoren aus OpenStreetMap für iOS und Android. Die App zeigt den nächstgelegenen Defibrillator, die Entfernung dorthin und den Fußweg.",
+    "statistics": "{count} Defibrillatoren in {countries} Ländern",
+    "imageAlt": "Bildschirm der App AED-Karte mit einer Karte der Defibrillatoren",
+    "detailsImageAlt": "Defibrillator-Karte mit Zugang, Öffnungszeiten und Navigationsschaltfläche"
+  },
+  "features": {
+    "title": "Funktionen",
+    "items": {
+      "nearest": {
+        "title": "Nächstgelegener AED",
+        "description": "Beim Öffnen der App zentriert sich die Karte auf den aktuellen Standort, und das Feld am unteren Rand zeigt den nächstgelegenen Defibrillator mit Entfernung und Gehzeit."
+      },
+      "route": {
+        "title": "Fußweg",
+        "description": "Der Weg zum ausgewählten AED wird auf der Karte in der App eingezeichnet. Derselbe Punkt lässt sich auch in Apple Karten, Google Maps oder einer anderen Navigations-App öffnen."
+      },
+      "details": {
+        "title": "Details zum Standort",
+        "description": "Die Karte eines Defibrillators enthält eine Beschreibung des Standorts, die Zugangsregeln, die Öffnungszeiten, den Betreiber, eine Kontakttelefonnummer und ein Foto, sofern jemand eines hinzugefügt hat."
+      },
+      "edit": {
+        "title": "Hinzufügen und Bearbeiten",
+        "description": "Nach der Anmeldung mit einem OpenStreetMap-Konto lassen sich neue AEDs hinzufügen, Markierungen verschieben, Beschreibungen korrigieren und Öffnungszeiten festlegen. Die Änderungen werden direkt in OpenStreetMap gespeichert."
+      },
+      "photos": {
+        "title": "Fotos",
+        "description": "Ein Foto des Defibrillators wird mit der Kamera aufgenommen oder aus der Galerie ausgewählt. Es wird unter der Lizenz CC0 an OpenAEDMap übertragen, und unangemessene Fotos können gemeldet werden."
+      },
+      "offline": {
+        "title": "Ohne Verbindung",
+        "description": "Die Defibrillator-Datenbank und bereits angesehene Kartenausschnitte bleiben auf dem Gerät gespeichert, sodass die Liste der Standorte auch ohne Internet verfügbar ist."
+      }
+    }
+  },
+  "data": {
+    "title": "Daten aus OpenStreetMap",
+    "headline": "{world} Defibrillatoren auf der Karte, davon {local} in Deutschland.",
+    "description": "Die Standorte der Defibrillatoren stammen aus OpenStreetMap und werden vom Projekt OpenAEDMap bereitgestellt. Es handelt sich um eine offene Datenbank, die von Freiwilligen, Institutionen und den Nutzern der App selbst ergänzt wird.",
+    "openAedMap": "OpenAEDMap",
+    "countryCode": "DE"
+  },
+  "survival": {
+    "title": "Eine Defibrillation in den ersten Minuten erhöht die Überlebenschance von 5 % auf 70 %",
+    "description": "Bei einem plötzlichen Herzstillstand zählt die Zeit bis zum Erreichen eines Defibrillators. Die Karte zeigt, wo sich der nächstgelegene befindet.",
+    "link": "Mehr über AED-Defibrillatoren"
+  },
+  "faq": {
+    "title": "Fragen",
+    "items": {
+      "emergency": {
+        "question": "Was ist zu tun, wenn jemand das Bewusstsein verloren hat?",
+        "answer": "Zuerst muss die Notrufnummer 112 gewählt und mit der Wiederbelebung begonnen werden. Die Leitstelle führt durch die weiteren Schritte. Die App zeigt, wo sich der nächstgelegene AED befindet, damit eine zweite Person ihn holen kann. Sie ersetzt keinen Notruf."
+      },
+      "source": {
+        "question": "Woher stammen die Daten zu den Defibrillatoren?",
+        "answer": "Aus OpenStreetMap, einer offenen, von der Community erstellten Weltkarte. Den Datensatz der Defibrillatoren stellt das Projekt OpenAEDMap bereit."
+      },
+      "add": {
+        "question": "Wie wird ein fehlender Defibrillator hinzugefügt?",
+        "answer": "Die App hat eine Schaltfläche zum Hinzufügen eines Standorts. Nach der Anmeldung mit einem OpenStreetMap-Konto werden die Markierung, die Zugangsregeln, eine Beschreibung und die Öffnungszeiten festgelegt. Ein OpenStreetMap-Konto lässt sich kostenlos auf openstreetmap.org erstellen."
+      },
+      "abroad": {
+        "question": "Funktioniert die App auch außerhalb Polens?",
+        "answer": "Ja. Die App zeigt Defibrillatoren aus der ganzen Welt, die in OpenStreetMap erfasst sind."
+      },
+      "offline": {
+        "question": "Funktioniert die App ohne Internet?",
+        "answer": "Die Defibrillator-Datenbank ist auf dem Gerät gespeichert, sodass die Standorte und ihre Details ohne Verbindung verfügbar sind. Die Routenberechnung und neue Kartenausschnitte erfordern eine Internetverbindung."
+      },
+      "update": {
+        "question": "Wie oft werden die Daten aktualisiert?",
+        "answer": "OpenAEDMap übernimmt Änderungen aus OpenStreetMap laufend. Die App lädt beim Start den aktuellen Datensatz, und in den Einstellungen ist das Datum der letzten Aktualisierung zu sehen."
+      }
+    }
+  },
+  "download": {
+    "title": "AED-Karte herunterladen",
+    "description": "Die App ist im App Store und bei Google Play erhältlich.",
+    "appStore": "Laden im App Store",
+    "googlePlay": "Jetzt bei Google Play"
+  },
+  "footer": {
+    "createdBy": "Autor: {name}",
+    "partner": "Projektpartner: Lekify.pl",
+    "privacy": "Datenschutzerklärung",
+    "terms": "Nutzungsbedingungen",
+    "sourceCode": "Quellcode",
+    "dataLicense": "Daten © OpenStreetMap-Mitwirkende, ODbL",
+    "posters": "Plakate"
+  },
+  "legal": {
+    "updatedAt": "Zuletzt aktualisiert: {date}"
+  },
+  "brand": {
+    "title": "Plakate",
+    "description": "Das Plakat mit QR-Code zur App AED-Karte lässt sich herunterladen und an einem öffentlichen Ort aufhängen, etwa in einer Schule, Praxis, Behörde oder neben einem Defibrillator.",
+    "download": {
+      "a4": "A4 herunterladen",
+      "a5": "A5 herunterladen"
+    }
+  },
+  "posters": {
+    "headline": "App mit einer Karte der AED-Defibrillatoren",
+    "lead": "Die AED-Karte hilft dir, den nächsten AED-Defibrillator in der Nähe zu finden.",
+    "aed": {
+      "title": "Was ist ein AED-Defibrillator?",
+      "description": "Ein AED ist ein Defibrillator, der bei plötzlichem Herzstillstand einen Elektroschock abgibt und den normalen Herzrhythmus wiederherstellt. Er analysiert den Rhythmus selbst und führt per Sprachansage Schritt für Schritt."
+    },
+    "survival": {
+      "value": "5 % → 70 %",
+      "description": "So steigt die Überlebenschance, wenn die Defibrillation in den ersten Minuten erfolgt."
+    },
+    "steps": {
+      "title": "Wenn jemand nicht atmet",
+      "call": "Wähle die 112.",
+      "compressions": "Führe bis zum Eintreffen des AED eine Herzdruckmassage durch.",
+      "aed": "Befolge nach dem Einschalten die Sprachanweisungen des AED."
+    },
+    "download": "Scanne den Code oder öffne {domain} und lade die App aus Google Play oder dem App Store.",
+    "emergency": "Die App ersetzt keinen Notruf."
+  }
+}

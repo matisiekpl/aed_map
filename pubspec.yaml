@@ -4,7 +4,7 @@ description: App showing available AEDs
 publish_to: "none"
 
 # Remember to run: node whatsNew.js
-version: 1.0.85+85
+version: 1.0.86+86
 
 environment:
   sdk: ^3.5.3
@@ -71,6 +71,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   bloc_test: ^10.0.0
+  geolocator_platform_interface: 4.2.6
+  plugin_platform_interface: ^2.1.8
 
 dependency_overrides:
   geolocator_android: ^4.6.0

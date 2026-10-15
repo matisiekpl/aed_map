@@ -32,118 +32,124 @@ class MapHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(appLocalizations.heading,
-                  key: const Key('title'),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 32)),
-              BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
-                if (state is PointsLoadSuccess) {
-                  return Text(
-                      appLocalizations.subheading(state.defibrillatorsCount),
-                      style: const TextStyle(fontSize: 14));
-                } else {
-                  return Text(appLocalizations.subheading(0),
-                      style: const TextStyle(fontSize: 14));
-                }
-              }),
-              const SizedBox(height: 2),
-              Text('OpenStreetMap contributors',
-                  style: const TextStyle(fontSize: 12)),
-              const SizedBox(height: 6),
-              BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
-                if (editState.pendingChanges.isEmpty) return const SizedBox();
-                var appLocalizations = AppLocalizations.of(context)!;
-                return Semantics(
-                  button: true,
-                  label: appLocalizations
-                      .pendingChangesBadge(editState.pendingChanges.length),
-                  child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    var editCubit = context.read<EditCubit>();
-                    var pointsCubit = context.read<PointsCubit>();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MultiBlocProvider(
-                          providers: [
-                            BlocProvider.value(value: editCubit),
-                            BlocProvider.value(value: pointsCubit),
-                          ],
-                          child: const PendingChangesPage(),
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Text(
-                      appLocalizations
-                          .pendingChangesBadge(editState.pendingChanges.length),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(appLocalizations.heading,
+                      key: const Key('title'),
                       style: const TextStyle(
-                          fontSize: 11,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.bold, fontSize: 32)),
+                ),
+                BlocBuilder<PointsCubit, PointsState>(builder: (context, state) {
+                  if (state is PointsLoadSuccess) {
+                    return Text(
+                        appLocalizations.subheading(state.defibrillatorsCount),
+                        style: const TextStyle(fontSize: 14));
+                  } else {
+                    return Text(appLocalizations.subheading(0),
+                        style: const TextStyle(fontSize: 14));
+                  }
+                }),
+                const SizedBox(height: 2),
+                Text('OpenStreetMap contributors',
+                    style: const TextStyle(fontSize: 12)),
+                const SizedBox(height: 6),
+                BlocBuilder<EditCubit, EditState>(builder: (context, editState) {
+                  if (editState.pendingChanges.isEmpty) return const SizedBox();
+                  var appLocalizations = AppLocalizations.of(context)!;
+                  return Semantics(
+                    button: true,
+                    label: appLocalizations
+                        .pendingChangesBadge(editState.pendingChanges.length),
+                    child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      var editCubit = context.read<EditCubit>();
+                      var pointsCubit = context.read<PointsCubit>();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(value: editCubit),
+                              BlocProvider.value(value: pointsCubit),
+                            ],
+                            child: const PendingChangesPage(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      child: Text(
+                        appLocalizations
+                            .pendingChangesBadge(editState.pendingChanges.length),
+                        style: const TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
-                ),
-                );
-              }),
-              const SizedBox(height: 2),
-              BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
-                  builder: (context, state) {
-                if (state.connected) return const SizedBox();
-                return Text(appLocalizations.noNetwork,
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: CupertinoColors.systemRed.resolveFrom(context),
-                        fontWeight: FontWeight.bold));
-              }),
-              BlocBuilder<LocationCubit, LocationState>(
-                  builder: (context, state) {
-                if (state is! LocationDetermined || !state.permissionDenied) {
-                  return const SizedBox();
-                }
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(appLocalizations.noLocationPermission,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color:
-                                CupertinoColors.systemRed.resolveFrom(context),
-                            fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 4),
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () => Geolocator.openAppSettings(),
-                      child: Card(
-                        color: CupertinoColors.secondarySystemBackground
-                            .resolveFrom(context),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          child: Text(appLocalizations.openSettings,
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: CupertinoColors.label
-                                      .resolveFrom(context))),
+                  );
+                }),
+                const SizedBox(height: 2),
+                BlocBuilder<NetworkStatusCubit, NetworkStatusState>(
+                    builder: (context, state) {
+                  if (state.connected) return const SizedBox();
+                  return Text(appLocalizations.noNetwork,
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: CupertinoColors.systemRed.resolveFrom(context),
+                          fontWeight: FontWeight.bold));
+                }),
+                BlocBuilder<LocationCubit, LocationState>(
+                    builder: (context, state) {
+                  if (state is! LocationDetermined || !state.permissionDenied) {
+                    return const SizedBox();
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(appLocalizations.noLocationPermission,
+                          style: TextStyle(
+                              fontSize: 14,
+                              color:
+                                  CupertinoColors.systemRed.resolveFrom(context),
+                              fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () => Geolocator.openAppSettings(),
+                        child: Card(
+                          color: CupertinoColors.secondarySystemBackground
+                              .resolveFrom(context),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Text(appLocalizations.openSettings,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: CupertinoColors.label
+                                        .resolveFrom(context))),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              })
-            ],
+                    ],
+                  );
+                })
+              ],
+            ),
           ),
           Row(
             children: [

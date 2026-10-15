@@ -17,6 +17,7 @@ import 'package:aed_map/repositories/user_created_defibrillator_repository.dart'
 import 'package:aed_map/screens/edit/edit_form.dart';
 import 'package:aed_map/screens/map/map_screen.dart';
 import 'package:aed_map/screens/onboarding/onboarding_screen.dart';
+import 'package:aed_map/shared/cached_network_tile_provider.dart';
 import 'package:feedback/feedback.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -24,6 +25,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:nsfw_detector_flutter/nsfw_detector_flutter.dart';
@@ -75,9 +77,24 @@ void main() async {
 }
 
 class App extends StatefulWidget {
-  const App({super.key, this.skipOnboarding = false});
+  const App({
+    super.key,
+    this.skipOnboarding = false,
+    this.locale,
+    this.tileProvider,
+    this.geolocationRepository,
+    this.pointsRepository,
+    this.routingRepository,
+    this.networkStatusCubit,
+  });
 
   final bool skipOnboarding;
+  final Locale? locale;
+  final TileProvider? tileProvider;
+  final GeolocationRepository? geolocationRepository;
+  final PointsRepository? pointsRepository;
+  final RoutingRepository? routingRepository;
+  final NetworkStatusCubit? networkStatusCubit;
 
   @override
   State<App> createState() => _AppState();
@@ -99,10 +116,13 @@ class _AppState extends State<App> {
     });
   }
 
-  final GeolocationRepository geolocationRepository = GeolocationRepository();
-  final PointsRepository pointsRepository = PointsRepository();
+  late final GeolocationRepository geolocationRepository =
+      widget.geolocationRepository ?? GeolocationRepository();
+  late final PointsRepository pointsRepository =
+      widget.pointsRepository ?? PointsRepository();
   final FeedbackRepository feedbackRepository = FeedbackRepository();
-  final RoutingRepository routingRepository = RoutingRepository();
+  late final RoutingRepository routingRepository =
+      widget.routingRepository ?? RoutingRepository();
   final PendingChangesRepository pendingChangesRepository = PendingChangesRepository();
   final UserCreatedDefibrillatorRepository userCreatedDefibrillatorRepository =
       UserCreatedDefibrillatorRepository();
@@ -131,40 +151,45 @@ class _AppState extends State<App> {
     return CupertinoApp(
       theme: const CupertinoThemeData(brightness: null),
       debugShowCheckedModeBanner: false,
+      locale: widget.locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: List.from(AppLocalizations.supportedLocales)
         ..sort((a, b) =>
             const Locale('en').languageCode.compareTo(a.languageCode)),
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<EditCubit>.value(value: editCubit..loadPendingChanges()),
-          BlocProvider<PointsCubit>(
-            create: (BuildContext context) => PointsCubit(
-                pointsRepository: pointsRepository,
-                geolocationRepository: geolocationRepository,
-                editCubit: editCubit)
-              ..load(),
-          ),
-          BlocProvider<RoutingCubit>(
-            create: (BuildContext context) => RoutingCubit(
-                geolocationRepository: geolocationRepository,
-                routingRepository: routingRepository),
-          ),
-          BlocProvider<LocationCubit>(
-            create: (BuildContext context) =>
-                LocationCubit(geolocationRepository: geolocationRepository)
-                  ..locate(),
-          ),
-          BlocProvider<PanelCubit>(
-            create: (BuildContext context) => PanelCubit(),
-          ),
-          BlocProvider<NetworkStatusCubit>(
-              create: (BuildContext context) => NetworkStatusCubit()),
-          BlocProvider<FeedbackCubit>(
+      home: RepositoryProvider<TileProvider>.value(
+        value: widget.tileProvider ?? CachedNetworkTileProvider(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<EditCubit>.value(value: editCubit..loadPendingChanges()),
+            BlocProvider<PointsCubit>(
+              create: (BuildContext context) => PointsCubit(
+                  pointsRepository: pointsRepository,
+                  geolocationRepository: geolocationRepository,
+                  editCubit: editCubit)
+                ..load(),
+            ),
+            BlocProvider<RoutingCubit>(
+              create: (BuildContext context) => RoutingCubit(
+                  geolocationRepository: geolocationRepository,
+                  routingRepository: routingRepository),
+            ),
+            BlocProvider<LocationCubit>(
               create: (BuildContext context) =>
-                  FeedbackCubit(feedbackRepository: feedbackRepository)),
-        ],
-        child: widget.skipOnboarding ? Home() : home,
+                  LocationCubit(geolocationRepository: geolocationRepository)
+                    ..locate(),
+            ),
+            BlocProvider<PanelCubit>(
+              create: (BuildContext context) => PanelCubit(),
+            ),
+            BlocProvider<NetworkStatusCubit>(
+                create: (BuildContext context) =>
+                    widget.networkStatusCubit ?? NetworkStatusCubit()),
+            BlocProvider<FeedbackCubit>(
+                create: (BuildContext context) =>
+                    FeedbackCubit(feedbackRepository: feedbackRepository)),
+          ],
+          child: widget.skipOnboarding ? Home() : home,
+        ),
       ),
     );
   }

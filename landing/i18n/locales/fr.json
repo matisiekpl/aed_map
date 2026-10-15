@@ -1,0 +1,151 @@
+{
+  "site": {
+    "name": "Carte des DAE"
+  },
+  "seo": {
+    "home": {
+      "title": "Carte des DAE – défibrillateurs à proximité",
+      "description": "Application iOS et Android avec une carte des défibrillateurs DAE issus d'OpenStreetMap. Elle indique le DAE le plus proche, la distance, le temps de marche et l'itinéraire à pied."
+    },
+    "privacy": {
+      "title": "Politique de confidentialité – Carte des DAE",
+      "description": "Quelles données l'application et le site Carte des DAE traitent, dans quel but et à qui elles sont transmises."
+    },
+    "terms": {
+      "title": "Conditions d'utilisation – Carte des DAE",
+      "description": "Règles d'utilisation de l'application Carte des DAE ainsi que d'ajout et de modification de défibrillateurs."
+    },
+    "brand": {
+      "title": "Affiches – Carte des DAE",
+      "description": "Affiche avec code QR de l'application Carte des DAE, en A4 et A5 à imprimer."
+    }
+  },
+  "nav": {
+    "features": "Fonctionnalités",
+    "faq": "Questions",
+    "download": "Télécharger"
+  },
+  "hero": {
+    "title": "Carte des DAE",
+    "description": "Carte des défibrillateurs DAE issus d'OpenStreetMap sur iOS et Android. L'application indique le défibrillateur le plus proche, la distance qui le sépare et l'itinéraire pour s'y rendre.",
+    "statistics": "{count} défibrillateurs dans {countries} pays",
+    "imageAlt": "Écran de l'application Carte des DAE avec une carte des défibrillateurs",
+    "detailsImageAlt": "Fiche du défibrillateur avec accès, horaires et bouton de navigation"
+  },
+  "features": {
+    "title": "Fonctionnalités",
+    "items": {
+      "nearest": {
+        "title": "DAE le plus proche",
+        "description": "À l'ouverture de l'application, la carte se centre sur la position actuelle et le panneau du bas affiche le défibrillateur le plus proche avec la distance et le temps de marche."
+      },
+      "route": {
+        "title": "Itinéraire à pied",
+        "description": "L'itinéraire vers le DAE choisi s'affiche sur la carte dans l'application. Le même point s'ouvre aussi dans Plans d'Apple, Google Maps ou une autre application de navigation."
+      },
+      "details": {
+        "title": "Détails du point",
+        "description": "La fiche du défibrillateur contient la description de l'emplacement, les conditions d'accès, les horaires d'ouverture, l'exploitant, un numéro de contact et une photo, si quelqu'un en a ajouté une."
+      },
+      "edit": {
+        "title": "Ajout et modification",
+        "description": "Une fois connecté avec un compte OpenStreetMap, il est possible d'ajouter un nouveau DAE, de déplacer l'épingle, de corriger la description et de définir les horaires d'ouverture. Les modifications sont envoyées directement à OpenStreetMap."
+      },
+      "photos": {
+        "title": "Photos",
+        "description": "La photo du défibrillateur se prend avec l'appareil photo ou se choisit dans la galerie. Elle est publiée sur OpenAEDMap sous licence CC0, et les photos inappropriées peuvent être signalées."
+      },
+      "offline": {
+        "title": "Hors connexion",
+        "description": "La base des défibrillateurs et les zones de carte déjà consultées restent sur l'appareil, si bien que la liste des points est accessible aussi sans internet."
+      }
+    }
+  },
+  "data": {
+    "title": "Données OpenStreetMap",
+    "headline": "{world} DAE sur la carte, dont {local} en France.",
+    "description": "Les emplacements des défibrillateurs proviennent d'OpenStreetMap et sont mis à disposition par le projet OpenAEDMap. Cette base ouverte est complétée par des bénévoles, des institutions et les utilisateurs de l'application.",
+    "openAedMap": "OpenAEDMap",
+    "countryCode": "FR"
+  },
+  "survival": {
+    "title": "Une défibrillation dans les premières minutes fait passer les chances de survie de 5 % à 70 %",
+    "description": "Lors d'un arrêt cardiaque soudain, le temps nécessaire pour atteindre un défibrillateur est déterminant. La carte indique où se trouve le plus proche.",
+    "link": "En savoir plus sur les défibrillateurs DAE"
+  },
+  "faq": {
+    "title": "Questions",
+    "items": {
+      "emergency": {
+        "question": "Que faire lorsqu'une personne a perdu connaissance ?",
+        "answer": "Il faut d'abord appeler le 112 (ou le 15 en France) et commencer la réanimation. Le régulateur guide les étapes suivantes. L'application indique où se trouve le DAE le plus proche, afin qu'une deuxième personne puisse aller le chercher. Elle ne remplace pas l'appel aux secours."
+      },
+      "source": {
+        "question": "D'où proviennent les données sur les défibrillateurs ?",
+        "answer": "D'OpenStreetMap, une carte ouverte du monde créée par la communauté. Le jeu de données des défibrillateurs est mis à disposition par le projet OpenAEDMap."
+      },
+      "add": {
+        "question": "Comment ajouter un défibrillateur manquant ?",
+        "answer": "L'application comporte un bouton d'ajout de point. Après connexion avec un compte OpenStreetMap, on place l'épingle et on renseigne les conditions d'accès, la description et les horaires d'ouverture. Un compte OpenStreetMap se crée gratuitement sur openstreetmap.org."
+      },
+      "abroad": {
+        "question": "L'application fonctionne-t-elle en dehors de la Pologne ?",
+        "answer": "Oui. L'application affiche les défibrillateurs du monde entier enregistrés dans OpenStreetMap."
+      },
+      "offline": {
+        "question": "L'application fonctionne-t-elle sans internet ?",
+        "answer": "La base des défibrillateurs est enregistrée sur l'appareil, les points et leurs détails sont donc accessibles hors connexion. Le calcul d'itinéraire et le chargement de nouvelles zones de carte nécessitent internet."
+      },
+      "update": {
+        "question": "À quelle fréquence les données sont-elles mises à jour ?",
+        "answer": "OpenAEDMap récupère les modifications d'OpenStreetMap en continu. L'application télécharge le jeu de données à jour au démarrage, et la date de la dernière mise à jour figure dans les réglages."
+      }
+    }
+  },
+  "download": {
+    "title": "Télécharger Carte des DAE",
+    "description": "L'application est disponible sur l'App Store et Google Play.",
+    "appStore": "Télécharger dans l'App Store",
+    "googlePlay": "Disponible sur Google Play"
+  },
+  "footer": {
+    "createdBy": "Auteur : {name}",
+    "partner": "Partenaire du projet : Lekify.pl",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "sourceCode": "Code source",
+    "dataLicense": "Données © contributeurs OpenStreetMap, ODbL",
+    "posters": "Affiches"
+  },
+  "legal": {
+    "updatedAt": "Dernière mise à jour : {date}"
+  },
+  "brand": {
+    "title": "Affiches",
+    "description": "L'affiche avec le code QR de l'application Carte des DAE peut être téléchargée et affichée dans un lieu public, par exemple une école, un cabinet médical, une mairie ou à côté d'un défibrillateur.",
+    "download": {
+      "a4": "Télécharger A4",
+      "a5": "Télécharger A5"
+    }
+  },
+  "posters": {
+    "headline": "Application avec une carte des défibrillateurs DAE",
+    "lead": "Carte des DAE vous aide à trouver le défibrillateur DAE le plus proche.",
+    "aed": {
+      "title": "Qu'est-ce qu'un défibrillateur DAE ?",
+      "description": "Un DAE est un défibrillateur qui, en cas d'arrêt cardiaque soudain, délivre un choc électrique et rétablit un rythme cardiaque normal. Il analyse lui-même le rythme et guide pas à pas par la voix."
+    },
+    "survival": {
+      "value": "5 % → 70 %",
+      "description": "Ainsi augmentent les chances de survie lorsque la défibrillation a lieu dans les premières minutes."
+    },
+    "steps": {
+      "title": "Quand quelqu'un ne respire pas",
+      "call": "Appelez le 112.",
+      "compressions": "Jusqu'à l'arrivée du DAE, pratiquez des compressions thoraciques.",
+      "aed": "Une fois le DAE allumé, suivez ses instructions vocales."
+    },
+    "download": "Scannez le code ou rendez-vous sur {domain} et téléchargez l'application sur Google Play ou l'App Store.",
+    "emergency": "L'application ne remplace pas un appel d'urgence."
+  }
+}
