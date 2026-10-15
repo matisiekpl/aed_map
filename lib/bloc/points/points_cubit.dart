@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:aed_map/bloc/edit/edit_cubit.dart';
 import 'package:aed_map/bloc/edit/edit_state.dart';
@@ -125,11 +126,13 @@ class PointsCubit extends Cubit<PointsState> {
   }
 
   void select(Defibrillator defibrillator) {
-    FirebaseAnalytics.instance.logSelectContent(
-        contentType: 'aed', itemId: defibrillator.id.toString());
     HapticFeedback.mediumImpact();
-    analytics.event(name: selectEvent);
-    mixpanel?.track(selectEvent, properties: defibrillator.getEventProperties());
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      FirebaseAnalytics.instance.logSelectContent(
+          contentType: 'aed', itemId: defibrillator.id.toString());
+      analytics.event(name: selectEvent);
+      mixpanel?.track(selectEvent, properties: defibrillator.getEventProperties());
+    }
     if (state is PointsLoadSuccess) {
       emit((state as PointsLoadSuccess)
           .copyWith(selected: defibrillator, hash: generateRandomString(32)));

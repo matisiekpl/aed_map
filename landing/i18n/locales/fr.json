@@ -25,7 +25,8 @@
     "title": "Carte des DAE",
     "description": "Carte des défibrillateurs DAE issus d'OpenStreetMap sur iOS et Android. L'application indique le défibrillateur le plus proche, la distance qui le sépare et l'itinéraire pour s'y rendre.",
     "statistics": "{count} défibrillateurs dans {countries} pays",
-    "imageAlt": "Écran de l'application Carte des DAE avec la carte des défibrillateurs"
+    "imageAlt": "Écran de l'application Carte des DAE avec une carte des défibrillateurs",
+    "detailsImageAlt": "Fiche du défibrillateur avec accès, horaires et bouton de navigation"
   },
   "features": {
     "title": "Fonctionnalités",

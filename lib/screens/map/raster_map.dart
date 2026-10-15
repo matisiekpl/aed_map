@@ -16,7 +16,6 @@ import '../../bloc/panel/panel_cubit.dart';
 import '../../bloc/points/points_cubit.dart';
 import '../../bloc/points/points_state.dart';
 import '../../bloc/routing/routing_state.dart';
-import '../../shared/cached_network_tile_provider.dart';
 import '../../shared/utils.dart';
 
 class RasterMap extends StatefulWidget {
@@ -121,7 +120,7 @@ class _RasterMapState extends State<RasterMap> with TickerProviderStateMixin {
                                         userAgentPackageName:
                                             'pl.enteam.aed_map',
                                         tileProvider:
-                                            CachedNetworkTileProvider(),
+                                            context.read<TileProvider>(),
                                         urlTemplate:
                                             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                                       );

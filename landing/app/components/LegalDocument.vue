@@ -23,7 +23,7 @@ defineOgImage('AedMap', {
 </script>
 
 <template>
-  <article v-if="page" class="prose prose-neutral mx-auto max-w-3xl px-4 py-16 dark:prose-invert">
+  <article v-if="page" class="prose prose-neutral mx-auto max-w-3xl px-4 py-8 sm:py-16 dark:prose-invert">
     <p class="mb-4 text-sm text-muted-foreground">{{ $t('legal.updatedAt', {date: $d(new Date(page.updatedAt))}) }}</p>
     <ContentRenderer :value="page"/>
   </article>

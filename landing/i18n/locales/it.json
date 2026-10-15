@@ -25,7 +25,8 @@
     "title": "Mappa dei DAE",
     "description": "Mappa dei defibrillatori DAE da OpenStreetMap su iOS e Android. L'app indica il defibrillatore più vicino, la distanza e il percorso a piedi per raggiungerlo.",
     "statistics": "{count} defibrillatori in {countries} paesi",
-    "imageAlt": "Schermata dell'app Mappa dei DAE con la mappa dei defibrillatori"
+    "imageAlt": "Schermata dell'app Mappa dei DAE con una mappa dei defibrillatori",
+    "detailsImageAlt": "Scheda del defibrillatore con accesso, orari e pulsante di navigazione"
   },
   "features": {
     "title": "Funzioni",

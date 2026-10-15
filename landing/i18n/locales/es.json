@@ -25,7 +25,8 @@
     "title": "Mapa de DEA",
     "description": "Mapa de desfibriladores externos automáticos (DEA) de OpenStreetMap para iOS y Android. La aplicación indica el desfibrilador más cercano, la distancia hasta él y la ruta a pie.",
     "statistics": "{count} desfibriladores en {countries} países",
-    "imageAlt": "Pantalla de la aplicación Mapa de DEA con el mapa de desfibriladores"
+    "imageAlt": "Pantalla de la app Mapa de DEA con un mapa de desfibriladores",
+    "detailsImageAlt": "Ficha del desfibrilador con acceso, horario y botón de navegación"
   },
   "features": {
     "title": "Funciones",

@@ -7,7 +7,9 @@ import 'package:http/http.dart' as http;
 import 'network_status_state.dart';
 
 class NetworkStatusCubit extends Cubit<NetworkStatusState> {
-  NetworkStatusCubit() : super(const NetworkStatusState(connected: true)) {
+  NetworkStatusCubit({bool monitor = true})
+      : super(const NetworkStatusState(connected: true)) {
+    if (!monitor) return;
     _tickerSubscription =
         const Ticker().tick(seconds: 1).listen((duration) async {
       ping();

@@ -25,7 +25,8 @@
     "title": "AED-Karte",
     "description": "Karte der AED-Defibrillatoren aus OpenStreetMap für iOS und Android. Die App zeigt den nächstgelegenen Defibrillator, die Entfernung dorthin und den Fußweg.",
     "statistics": "{count} Defibrillatoren in {countries} Ländern",
-    "imageAlt": "Bildschirm der App AED-Karte mit einer Karte der Defibrillatoren"
+    "imageAlt": "Bildschirm der App AED-Karte mit einer Karte der Defibrillatoren",
+    "detailsImageAlt": "Defibrillator-Karte mit Zugang, Öffnungszeiten und Navigationsschaltfläche"
   },
   "features": {
     "title": "Funktionen",

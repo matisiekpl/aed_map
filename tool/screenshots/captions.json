@@ -1,0 +1,50 @@
+{
+  "pl": {
+    "map": "Defibrylatory w okolicy na jednej mapie",
+    "details": "Dostęp, godziny otwarcia i opis miejsca",
+    "route": "Trasa piesza do najbliższego AED",
+    "dark": "Tryb ciemny",
+    "add": "Nowe AED trafiają do OpenStreetMap",
+    "banner": "Najbliższy defibrylator, trasa piesza i szczegóły punktu"
+  },
+  "en": {
+    "map": "Nearby defibrillators on one map",
+    "details": "Access, opening hours and location details",
+    "route": "Walking route to the nearest AED",
+    "dark": "Dark mode",
+    "add": "New AEDs go straight to OpenStreetMap",
+    "banner": "Nearest defibrillator, walking route and location details"
+  },
+  "de": {
+    "map": "Defibrillatoren in der Nähe auf einer Karte",
+    "details": "Zugang, Öffnungszeiten und Standortbeschreibung",
+    "route": "Fußweg zum nächsten AED",
+    "dark": "Dunkelmodus",
+    "add": "Neue AEDs landen direkt in OpenStreetMap",
+    "banner": "Nächster Defibrillator, Fußweg und Standortdetails"
+  },
+  "es": {
+    "map": "Desfibriladores cercanos en un solo mapa",
+    "details": "Acceso, horario y descripción del lugar",
+    "route": "Ruta a pie hasta el DEA más cercano",
+    "dark": "Modo oscuro",
+    "add": "Los nuevos DEA se guardan en OpenStreetMap",
+    "banner": "El desfibrilador más cercano, la ruta a pie y los detalles del lugar"
+  },
+  "fr": {
+    "map": "Les défibrillateurs à proximité sur une carte",
+    "details": "Accès, horaires et description du lieu",
+    "route": "Itinéraire à pied vers le DAE le plus proche",
+    "dark": "Mode sombre",
+    "add": "Les nouveaux DAE sont ajoutés à OpenStreetMap",
+    "banner": "Le défibrillateur le plus proche, l'itinéraire à pied et les détails du lieu"
+  },
+  "it": {
+    "map": "I defibrillatori vicini su un'unica mappa",
+    "details": "Accesso, orari e descrizione del luogo",
+    "route": "Percorso a piedi verso il DAE più vicino",
+    "dark": "Modalità scura",
+    "add": "I nuovi DAE finiscono su OpenStreetMap",
+    "banner": "Il defibrillatore più vicino, il percorso a piedi e i dettagli del luogo"
+  }
+}
