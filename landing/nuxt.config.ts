@@ -81,8 +81,10 @@ export default defineNuxtConfig({
     '/blog': {redirect: '/'},
   },
   nitro: {
+    preset: 'static',
     prerender: {
       crawlLinks: true,
+      ignore: ['/.netlify'],
       routes: [
         '/sitemap.xml',
         '/robots.txt',
