@@ -1,0 +1,7 @@
+[build]
+  base = "landing"
+  command = "yarn generate"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22.21.0"
