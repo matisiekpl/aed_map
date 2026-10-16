@@ -4,7 +4,7 @@ const localePath = useLocalePath()
 
 <template>
   <header class="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
-    <div class="mx-auto flex h-18 max-w-6xl items-center justify-between px-4">
+    <div class="mx-auto flex h-18 max-w-5xl items-center justify-between px-4">
       <NuxtLink :to="localePath('/')" class="flex items-center gap-2.5 text-lg font-extrabold">
         <img src="/images/icon.png" alt="" width="32" height="32" class="size-9 rounded-[22%]">
         {{ $t('site.name') }}

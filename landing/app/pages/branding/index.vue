@@ -18,7 +18,7 @@ defineOgImage('Default', {
 </script>
 
 <template>
-  <section class="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 sm:gap-12 sm:py-16 md:grid-cols-2">
+  <section class="mx-auto grid max-w-5xl items-center gap-8 px-4 py-8 sm:gap-12 sm:py-16 md:grid-cols-2">
     <div class="flex flex-col gap-5">
       <h1 class="text-4xl font-extrabold tracking-tight md:text-6xl">{{ $t('brand.title') }}</h1>
       <p class="text-lg leading-relaxed">{{ $t('brand.description') }}</p>

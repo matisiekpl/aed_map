@@ -6,7 +6,7 @@ const localePath = useLocalePath()
 
 <template>
   <footer class="border-t">
-    <div class="mx-auto grid max-w-6xl gap-6 px-4 py-8 text-sm sm:grid-cols-3 sm:gap-8 sm:py-12">
+    <div class="mx-auto grid max-w-5xl gap-6 px-4 py-8 text-sm sm:grid-cols-3 sm:gap-8 sm:py-12">
       <div class="flex flex-col gap-2">
         <span class="font-extrabold">{{ $t('site.name') }}</span>
         <a :href="`mailto:${Config.contactEmail}`" class="text-muted-foreground hover:text-foreground" @click="useTrackEvent('author')">
