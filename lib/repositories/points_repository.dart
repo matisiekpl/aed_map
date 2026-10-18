@@ -88,8 +88,9 @@ class PointsRepository {
     jsonList.forEach((row) {
       var id = row['properties'][idLabel];
       defibrillators.add(Defibrillator(
-          location: LatLng(row['geometry']['coordinates'][1],
-              row['geometry']['coordinates'][0]),
+          location: LatLng(
+              (row['geometry']['coordinates'][1] as num).toDouble(),
+              (row['geometry']['coordinates'][0] as num).toDouble()),
           id: id,
           description: row['properties']['defibrillator:location'],
           descriptionTranslations: Defibrillator.parseLocationTranslations(

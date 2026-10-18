@@ -1,1 +1,1 @@
-Nagłówek na ekranie mapy mieści się w całości także w dłuższych tłumaczeniach.
+Aplikacja znów uruchamia się poprawnie. Wcześniej część urządzeń zatrzymywała się na ekranie ładowania.

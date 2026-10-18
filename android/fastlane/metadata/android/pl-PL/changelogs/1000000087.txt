@@ -1,0 +1,1 @@
+Aplikacja znów uruchamia się poprawnie. Wcześniej część urządzeń zatrzymywała się na ekranie ładowania.

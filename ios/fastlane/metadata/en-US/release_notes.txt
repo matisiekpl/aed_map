@@ -1,1 +1,1 @@
-The map screen header now fits in full in longer translations.
+The app starts correctly again. Previously it stopped at the loading screen on some devices.

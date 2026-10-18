@@ -1,0 +1,1 @@
+La aplicación vuelve a iniciarse correctamente. Antes, en algunos dispositivos se quedaba en la pantalla de carga.

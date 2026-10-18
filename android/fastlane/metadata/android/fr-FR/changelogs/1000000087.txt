@@ -1,0 +1,1 @@
+L'application démarre de nouveau correctement. Auparavant, elle restait bloquée sur l'écran de chargement sur certains appareils.

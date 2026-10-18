@@ -1,1 +1,1 @@
-L'en-tête de l'écran de la carte s'affiche désormais en entier, même dans les traductions plus longues.
+L'application démarre de nouveau correctement. Auparavant, elle restait bloquée sur l'écran de chargement sur certains appareils.

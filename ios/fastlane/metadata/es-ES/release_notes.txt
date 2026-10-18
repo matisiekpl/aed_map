@@ -1,1 +1,1 @@
-El encabezado de la pantalla del mapa ahora cabe completo también en traducciones más largas.
+La aplicación vuelve a iniciarse correctamente. Antes, en algunos dispositivos se quedaba en la pantalla de carga.

@@ -1,1 +1,1 @@
-Die Überschrift auf dem Kartenbildschirm passt jetzt auch bei längeren Übersetzungen vollständig hinein.
+Die App startet wieder korrekt. Zuvor blieb sie auf einigen Geräten beim Ladebildschirm hängen.

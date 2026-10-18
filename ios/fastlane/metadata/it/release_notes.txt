@@ -1,1 +1,1 @@
-L'intestazione della schermata della mappa ora si vede per intero anche nelle traduzioni più lunghe.
+L'app si avvia di nuovo correttamente. In precedenza, su alcuni dispositivi si fermava alla schermata di caricamento.
